@@ -1,0 +1,7 @@
+﻿Satinalma analiz raporu olusturuldu.
+Kayit sayisi (urun): 1409
+Kaynak dosya: C:\Vs Code Proje\Satınalma\Tabloalarım\25-26.XLSX
+CSV cikti: C:\Vs Code Proje\Satınalma\Tabloalarım\Satinalma_Analiz_Raporu_2025_2026.csv
+XLSX cikti: C:\Vs Code Proje\Satınalma\Tabloalarım\Satinalma_Analiz_Raporu_2025_2026.xlsx
+15 aylik pencere: 2025-02-01 - 2026-04-09
+Kullaniliyor_Mu: Son alim <=120 gun veya sik alim yapan urunler Evet olarak siniflandi.
