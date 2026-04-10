@@ -19,8 +19,7 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 
-# SQLite veritabanı (canlı DB - yedek DB yüklenir)
-server/satinalma.db
+# SQLite WAL dosyaları (geçici)
 server/satinalma.db-wal
 server/satinalma.db-shm
 
