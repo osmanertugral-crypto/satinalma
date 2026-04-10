@@ -2,6 +2,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { getDb } = require('../db/schema');
 const { authenticate, authorize } = require('../middleware/auth');
+const { normTr } = require('../utils/searchUtils');
 
 const router = express.Router();
 router.use(authenticate);
@@ -34,7 +35,7 @@ router.get('/', (req, res) => {
     ) po_stats ON po_stats.supplier_id = s.id
     WHERE 1=1`;
   const params = [];
-  if (search) { query += ' AND (s.name LIKE ? OR s.contact_name LIKE ? OR s.email LIKE ?)'; params.push(`%${search}%`, `%${search}%`, `%${search}%`); }
+  if (search) { const ns = normTr(search); query += ' AND (norm(s.name) LIKE ? OR norm(s.contact_name) LIKE ? OR s.email LIKE ?)'; params.push(`%${ns}%`, `%${ns}%`, `%${search}%`); }
   if (active !== undefined) { query += ' AND s.active = ?'; params.push(active === 'true' ? 1 : 0); }
   query += ' ORDER BY s.name';
   res.json(db.prepare(query).all(...params));

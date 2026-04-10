@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getFinanceKurlar, getFinanceOzet, getFinanceCariler, getFinanceCariDetay } from '../api';
+import { normSearch } from '../utils/searchUtils';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell, ComposedChart, Line
@@ -254,8 +255,8 @@ function CarilerTab({ onSelectCari, mode }) {
     if (mode === 'borc') arr = arr.filter(r => r.bakiye < 0);
     else if (mode === 'alacak') arr = arr.filter(r => r.bakiye > 0);
     if (search) {
-      const s = search.toLowerCase();
-      arr = arr.filter(r => r.cariKodu.toLowerCase().includes(s) || r.cariAdi.toLowerCase().includes(s));
+      const s = normSearch(search);
+      arr = arr.filter(r => normSearch(r.cariKodu).includes(s) || normSearch(r.cariAdi).includes(s));
     }
     arr.sort((a, b) => {
       let va = a[sortField] ?? 0, vb = b[sortField] ?? 0;

@@ -2,6 +2,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { getDb } = require('../db/schema');
 const { authenticate, authorize } = require('../middleware/auth');
+const { normTr } = require('../utils/searchUtils');
 
 const router = express.Router();
 router.use(authenticate);
@@ -59,7 +60,7 @@ router.get('/', (req, res) => {
     ) last_po ON last_po.product_id = p.id AND last_po.rn = 1
     WHERE 1=1`;
   const params = [];
-  if (search) { query += ' AND (p.name LIKE ? OR p.code LIKE ?)'; params.push(`%${search}%`, `%${search}%`); }
+  if (search) { const ns = normTr(search); query += ' AND (norm(p.name) LIKE ? OR norm(p.code) LIKE ?)'; params.push(`%${ns}%`, `%${ns}%`); }
   if (category_id) { query += ' AND p.category_id = ?'; params.push(category_id); }
   if (active !== undefined) { query += ' AND p.active = ?'; params.push(active === 'true' ? 1 : 0); }
   query += ' ORDER BY p.name';

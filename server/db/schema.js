@@ -1,5 +1,6 @@
 const Database = require('better-sqlite3');
 const path = require('path');
+const { normTr } = require('../utils/searchUtils');
 
 const DB_PATH = path.join(__dirname, '..', 'satinalma.db');
 
@@ -10,6 +11,8 @@ function getDb() {
     db = new Database(DB_PATH);
     db.pragma('journal_mode = WAL');
     db.pragma('foreign_keys = ON');
+    // Türkçe karaktere duyarsız arama için norm() fonksiyonu
+    db.function('norm', { deterministic: true }, normTr);
   }
   return db;
 }

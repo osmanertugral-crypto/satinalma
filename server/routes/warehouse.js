@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const XLSX = require('xlsx');
 const { getDb } = require('../db/schema');
+const { normTr } = require('../utils/searchUtils');
 const { authenticate } = require('../middleware/auth');
 
 router.use(authenticate);
@@ -124,8 +125,9 @@ router.get('/stock', (req, res) => {
   const params = [];
 
   if (search) {
-    where += ' AND (stok_kodu LIKE ? OR stok_adi LIKE ?)';
-    params.push(`%${search}%`, `%${search}%`);
+    const ns = normTr(search);
+    where += ' AND (norm(stok_kodu) LIKE ? OR norm(stok_adi) LIKE ?)';
+    params.push(`%${ns}%`, `%${ns}%`);
   }
 
   if (kart_tipi) {

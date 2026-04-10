@@ -118,12 +118,12 @@ export default function MalzemeIhtiyac() {
   const filteredUretim = useMemo(() => {
     let data = uretimQuery.data?.data || [];
     if (search) {
-      const s = search.toLowerCase();
+      const s = normalizeStr(search);
       data = data.filter(d =>
-        d.alt_kod?.toLowerCase().includes(s) ||
-        d.alt_adi?.toLowerCase().includes(s) ||
-        d.proje_kodu?.toLowerCase().includes(s) ||
-        d.karavan_adi?.toLowerCase().includes(s)
+        normalizeStr(d.alt_kod).includes(s) ||
+        normalizeStr(d.alt_adi).includes(s) ||
+        normalizeStr(d.proje_kodu).includes(s) ||
+        normalizeStr(d.karavan_adi).includes(s)
       );
     }
     if (sortConfig.key) {
@@ -140,11 +140,11 @@ export default function MalzemeIhtiyac() {
   const filteredSatinalma = useMemo(() => {
     let data = satinalmaQuery.data?.data || [];
     if (satinalmaSearch) {
-      const s = satinalmaSearch.toLowerCase();
+      const s = normalizeStr(satinalmaSearch);
       data = data.filter(d =>
-        d.alt_kod?.toLowerCase().includes(s) ||
-        d.alt_adi?.toLowerCase().includes(s) ||
-        d.son_satinalma_cari?.toLowerCase().includes(s)
+        normalizeStr(d.alt_kod).includes(s) ||
+        normalizeStr(d.alt_adi).includes(s) ||
+        normalizeStr(d.son_satinalma_cari).includes(s)
       );
     }
     if (satinalmaFilter === 'eksik') {

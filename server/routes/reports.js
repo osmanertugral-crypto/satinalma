@@ -2,6 +2,7 @@ const express = require('express');
 const ExcelJS = require('exceljs');
 const { getDb } = require('../db/schema');
 const { authenticate } = require('../middleware/auth');
+const { normTr } = require('../utils/searchUtils');
 
 const router = express.Router();
 router.use(authenticate);
@@ -256,8 +257,9 @@ router.get('/product-price-analysis', (req, res) => {
   const params = [];
 
   if (search) {
-    query += ' AND (p.code LIKE ? OR p.name LIKE ?)';
-    params.push(`%${search}%`, `%${search}%`);
+    const ns = normTr(search);
+    query += ' AND (norm(p.code) LIKE ? OR norm(p.name) LIKE ?)';
+    params.push(`%${ns}%`, `%${ns}%`);
   }
 
   query += ' ORDER BY p.code, ph.price_date ASC';
