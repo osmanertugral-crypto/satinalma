@@ -13,10 +13,10 @@ const ALL_PAGES = [
   { key: 'inventory', label: 'Envanter' },
   { key: 'depo', label: 'Depo Stok' },
   { key: 'malzeme-ihtiyac', label: 'Malzeme İhtiyaç' },
-  { key: 'documents', label: 'Belgeler' },
   { key: 'price-analysis', label: 'Fiyat Analizi' },
+  { key: 'projects', label: 'Projeler' },
+  { key: 'damage-reports', label: 'Hasar Tutanakları' },
   { key: 'outlook-tasks', label: 'Outlook Yapılacaklar' },
-  { key: 'reports', label: 'Raporlar' },
 ];
 
 const EMPTY = { name: '', email: '', password: '', role: 'user', allowed_pages: null };

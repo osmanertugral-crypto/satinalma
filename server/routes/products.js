@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const { getDb } = require('../db/schema');
 const { authenticate, authorize } = require('../middleware/auth');
 const { normTr } = require('../utils/searchUtils');
+const { getExcelProducts, getExcelProductById, getExcelProductStats } = require('../utils/excelPurchaseFallback');
 
 const router = express.Router();
 router.use(authenticate);
@@ -64,7 +65,9 @@ router.get('/', (req, res) => {
   if (category_id) { query += ' AND p.category_id = ?'; params.push(category_id); }
   if (active !== undefined) { query += ' AND p.active = ?'; params.push(active === 'true' ? 1 : 0); }
   query += ' ORDER BY p.name';
-  res.json(db.prepare(query).all(...params));
+  const rows = db.prepare(query).all(...params);
+  if (rows.length > 0) return res.json(rows);
+  return res.json(getExcelProducts({ search }));
 });
 
 // --- ÜRÜN İSTATİSTİKLERİ ---
@@ -72,6 +75,10 @@ router.get('/stats/charts', (req, res) => {
   const db = getDb();
   const { year } = req.query;
   const filterYear = year ? parseInt(year) : new Date().getFullYear();
+  const productCount = db.prepare('SELECT COUNT(*) as c FROM products').get().c;
+  if (productCount === 0) {
+    return res.json(getExcelProductStats(filterYear));
+  }
 
   // 1) Devir hızı en yüksek ürünler (toplam sipariş miktarı / ortalama stok)
   // Sipariş miktarı yüksek + stok düşük = devir hızı yüksek
@@ -180,7 +187,11 @@ router.get('/:id', (req, res) => {
     LEFT JOIN warehouse_stock ws ON ws.stok_kodu = p.code
     WHERE p.id = ?
   `).get(req.params.id);
-  if (!product) return res.status(404).json({ error: 'Ürün bulunamadı' });
+  if (!product) {
+    const fallback = getExcelProductById(req.params.id);
+    if (!fallback) return res.status(404).json({ error: 'Ürün bulunamadı' });
+    return res.json({ ...fallback, suppliers: [], prices: [] });
+  }
 
   const suppliers = db.prepare(`
     SELECT sp.*, s.name as supplier_name, s.email as supplier_email

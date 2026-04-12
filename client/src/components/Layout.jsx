@@ -2,24 +2,23 @@ import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
-  LayoutDashboard, Users, Package, ShoppingCart, FileText,
-  TrendingUp, Warehouse, FolderOpen, BarChart2, LogOut,
+  LayoutDashboard, Users, Package, FileText,
+  TrendingUp, Warehouse, LogOut,
   Menu, X, ListChecks, LineChart, Container, ClipboardList, Wallet
 } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', key: 'dashboard' },
   { to: '/finance', icon: Wallet, label: 'Finans', key: 'finance' },
-  { to: '/suppliers', icon: Users, label: 'Tedarikçiler', key: 'suppliers' },
+  { to: '/suppliers', icon: Users, label: 'Siparişler ve Tedarikçiler', key: 'suppliers' },
   { to: '/products', icon: Package, label: 'Ürünler', key: 'products' },
-  { to: '/po', icon: ShoppingCart, label: 'Siparişler (PO)', key: 'po' },
   { to: '/inventory', icon: Warehouse, label: 'Envanter', key: 'inventory' },
   { to: '/depo', icon: Container, label: 'Depo Stok', key: 'depo' },
   { to: '/malzeme-ihtiyac', icon: ClipboardList, label: 'Malzeme İhtiyaç', key: 'malzeme-ihtiyac' },
-  { to: '/documents', icon: FolderOpen, label: 'Belgeler', key: 'documents' },
   { to: '/price-analysis', icon: LineChart, label: 'Fiyat Analizi', key: 'price-analysis' },
+  { to: '/projeler', icon: TrendingUp, label: 'Projeler', key: 'projects' },
+  { to: '/hasar-tutanaklari', icon: FileText, label: 'Hasar Tutanakları', key: 'damage-reports' },
   { to: '/outlook-tasks', icon: ListChecks, label: 'Outlook Yapılacaklar', key: 'outlook-tasks' },
-  { to: '/reports', icon: BarChart2, label: 'Raporlar', key: 'reports' },
 ];
 
 export default function Layout() {

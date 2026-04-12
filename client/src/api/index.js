@@ -15,8 +15,11 @@ export const deleteUser = (id) => api.delete(`/users/${id}`);
 export const getSuppliers = (params) => api.get('/suppliers', { params });
 export const getSupplierStats = (params) => api.get('/suppliers/stats/charts', { params });
 export const getSupplier = (id) => api.get(`/suppliers/${id}`);
+export const getSupplierPanelDetail = (id) => api.get(`/suppliers/${id}/panel-detail`);
 export const createSupplier = (data) => api.post('/suppliers', data);
 export const updateSupplier = (id, data) => api.put(`/suppliers/${id}`, data);
+export const updateSupplierRating = (id, rating) => api.patch(`/suppliers/${id}/rating`, { rating });
+export const toggleSupplierActive = (id) => api.patch(`/suppliers/${id}/toggle-active`);
 export const deleteSupplier = (id) => api.delete(`/suppliers/${id}`);
 export const addSupplierProduct = (id, data) => api.post(`/suppliers/${id}/products`, data);
 export const removeSupplierProduct = (id, spId) => api.delete(`/suppliers/${id}/products/${spId}`);
@@ -69,7 +72,7 @@ export const deleteDocument = (id) => api.delete(`/documents/${id}`);
 export const getDocumentDownloadUrl = (id) => `/api/documents/${id}/download`;
 
 // Reports / Dashboard
-export const getDashboard = () => api.get('/reports/dashboard');
+export const getDashboard = (params) => api.get('/reports/dashboard', { params });
 export const getMonthlySummary = () => api.get('/reports/monthly-summary');
 export const getProductPriceAnalysis = (params) => api.get('/reports/product-price-analysis', { params });
 
@@ -109,3 +112,31 @@ export const getFinanceKurlar = () => api.get('/finance/kurlar');
 export const getFinanceOzet = () => api.get('/finance/ozet');
 export const getFinanceCariler = (params) => api.get('/finance/cariler', { params });
 export const getFinanceCariDetay = (params) => api.get('/finance/cari-detay', { params });
+
+// Damage Reports (Kirilan/Bozulan Urun Tutanak)
+export const getDamageReports = (params) => api.get('/damage-reports', { params });
+export const importDamageReports = (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return api.post('/damage-reports/import', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000,
+  }).then(r => r.data);
+};
+
+// Projects (Teklif/Tender)
+export const getProjects = (params) => api.get('/projects', { params });
+export const getProjectDetail = (id) => api.get(`/projects/${id}`);
+export const updateProject = (id, data) => api.patch(`/projects/${id}`, data);
+export const deleteProject = (id) => api.delete(`/projects/${id}`);
+export const createProjectItem = (id, data) => api.post(`/projects/${id}/items`, data);
+export const updateProjectItem = (id, itemId, data) => api.patch(`/projects/${id}/items/${itemId}`, data);
+export const deleteProjectItem = (id, itemId) => api.delete(`/projects/${id}/items/${itemId}`);
+export const importProjects = (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return api.post('/projects/import', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000,
+  }).then(r => r.data);
+};

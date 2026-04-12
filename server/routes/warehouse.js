@@ -11,6 +11,34 @@ router.use(authenticate);
 const EXCEL_PATH = path.join(__dirname, '..', '..', 'gecici', 'SATINALMA - STOK RAPORU.xlsx');
 const SHEET_NAME = 'AA_KUMULATIF_STOK_RAPORU_123_BU';
 
+function getExcelStockRows() {
+  const fs = require('fs');
+  if (!fs.existsSync(EXCEL_PATH)) return [];
+  const wb = XLSX.readFile(EXCEL_PATH);
+  if (!wb.SheetNames.includes(SHEET_NAME)) return [];
+  const ws = wb.Sheets[SHEET_NAME];
+  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+  const out = [];
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i] || [];
+    const kod = String(r[0] || '').trim();
+    if (!kod) continue;
+    out.push({
+      stok_kodu: kod,
+      stok_adi: String(r[1] || '').trim(),
+      gebze_stok: Math.round((+r[2] || 0) * 100) / 100,
+      eticaret_stok: Math.round((+r[3] || 0) * 100) / 100,
+      showroom_stok: Math.round((+r[4] || 0) * 100) / 100,
+      birim_fiyat: Math.round((+r[5] || 0) * 100) / 100,
+      gebze_tutar: Math.round((+r[6] || 0) * 100) / 100,
+      eticaret_tutar: Math.round((+r[7] || 0) * 100) / 100,
+      showroom_tutar: Math.round((+r[8] || 0) * 100) / 100,
+      kart_tipi: String(r[9] || '').trim(),
+    });
+  }
+  return out;
+}
+
 // Excel'den oku ve DB'ye senkronize et
 function syncFromExcel() {
   const fs = require('fs');
@@ -102,6 +130,15 @@ router.post('/sync', (req, res) => {
 router.get('/status', (req, res) => {
   const db = getDb();
   const totalRows = db.prepare('SELECT COUNT(*) as c FROM warehouse_stock').get().c;
+  if (totalRows === 0) {
+    const excelRows = getExcelStockRows();
+    return res.json({
+      totalRows: excelRows.length,
+      lastSync: null,
+      recentLogs: [],
+      source: 'excel-fallback'
+    });
+  }
   const lastSync = db.prepare(
     "SELECT * FROM warehouse_sync_log ORDER BY id DESC LIMIT 1"
   ).get();
@@ -120,6 +157,33 @@ router.get('/status', (req, res) => {
 router.get('/stock', (req, res) => {
   const db = getDb();
   const { search, kart_tipi, depo, page = 1, limit = 50, sort = 'stok_kodu', order = 'asc' } = req.query;
+  const dbCount = db.prepare('SELECT COUNT(*) as c FROM warehouse_stock').get().c;
+
+  if (dbCount === 0) {
+    let rows = getExcelStockRows();
+    if (search) {
+      const ns = normTr(search);
+      rows = rows.filter(r => normTr(r.stok_kodu).includes(ns) || normTr(r.stok_adi).includes(ns));
+    }
+    if (kart_tipi) rows = rows.filter(r => r.kart_tipi === kart_tipi);
+    if (depo === 'gebze') rows = rows.filter(r => (r.gebze_stok || 0) > 0);
+    else if (depo === 'eticaret') rows = rows.filter(r => (r.eticaret_stok || 0) > 0);
+    else if (depo === 'showroom') rows = rows.filter(r => (r.showroom_stok || 0) > 0);
+
+    const allowedSort = ['stok_kodu', 'stok_adi', 'gebze_stok', 'eticaret_stok', 'showroom_stok', 'birim_fiyat', 'gebze_tutar', 'eticaret_tutar', 'showroom_tutar', 'kart_tipi'];
+    const sortCol = allowedSort.includes(sort) ? sort : 'stok_kodu';
+    const sortDir = order === 'desc' ? -1 : 1;
+    rows.sort((a, b) => {
+      const av = a[sortCol];
+      const bv = b[sortCol];
+      if (typeof av === 'number' || typeof bv === 'number') return (Number(av || 0) - Number(bv || 0)) * sortDir;
+      return String(av || '').localeCompare(String(bv || ''), 'tr') * sortDir;
+    });
+
+    const total = rows.length;
+    const offset = (Math.max(1, +page) - 1) * +limit;
+    return res.json({ rows: rows.slice(offset, offset + (+limit)), total, page: +page, limit: +limit, source: 'excel-fallback' });
+  }
 
   let where = '1=1';
   const params = [];
@@ -160,6 +224,40 @@ router.get('/stock', (req, res) => {
 // GET /api/warehouse/summary — Depo bazlı özet istatistikler
 router.get('/summary', (req, res) => {
   const db = getDb();
+  const dbCount = db.prepare('SELECT COUNT(*) as c FROM warehouse_stock').get().c;
+
+  if (dbCount === 0) {
+    const rows = getExcelStockRows();
+    const totals = rows.reduce((acc, r) => {
+      acc.urun_sayisi += 1;
+      acc.gebze_adet += r.gebze_stok || 0;
+      acc.eticaret_adet += r.eticaret_stok || 0;
+      acc.showroom_adet += r.showroom_stok || 0;
+      acc.gebze_tutar += r.gebze_tutar || 0;
+      acc.eticaret_tutar += r.eticaret_tutar || 0;
+      acc.showroom_tutar += r.showroom_tutar || 0;
+      return acc;
+    }, { urun_sayisi: 0, gebze_adet: 0, eticaret_adet: 0, showroom_adet: 0, gebze_tutar: 0, eticaret_tutar: 0, showroom_tutar: 0 });
+    totals.toplam_tutar = totals.gebze_tutar + totals.eticaret_tutar + totals.showroom_tutar;
+    totals.toplam_adet = totals.gebze_adet + totals.eticaret_adet + totals.showroom_adet;
+
+    const grouped = new Map();
+    for (const r of rows) {
+      const key = r.kart_tipi || 'Belirsiz';
+      if (!grouped.has(key)) grouped.set(key, { kart_tipi: key, urun_sayisi: 0, gebze_adet: 0, eticaret_adet: 0, showroom_adet: 0, gebze_tutar: 0, eticaret_tutar: 0, showroom_tutar: 0, toplam_tutar: 0 });
+      const g = grouped.get(key);
+      g.urun_sayisi += 1;
+      g.gebze_adet += r.gebze_stok || 0;
+      g.eticaret_adet += r.eticaret_stok || 0;
+      g.showroom_adet += r.showroom_stok || 0;
+      g.gebze_tutar += r.gebze_tutar || 0;
+      g.eticaret_tutar += r.eticaret_tutar || 0;
+      g.showroom_tutar += r.showroom_tutar || 0;
+      g.toplam_tutar = g.gebze_tutar + g.eticaret_tutar + g.showroom_tutar;
+    }
+
+    return res.json({ totals, byType: Array.from(grouped.values()).sort((a, b) => b.toplam_tutar - a.toplam_tutar), lastSync: null, source: 'excel-fallback' });
+  }
 
   // Genel toplamlar
   const totals = db.prepare(`
@@ -204,7 +302,13 @@ router.get('/summary', (req, res) => {
 // GET /api/warehouse/kart-tipleri — Benzersiz kart tipleri
 router.get('/kart-tipleri', (req, res) => {
   const db = getDb();
-  const types = db.prepare('SELECT DISTINCT kart_tipi FROM warehouse_stock WHERE kart_tipi IS NOT NULL AND kart_tipi != "" ORDER BY kart_tipi').all();
+  const dbCount = db.prepare('SELECT COUNT(*) as c FROM warehouse_stock').get().c;
+  if (dbCount === 0) {
+    const rows = getExcelStockRows();
+    const types = Array.from(new Set(rows.map(r => r.kart_tipi).filter(Boolean))).sort((a, b) => String(a).localeCompare(String(b), 'tr'));
+    return res.json(types);
+  }
+  const types = db.prepare("SELECT DISTINCT kart_tipi FROM warehouse_stock WHERE kart_tipi IS NOT NULL AND kart_tipi != '' ORDER BY kart_tipi").all();
   res.json(types.map(t => t.kart_tipi));
 });
 

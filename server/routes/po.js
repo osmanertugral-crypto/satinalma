@@ -1,7 +1,8 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
-const { getDb } = require('../db/schema');
+const { getDb, calculatePoStatus } = require('../db/schema');
 const { authenticate, authorize } = require('../middleware/auth');
+const { getExcelOrders, getExcelOrderById } = require('../utils/excelPurchaseFallback');
 
 const router = express.Router();
 router.use(authenticate);
@@ -22,14 +23,20 @@ router.get('/', (req, res) => {
   if (status) { query += ' AND po.status = ?'; params.push(status); }
   if (supplier_id) { query += ' AND po.supplier_id = ?'; params.push(supplier_id); }
   query += ' ORDER BY po.created_at DESC';
-  res.json(db.prepare(query).all(...params));
+  const sqlRows = db.prepare(query).all(...params);
+  if (sqlRows.length > 0) return res.json(sqlRows);
+  return res.json(getExcelOrders({ status, supplier_id }));
 });
 
 // GET /api/po/:id
 router.get('/:id', (req, res) => {
   const db = getDb();
   const po = db.prepare(`SELECT po.*, s.name as supplier_name FROM purchase_orders po JOIN suppliers s ON s.id = po.supplier_id WHERE po.id = ?`).get(req.params.id);
-  if (!po) return res.status(404).json({ error: 'Sipariş bulunamadı' });
+  if (!po) {
+    const excelPo = getExcelOrderById(req.params.id);
+    if (!excelPo) return res.status(404).json({ error: 'Sipariş bulunamadı' });
+    return res.json({ ...excelPo, documents: [] });
+  }
   const items = db.prepare(`
     SELECT poi.*, p.name as product_name, p.code as product_code, p.unit
     FROM po_items poi JOIN products p ON p.id = poi.product_id WHERE poi.po_id = ?
@@ -49,12 +56,12 @@ router.post('/', authorize('admin', 'user'), (req, res) => {
   const po_number = getNextPoNumber(db);
   const total = items.reduce((s, i) => s + (parseFloat(i.quantity) * parseFloat(i.unit_price)), 0);
 
-  const insertPo = db.prepare(`INSERT INTO purchase_orders (id, po_number, supplier_id, order_date, expected_date, currency, total_amount, notes, created_by)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+  const insertPo = db.prepare(`INSERT INTO purchase_orders (id, po_number, supplier_id, order_date, expected_date, currency, total_amount, notes, status, created_by)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
   const insertItem = db.prepare(`INSERT INTO po_items (id, po_id, product_id, quantity, unit_price, notes) VALUES (?, ?, ?, ?, ?, ?)`);
 
   db.transaction(() => {
-    insertPo.run(id, po_number, supplier_id, order_date, expected_date || null, currency || 'TRY', total, notes || null, req.user.id);
+    insertPo.run(id, po_number, supplier_id, order_date, expected_date || null, currency || 'TRY', total, notes || null, 'açık', req.user.id);
     for (const item of items) {
       insertItem.run(uuidv4(), id, item.product_id, parseFloat(item.quantity), parseFloat(item.unit_price), item.notes || null);
     }
@@ -73,20 +80,52 @@ router.put('/:id/status', authorize('admin', 'user'), (req, res) => {
   db.prepare(`UPDATE purchase_orders SET status=?, delivery_date=?, updated_at=datetime('now') WHERE id=?`)
     .run(status, delivery_date || null, req.params.id);
 
-  // Teslim alındı → envanter güncelle
-  if (status === 'delivered') {
-    const items = db.prepare('SELECT * FROM po_items WHERE po_id = ?').all(req.params.id);
+  // Kapanan → envanter güncelle
+  if (status === 'kapanan') {
+    const items = db.prepare(`
+      SELECT poi.*, poi.received_quantity FROM po_items poi WHERE poi.po_id = ?
+    `).all(req.params.id);
     const updateInv = db.prepare('UPDATE inventory SET quantity = quantity + ?, updated_at = datetime(\'now\') WHERE product_id = ?');
     const insertTx = db.prepare('INSERT INTO inventory_transactions (id, product_id, type, quantity, reference, created_by) VALUES (?, ?, ?, ?, ?, ?)');
     db.transaction(() => {
       for (const item of items) {
-        updateInv.run(item.quantity, item.product_id);
-        insertTx.run(uuidv4(), item.product_id, 'in', item.quantity, po.po_number, req.user.id);
+        const addQty = item.received_quantity || item.quantity;
+        updateInv.run(addQty, item.product_id);
+        insertTx.run(uuidv4(), item.product_id, 'in', addQty, po.po_number, req.user.id);
       }
     })();
   }
 
   res.json({ message: 'Durum güncellendi' });
+});
+
+// POST /api/po/:id/receive-items - Teslim alınan ürünleri güncelle
+router.post('/:id/receive-items', authorize('admin', 'user'), (req, res) => {
+  const { items } = req.body; // [{ poi_id, received_quantity, received_date }, ...]
+  if (!items || items.length === 0) {
+    return res.status(400).json({ error: 'En az bir kalem gerekli' });
+  }
+  
+  const db = getDb();
+  const po = db.prepare('SELECT * FROM purchase_orders WHERE id = ?').get(req.params.id);
+  if (!po) return res.status(404).json({ error: 'Sipariş bulunamadı' });
+
+  const updateItem = db.prepare(`
+    UPDATE po_items SET received_quantity = ?, received_date = ? WHERE id = ?
+  `);
+
+  db.transaction(() => {
+    for (const item of items) {
+      updateItem.run(item.received_quantity || 0, item.received_date || null, item.poi_id);
+    }
+  })();
+
+  // Yeni status hesapla
+  const newStatus = calculatePoStatus(db, req.params.id);
+  db.prepare('UPDATE purchase_orders SET status = ?, updated_at = datetime(\'now\') WHERE id = ?')
+    .run(newStatus, req.params.id);
+
+  res.json({ message: 'Teslim alınan ürünler güncellendi', status: newStatus });
 });
 
 // DELETE /api/po/:id

@@ -178,7 +178,7 @@ router.post('/purchase-report', authenticate, authorize('admin', 'user'), upload
           poMap[poNumber] = existing.id;
         } else {
           const poId = uuidv4();
-          const poStatus = kapali == 1 ? 'delivered' : 'confirmed';
+          const poStatus = kapali == 1 ? 'kapanan' : 'açık';
           stmts.insertPO.run(poId, poNumber, supplierId, poStatus, tarih, 'TRY',
             `Excel içe aktarma - Fiş No: ${fisNo}`);
           poMap[poNumber] = poId;

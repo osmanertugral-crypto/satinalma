@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getMonthlySummary, getProductPriceAnalysis } from '../api';
 import { PageHeader, Card, Badge, Spinner } from '../components/UI';
-import { TrendingUp, TrendingDown, Minus, Search, BarChart2, LineChart as LineChartIcon, Filter } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Search, BarChart2, LineChart as LineChartIcon, Filter, ArrowUpDown, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   Legend, ResponsiveContainer, Area, AreaChart, Cell, PieChart, Pie
@@ -39,6 +40,26 @@ function formatTRY(val) {
 function formatNum(val) {
   if (val == null) return '-';
   return new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 2 }).format(val);
+}
+
+function exportRowsToExcel(filename, sheetName, rows) {
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  XLSX.writeFile(wb, filename);
+}
+
+function ExportExcelButton({ onClick, label = 'Excel Indir' }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+    >
+      <Download size={14} />
+      {label}
+    </button>
+  );
 }
 
 function ChangeIndicator({ value }) {
@@ -101,10 +122,244 @@ function MonthlySummaryTab() {
     queryKey: ['monthly-summary'],
     queryFn: () => getMonthlySummary().then(r => r.data)
   });
+  const [incSortBy, setIncSortBy] = useState('changePercent');
+  const [incSortDir, setIncSortDir] = useState('desc');
+  const [detailSortBy, setDetailSortBy] = useState('changePercent');
+  const [detailSortDir, setDetailSortDir] = useState('desc');
 
   if (isLoading) return <Spinner />;
-  if (!data || !data.months || data.months.length === 0) {
+  if (!data || (!data.months && !data.monthTrend)) {
     return <Card className="p-8 text-center text-gray-400">Henüz aylık veri bulunamadı. Önce bir satınalma raporu içe aktarın.</Card>;
+  }
+
+  if (data.mode === 'excel-comparison') {
+    const summary = data.summary || {};
+    const monthTrend = data.monthTrend || [];
+    const comparisons = data.comparisons || [];
+    const topIncreases = data.topIncreases || [];
+
+    const sortedTopIncreases = [...topIncreases].sort((a, b) => {
+      const getVal = (x) => {
+        if (incSortBy === 'name') return String(x.name || '');
+        if (incSortBy === 'currentPrice') return Number(x.currentPrice || Number.NEGATIVE_INFINITY);
+        return Number(x.changePercent || Number.NEGATIVE_INFINITY);
+      };
+      const av = getVal(a);
+      const bv = getVal(b);
+      if (typeof av === 'string' || typeof bv === 'string') {
+        const cmp = String(av).localeCompare(String(bv), 'tr');
+        return incSortDir === 'asc' ? cmp : -cmp;
+      }
+      if (av === bv) return String(a.code || '').localeCompare(String(b.code || ''), 'tr');
+      return incSortDir === 'asc' ? av - bv : bv - av;
+    });
+
+    const sortedComparisons = [...comparisons].sort((a, b) => {
+      const getVal = (x) => {
+        if (detailSortBy === 'name') return String(x.name || '');
+        if (detailSortBy === 'currentDate') return String(x.currentDate || '');
+        if (detailSortBy === 'previousDate') return String(x.previousDate || '');
+        if (detailSortBy === 'currentPrice') return Number(x.currentPrice || Number.NEGATIVE_INFINITY);
+        if (detailSortBy === 'previousPrice') return Number(x.previousPrice || Number.NEGATIVE_INFINITY);
+        return Number(x.changePercent || Number.NEGATIVE_INFINITY);
+      };
+      const av = getVal(a);
+      const bv = getVal(b);
+      if (typeof av === 'string' || typeof bv === 'string') {
+        const cmp = String(av).localeCompare(String(bv), 'tr');
+        return detailSortDir === 'asc' ? cmp : -cmp;
+      }
+      if (av === bv) return String(a.code || '').localeCompare(String(b.code || ''), 'tr');
+      return detailSortDir === 'asc' ? av - bv : bv - av;
+    });
+
+    const toggleIncSort = (key) => {
+      if (incSortBy === key) {
+        setIncSortDir(prev => (prev === 'asc' ? 'desc' : 'asc'));
+        return;
+      }
+      setIncSortBy(key);
+      setIncSortDir('desc');
+    };
+
+    const toggleDetailSort = (key) => {
+      if (detailSortBy === key) {
+        setDetailSortDir(prev => (prev === 'asc' ? 'desc' : 'asc'));
+        return;
+      }
+      setDetailSortBy(key);
+      setDetailSortDir('desc');
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <SummaryCard label="Mevcut Ay" value={data.currentMonth || '-'} />
+          <SummaryCard label="Bir Onceki Ay" value={data.previousMonth || '-'} />
+          <SummaryCard label="Mevcut Ay Toplam" value={formatTRY(summary.currentMonthTotal || 0)} />
+          <SummaryCard label="Onceki Ay Toplam" value={formatTRY(summary.previousMonthTotal || 0)} />
+          <SummaryCard label="Aydan Aya Degisim" value={summary.monthToMonthChangePercent == null ? '-' : `%${formatNum(summary.monthToMonthChangePercent)}`} />
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <SummaryCard label="Mevcut Ay Alim Satiri" value={formatNum(summary.currentMonthOrderCount || 0)} />
+          <SummaryCard label="Mevcut Ay Tedarikci" value={formatNum(summary.currentMonthSupplierCount || 0)} />
+          <SummaryCard label="Karsilastirilan Urun" value={formatNum(summary.comparedProductCount || 0)} />
+        </div>
+
+        <Card className="p-4">
+          <h3 className="font-semibold text-gray-700 mb-4">Son 12 Ay Toplam Alim Trendi</h3>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={monthTrend} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+              <YAxis tickFormatter={v => `${(v / 1000).toFixed(0)}K`} tick={{ fontSize: 11 }} />
+              <Tooltip formatter={(val, key) => [key === 'GENEL_TOPLAM' ? formatTRY(val) : formatNum(val), key === 'GENEL_TOPLAM' ? 'Toplam Tutar' : key]} />
+              <Bar dataKey="GENEL_TOPLAM" fill="#1E40AF" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card className="p-4 overflow-auto">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <h3 className="font-semibold text-gray-700">En Yuksek Artislar (Son Alim vs Onceki Alim)</h3>
+              <ExportExcelButton
+                onClick={() => exportRowsToExcel(
+                  `en-yuksek-artislar-${data.currentMonth || 'rapor'}.xlsx`,
+                  'EnYuksekArtislar',
+                  sortedTopIncreases.map(item => ({
+                    StokKodu: item.code,
+                    Urun: item.name,
+                    SonAlimTarihi: item.currentDate,
+                    SonAlimTedarikci: item.currentSupplier,
+                    SonFiyat: item.currentPrice,
+                    OncekiAlimTarihi: item.previousDate,
+                    OncekiAlimTedarikci: item.previousSupplier,
+                    OncekiFiyat: item.previousPrice,
+                    ArtisYuzde: item.changePercent,
+                  }))
+                )}
+              />
+            </div>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-2 px-2">
+                    <button type="button" onClick={() => toggleIncSort('name')} className="inline-flex items-center gap-1 hover:text-gray-800">
+                      Urun
+                      <ArrowUpDown size={13} className={incSortBy === 'name' ? 'text-blue-600' : 'text-gray-400'} />
+                    </button>
+                  </th>
+                  <th className="text-right py-2 px-2">
+                    <button type="button" onClick={() => toggleIncSort('changePercent')} className="inline-flex items-center gap-1 hover:text-gray-800">
+                      Artis
+                      <ArrowUpDown size={13} className={incSortBy === 'changePercent' ? 'text-blue-600' : 'text-gray-400'} />
+                    </button>
+                  </th>
+                  <th className="text-right py-2 px-2">
+                    <button type="button" onClick={() => toggleIncSort('currentPrice')} className="inline-flex items-center gap-1 hover:text-gray-800">
+                      Son Fiyat
+                      <ArrowUpDown size={13} className={incSortBy === 'currentPrice' ? 'text-blue-600' : 'text-gray-400'} />
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedTopIncreases.slice(0, 10).map(item => (
+                  <tr key={`${item.code}-${item.currentDate}`} className="border-b border-gray-100">
+                    <td className="py-2 px-2">
+                      <div className="font-medium text-gray-700">{item.name}</div>
+                      <div className="text-xs text-gray-400">{item.code}</div>
+                    </td>
+                    <td className="py-2 px-2 text-right"><ChangeIndicator value={item.changePercent} /></td>
+                    <td className="py-2 px-2 text-right text-gray-700">{formatTRY(item.currentPrice)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Card>
+
+          <Card className="p-4 overflow-auto">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <h3 className="font-semibold text-gray-700">Son Alim ve Onceki Alim Detayi</h3>
+              <ExportExcelButton
+                onClick={() => exportRowsToExcel(
+                  `son-alim-karsilastirma-${data.currentMonth || 'rapor'}.xlsx`,
+                  'SonAlimKarsilastirma',
+                  sortedComparisons.map(item => ({
+                    StokKodu: item.code,
+                    Urun: item.name,
+                    SonAlimTarihi: item.currentDate,
+                    SonAlimTedarikci: item.currentSupplier,
+                    SonFiyat: item.currentPrice,
+                    SonMiktar: item.currentQty,
+                    OncekiAlimTarihi: item.previousDate,
+                    OncekiAlimTedarikci: item.previousSupplier,
+                    OncekiFiyat: item.previousPrice,
+                    ArtisYuzde: item.changePercent,
+                  }))
+                )}
+              />
+            </div>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-2 px-2">
+                    <button type="button" onClick={() => toggleDetailSort('name')} className="inline-flex items-center gap-1 hover:text-gray-800">
+                      Urun
+                      <ArrowUpDown size={13} className={detailSortBy === 'name' ? 'text-blue-600' : 'text-gray-400'} />
+                    </button>
+                  </th>
+                  <th className="text-left py-2 px-2">
+                    <button type="button" onClick={() => toggleDetailSort('currentDate')} className="inline-flex items-center gap-1 hover:text-gray-800">
+                      Son Alim
+                      <ArrowUpDown size={13} className={detailSortBy === 'currentDate' ? 'text-blue-600' : 'text-gray-400'} />
+                    </button>
+                  </th>
+                  <th className="text-left py-2 px-2">
+                    <button type="button" onClick={() => toggleDetailSort('previousDate')} className="inline-flex items-center gap-1 hover:text-gray-800">
+                      Onceki Alim
+                      <ArrowUpDown size={13} className={detailSortBy === 'previousDate' ? 'text-blue-600' : 'text-gray-400'} />
+                    </button>
+                  </th>
+                  <th className="text-right py-2 px-2">
+                    <button type="button" onClick={() => toggleDetailSort('changePercent')} className="inline-flex items-center gap-1 hover:text-gray-800">
+                      Degisim
+                      <ArrowUpDown size={13} className={detailSortBy === 'changePercent' ? 'text-blue-600' : 'text-gray-400'} />
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedComparisons.slice(0, 80).map(item => (
+                  <tr key={`${item.code}-${item.currentDate}-detail`} className="border-b border-gray-100">
+                    <td className="py-2 px-2">
+                      <div className="font-medium text-gray-700">{item.name}</div>
+                      <div className="text-xs text-gray-400">{item.code}</div>
+                    </td>
+                    <td className="py-2 px-2 text-xs text-gray-700">
+                      <div>{item.currentDate || '-'}</div>
+                      <div className="text-gray-500">{item.currentSupplier || '-'}</div>
+                      <div className="font-medium">{formatTRY(item.currentPrice)}</div>
+                    </td>
+                    <td className="py-2 px-2 text-xs text-gray-700">
+                      <div>{item.previousDate || '-'}</div>
+                      <div className="text-gray-500">{item.previousSupplier || '-'}</div>
+                      <div className="font-medium">{item.previousPrice == null ? '-' : formatTRY(item.previousPrice)}</div>
+                    </td>
+                    <td className="py-2 px-2 text-right"><ChangeIndicator value={item.changePercent} /></td>
+                  </tr>
+                ))}
+                {sortedComparisons.length === 0 && (
+                  <tr><td colSpan={4} className="py-8 text-center text-gray-400">Karsilastirilabilir alim bulunamadi</td></tr>
+                )}
+              </tbody>
+            </table>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   const { months, categories } = data;
@@ -190,7 +445,20 @@ function MonthlySummaryTab() {
 
         {/* Aylık tablo */}
         <Card className="p-4 overflow-auto">
-          <h3 className="font-semibold text-gray-700 mb-4">Aylık Tablo</h3>
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <h3 className="font-semibold text-gray-700">Aylık Tablo</h3>
+            <ExportExcelButton
+              onClick={() => exportRowsToExcel(
+                'aylik-ozet.xlsx',
+                'AylikOzet',
+                months.map(m => {
+                  const row = { Ay: m.month, Toplam: m.GENEL_TOPLAM };
+                  categories.forEach(c => { row[CATEGORY_LABELS[c] || c] = m[c] || 0; });
+                  return row;
+                })
+              )}
+            />
+          </div>
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">
@@ -236,13 +504,68 @@ function MonthlySummaryTab() {
 function ProductAnalysisTab() {
   const [search, setSearch] = useState('');
   const [catFilter, setCatFilter] = useState('');
+  const [periodFilter, setPeriodFilter] = useState('all');
+  const [yearFilter, setYearFilter] = useState('');
+  const [monthFilter, setMonthFilter] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [sortBy, setSortBy] = useState('overallChange');
+  const [sortDir, setSortDir] = useState('desc');
 
-  const { data: products = [], isLoading } = useQuery({
-    queryKey: ['product-price-analysis', catFilter, search],
-    queryFn: () => getProductPriceAnalysis({ category: catFilter || undefined, search: search || undefined }).then(r => r.data),
+  const { data: payload, isLoading, isError } = useQuery({
+    queryKey: ['product-price-analysis', catFilter, search, periodFilter, yearFilter, monthFilter],
+    queryFn: () => getProductPriceAnalysis({
+      category: catFilter || undefined,
+      search: search || undefined,
+      period: periodFilter,
+      year: yearFilter || undefined,
+      month: monthFilter || undefined,
+    }).then(r => r.data),
     keepPreviousData: true
   });
+
+  const products = Array.isArray(payload) ? payload : (payload?.data || []);
+  const summary = Array.isArray(payload)
+    ? {
+        totalProducts: products.length,
+        totalStockQty: products.reduce((sum, p) => sum + Number(p.totalQty || 0), 0),
+        avgIncreasePercent: (() => {
+          const vals = products.map(p => p.overallChange).filter(v => v != null);
+          return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+        })(),
+        weightedIncreasePercent: null,
+      }
+    : (payload?.summary || {});
+  const availableYears = Array.isArray(payload)
+    ? [...new Set(products.map(p => String(p.lastDate || '').slice(0, 4)).filter(Boolean).map(v => Number(v)).filter(Boolean))].sort((a, b) => b - a)
+    : (payload?.availableYears || []);
+
+  useEffect(() => {
+    if (!selectedProduct) return;
+    const exists = products.some(p => p.product_id === selectedProduct.product_id);
+    if (!exists) setSelectedProduct(null);
+  }, [products, selectedProduct]);
+
+  const MONTH_OPTIONS = [
+    { value: '1', label: 'Ocak' },
+    { value: '2', label: 'Subat' },
+    { value: '3', label: 'Mart' },
+    { value: '4', label: 'Nisan' },
+    { value: '5', label: 'Mayis' },
+    { value: '6', label: 'Haziran' },
+    { value: '7', label: 'Temmuz' },
+    { value: '8', label: 'Agustos' },
+    { value: '9', label: 'Eylul' },
+    { value: '10', label: 'Ekim' },
+    { value: '11', label: 'Kasim' },
+    { value: '12', label: 'Aralik' },
+  ];
+
+  const PERIOD_OPTIONS = [
+    { value: 'all', label: 'Tum Donem' },
+    { value: '3', label: 'Son 3 Ay' },
+    { value: '6', label: 'Son 6 Ay' },
+    { value: '12', label: 'Son 1 Yil' },
+  ];
 
   // En çok artan ve en çok düşen ürünler
   const topIncreasing = useMemo(() =>
@@ -253,6 +576,31 @@ function ProductAnalysisTab() {
     [...products].filter(p => p.overallChange != null).sort((a, b) => a.overallChange - b.overallChange).slice(0, 5),
     [products]
   );
+
+  const sortedProducts = useMemo(() => {
+    const list = [...products];
+    const getVal = (p, key) => {
+      if (key === 'overallChange') return Number(p.overallChange ?? Number.NEGATIVE_INFINITY);
+      if (key === 'totalQty') return Number(p.totalQty ?? Number.NEGATIVE_INFINITY);
+      return 0;
+    };
+    list.sort((a, b) => {
+      const av = getVal(a, sortBy);
+      const bv = getVal(b, sortBy);
+      if (av === bv) return String(a.code || '').localeCompare(String(b.code || ''), 'tr');
+      return sortDir === 'asc' ? av - bv : bv - av;
+    });
+    return list;
+  }, [products, sortBy, sortDir]);
+
+  function toggleSort(column) {
+    if (sortBy === column) {
+      setSortDir(prev => (prev === 'asc' ? 'desc' : 'asc'));
+      return;
+    }
+    setSortBy(column);
+    setSortDir('desc');
+  }
 
   // Kategori dağılım istatistiği
   const catStats = useMemo(() => {
@@ -270,6 +618,12 @@ function ProductAnalysisTab() {
 
   return (
     <div className="space-y-6">
+      {isError && (
+        <Card className="p-4 border border-red-200 bg-red-50 text-red-700 text-sm">
+          Fiyat analizi verisi alınamadı. Sunucuyu yeniden başlatıp tekrar deneyin.
+        </Card>
+      )}
+
       {/* Filtreler */}
       <Card className="p-4">
         <div className="flex flex-wrap gap-3 items-end">
@@ -296,12 +650,60 @@ function ProductAnalysisTab() {
               ))}
             </select>
           </div>
+          <div className="min-w-[260px]">
+            <label className="block text-xs font-medium text-gray-500 mb-1">Donem</label>
+            <div className="inline-flex rounded-lg border border-gray-300 overflow-hidden bg-white">
+              {PERIOD_OPTIONS.map(option => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setPeriodFilter(option.value)}
+                  className={`px-3 py-2 text-sm font-medium transition-colors ${periodFilter === option.value ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="min-w-[130px]">
+            <label className="block text-xs font-medium text-gray-500 mb-1">Yil</label>
+            <select
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={yearFilter}
+              onChange={e => setYearFilter(e.target.value)}
+            >
+              <option value="">Tumu</option>
+              {availableYears.map(y => (
+                <option key={y} value={String(y)}>{y}</option>
+              ))}
+            </select>
+          </div>
+          <div className="min-w-[150px]">
+            <label className="block text-xs font-medium text-gray-500 mb-1">Ay</label>
+            <select
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={monthFilter}
+              onChange={e => setMonthFilter(e.target.value)}
+            >
+              <option value="">Tum Aylar</option>
+              {MONTH_OPTIONS.map(m => (
+                <option key={m.value} value={m.value}>{m.label}</option>
+              ))}
+            </select>
+          </div>
           <div className="text-sm text-gray-500">
             <Filter size={14} className="inline mr-1" />
             {products.length} ürün
           </div>
         </div>
       </Card>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <SummaryCard label="Filtrelenen Urun" value={summary.totalProducts ?? products.length} />
+        <SummaryCard label="Toplam Stok Adedi" value={formatNum(summary.totalStockQty || 0)} />
+        <SummaryCard label="Ort. Artis" value={summary.avgIncreasePercent == null ? '-' : `%${formatNum(summary.avgIncreasePercent)}`} />
+        <SummaryCard label="Stok Agirlikli Artis" value={summary.weightedIncreasePercent == null ? '-' : `%${formatNum(summary.weightedIncreasePercent)}`} />
+      </div>
 
       {/* Kategori özet kartları */}
       {!catFilter && Object.keys(catStats).length > 0 && (
@@ -400,6 +802,25 @@ function ProductAnalysisTab() {
       {/* Ürün listesi tablosu */}
       {isLoading ? <Spinner /> : (
         <Card className="overflow-auto">
+          <div className="p-3 border-b border-gray-200 flex justify-end">
+            <ExportExcelButton
+              onClick={() => exportRowsToExcel(
+                `urun-fiyat-analizi-${new Date().toISOString().slice(0, 10)}.xlsx`,
+                'UrunFiyatAnalizi',
+                sortedProducts.map(p => ({
+                  StokKodu: p.code,
+                  Urun: p.name,
+                  Kategori: CATEGORY_LABELS[p.anaGrup] || p.anaGrup,
+                  IlkFiyat: p.firstPrice,
+                  SonFiyat: p.lastPrice,
+                  ToplamDegisimYuzde: p.overallChange,
+                  ToplamAdet: p.totalQty,
+                  SonAlimTarihi: p.lastDate,
+                  KayitSayisi: p.priceCount,
+                }))
+              )}
+            />
+          </div>
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
@@ -407,16 +828,25 @@ function ProductAnalysisTab() {
                 <th className="text-left py-2.5 px-3 font-medium text-gray-500">Ürün</th>
                 <th className="text-left py-2.5 px-3 font-medium text-gray-500">Kategori</th>
                 <th className="text-right py-2.5 px-3 font-medium text-gray-500">İlk Fiyat</th>
-                <th className="text-right py-2.5 px-3 font-medium text-gray-500">Q4 2025 Ort.</th>
-                <th className="text-right py-2.5 px-3 font-medium text-gray-500">2026 Ort.</th>
                 <th className="text-right py-2.5 px-3 font-medium text-gray-500">Son Fiyat</th>
-                <th className="text-right py-2.5 px-3 font-medium text-gray-500">Toplam Değişim</th>
-                <th className="text-right py-2.5 px-3 font-medium text-gray-500">Q4→2026</th>
+                <th className="text-right py-2.5 px-3 font-medium text-gray-500">
+                  <button type="button" onClick={() => toggleSort('overallChange')} className="inline-flex items-center gap-1 text-gray-600 hover:text-gray-800">
+                    Toplam Değişim
+                    <ArrowUpDown size={13} className={sortBy === 'overallChange' ? 'text-blue-600' : 'text-gray-400'} />
+                  </button>
+                </th>
+                <th className="text-right py-2.5 px-3 font-medium text-gray-500">
+                  <button type="button" onClick={() => toggleSort('totalQty')} className="inline-flex items-center gap-1 text-gray-600 hover:text-gray-800">
+                    Toplam Adet
+                    <ArrowUpDown size={13} className={sortBy === 'totalQty' ? 'text-blue-600' : 'text-gray-400'} />
+                  </button>
+                </th>
+                <th className="text-right py-2.5 px-3 font-medium text-gray-500">Son Alim</th>
                 <th className="text-center py-2.5 px-3 font-medium text-gray-500">Kayıt</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((p, i) => (
+              {sortedProducts.map((p, i) => (
                 <tr
                   key={p.product_id}
                   className={`border-b border-gray-100 cursor-pointer transition-colors ${
@@ -433,16 +863,15 @@ function ProductAnalysisTab() {
                     </span>
                   </td>
                   <td className="py-2 px-3 text-right text-gray-600">{formatTRY(p.firstPrice)}</td>
-                  <td className="py-2 px-3 text-right text-gray-600">{p.q4Avg ? formatTRY(p.q4Avg) : '—'}</td>
-                  <td className="py-2 px-3 text-right text-gray-600">{p.recentAvg ? formatTRY(p.recentAvg) : '—'}</td>
                   <td className="py-2 px-3 text-right font-semibold text-gray-800">{formatTRY(p.lastPrice)}</td>
                   <td className="py-2 px-3 text-right"><ChangeIndicator value={p.overallChange} /></td>
-                  <td className="py-2 px-3 text-right"><ChangeIndicator value={p.q4ToRecentChange} /></td>
+                  <td className="py-2 px-3 text-right text-gray-600">{formatNum(p.totalQty || 0)}</td>
+                  <td className="py-2 px-3 text-right text-gray-600">{p.lastDate || '-'}</td>
                   <td className="py-2 px-3 text-center text-xs text-gray-400">{p.priceCount}</td>
                 </tr>
               ))}
-              {products.length === 0 && (
-                <tr><td colSpan={10} className="py-8 text-center text-gray-400">Fiyat verisi bulunamadı</td></tr>
+              {sortedProducts.length === 0 && (
+                <tr><td colSpan={9} className="py-8 text-center text-gray-400">Fiyat verisi bulunamadı</td></tr>
               )}
             </tbody>
           </table>

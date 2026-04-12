@@ -16,7 +16,14 @@ function getNextRfqNumber(db) {
 // GET /api/rfq
 router.get('/', (req, res) => {
   const db = getDb();
-  res.json(db.prepare('SELECT * FROM quotations ORDER BY created_at DESC').all());
+  const rfqs = db.prepare(`
+    SELECT q.*,
+      (SELECT COUNT(*) FROM quotation_suppliers qs WHERE qs.quotation_id = q.id) as supplier_count,
+      (SELECT COUNT(*) FROM quotation_items qi WHERE qi.quotation_id = q.id) as item_count
+    FROM quotations q
+    ORDER BY q.created_at DESC
+  `).all();
+  res.json(rfqs);
 });
 
 // GET /api/rfq/:id

@@ -5,7 +5,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import LoginPage from './pages/Login';
 import DashboardPage from './pages/Dashboard';
-import SuppliersPage from './pages/Suppliers';
+import SuppliersOrdersPage from './pages/SuppliersOrders';
 import SupplierDetailPage from './pages/SupplierDetail';
 import ProductsPage from './pages/Products';
 import ProductDetailPage from './pages/ProductDetail';
@@ -23,6 +23,9 @@ import AdminUsersPage from './pages/AdminUsers';
 import OutlookTasksPage from './pages/OutlookTasks';
 import MalzemeIhtiyacPage from './pages/MalzemeIhtiyac';
 import FinancePage from './pages/Finance';
+import DamageReportsPage from './pages/DamageReports';
+import ProjectsPage from './pages/Projects';
+import ProjectDetailPage from './pages/ProjectDetail';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30000 } }
@@ -50,7 +53,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
               <Route index element={<DashboardPage />} />
-              <Route path="suppliers" element={<SuppliersPage />} />
+              <Route path="suppliers" element={<SuppliersOrdersPage />} />
               <Route path="suppliers/:id" element={<SupplierDetailPage />} />
               <Route path="products" element={<ProductsPage />} />
               <Route path="products/:id" element={<ProductDetailPage />} />
@@ -66,6 +69,9 @@ function App() {
               <Route path="documents" element={<DocumentsPage />} />
               <Route path="outlook-tasks" element={<OutlookTasksPage />} />
               <Route path="price-analysis" element={<PriceAnalysisPage />} />
+              <Route path="hasar-tutanaklari" element={<DamageReportsPage />} />
+              <Route path="projeler" element={<ProjectsPage />} />
+              <Route path="projeler/:id" element={<ProjectDetailPage />} />
               <Route path="reports" element={<ReportsPage />} />
               <Route path="admin/users" element={<AdminRoute><AdminUsersPage /></AdminRoute>} />
             </Route>

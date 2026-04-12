@@ -6,10 +6,10 @@ import { Card, Button, Badge, Table, Spinner, Modal, Input, Select } from '../co
 import { ArrowLeft, Upload, Download, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const STATUS_LABELS = { draft: 'Taslak', sent: 'Gönderildi', confirmed: 'Onaylandı', delivered: 'Teslim Alındı', cancelled: 'İptal' };
-const STATUS_COLOR = { draft: 'gray', sent: 'blue', confirmed: 'green', delivered: 'purple', cancelled: 'red' };
-const NEXT_STATUS = { draft: 'sent', sent: 'confirmed', confirmed: 'delivered' };
-const NEXT_LABEL = { draft: 'Gönderildi İşaretle', sent: 'Onayla', confirmed: 'Teslim Alındı' };
+const STATUS_LABELS = { draft: 'Taslak', sent: 'Gönderildi', confirmed: 'Onaylandı', delivered: 'Teslim Alındı', cancelled: 'İptal', açık: 'Açık', bekleyen: 'Bekleyen', kapanan: 'Kapanan' };
+const STATUS_COLOR = { draft: 'gray', sent: 'blue', confirmed: 'green', delivered: 'purple', cancelled: 'red', açık: 'yellow', bekleyen: 'orange', kapanan: 'green' };
+const NEXT_STATUS = { draft: 'sent', sent: 'confirmed', confirmed: 'delivered', açık: 'bekleyen', bekleyen: 'kapanan' };
+const NEXT_LABEL = { draft: 'Gönderildi İşaretle', sent: 'Onayla', confirmed: 'Teslim Alındı', açık: 'Teslim Alma', bekleyen: 'Tamamen Teslim Al' };
 
 export default function PODetailPage() {
   const { id } = useParams();

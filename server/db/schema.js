@@ -105,7 +105,7 @@ function initDb() {
       id TEXT PRIMARY KEY,
       po_number TEXT UNIQUE NOT NULL,
       supplier_id TEXT NOT NULL REFERENCES suppliers(id),
-      status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','sent','confirmed','delivered','cancelled')),
+      status TEXT NOT NULL DEFAULT 'draft',
       order_date TEXT NOT NULL,
       expected_date TEXT,
       delivery_date TEXT,
@@ -244,6 +244,19 @@ function initDb() {
   // Sonradan eklenen sütunlar (idempotent)
   try { database.exec('ALTER TABLE suppliers ADD COLUMN external_code TEXT'); } catch(e) {}
   try { database.exec('ALTER TABLE users ADD COLUMN allowed_pages TEXT DEFAULT NULL'); } catch(e) {}
+  try { database.exec('ALTER TABLE suppliers ADD COLUMN rating INTEGER DEFAULT NULL'); } catch(e) {}
+  try { database.exec('ALTER TABLE po_items ADD COLUMN received_quantity REAL DEFAULT 0'); } catch(e) {}
+  try { database.exec('ALTER TABLE po_items ADD COLUMN received_date TEXT'); } catch(e) {}
+  try { database.exec('ALTER TABLE project_offers ADD COLUMN color TEXT'); } catch(e) {}
+  try { database.exec('ALTER TABLE project_offers ADD COLUMN customer_note TEXT'); } catch(e) {}
+  try { database.exec('ALTER TABLE project_offers ADD COLUMN purchase_note TEXT'); } catch(e) {}
+  try { database.exec('ALTER TABLE project_offer_items ADD COLUMN actual_unit_price REAL DEFAULT 0'); } catch(e) {}
+  try { database.exec('ALTER TABLE project_offer_items ADD COLUMN actual_total_price REAL DEFAULT 0'); } catch(e) {}
+  try { database.exec('ALTER TABLE project_offer_items ADD COLUMN actual_approved INTEGER DEFAULT 0'); } catch(e) {}
+  try { database.exec('ALTER TABLE project_offer_items ADD COLUMN actual_note TEXT'); } catch(e) {}
+
+  // Eski durum normalize: artik cancelled kullanilmiyor, pending'e cek
+  try { database.exec("UPDATE project_offers SET status = 'pending' WHERE status = 'cancelled'"); } catch(e) {}
 
   // Canlı depo stok tablosu (Excel'den senkronize)
   database.exec(`
@@ -269,6 +282,80 @@ function initDb() {
       message TEXT,
       synced_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
+
+    CREATE TABLE IF NOT EXISTS damage_reports (
+      id TEXT PRIMARY KEY,
+      report_date TEXT NOT NULL,
+      product_code TEXT,
+      product_name TEXT,
+      problem TEXT,
+      quantity REAL DEFAULT 0,
+      problem_source TEXT,
+      reported_by TEXT,
+      approved_by TEXT,
+      resolution TEXT,
+      purchase_action TEXT,
+      total_cost REAL DEFAULT 0,
+      source_file TEXT,
+      row_hash TEXT UNIQUE,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS project_offers (
+      id TEXT PRIMARY KEY,
+      project_name TEXT,
+      institution TEXT,
+      sheet_name TEXT,
+      offer_type TEXT,
+      country TEXT,
+      superstructure TEXT,
+      vehicle TEXT,
+      color TEXT,
+      quantity REAL DEFAULT 0,
+      created_date TEXT,
+      offer_due_date TEXT,
+      usd_rate REAL,
+      eur_rate REAL,
+      quoted_tl REAL DEFAULT 0,
+      quoted_eur REAL DEFAULT 0,
+      quoted_usd REAL DEFAULT 0,
+      status TEXT NOT NULL DEFAULT 'offered' CHECK (status IN ('offered','won','lost','cancelled','pending')),
+      pre_cost_tl REAL DEFAULT 0,
+      realized_cost_tl REAL DEFAULT 0,
+      realized_revenue_tl REAL DEFAULT 0,
+      result_note TEXT,
+      customer_note TEXT,
+      purchase_note TEXT,
+      source_file TEXT,
+      row_hash TEXT UNIQUE,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS project_offer_items (
+      id TEXT PRIMARY KEY,
+      project_offer_id TEXT NOT NULL REFERENCES project_offers(id) ON DELETE CASCADE,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      category TEXT,
+      product_name TEXT,
+      description TEXT,
+      brand TEXT,
+      image_ref TEXT,
+      product_note TEXT,
+      size_info TEXT,
+      unit TEXT,
+      purchase_note TEXT,
+      termin TEXT,
+      unit_price REAL DEFAULT 0,
+      total_price REAL DEFAULT 0,
+      actual_unit_price REAL DEFAULT 0,
+      actual_total_price REAL DEFAULT 0,
+      actual_approved INTEGER DEFAULT 0,
+      actual_note TEXT,
+      row_hash TEXT UNIQUE,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
   `);
 
   // stok_kodu tekil index (varsa atla)
@@ -277,4 +364,22 @@ function initDb() {
   console.log('Veritabanı başlatıldı.');
 }
 
-module.exports = { getDb, initDb };
+function calculatePoStatus(db, poId) {
+  // po_items'e göre status hesapla
+  // Açık: Hiç ürün gelmemişse
+  // Bekleyen: Bazı ürünler gelmişse
+  // Kapanan: Tüm ürünler gelmişse
+  
+  const items = db.prepare(`
+    SELECT SUM(quantity) as total_qty, SUM(COALESCE(received_quantity, 0)) as received_qty
+    FROM po_items WHERE po_id = ?
+  `).get(poId);
+  
+  if (!items || items.total_qty === 0) return 'draft';
+  
+  if (items.received_qty === 0) return 'açık';
+  if (items.received_qty < items.total_qty) return 'bekleyen';
+  return 'kapanan';
+}
+
+module.exports = { getDb, initDb, calculatePoStatus };
