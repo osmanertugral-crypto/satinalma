@@ -191,7 +191,7 @@ function upsertOffers(rows) {
       id, project_offer_id, sort_order, category, product_name, description, brand, image_ref,
       product_note, size_info, unit, purchase_note, termin, unit_price, total_price,
       actual_unit_price, actual_total_price, actual_approved, actual_note, row_hash
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   const tx = db.transaction((offers) => {
@@ -482,7 +482,7 @@ router.post('/:id/items', authorize('admin', 'user'), (req, res) => {
       id, project_offer_id, sort_order, category, product_name, description, brand, image_ref,
       product_note, size_info, unit, purchase_note, termin, unit_price, total_price,
       actual_unit_price, actual_total_price, actual_approved, actual_note, row_hash
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     itemId,
     req.params.id,
