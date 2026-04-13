@@ -43,6 +43,8 @@ export default function MalzemeIhtiyac() {
   const [siparisModal, setSiparisModal] = useState(null); // { cari, action: 'pdf'|'mail', urunler: [{...row, adet}] }
   const [selectedTedarikci, setSelectedTedarikci] = useState(new Set());
   const [odemeOnayModal, setOdemeOnayModal] = useState(false);
+  const [uretimGrupView, setUretimGrupView] = useState('liste'); // 'liste' | 'proje'
+  const [uretimFilters, setUretimFilters] = useState({ tur: 'all', cari: 'all', grup: 'all', durum: 'all' });
   const [stokAraModal, setStokAraModal] = useState(null); // { cari: string }
   const [stokEklenenler, setStokEklenenler] = useState({}); // { [cari]: [{stok_kodu, stok_adi, adet, birim_fiyat}] }
 
@@ -117,6 +119,19 @@ export default function MalzemeIhtiyac() {
     }));
   }
 
+  // Dropdown seçenekleri
+  const uretimTurList = useMemo(() => [
+    ...new Set((uretimQuery.data?.data || []).map(d => d.alt_kod_tur).filter(Boolean)),
+  ].sort(), [uretimQuery.data]);
+
+  const uretimCariList = useMemo(() => [
+    ...new Set((uretimQuery.data?.data || []).map(d => d.son_satinalma_cari).filter(Boolean)),
+  ].sort((a, b) => a.localeCompare(b, 'tr')), [uretimQuery.data]);
+
+  const uretimGrupList = useMemo(() => [
+    ...new Set((uretimQuery.data?.data || []).map(d => d.alt_stok_grup_kodu).filter(Boolean)),
+  ].sort((a, b) => a.localeCompare(b, 'tr')), [uretimQuery.data]);
+
   // Filtered & sorted üretim data
   const filteredUretim = useMemo(() => {
     let data = uretimQuery.data?.data || [];
@@ -126,9 +141,16 @@ export default function MalzemeIhtiyac() {
         normalizeStr(d.alt_kod).includes(s) ||
         normalizeStr(d.alt_adi).includes(s) ||
         normalizeStr(d.proje_kodu).includes(s) ||
-        normalizeStr(d.karavan_adi).includes(s)
+        normalizeStr(d.karavan_adi).includes(s) ||
+        normalizeStr(d.son_satinalma_cari || '').includes(s)
       );
     }
+    if (uretimFilters.tur !== 'all') data = data.filter(d => d.alt_kod_tur === uretimFilters.tur);
+    if (uretimFilters.cari !== 'all') data = data.filter(d => d.son_satinalma_cari === uretimFilters.cari);
+    if (uretimFilters.grup !== 'all') data = data.filter(d => d.alt_stok_grup_kodu === uretimFilters.grup);
+    if (uretimFilters.durum === 'teslim') data = data.filter(d => Number(d.projelere_cikislar) > 0);
+    else if (uretimFilters.durum === 'bekliyor') data = data.filter(d => Number(d.projelere_cikislar) === 0);
+    else if (uretimFilters.durum === 'negatif') data = data.filter(d => Number(d.satinalma) < 0);
     if (sortConfig.key) {
       data = [...data].sort((a, b) => {
         const av = a[sortConfig.key], bv = b[sortConfig.key];
@@ -137,7 +159,29 @@ export default function MalzemeIhtiyac() {
       });
     }
     return data;
-  }, [uretimQuery.data, search, sortConfig]);
+  }, [uretimQuery.data, search, sortConfig, uretimFilters]);
+
+  // Proje dağılımı pivot
+  const projeDagilimi = useMemo(() => {
+    if (uretimGrupView !== 'proje') return null;
+    const projelerList = [...new Set(filteredUretim.map(d => d.proje_kodu))].sort((a, b) => a.localeCompare(b, 'tr'));
+    const urunMap = {};
+    for (const row of filteredUretim) {
+      if (!urunMap[row.alt_kod]) {
+        urunMap[row.alt_kod] = {
+          alt_kod: row.alt_kod, alt_adi: row.alt_adi, birim: row.birim,
+          cari: row.son_satinalma_cari, grup: row.alt_stok_grup_kodu,
+          tur: row.alt_kod_tur, projeler: {}, toplam: 0, toplam_tutar: 0,
+        };
+      }
+      const m = Number(row.miktar || 0);
+      urunMap[row.alt_kod].projeler[row.proje_kodu] = (urunMap[row.alt_kod].projeler[row.proje_kodu] || 0) + m;
+      urunMap[row.alt_kod].toplam += m;
+      urunMap[row.alt_kod].toplam_tutar += Number(row.tutar || 0);
+    }
+    const urunler = Object.values(urunMap).sort((a, b) => a.alt_kod.localeCompare(b.alt_kod, 'tr'));
+    return { urunler, projelerList };
+  }, [filteredUretim, uretimGrupView]);
 
   // Filtered & sorted satınalma data
   const filteredSatinalma = useMemo(() => {
@@ -721,88 +765,231 @@ export default function MalzemeIhtiyac() {
 
       {/* TAB: ÜRETİM İHTİYAÇ RAPORU */}
       {activeTab === 'uretim' && (
-        <Card>
-          <div className="p-4 border-b flex items-center gap-3">
-            <div className="relative flex-1 max-w-sm">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Malzeme kodu, adı veya proje ara..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+        <div className="space-y-3">
+          {/* Filtre bar */}
+          <Card className="p-3">
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Arama */}
+              <div className="relative min-w-[200px] flex-1 max-w-xs">
+                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Kod, ad, proje, cari ara..."
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              {/* Tür */}
+              <select
+                value={uretimFilters.tur}
+                onChange={e => setUretimFilters(f => ({ ...f, tur: e.target.value }))}
+                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Tüm Türler</option>
+                {uretimTurList.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+              {/* Durum */}
+              <select
+                value={uretimFilters.durum}
+                onChange={e => setUretimFilters(f => ({ ...f, durum: e.target.value }))}
+                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Tüm Durumlar</option>
+                <option value="teslim">✅ Çıkış Yapılmış</option>
+                <option value="bekliyor">⏳ Çıkış Yok</option>
+                <option value="negatif">🔴 Satınalma Gerekli</option>
+              </select>
+              {/* Cari */}
+              <select
+                value={uretimFilters.cari}
+                onChange={e => setUretimFilters(f => ({ ...f, cari: e.target.value }))}
+                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[200px]"
+              >
+                <option value="all">Tüm Cariler</option>
+                {uretimCariList.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+              {/* Grup */}
+              <select
+                value={uretimFilters.grup}
+                onChange={e => setUretimFilters(f => ({ ...f, grup: e.target.value }))}
+                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Tüm Gruplar</option>
+                {uretimGrupList.map(g => <option key={g} value={g}>{g}</option>)}
+              </select>
+              {/* Sıfırla */}
+              {(search || uretimFilters.tur !== 'all' || uretimFilters.cari !== 'all' || uretimFilters.grup !== 'all' || uretimFilters.durum !== 'all') && (
+                <button
+                  onClick={() => { setSearch(''); setUretimFilters({ tur: 'all', cari: 'all', grup: 'all', durum: 'all' }); }}
+                  className="text-xs text-red-500 hover:text-red-700 px-2 py-1.5 rounded border border-red-200 hover:border-red-400 whitespace-nowrap"
+                >
+                  ✕ Filtreleri Sıfırla
+                </button>
+              )}
+              <span className="text-sm text-gray-400 ml-auto whitespace-nowrap">{filteredUretim.length} kayıt</span>
+              {/* Görünüm toggle */}
+              <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-lg ml-2">
+                <button
+                  onClick={() => setUretimGrupView('liste')}
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${uretimGrupView === 'liste' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500'}`}
+                >
+                  <List size={13} /> Liste
+                </button>
+                <button
+                  onClick={() => setUretimGrupView('proje')}
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${uretimGrupView === 'proje' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500'}`}
+                >
+                  <Users size={13} /> Proje Dağılımı
+                </button>
+              </div>
             </div>
-            <span className="text-sm text-gray-500">{filteredUretim.length} kayıt</span>
-          </div>
+          </Card>
+
           {uretimQuery.isLoading ? (
-            <Spinner />
+            <Card><Spinner /></Card>
           ) : uretimQuery.isError ? (
-            <div className="p-8 text-center text-red-500">{uretimQuery.error?.response?.data?.error || 'Veri yüklenemedi'}</div>
+            <Card><div className="p-8 text-center text-red-500">{uretimQuery.error?.response?.data?.error || 'Veri yüklenemedi'}</div></Card>
+          ) : uretimGrupView === 'liste' ? (
+            /* ── LİSTE GÖRÜNÜMÜ ── */
+            <Card>
+              <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+                <table className="w-full text-sm">
+                  <thead className="sticky top-0 bg-gray-50 z-10">
+                    <tr className="border-b border-gray-200">
+                      <SortHeader label="Proje" sortKey="proje_kodu" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Karavan" sortKey="karavan_adi" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Tür" sortKey="alt_kod_tur" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Malzeme Kodu" sortKey="alt_kod" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Malzeme Adı" sortKey="alt_adi" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Miktar" sortKey="miktar" onSort={handleSort} currentSort={sortConfig} />
+                      <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Birim</th>
+                      <SortHeader label="Çıkışlar" sortKey="projelere_cikislar" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Elde Kalan" sortKey="elde_kalan" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Ürt.Depo" sortKey="uretim_depo" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Satınalma" sortKey="satinalma" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Açık Sip." sortKey="acik_satinalma_siparisleri" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Toplam" sortKey="toplam" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Birim Fiyat" sortKey="birim_fiyat" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Tutar" sortKey="tutar" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Cari" sortKey="son_satinalma_cari" onSort={handleSort} currentSort={sortConfig} />
+                      <SortHeader label="Grup" sortKey="alt_stok_grup_kodu" onSort={handleSort} currentSort={sortConfig} />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredUretim.map((row, i) => {
+                      const teslimEdildi = Number(row.projelere_cikislar) > 0;
+                      return (
+                        <tr
+                          key={i}
+                          className={`border-b border-gray-100 hover:bg-gray-50 ${teslimEdildi ? 'bg-green-50/50' : ''}`}
+                        >
+                          <td className="px-3 py-2 font-medium text-blue-700 whitespace-nowrap">{row.proje_kodu}</td>
+                          <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.karavan_adi}</td>
+                          <td className="px-3 py-2"><Badge color={row.alt_kod_tur === 'Hammadde' ? 'blue' : 'gray'}>{row.alt_kod_tur}</Badge></td>
+                          <td className="px-3 py-2 font-mono text-xs whitespace-nowrap">{row.alt_kod}</td>
+                          <td className="px-3 py-2 max-w-[200px] truncate" title={row.alt_adi}>{row.alt_adi}</td>
+                          <td className="px-3 py-2 text-right">{formatNumber(row.miktar)}</td>
+                          <td className="px-3 py-2 text-gray-500">{row.birim}</td>
+                          <td className={`px-3 py-2 text-right ${Number(row.projelere_cikislar) > 0 ? 'text-green-600 font-medium' : ''}`}>
+                            {formatNumber(row.projelere_cikislar)}
+                          </td>
+                          <td className="px-3 py-2 text-right">{formatNumber(row.elde_kalan)}</td>
+                          <td className="px-3 py-2 text-right">{formatNumber(row.uretim_depo)}</td>
+                          <td className={`px-3 py-2 text-right ${Number(row.satinalma) < 0 ? 'text-red-600 font-medium' : ''}`}>
+                            {formatNumber(row.satinalma)}
+                          </td>
+                          <td className="px-3 py-2 text-right">{formatNumber(row.acik_satinalma_siparisleri)}</td>
+                          <td className="px-3 py-2 text-right font-medium">{formatNumber(row.toplam)}</td>
+                          <td className="px-3 py-2 text-right">{formatCurrency(row.birim_fiyat)}</td>
+                          <td className="px-3 py-2 text-right font-medium">{formatCurrency(row.tutar)}</td>
+                          <td className="px-3 py-2 text-xs max-w-[150px] truncate text-gray-500" title={row.son_satinalma_cari}>{row.son_satinalma_cari}</td>
+                          <td className="px-3 py-2"><Badge color="purple">{row.alt_stok_grup_kodu}</Badge></td>
+                        </tr>
+                      );
+                    })}
+                    {filteredUretim.length === 0 && (
+                      <tr><td colSpan={17} className="text-center text-gray-400 py-12">Veri bulunamadı</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
           ) : (
-            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
-              <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-gray-50 z-10">
-                  <tr className="border-b border-gray-200">
-                    <SortHeader label="Proje" sortKey="proje_kodu" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Karavan" sortKey="karavan_adi" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Tür" sortKey="alt_kod_tur" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Malzeme Kodu" sortKey="alt_kod" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Malzeme Adı" sortKey="alt_adi" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Miktar" sortKey="miktar" onSort={handleSort} currentSort={sortConfig} />
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Birim</th>
-                    <SortHeader label="Çıkışlar" sortKey="projelere_cikislar" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Elde Kalan" sortKey="elde_kalan" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Ürt.Depo" sortKey="uretim_depo" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Satınalma" sortKey="satinalma" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Açık Sip." sortKey="acik_satinalma_siparisleri" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Toplam" sortKey="toplam" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Birim Fiyat" sortKey="birim_fiyat" onSort={handleSort} currentSort={sortConfig} />
-                    <SortHeader label="Tutar" sortKey="tutar" onSort={handleSort} currentSort={sortConfig} />
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Cari</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Grup</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUretim.map((row, i) => {
-                    const teslimEdildi = Number(row.projelere_cikislar) > 0;
-                    return (
-                      <tr
-                        key={i}
-                        className={`border-b border-gray-100 hover:bg-gray-50 ${teslimEdildi ? 'bg-green-50/50' : ''}`}
-                      >
-                        <td className="px-3 py-2 font-medium text-blue-700 whitespace-nowrap">{row.proje_kodu}</td>
-                        <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.karavan_adi}</td>
-                        <td className="px-3 py-2"><Badge color={row.alt_kod_tur === 'Hammadde' ? 'blue' : 'gray'}>{row.alt_kod_tur}</Badge></td>
-                        <td className="px-3 py-2 font-mono text-xs whitespace-nowrap">{row.alt_kod}</td>
-                        <td className="px-3 py-2 max-w-[200px] truncate" title={row.alt_adi}>{row.alt_adi}</td>
-                        <td className="px-3 py-2 text-right">{formatNumber(row.miktar)}</td>
-                        <td className="px-3 py-2 text-gray-500">{row.birim}</td>
-                        <td className={`px-3 py-2 text-right ${Number(row.projelere_cikislar) > 0 ? 'text-green-600 font-medium' : ''}`}>
-                          {formatNumber(row.projelere_cikislar)}
-                        </td>
-                        <td className="px-3 py-2 text-right">{formatNumber(row.elde_kalan)}</td>
-                        <td className="px-3 py-2 text-right">{formatNumber(row.uretim_depo)}</td>
-                        <td className={`px-3 py-2 text-right ${Number(row.satinalma) < 0 ? 'text-red-600 font-medium' : ''}`}>
-                          {formatNumber(row.satinalma)}
-                        </td>
-                        <td className="px-3 py-2 text-right">{formatNumber(row.acik_satinalma_siparisleri)}</td>
-                        <td className="px-3 py-2 text-right font-medium">{formatNumber(row.toplam)}</td>
-                        <td className="px-3 py-2 text-right">{formatCurrency(row.birim_fiyat)}</td>
-                        <td className="px-3 py-2 text-right font-medium">{formatCurrency(row.tutar)}</td>
-                        <td className="px-3 py-2 text-xs max-w-[150px] truncate text-gray-500" title={row.son_satinalma_cari}>{row.son_satinalma_cari}</td>
-                        <td className="px-3 py-2"><Badge color="purple">{row.alt_stok_grup_kodu}</Badge></td>
-                      </tr>
-                    );
-                  })}
-                  {filteredUretim.length === 0 && (
-                    <tr><td colSpan={17} className="text-center text-gray-400 py-12">Veri bulunamadı</td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            /* ── PROJE DAĞILIMI GÖRÜNÜMÜ ── */
+            <Card>
+              {!projeDagilimi || projeDagilimi.urunler.length === 0 ? (
+                <div className="p-8 text-center text-gray-400">Veri bulunamadı</div>
+              ) : (
+                <>
+                  <div className="px-4 py-3 border-b bg-blue-50 flex items-center gap-3 flex-wrap">
+                    <span className="text-sm font-semibold text-blue-800">Proje Bazlı Ürün Dağılımı</span>
+                    <Badge color="blue">{projeDagilimi.urunler.length} ürün</Badge>
+                    <Badge color="purple">{projeDagilimi.projelerList.length} proje</Badge>
+                    <span className="text-xs text-blue-600 ml-auto">Her hücre: o projede bu ürünün toplam miktarını gösterir</span>
+                  </div>
+                  <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+                    <table className="w-full text-xs border-collapse">
+                      <thead className="sticky top-0 z-10">
+                        <tr className="bg-gray-800 text-white">
+                          <th className="text-left px-3 py-2.5 font-semibold whitespace-nowrap">Malzeme Kodu</th>
+                          <th className="text-left px-3 py-2.5 font-semibold">Malzeme Adı</th>
+                          <th className="px-3 py-2.5 font-semibold whitespace-nowrap">Birim</th>
+                          <th className="px-3 py-2.5 font-semibold whitespace-nowrap">Tür</th>
+                          {projeDagilimi.projelerList.map(p => (
+                            <th key={p} className="text-right px-2 py-2.5 font-semibold whitespace-nowrap bg-blue-700 border-x border-blue-600">{p}</th>
+                          ))}
+                          <th className="text-right px-3 py-2.5 font-semibold whitespace-nowrap bg-gray-700">Toplam</th>
+                          <th className="text-right px-3 py-2.5 font-semibold whitespace-nowrap bg-gray-700">Tutar</th>
+                          <th className="text-left px-3 py-2.5 font-semibold whitespace-nowrap">Cari</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {projeDagilimi.urunler.map((u, i) => (
+                          <tr key={u.alt_kod} className={`border-b border-gray-100 hover:bg-blue-50/40 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                            <td className="px-3 py-1.5 font-mono text-gray-500 whitespace-nowrap">{u.alt_kod}</td>
+                            <td className="px-3 py-1.5 max-w-[200px] truncate text-gray-800 font-medium" title={u.alt_adi}>{u.alt_adi}</td>
+                            <td className="px-3 py-1.5 text-center text-gray-400">{u.birim}</td>
+                            <td className="px-3 py-1.5 text-center">
+                              <Badge color={u.tur === 'Hammadde' ? 'blue' : 'gray'}>{u.tur}</Badge>
+                            </td>
+                            {projeDagilimi.projelerList.map(p => {
+                              const val = u.projeler[p];
+                              return (
+                                <td key={p} className={`px-2 py-1.5 text-right border-x border-gray-100 font-medium whitespace-nowrap ${val ? 'text-blue-700 bg-blue-50/60' : 'text-gray-300'}`}>
+                                  {val ? formatNumber(val) : '—'}
+                                </td>
+                              );
+                            })}
+                            <td className="px-3 py-1.5 text-right font-bold text-gray-800 bg-gray-50 whitespace-nowrap">{formatNumber(u.toplam)}</td>
+                            <td className="px-3 py-1.5 text-right font-semibold text-blue-700 bg-gray-50 whitespace-nowrap">{formatCurrency(u.toplam_tutar)}</td>
+                            <td className="px-3 py-1.5 max-w-[140px] truncate text-gray-400 text-[11px]" title={u.cari}>{u.cari}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot>
+                        <tr className="bg-gray-800 text-white font-bold text-xs">
+                          <td className="px-3 py-2" colSpan={4}>Toplam</td>
+                          {projeDagilimi.projelerList.map(p => {
+                            const total = projeDagilimi.urunler.reduce((s, u) => s + (u.projeler[p] || 0), 0);
+                            return <td key={p} className="text-right px-2 py-2 bg-blue-800 border-x border-blue-700 whitespace-nowrap">{formatNumber(total)}</td>;
+                          })}
+                          <td className="text-right px-3 py-2 whitespace-nowrap">
+                            {formatNumber(projeDagilimi.urunler.reduce((s, u) => s + u.toplam, 0))}
+                          </td>
+                          <td className="text-right px-3 py-2 whitespace-nowrap">
+                            {formatCurrency(projeDagilimi.urunler.reduce((s, u) => s + u.toplam_tutar, 0))}
+                          </td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </>
+              )}
+            </Card>
           )}
-        </Card>
+        </div>
       )}
 
       {/* TAB: PROJE MALİYET */}
