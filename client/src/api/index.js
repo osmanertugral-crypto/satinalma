@@ -81,7 +81,8 @@ export const getWarehouseSummary = () => api.get('/warehouse/summary');
 export const getWarehouseStock = (params) => api.get('/warehouse/stock', { params });
 export const getWarehouseKartTipleri = () => api.get('/warehouse/kart-tipleri');
 export const getWarehouseStatus = () => api.get('/warehouse/status');
-export const syncWarehouse = () => api.post('/warehouse/sync');
+export const syncWarehouse = () => api.post('/warehouse/sync', {});
+export const refreshWarehouseExcelAndSync = () => api.post('/warehouse/sync', { refreshExcel: true }, { timeout: 300_000 });
 
 // Outlook Tasks
 export const getOutlookStatus = () => api.get('/outlook/status');
@@ -91,7 +92,7 @@ export const getOutlookTasks = () => api.get('/outlook/tasks');
 export const updateOutlookTaskStatus = (id, data) => api.patch(`/outlook/tasks/${id}`, data);
 
 // Malzeme İhtiyaç
-export const refreshMalzemeExcel = () => api.post('/malzeme-ihtiyac/refresh');
+export const refreshMalzemeExcel = () => api.post('/malzeme-ihtiyac/refresh', {}, { timeout: 300_000 });
 export const getMalzemeUretimIhtiyac = (proje) => api.get('/malzeme-ihtiyac/uretim-ihtiyac', { params: { proje } });
 export const getMalzemeProjeMaliyet = () => api.get('/malzeme-ihtiyac/proje-maliyet');
 export const getMalzemeSatinalma = (proje) => api.get('/malzeme-ihtiyac/satinalma', { params: { proje } });
@@ -112,6 +113,8 @@ export const getFinanceKurlar = () => api.get('/finance/kurlar');
 export const getFinanceOzet = () => api.get('/finance/ozet');
 export const getFinanceCariler = (params) => api.get('/finance/cariler', { params });
 export const getFinanceCariDetay = (params) => api.get('/finance/cari-detay', { params });
+export const refreshFinanceExcel = () => api.post('/finance/refresh-excel', {});
+export const getFinanceRefreshStatus = () => api.get('/finance/refresh-status');
 
 // Damage Reports (Kirilan/Bozulan Urun Tutanak)
 export const getDamageReports = (params) => api.get('/damage-reports', { params });
@@ -140,3 +143,7 @@ export const importProjects = (file) => {
     timeout: 120000,
   }).then(r => r.data);
 };
+
+// Ciro Raporu
+export const getCiroRaporu = () => api.get('/ciro/raporu');
+export const getCiroRaporuForce = () => api.get('/ciro/raporu', { params: { force: 'true' } });

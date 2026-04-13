@@ -16,6 +16,7 @@ let productAnalysisCache = { mtimeMs: 0, rows: [] };
 const PURCHASE_SOURCE_EXCEL_PATH = path.join(__dirname, '..', '..', 'gecici', 'Ocak 2025-2026 Mart 30.xls');
 let purchaseSourceCache = { mtimeMs: 0, rows: [] };
 const WAREHOUSE_STOCK_EXCEL_PATH = path.join(__dirname, '..', '..', 'gecici', 'SATINALMA - STOK RAPORU.xlsx');
+let warehouseStockCache = { mtimeMs: 0, count: 0 };
 
 function parseExcelDate(value) {
   if (value == null || value === '') return null;
@@ -173,6 +174,8 @@ function getPurchaseRowsFromExcel() {
 function getLowStockFromWarehouseExcel() {
   if (!fs.existsSync(WAREHOUSE_STOCK_EXCEL_PATH)) return 0;
   try {
+    const stat = fs.statSync(WAREHOUSE_STOCK_EXCEL_PATH);
+    if (stat.mtimeMs === warehouseStockCache.mtimeMs) return warehouseStockCache.count;
     const wb = XLSX.readFile(WAREHOUSE_STOCK_EXCEL_PATH, { cellDates: true });
     const ws = wb.Sheets[wb.SheetNames[0]];
     if (!ws) return 0;
@@ -186,6 +189,7 @@ function getLowStockFromWarehouseExcel() {
       const total = gebze + eticaret + showroom;
       if (total <= 0) count += 1;
     }
+    warehouseStockCache = { mtimeMs: stat.mtimeMs, count };
     return count;
   } catch {
     return 0;
@@ -309,36 +313,48 @@ router.get('/dashboard', (req, res) => {
     LIMIT 10
   `).all();
 
-  // Fiyat artış uyarıları
-  const alerts = db.prepare(`SELECT pa.*, p.name as product_name, p.code FROM price_alerts pa JOIN products p ON p.id=pa.product_id WHERE pa.active=1`).all();
-  const triggeredAlerts = [];
-  for (const alert of alerts) {
-    const rows = db.prepare('SELECT price, price_date FROM price_history WHERE product_id = ? ORDER BY price_date DESC LIMIT 2').all(alert.product_id);
-    if (rows.length === 2 && rows[1].price > 0) {
-      const change = ((rows[0].price - rows[1].price) / rows[1].price) * 100;
-      if (change >= alert.threshold_percent) {
-        triggeredAlerts.push({ ...alert, change_percent: Math.round(change * 100) / 100, latest_price: rows[0].price });
-      }
-    }
-  }
-
-  // En fazla fiyat artışı olan ürünler (son 2 fiyat kaydından hesapla, top 10)
-  const allPriceProducts = db.prepare(`
-    SELECT DISTINCT product_id FROM price_history
+  // Fiyat artış uyarıları — tek sorguda
+  const triggeredAlerts = db.prepare(`
+    WITH ranked AS (
+      SELECT product_id, price, price_date,
+        ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY price_date DESC) AS rn
+      FROM price_history
+    ),
+    latest AS (SELECT * FROM ranked WHERE rn = 1),
+    prev   AS (SELECT * FROM ranked WHERE rn = 2)
+    SELECT pa.*, p.name AS product_name, p.code,
+      l.price AS latest_price,
+      ROUND((l.price - prev.price) * 100.0 / prev.price, 2) AS change_percent
+    FROM price_alerts pa
+    JOIN products p ON p.id = pa.product_id
+    JOIN latest l ON l.product_id = pa.product_id
+    JOIN prev ON prev.product_id = pa.product_id
+    WHERE pa.active = 1
+      AND prev.price > 0
+      AND ROUND((l.price - prev.price) * 100.0 / prev.price, 2) >= pa.threshold_percent
   `).all();
-  let topPriceIncreases = [];
-  for (const { product_id } of allPriceProducts) {
-    const rows = db.prepare('SELECT ph.price, ph.price_date, s.name as supplier_name FROM price_history ph JOIN suppliers s ON s.id=ph.supplier_id WHERE ph.product_id=? ORDER BY ph.price_date DESC LIMIT 2').all(product_id);
-    if (rows.length === 2 && rows[1].price > 0) {
-      const change = ((rows[0].price - rows[1].price) / rows[1].price) * 100;
-      if (change > 0) {
-        const prod = db.prepare('SELECT name, code FROM products WHERE id=?').get(product_id);
-        if (prod) topPriceIncreases.push({ product_id, name: prod.name, code: prod.code, change_percent: Math.round(change * 100) / 100, latest_price: rows[0].price, prev_price: rows[1].price, supplier_name: rows[0].supplier_name, price_date: rows[0].price_date });
-      }
-    }
-  }
-  topPriceIncreases.sort((a, b) => b.change_percent - a.change_percent);
-  let topPriceIncreasesSliced = topPriceIncreases.slice(0, 10);
+
+  // En fazla fiyat artışı olan ürünler — tek sorguda (window function)
+  let topPriceIncreasesSliced = db.prepare(`
+    WITH ranked AS (
+      SELECT ph.product_id, ph.price, ph.price_date, s.name AS supplier_name,
+        ROW_NUMBER() OVER (PARTITION BY ph.product_id ORDER BY ph.price_date DESC) AS rn
+      FROM price_history ph
+      JOIN suppliers s ON s.id = ph.supplier_id
+    ),
+    latest AS (SELECT * FROM ranked WHERE rn = 1),
+    prev   AS (SELECT * FROM ranked WHERE rn = 2)
+    SELECT l.product_id, p.name, p.code,
+      l.price AS latest_price, prev.price AS prev_price,
+      l.supplier_name, l.price_date,
+      ROUND((l.price - prev.price) * 100.0 / prev.price, 2) AS change_percent
+    FROM latest l
+    JOIN prev ON prev.product_id = l.product_id
+    JOIN products p ON p.id = l.product_id
+    WHERE p.active = 1 AND prev.price > 0 AND l.price > prev.price
+    ORDER BY change_percent DESC
+    LIMIT 10
+  `).all();
 
   if (!topPriceIncreasesSliced.length) {
     const excelPriceRows = getProductAnalysisRowsFromExcel();

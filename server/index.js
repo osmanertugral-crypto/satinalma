@@ -29,6 +29,7 @@ app.use('/api/malzeme-ihtiyac', require('./routes/malzeme-ihtiyac'));
 app.use('/api/finance', require('./routes/finance'));
 app.use('/api/damage-reports', require('./routes/damage-reports'));
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/ciro', require('./routes/ciro'));
 
 // Üretim modunda React build'ini sun
 if (process.env.NODE_ENV === 'production') {

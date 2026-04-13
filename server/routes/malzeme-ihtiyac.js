@@ -3,31 +3,34 @@ const router = express.Router();
 const path = require('path');
 const XLSX = require('xlsx');
 const { authenticate } = require('../middleware/auth');
+const { refreshExcelQueries } = require('../utils/excelRefresh');
 
 router.use(authenticate);
 
 const EXCEL_PATH = path.join(__dirname, '..', '..', 'gecici', 'MALZEME İHTİYAÇ TOPLAM SATINALMA.xlsx');
 
-// Sayfaları yenile (Excel dosyasını yeniden oku)
-router.post('/refresh', (req, res) => {
+// Sayfaları yenile — SQL sorgularını çalıştırıp Excel'i kaydet, sonra verileri döndür
+router.post('/refresh', async (req, res) => {
   try {
     const fs = require('fs');
     if (!fs.existsSync(EXCEL_PATH)) {
       return res.status(404).json({ error: 'Excel dosyası bulunamadı' });
     }
 
-    // Excel dosyasını yeniden oku - bu Logo'dan gelen verileri alır
+    // Önce SQL sorgularını yenile
+    const log = await refreshExcelQueries(EXCEL_PATH);
+    console.log('Malzeme İhtiyaç Excel yenilendi:', log);
+
+    // Yenilenen Excel'i oku
     const wb = XLSX.readFile(EXCEL_PATH, { cellFormula: false, cellStyles: false });
     const sheets = wb.SheetNames;
 
-    // Sayfa sırasını kontrol et
     const expectedSheets = ['ÖRNEK PİVOT', 'ÜRETİM İHTİYAÇ RAPORU', 'PROJE MALİYET', 'SATINALMA'];
     const missing = expectedSheets.filter(s => !sheets.includes(s));
     if (missing.length > 0) {
       return res.status(400).json({ error: `Eksik sayfalar: ${missing.join(', ')}` });
     }
 
-    // Her sayfa için satır sayısını döndür
     const summary = {};
     expectedSheets.forEach(name => {
       const ws = wb.Sheets[name];
@@ -37,12 +40,12 @@ router.post('/refresh', (req, res) => {
 
     res.json({
       success: true,
-      message: 'Excel dosyası başarıyla yenilendi',
+      message: 'SQL sorguları yenilendi ve Excel güncellendi',
       timestamp: new Date().toISOString(),
       summary
     });
   } catch (err) {
-    console.error('Refresh error:', err);
+    console.error('Malzeme refresh error:', err);
     res.status(500).json({ error: 'Yenileme hatası: ' + err.message });
   }
 });

@@ -26,6 +26,7 @@ import FinancePage from './pages/Finance';
 import DamageReportsPage from './pages/DamageReports';
 import ProjectsPage from './pages/Projects';
 import ProjectDetailPage from './pages/ProjectDetail';
+import CiroRaporuPage from './pages/CiroRaporu';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30000 } }
@@ -72,6 +73,7 @@ function App() {
               <Route path="hasar-tutanaklari" element={<DamageReportsPage />} />
               <Route path="projeler" element={<ProjectsPage />} />
               <Route path="projeler/:id" element={<ProjectDetailPage />} />
+              <Route path="ciro-raporu" element={<CiroRaporuPage />} />
               <Route path="reports" element={<ReportsPage />} />
               <Route path="admin/users" element={<AdminRoute><AdminUsersPage /></AdminRoute>} />
             </Route>

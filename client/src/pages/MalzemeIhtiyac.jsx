@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PageHeader, Card, Button, Spinner, Badge, StatCard, Select, Input, Modal } from '../components/UI';
-import { RefreshCw, Package, ShoppingCart, TrendingUp, Search, Filter, Download, AlertTriangle, CheckCircle, ArrowUpDown, List, Users, ChevronDown, ChevronRight, Mail, FileDown, Plus, Minus, Printer, ExternalLink, CheckSquare, Square, CreditCard, Info } from 'lucide-react';
+import { RefreshCw, Package, ShoppingCart, TrendingUp, Search, Filter, Download, AlertTriangle, CheckCircle, ArrowUpDown, List, Users, ChevronDown, ChevronRight, Mail, FileDown, Plus, Minus, Printer, ExternalLink, CheckSquare, Square, CreditCard, Info, X, Warehouse } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import {
   getMalzemeUretimIhtiyac,
@@ -10,6 +10,7 @@ import {
   refreshMalzemeExcel,
   downloadTedarikciPdf,
   getFinanceCariler,
+  getWarehouseStock,
 } from '../api';
 
 const TABS = [
@@ -42,6 +43,8 @@ export default function MalzemeIhtiyac() {
   const [siparisModal, setSiparisModal] = useState(null); // { cari, action: 'pdf'|'mail', urunler: [{...row, adet}] }
   const [selectedTedarikci, setSelectedTedarikci] = useState(new Set());
   const [odemeOnayModal, setOdemeOnayModal] = useState(false);
+  const [stokAraModal, setStokAraModal] = useState(null); // { cari: string }
+  const [stokEklenenler, setStokEklenenler] = useState({}); // { [cari]: [{stok_kodu, stok_adi, adet, birim_fiyat}] }
 
   // Data queries
   const uretimQuery = useQuery({
@@ -322,17 +325,29 @@ export default function MalzemeIhtiyac() {
 
   // Sipariş modal aç (mail/pdf)
   function openSiparisModal(group, action) {
+    const ekUrunler = (stokEklenenler[group.cari] || []).map(s => ({
+      alt_kod: s.stok_kodu,
+      alt_adi: s.stok_adi,
+      adet: s.adet,
+      birim_fiyat: Number(s.birim_fiyat) || 0,
+      orijinal_adet: s.adet,
+      dahil: true,
+      ekUrun: true,
+    }));
     setSiparisModal({
       cari: group.cari,
       action,
-      urunler: group.urunler.map(u => ({
-        alt_kod: u.alt_kod,
-        alt_adi: u.alt_adi,
-        adet: Math.max(0, Math.ceil(Number(u.gercek_satinalma) || 0)),
-        birim_fiyat: Number(u.birim_fiyat) || 0,
-        orijinal_adet: Math.max(0, Math.ceil(Number(u.gercek_satinalma) || 0)),
-        dahil: true,
-      })),
+      urunler: [
+        ...group.urunler.map(u => ({
+          alt_kod: u.alt_kod,
+          alt_adi: u.alt_adi,
+          adet: Math.max(0, Math.ceil(Number(u.gercek_satinalma) || 0)),
+          birim_fiyat: Number(u.birim_fiyat) || 0,
+          orijinal_adet: Math.max(0, Math.ceil(Number(u.gercek_satinalma) || 0)),
+          dahil: true,
+        })),
+        ...ekUrunler,
+      ],
     });
   }
 
@@ -458,6 +473,164 @@ export default function MalzemeIhtiyac() {
       </span>
     </th>
   );
+
+  // ── Stok Ara Modal (satır içi bileşen) ──────────────────────────────────
+  function StokAraModalView() {
+    const cari = stokAraModal?.cari;
+    const [araText, setAraText] = useState('');
+    const [debouncedText, setDebouncedText] = useState('');
+    const debounceRef = useRef(null);
+    const [adetler, setAdetler] = useState({}); // { stok_kodu: number }
+
+    const handleSearch = useCallback((val) => {
+      setAraText(val);
+      clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => setDebouncedText(val), 400);
+    }, []);
+
+    const stokQuery = useQuery({
+      queryKey: ['warehouse-stock-search', debouncedText],
+      queryFn: () => getWarehouseStock({ search: debouncedText, limit: 50 }).then(r => r.data),
+      enabled: debouncedText.length >= 2,
+      staleTime: 60_000,
+    });
+
+    const eklenenSet = new Set((stokEklenenler[cari] || []).map(s => s.stok_kodu));
+
+    function handleEkle(row) {
+      const adet = Number(adetler[row.stok_kodu]) || 1;
+      setStokEklenenler(prev => {
+        const mevcutlar = prev[cari] || [];
+        const zatenVar = mevcutlar.findIndex(s => s.stok_kodu === row.stok_kodu);
+        if (zatenVar >= 0) {
+          // güncelle
+          const updated = [...mevcutlar];
+          updated[zatenVar] = { ...updated[zatenVar], adet };
+          return { ...prev, [cari]: updated };
+        }
+        return {
+          ...prev,
+          [cari]: [...mevcutlar, { stok_kodu: row.stok_kodu, stok_adi: row.stok_adi, adet, birim_fiyat: row.birim_fiyat }],
+        };
+      });
+    }
+
+    function handleKaldir(stok_kodu) {
+      setStokEklenenler(prev => ({
+        ...prev,
+        [cari]: (prev[cari] || []).filter(s => s.stok_kodu !== stok_kodu),
+      }));
+    }
+
+    const rows = stokQuery.data?.rows || [];
+
+    return (
+      <Modal
+        open={!!stokAraModal}
+        onClose={() => setStokAraModal(null)}
+        title={`Stoktan Ürün Ekle — ${cari || ''}`}
+        size="xl"
+      >
+        <div className="space-y-4">
+          {/* Eklenen ürünler listesi */}
+          {(stokEklenenler[cari]?.length > 0) && (
+            <div className="p-3 rounded-lg bg-violet-50 border border-violet-200">
+              <p className="text-xs font-semibold text-violet-700 mb-2">Eklenen ürünler ({stokEklenenler[cari].length})</p>
+              <div className="flex flex-wrap gap-2">
+                {(stokEklenenler[cari] || []).map(s => (
+                  <div key={s.stok_kodu} className="flex items-center gap-1 bg-white border border-violet-200 rounded-full px-2 py-0.5 text-xs text-violet-800">
+                    <span className="font-mono">{s.stok_kodu}</span>
+                    <span className="text-gray-600 max-w-[120px] truncate">{s.stok_adi}</span>
+                    <span className="font-semibold text-violet-700">×{s.adet}</span>
+                    <button onClick={() => handleKaldir(s.stok_kodu)} className="text-red-400 hover:text-red-600 ml-0.5"><X size={12} /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Arama inputu */}
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Stok kodu veya adı ile ara (en az 2 karakter)..."
+              value={araText}
+              onChange={e => handleSearch(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+              autoFocus
+            />
+          </div>
+
+          {/* Sonuçlar */}
+          <div className="overflow-y-auto max-h-[340px] border rounded-lg">
+            {debouncedText.length < 2 ? (
+              <div className="py-10 text-center text-sm text-gray-400">En az 2 karakter girin</div>
+            ) : stokQuery.isLoading ? (
+              <div className="py-10 flex justify-center"><Spinner /></div>
+            ) : rows.length === 0 ? (
+              <div className="py-10 text-center text-sm text-gray-400">Sonuç bulunamadı</div>
+            ) : (
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-gray-50 z-10">
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Stok Kodu</th>
+                    <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Stok Adı</th>
+                    <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Depo</th>
+                    <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Birim Fiyat</th>
+                    <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-28">Adet</th>
+                    <th className="w-16"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map(row => {
+                    const zaten = eklenenSet.has(row.stok_kodu);
+                    return (
+                      <tr key={row.stok_kodu} className={`border-b border-gray-100 hover:bg-gray-50 ${zaten ? 'bg-violet-50/40' : ''}`}>
+                        <td className="px-3 py-2 font-mono text-xs whitespace-nowrap text-gray-500">{row.stok_kodu}</td>
+                        <td className="px-3 py-2 max-w-[220px] truncate text-gray-800" title={row.stok_adi}>{row.stok_adi}</td>
+                        <td className="px-3 py-2 text-right text-blue-600 whitespace-nowrap">{formatNumber(row.gebze_stok ?? row.toplam_stok)}</td>
+                        <td className="px-3 py-2 text-right text-gray-600 whitespace-nowrap">{formatCurrency(row.birim_fiyat)}</td>
+                        <td className="px-3 py-2">
+                          <input
+                            type="number"
+                            min="1"
+                            value={adetler[row.stok_kodu] ?? 1}
+                            onChange={e => setAdetler(prev => ({ ...prev, [row.stok_kodu]: Math.max(1, Number(e.target.value) || 1) }))}
+                            className="w-full text-center border border-gray-300 rounded px-1 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-violet-500"
+                          />
+                        </td>
+                        <td className="px-3 py-2 text-center">
+                          <button
+                            onClick={() => handleEkle(row)}
+                            className={`px-2 py-1 rounded text-xs font-medium transition-colors ${zaten ? 'bg-violet-100 text-violet-700 hover:bg-violet-200' : 'bg-violet-600 text-white hover:bg-violet-700'}`}
+                          >
+                            {zaten ? 'Güncelle' : 'Ekle'}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          <div className="flex justify-end gap-3 pt-2 border-t">
+            <Button variant="secondary" onClick={() => setStokAraModal(null)}>Kapat</Button>
+            <Button
+              variant="primary"
+              className="bg-violet-600 hover:bg-violet-700"
+              onClick={() => setStokAraModal(null)}
+              disabled={!stokEklenenler[cari]?.length}
+            >
+              Tamam ({stokEklenenler[cari]?.length || 0} ürün eklendi)
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <div className="p-6">
@@ -995,6 +1168,17 @@ export default function MalzemeIhtiyac() {
                             </table>
                           </div>
                           <div className="p-3 bg-gray-50 border-t flex items-center gap-2 justify-end">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="border-violet-300 text-violet-700 hover:bg-violet-50"
+                              onClick={(e) => { e.stopPropagation(); setStokAraModal({ cari: group.cari }); }}
+                            >
+                              <Warehouse size={14} /> Ürün Ekle
+                              {(stokEklenenler[group.cari]?.length > 0) && (
+                                <Badge color="purple" className="ml-1">{stokEklenenler[group.cari].length}</Badge>
+                              )}
+                            </Button>
                             <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); openSiparisModal(group, 'mail'); }}>
                               <Mail size={14} /> Mail At
                             </Button>
@@ -1020,6 +1204,9 @@ export default function MalzemeIhtiyac() {
         </div>
       )}
       
+      {/* Stok Ara Modal */}
+      {stokAraModal && <StokAraModalView />}
+
       {/* Sipariş Modal (Mail / PDF / Sipariş Aç) */}
       <Modal
         open={!!siparisModal}

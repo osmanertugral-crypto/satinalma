@@ -3,6 +3,7 @@ const router = express.Router();
 const XLSX = require('xlsx');
 const path = require('path');
 const { authenticate } = require('../middleware/auth');
+const { refreshExcelQueries } = require('../utils/excelRefresh');
 
 router.use(authenticate);
 
@@ -287,6 +288,41 @@ router.get('/cari-detay', (req, res) => {
     console.error('Finance cari-detay error:', err);
     res.status(500).json({ error: err.message });
   }
+});
+
+// POST /api/finance/refresh-excel — SQL sorgularını arka planda yeniler
+// Hemen 202 döner, işlem arka planda devam eder.
+// GET /api/finance/refresh-status ile durum sorgulanabilir.
+let refreshState = { status: 'idle', startedAt: null, finishedAt: null, message: null, error: null };
+
+router.post('/refresh-excel', (req, res) => {
+  if (refreshState.status === 'running') {
+    return res.json({
+      success: false,
+      running: true,
+      message: 'Yenileme zaten devam ediyor, lütfen bekleyin…',
+      startedAt: refreshState.startedAt,
+    });
+  }
+
+  refreshState = { status: 'running', startedAt: new Date().toISOString(), finishedAt: null, message: null, error: null };
+
+  // Arka planda çalıştır — await YOK, istek hemen döner
+  refreshExcelQueries(EXCEL_PATH)
+    .then(log => {
+      refreshState = { status: 'done', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: 'Cari Extre güncellendi', error: null };
+      console.log('Finance Excel yenilendi:', log);
+    })
+    .catch(err => {
+      refreshState = { status: 'error', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: null, error: err.message };
+      console.error('Finance Excel refresh hatası:', err.message);
+    });
+
+  res.json({ success: true, running: true, message: 'SQL sorguları arka planda çalıştırılıyor, tamamlandığında sayfa otomatik yenilenecek…' });
+});
+
+router.get('/refresh-status', (req, res) => {
+  res.json(refreshState);
 });
 
 module.exports = router;

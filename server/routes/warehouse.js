@@ -5,6 +5,7 @@ const XLSX = require('xlsx');
 const { getDb } = require('../db/schema');
 const { normTr } = require('../utils/searchUtils');
 const { authenticate } = require('../middleware/auth');
+const { refreshExcelQueries } = require('../utils/excelRefresh');
 
 router.use(authenticate);
 
@@ -103,8 +104,14 @@ function syncFromExcel() {
 }
 
 // POST /api/warehouse/sync — Excel'den veritabanını yenile
-router.post('/sync', (req, res) => {
+// refreshExcel=true gönderilirse önce SQL sorgularını çalıştırır
+router.post('/sync', async (req, res) => {
   try {
+    if (req.body?.refreshExcel) {
+      console.log('Depo: SQL sorguları yenileniyor...');
+      await refreshExcelQueries(EXCEL_PATH);
+      console.log('Depo: Excel yenilendi, DB senkronizasyonu başlıyor...');
+    }
     const count = syncFromExcel();
     const lastSync = getDb().prepare(
       "SELECT synced_at FROM warehouse_sync_log ORDER BY id DESC LIMIT 1"
@@ -116,7 +123,6 @@ router.post('/sync', (req, res) => {
       lastSync: lastSync?.synced_at
     });
   } catch (e) {
-    // Log error
     try {
       getDb().prepare(
         "INSERT INTO warehouse_sync_log (row_count, status, message) VALUES (0, 'error', ?)"

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getWarehouseSummary, getWarehouseStock, getWarehouseKartTipleri, syncWarehouse, getWarehouseStatus } from '../api';
+import { getWarehouseSummary, getWarehouseStock, getWarehouseKartTipleri, syncWarehouse, getWarehouseStatus, refreshWarehouseExcelAndSync } from '../api';
 import { PageHeader, Card, Button, Badge, Spinner } from '../components/UI';
 import { Warehouse as WarehouseIcon, RefreshCw, Search, ChevronLeft, ChevronRight, ArrowUpDown, CheckCircle, AlertCircle, Clock, Package, X, Filter } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -69,6 +69,16 @@ export default function DepoPage() {
 
   const syncMut = useMutation({
     mutationFn: syncWarehouse,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['warehouse-summary'] });
+      qc.invalidateQueries({ queryKey: ['warehouse-stock'] });
+      qc.invalidateQueries({ queryKey: ['warehouse-status'] });
+      qc.invalidateQueries({ queryKey: ['warehouse-kart-tipleri'] });
+    }
+  });
+
+  const sqlRefreshMut = useMutation({
+    mutationFn: refreshWarehouseExcelAndSync,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['warehouse-summary'] });
       qc.invalidateQueries({ queryKey: ['warehouse-stock'] });
@@ -155,27 +165,37 @@ export default function DepoPage() {
         title="Depo Stok"
         subtitle={summary?.lastSync ? `Son güncelleme: ${new Date(summary.lastSync).toLocaleString('tr-TR')}` : 'Henüz senkronize edilmedi'}
         action={
-          <Button
-            onClick={() => syncMut.mutate()}
-            disabled={syncMut.isPending}
-          >
-            <RefreshCw size={16} className={syncMut.isPending ? 'animate-spin' : ''} />
-            {syncMut.isPending ? 'Yenileniyor...' : 'Excel\'den Yenile'}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => sqlRefreshMut.mutate()}
+              disabled={sqlRefreshMut.isPending || syncMut.isPending}
+              className="bg-emerald-600 hover:bg-emerald-700"
+            >
+              <RefreshCw size={16} className={sqlRefreshMut.isPending ? 'animate-spin' : ''} />
+              {sqlRefreshMut.isPending ? 'SQL sorgulanıyor…' : "SQL'den Yenile"}
+            </Button>
+            <Button
+              onClick={() => syncMut.mutate()}
+              disabled={syncMut.isPending || sqlRefreshMut.isPending}
+            >
+              <RefreshCw size={16} className={syncMut.isPending ? 'animate-spin' : ''} />
+              {syncMut.isPending ? 'Aktarılıyor...' : "Excel'den Aktar"}
+            </Button>
+          </div>
         }
       />
 
       {/* Sync sonucu */}
-      {syncMut.isSuccess && (
+      {(syncMut.isSuccess || sqlRefreshMut.isSuccess) && (
         <div className="mb-4 bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-center gap-2">
           <CheckCircle size={18} className="text-emerald-500" />
-          <span className="text-sm text-emerald-700">{syncMut.data?.data?.message}</span>
+          <span className="text-sm text-emerald-700">{(sqlRefreshMut.data || syncMut.data)?.data?.message}</span>
         </div>
       )}
-      {syncMut.isError && (
+      {(syncMut.isError || sqlRefreshMut.isError) && (
         <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2">
           <AlertCircle size={18} className="text-red-500" />
-          <span className="text-sm text-red-700">{syncMut.error?.response?.data?.error || 'Senkronizasyon hatası'}</span>
+          <span className="text-sm text-red-700">{(sqlRefreshMut.error || syncMut.error)?.response?.data?.error || 'Hata oluştu'}</span>
         </div>
       )}
 

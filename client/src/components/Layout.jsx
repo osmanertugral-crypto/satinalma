@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Users, Package, FileText,
   TrendingUp, Warehouse, LogOut,
-  Menu, X, ListChecks, LineChart, Container, ClipboardList, Wallet
+  Menu, X, ListChecks, LineChart, Container, ClipboardList, Wallet, BarChart2
 } from 'lucide-react';
 
 const navItems = [
@@ -18,6 +18,7 @@ const navItems = [
   { to: '/price-analysis', icon: LineChart, label: 'Fiyat Analizi', key: 'price-analysis' },
   { to: '/projeler', icon: TrendingUp, label: 'Projeler', key: 'projects' },
   { to: '/hasar-tutanaklari', icon: FileText, label: 'Hasar Tutanakları', key: 'damage-reports' },
+  { to: '/ciro-raporu', icon: BarChart2, label: 'Ciro Raporu', key: 'ciro-raporu' },
   { to: '/outlook-tasks', icon: ListChecks, label: 'Outlook Yapılacaklar', key: 'outlook-tasks' },
 ];
 

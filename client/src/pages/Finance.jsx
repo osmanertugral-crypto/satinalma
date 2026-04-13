@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getFinanceKurlar, getFinanceOzet, getFinanceCariler, getFinanceCariDetay } from '../api';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getFinanceKurlar, getFinanceOzet, getFinanceCariler, getFinanceCariDetay, refreshFinanceExcel, getFinanceRefreshStatus } from '../api';
 import { normSearch } from '../utils/searchUtils';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -9,7 +9,8 @@ import {
 import {
   TrendingDown, TrendingUp, Clock, ArrowUpDown,
   ChevronDown, ChevronUp, Search, ArrowLeft, RefreshCw,
-  DollarSign, AlertTriangle, FileText, CreditCard, Calendar
+  DollarSign, AlertTriangle, FileText, CreditCard, Calendar,
+  Copy, CheckSquare, Square, X, ClipboardCheck
 } from 'lucide-react';
 
 // ── Helpers ──
@@ -248,6 +249,12 @@ function CarilerTab({ onSelectCari, mode }) {
     queryFn: () => getFinanceCariler({ cariKontrol, doviz }).then(r => r.data),
   });
 
+  const { data: kurlar } = useQuery({
+    queryKey: ['finance-kurlar'],
+    queryFn: () => getFinanceKurlar().then(r => r.data),
+    staleTime: 3600_000,
+  });
+
   const filtered = useMemo(() => {
     if (!cariler) return [];
     let arr = [...cariler];
@@ -266,7 +273,24 @@ function CarilerTab({ onSelectCari, mode }) {
     return arr;
   }, [cariler, search, sortField, sortDir, mode]);
 
-  // Borç/Alacak toplamları
+  // Döviz bazlı toplamlar (tüm filtreler devre dışı — tüm cariler üzerinden hesapla)
+  const dovizToplam = useMemo(() => {
+    if (!cariler) return { TL: 0, USD: 0, EUR: 0 };
+    const isBorc = mode === 'borc';
+    const rows = cariler.filter(r => isBorc ? r.bakiye < 0 : r.bakiye > 0);
+    const TL = rows.filter(r => r.doviz === 'TL').reduce((s, r) => s + Math.abs(r.bakiye), 0);
+    const USD = rows.filter(r => r.doviz === 'USD').reduce((s, r) => s + Math.abs(r.bakiye), 0);
+    const EUR = rows.filter(r => r.doviz === 'EUR').reduce((s, r) => s + Math.abs(r.bakiye), 0);
+    return { TL, USD, EUR };
+  }, [cariler, mode]);
+
+  const tlGenel = useMemo(() => {
+    const usd = kurlar?.usd || 0;
+    const eur = kurlar?.eur || 0;
+    return dovizToplam.TL + dovizToplam.USD * usd + dovizToplam.EUR * eur;
+  }, [dovizToplam, kurlar]);
+
+  // Borç/Alacak sayısı
   const borcSayisi = filtered.filter(r => r.bakiye < 0).length;
   const alacakSayisi = filtered.filter(r => r.bakiye > 0).length;
 
@@ -284,6 +308,55 @@ function CarilerTab({ onSelectCari, mode }) {
 
   return (
     <div className="space-y-4">
+
+      {/* ── Özet Dashboard (sadece borç/alacak modunda) ── */}
+      {mode && cariler && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {/* TL Borç */}
+          <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+            <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-400 mb-1">TL Toplam {mode === 'borc' ? 'Borç' : 'Alacak'}</div>
+            <div className="text-xl font-extrabold text-gray-800 tabular-nums">
+              {new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(dovizToplam.TL)}
+              <span className="text-sm font-semibold text-gray-400 ml-1">₺</span>
+            </div>
+            <div className="text-xs text-gray-400 mt-1">{(cariler || []).filter(r => r.doviz === 'TL' && (mode === 'borc' ? r.bakiye < 0 : r.bakiye > 0)).length} cari</div>
+          </div>
+          {/* USD Borç */}
+          <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+            <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-400 mb-1">USD Toplam {mode === 'borc' ? 'Borç' : 'Alacak'}</div>
+            <div className="text-xl font-extrabold text-green-700 tabular-nums">
+              {new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 2 }).format(dovizToplam.USD)}
+              <span className="text-sm font-semibold text-green-400 ml-1">$</span>
+            </div>
+            {kurlar?.usd ? (
+              <div className="text-xs text-gray-400 mt-1">≈ {new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(dovizToplam.USD * kurlar.usd)} ₺</div>
+            ) : <div className="text-xs text-gray-300 mt-1">kur bekleniyor</div>}
+          </div>
+          {/* EUR Borç */}
+          <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+            <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-400 mb-1">EUR Toplam {mode === 'borc' ? 'Borç' : 'Alacak'}</div>
+            <div className="text-xl font-extrabold text-blue-700 tabular-nums">
+              {new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 2 }).format(dovizToplam.EUR)}
+              <span className="text-sm font-semibold text-blue-400 ml-1">€</span>
+            </div>
+            {kurlar?.eur ? (
+              <div className="text-xs text-gray-400 mt-1">≈ {new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(dovizToplam.EUR * kurlar.eur)} ₺</div>
+            ) : <div className="text-xs text-gray-300 mt-1">kur bekleniyor</div>}
+          </div>
+          {/* TL Genel Toplam */}
+          <div className={`rounded-2xl p-4 shadow-sm border ${mode === 'borc' ? 'bg-red-600 border-red-700 text-white' : 'bg-emerald-600 border-emerald-700 text-white'}`}>
+            <div className="text-[11px] font-semibold uppercase tracking-wide opacity-80 mb-1">TL Genel Toplam {mode === 'borc' ? 'Borç' : 'Alacak'}</div>
+            <div className="text-xl font-extrabold tabular-nums">
+              {new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(tlGenel)}
+              <span className="text-sm font-semibold opacity-70 ml-1">₺</span>
+            </div>
+            {kurlar?.usd && kurlar?.eur ? (
+              <div className="text-[10px] opacity-60 mt-1">TL + USD×{kurlar.usd.toFixed(2)} + EUR×{kurlar.eur.toFixed(2)}</div>
+            ) : <div className="text-[10px] opacity-50 mt-1">TCMB kuru bekleniyor</div>}
+          </div>
+        </div>
+      )}
+
       {/* Filtreler */}
       <div className="flex flex-wrap gap-3 items-center">
         <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
@@ -402,7 +475,9 @@ function CariDetayTab({ cariKodu, onBack }) {
     enabled: !!cariKodu,
   });
 
-  const [faturaFilter, setFaturaFilter] = useState('all'); // all, odenmedi, kismi, odendi
+  const [faturaFilter, setFaturaFilter] = useState('odenmedi'); // all, odenmedi, kismi, odendi
+  const [secilenIdx, setSecilenIdx] = useState(new Set());
+  const [kopyalandiBilgi, setKopyalandiBilgi] = useState(false);
 
   if (isLoading) return <div className="flex items-center justify-center h-64 gap-2 text-gray-500"><RefreshCw className="animate-spin" size={20} /> Yükleniyor...</div>;
   if (!data) return null;
@@ -411,7 +486,59 @@ function CariDetayTab({ cariKodu, onBack }) {
   const durumLabel = { odendi: 'Ödendi', kismi: 'Kısmi', odenmedi: 'Ödenmedi' };
   const durumBg = { odendi: 'bg-emerald-50 text-emerald-700 border-emerald-200', kismi: 'bg-amber-50 text-amber-700 border-amber-200', odenmedi: 'bg-red-50 text-red-700 border-red-200' };
 
-  const filteredFaturalar = data.faturalar.filter(f => faturaFilter === 'all' || f.durum === faturaFilter);
+  const filteredFaturalar = data.faturalar
+    .map((f, origIdx) => ({ ...f, origIdx }))
+    .filter(f => faturaFilter === 'all' || f.durum === faturaFilter);
+
+  // Seçim yardımcıları
+  function toggleSecilen(origIdx) {
+    setSecilenIdx(prev => {
+      const next = new Set(prev);
+      next.has(origIdx) ? next.delete(origIdx) : next.add(origIdx);
+      return next;
+    });
+  }
+  function selectAllVisible() {
+    const selectableIdx = filteredFaturalar
+      .filter(f => f.durum === 'odenmedi' || f.durum === 'kismi')
+      .map(f => f.origIdx);
+    const allSelected = selectableIdx.every(i => secilenIdx.has(i));
+    if (allSelected) {
+      setSecilenIdx(prev => {
+        const next = new Set(prev);
+        selectableIdx.forEach(i => next.delete(i));
+        return next;
+      });
+    } else {
+      setSecilenIdx(prev => new Set([...prev, ...selectableIdx]));
+    }
+  }
+  const secilenFaturalar = data.faturalar.filter((_, i) => secilenIdx.has(i));
+  const secilenToplamKalan = secilenFaturalar.reduce((s, f) => s + (f.kalanBorc || 0), 0);
+  const secilenToplamFatura = secilenFaturalar.reduce((s, f) => s + (f.tutar || 0), 0);
+
+  function handleKopyala() {
+    if (secilenFaturalar.length === 0) return;
+    const baslik = 'Belge No\tTarih\tVade Tarihi\tFatura Tutarı\tÖdenen\tKalan Borç\tDöviz\tDurum';
+    const satirlar = secilenFaturalar.map(f =>
+      [
+        f.belgeNo || f.fisNo || '-',
+        f.tarih || '-',
+        f.vadeTarihi || '-',
+        (f.tutar || 0).toFixed(2),
+        (f.odpiranMiktar || 0).toFixed(2),
+        (f.kalanBorc || 0).toFixed(2),
+        f.doviz || 'TL',
+        f.durum === 'odenmedi' ? 'Ödenmedi' : f.durum === 'kismi' ? 'Kısmi' : 'Ödendi',
+      ].join('\t')
+    );
+    const toplam = `\nTOPLAM\t\t\t${secilenToplamFatura.toFixed(2)}\t\t${secilenToplamKalan.toFixed(2)}`;
+    const metin = [baslik, ...satirlar, toplam].join('\n');
+    navigator.clipboard.writeText(metin).then(() => {
+      setKopyalandiBilgi(true);
+      setTimeout(() => setKopyalandiBilgi(false), 2000);
+    });
+  }
 
   const odendiSayisi = data.faturalar.filter(f => f.durum === 'odendi').length;
   const kismiSayisi = data.faturalar.filter(f => f.durum === 'kismi').length;
@@ -507,26 +634,42 @@ function CariDetayTab({ cariKodu, onBack }) {
 
       {/* Fatura Listesi */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-wrap gap-2">
           <h3 className="font-bold text-gray-800">Faturalar</h3>
-          <div className="flex gap-1 bg-gray-100 p-0.5 rounded-lg">
-            {[
-              { k: 'all', l: `Tümü (${data.faturalar.length})` },
-              { k: 'odenmedi', l: `Ödenmedi (${odenmediSayisi})` },
-              { k: 'kismi', l: `Kısmi (${kismiSayisi})` },
-              { k: 'odendi', l: `Ödendi (${odendiSayisi})` },
-            ].map(f => (
-              <button key={f.k} onClick={() => setFaturaFilter(f.k)}
-                className={`px-3 py-1 rounded-md text-[11px] font-medium transition ${faturaFilter === f.k ? 'bg-white shadow text-gray-800' : 'text-gray-500'}`}>
-                {f.l}
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex gap-1 bg-gray-100 p-0.5 rounded-lg">
+              {[
+                { k: 'all', l: `Tümü (${data.faturalar.length})` },
+                { k: 'odenmedi', l: `Ödenmedi (${odenmediSayisi})` },
+                { k: 'kismi', l: `Kısmi (${kismiSayisi})` },
+                { k: 'odendi', l: `Ödendi (${odendiSayisi})` },
+              ].map(f => (
+                <button key={f.k} onClick={() => setFaturaFilter(f.k)}
+                  className={`px-3 py-1 rounded-md text-[11px] font-medium transition ${faturaFilter === f.k ? 'bg-white shadow text-gray-800' : 'text-gray-500'}`}>
+                  {f.l}
+                </button>
+              ))}
+            </div>
+            {secilenIdx.size > 0 && (
+              <button onClick={() => setSecilenIdx(new Set())} className="flex items-center gap-1 text-[11px] text-gray-500 hover:text-red-500 px-2 py-1 rounded border border-gray-200 hover:border-red-300">
+                <X size={11} /> Seçimi Temizle ({secilenIdx.size})
               </button>
-            ))}
+            )}
           </div>
         </div>
         <div className="overflow-x-auto max-h-[450px] overflow-y-auto">
           <table className="w-full text-xs">
             <thead className="bg-gray-50 sticky top-0">
               <tr>
+                <th className="p-2.5 w-8 text-center">
+                  <button onClick={selectAllVisible} title="Ödenmemiş/Kısmi tümünü seç/kaldır" className="opacity-60 hover:opacity-100">
+                    {filteredFaturalar
+                      .filter(f => f.durum === 'odenmedi' || f.durum === 'kismi')
+                      .every(f => secilenIdx.has(f.origIdx)) && filteredFaturalar.some(f => f.durum === 'odenmedi' || f.durum === 'kismi')
+                      ? <CheckSquare size={14} className="text-blue-600" />
+                      : <Square size={14} className="text-gray-400" />}
+                  </button>
+                </th>
                 <th className="text-left p-2.5 font-semibold text-gray-500">Durum</th>
                 <th className="text-left p-2.5 font-semibold text-gray-500">Fatura Tarihi</th>
                 <th className="text-left p-2.5 font-semibold text-gray-500">Vade Tarihi</th>
@@ -541,8 +684,26 @@ function CariDetayTab({ cariKodu, onBack }) {
               </tr>
             </thead>
             <tbody>
-              {filteredFaturalar.map((f, i) => (
-                <tr key={i} className={`border-t border-gray-50 transition ${f.durum === 'odenmedi' ? 'bg-red-50/30 hover:bg-red-50' : f.durum === 'kismi' ? 'bg-amber-50/30 hover:bg-amber-50' : 'hover:bg-emerald-50/30'}`}>
+              {filteredFaturalar.map((f, i) => {
+                const isSelectable = f.durum === 'odenmedi' || f.durum === 'kismi';
+                const isSecili = secilenIdx.has(f.origIdx);
+                return (
+                <tr
+                  key={i}
+                  onClick={() => isSelectable && toggleSecilen(f.origIdx)}
+                  className={`border-t border-gray-50 transition ${
+                    isSecili ? 'bg-blue-50 ring-1 ring-inset ring-blue-300' :
+                    f.durum === 'odenmedi' ? 'bg-red-50/30 hover:bg-red-50' :
+                    f.durum === 'kismi' ? 'bg-amber-50/30 hover:bg-amber-50' : 'hover:bg-emerald-50/30'
+                  } ${isSelectable ? 'cursor-pointer' : ''}`}
+                >
+                  <td className="p-2.5 text-center" onClick={e => { if (isSelectable) { e.stopPropagation(); toggleSecilen(f.origIdx); } }}>
+                    {isSelectable
+                      ? isSecili
+                        ? <CheckSquare size={14} className="text-blue-600 mx-auto" />
+                        : <Square size={14} className="text-gray-300 hover:text-gray-500 mx-auto" />
+                      : null}
+                  </td>
                   <td className="p-2.5">
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${durumBg[f.durum]}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${durumColor[f.durum]}`} />
@@ -562,13 +723,39 @@ function CariDetayTab({ cariKodu, onBack }) {
                   <td className="p-2.5 text-gray-500">{f.doviz}</td>
                   <td className="p-2.5 text-right text-gray-500 whitespace-nowrap">{f.dovizTutarAbs ? fmtFull(f.dovizTutarAbs) : '-'}</td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
           {filteredFaturalar.length === 0 && (
             <div className="text-center py-8 text-gray-400 text-sm">Bu filtreye uygun fatura yok</div>
           )}
         </div>
+
+        {/* Seçim özet barı */}
+        {secilenIdx.size > 0 && (
+          <div className="sticky bottom-0 left-0 right-0 bg-blue-700 text-white px-5 py-3 flex items-center gap-4 flex-wrap justify-between shadow-lg z-20">
+            <div className="flex items-center gap-6">
+              <span className="text-sm font-bold">{secilenIdx.size} fatura seçili</span>
+              <span className="text-[11px] opacity-80">Toplam Fatura: <b>{fmtFull(secilenToplamFatura)} ₺</b></span>
+              <span className="text-[11px] font-bold bg-white/20 px-2 py-0.5 rounded">Ödenecek Toplam: <b>{fmtFull(secilenToplamKalan)} ₺</b></span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleKopyala}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition ${
+                  kopyalandiBilgi ? 'bg-emerald-500 text-white' : 'bg-white text-blue-700 hover:bg-blue-50'
+                }`}
+              >
+                {kopyalandiBilgi ? <ClipboardCheck size={14} /> : <Copy size={14} />}
+                {kopyalandiBilgi ? 'Kopyalandı!' : 'Excel için Kopyala'}
+              </button>
+              <button onClick={() => setSecilenIdx(new Set())} className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] bg-white/10 hover:bg-white/20">
+                <X size={12} /> Temizle
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Ödemeler */}
@@ -611,8 +798,53 @@ function CariDetayTab({ cariKodu, onBack }) {
 
 // ══════════ ANA SAYFA ══════════
 export default function FinancePage() {
+  const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState('ozet');
   const [selectedCari, setSelectedCari] = useState(null);
+  const [refreshMsg, setRefreshMsg] = useState(null); // { type: 'info'|'success'|'error', text }
+  const pollRef = useRef(null);
+
+  function stopPolling() {
+    if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
+  }
+
+  function startPolling() {
+    stopPolling();
+    pollRef.current = setInterval(async () => {
+      try {
+        const res = await getFinanceRefreshStatus();
+        const s = res.data;
+        if (s.status === 'done') {
+          stopPolling();
+          setRefreshMsg({ type: 'success', text: `✓ ${s.message || 'Excel güncellendi'} — ${new Date(s.finishedAt).toLocaleTimeString('tr-TR')}` });
+          qc.invalidateQueries({ queryKey: ['finance-ozet'] });
+          qc.invalidateQueries({ queryKey: ['finance-cariler'] });
+          qc.invalidateQueries({ queryKey: ['finance-cariler-all'] });
+        } else if (s.status === 'error') {
+          stopPolling();
+          setRefreshMsg({ type: 'error', text: s.error || 'Yenileme hatası' });
+        }
+      } catch (_) {}
+    }, 4000);
+  }
+
+  useEffect(() => () => stopPolling(), []);
+
+  const refreshMut = useMutation({
+    mutationFn: refreshFinanceExcel,
+    onSuccess: (res) => {
+      const d = res.data;
+      if (d.running) {
+        setRefreshMsg({ type: 'info', text: 'SQL sorguları çalışıyor, veriler hazır olduğunda otomatik yenilenecek…' });
+        startPolling();
+      } else {
+        setRefreshMsg({ type: 'success', text: d.message || 'Tamamlandı' });
+      }
+    },
+    onError: (err) => {
+      setRefreshMsg({ type: 'error', text: err?.response?.data?.error || 'Bağlantı hatası' });
+    },
+  });
 
   function handleSelectCari(code) {
     setSelectedCari(code);
@@ -637,10 +869,35 @@ export default function FinancePage() {
           <h1 className="text-3xl font-extrabold text-gray-800">Finans</h1>
           <p className="text-sm text-gray-400 mt-1">RESTAR — Cari hesap borç/alacak takibi</p>
         </div>
-        <KurBand />
+        <div className="flex items-center gap-3 flex-wrap justify-end">
+          <button
+            onClick={() => { setRefreshMsg(null); refreshMut.mutate(); }}
+            disabled={refreshMut.isPending || refreshMsg?.type === 'info'}
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm"
+          >
+            <RefreshCw size={15} className={(refreshMut.isPending || refreshMsg?.type === 'info') ? 'animate-spin' : ''} />
+            {refreshMut.isPending ? 'Başlatılıyor…' : refreshMsg?.type === 'info' ? 'Sorgulanıyor…' : "Excel'i Yenile"}
+          </button>
+          <KurBand />
+        </div>
       </div>
 
       {/* Tabs */}
+      {refreshMsg && (
+        <div className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm mb-4 ${
+          refreshMsg.type === 'success' ? 'bg-emerald-50 border border-emerald-200 text-emerald-700'
+          : refreshMsg.type === 'error' ? 'bg-red-50 border border-red-200 text-red-700'
+          : 'bg-blue-50 border border-blue-200 text-blue-700'
+        }`}>
+          {refreshMsg.type === 'info'
+            ? <RefreshCw size={14} className="animate-spin shrink-0" />
+            : refreshMsg.type === 'success'
+            ? <RefreshCw size={14} className="shrink-0" />
+            : <AlertTriangle size={14} className="shrink-0" />}
+          <span>{refreshMsg.text}</span>
+          <button onClick={() => setRefreshMsg(null)} className="ml-auto text-current opacity-50 hover:opacity-100 text-lg leading-none">×</button>
+        </div>
+      )}
       <div className="flex gap-1 mb-6 bg-gray-100 p-1 rounded-xl w-fit">
         {tabs.map(t => (
           <button key={t.key} onClick={() => setActiveTab(t.key)}
