@@ -83,6 +83,8 @@ export default function DepartmentRequestsPage() {
       const product = products.find((p) => p.id === pId);
       if (product) {
         setSelectedProducts([...selectedProducts, { id: pId, code: product.code, name: product.name, qty: 1 }]);
+        setShowProductPicker(false);
+        setProductSearch('');
       }
     }
   }
