@@ -227,6 +227,34 @@ function initDb() {
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       UNIQUE(user_id, message_id)
     );
+
+    CREATE TABLE IF NOT EXISTS department_requests (
+      id TEXT PRIMARY KEY,
+      request_number TEXT UNIQUE NOT NULL,
+      created_by TEXT NOT NULL REFERENCES users(id),
+      department TEXT NOT NULL,
+      item_type TEXT NOT NULL CHECK (item_type IN ('stoklu','stok-disi')),
+      product_id TEXT REFERENCES products(id),
+      product_code TEXT,
+      product_name TEXT,
+      non_stock_item_name TEXT,
+      quantity REAL NOT NULL DEFAULT 0,
+      unit TEXT NOT NULL DEFAULT 'adet',
+      project_id TEXT REFERENCES projects(id),
+      project_code TEXT,
+      project_name TEXT,
+      usage_location TEXT,
+      details TEXT,
+      procurement_email TEXT,
+      status TEXT NOT NULL DEFAULT 'waiting_manager' CHECK (status IN ('draft','waiting_manager','waiting_gm','approved','rejected')),
+      manager_approved_by TEXT REFERENCES users(id),
+      manager_approved_at TEXT,
+      gm_approved_by TEXT REFERENCES users(id),
+      gm_approved_at TEXT,
+      procurement_notified_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
   `);
 
   // Varsayılan admin kullanıcı oluştur (eğer yoksa)

@@ -26,6 +26,7 @@ app.use('/api/import', require('./routes/import'));
 app.use('/api/outlook', require('./routes/outlook'));
 app.use('/api/warehouse', require('./routes/warehouse'));
 app.use('/api/malzeme-ihtiyac', require('./routes/malzeme-ihtiyac'));
+app.use('/api/department-requests', require('./routes/department-requests'));
 app.use('/api/finance', require('./routes/finance'));
 app.use('/api/damage-reports', require('./routes/damage-reports'));
 app.use('/api/projects', require('./routes/projects'));

@@ -97,6 +97,11 @@ export const getMalzemeProjeMaliyet = () => api.get('/malzeme-ihtiyac/proje-mali
 export const getMalzemeSatinalma = (proje) => api.get('/malzeme-ihtiyac/satinalma', { params: { proje } });
 export const downloadTedarikciPdf = (data) => api.post('/malzeme-ihtiyac/tedarikci-pdf', data, { responseType: 'blob' });
 
+// Department Requests
+export const getDepartmentRequests = (params) => api.get('/department-requests', { params });
+export const createDepartmentRequest = (data) => api.post('/department-requests', data);
+export const updateDepartmentRequestStatus = (id, data) => api.patch(`/department-requests/${id}/status`, data);
+
 // Import
 export const importPurchaseReport = (file) => {
   const formData = new FormData();
