@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const XLSX = require('xlsx');
 const { authenticate } = require('../middleware/auth');
+const { getDb } = require('../db/schema');
 const { refreshExcelQueries } = require('../utils/excelRefresh');
 
 router.use(authenticate);
@@ -255,6 +256,42 @@ router.get('/satinalma', (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('Satinalma error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Tüm projeleri getir (Excel + Database)
+router.get('/all-projects', (req, res) => {
+  try {
+    const db = getDb();
+    
+    // 1. Excel'den proje kodlarını al
+    const wb = XLSX.readFile(EXCEL_PATH, { cellFormula: false, cellStyles: false });
+    const ws = wb.Sheets['ÜRETİM İHTİYAÇ RAPORU'];
+    const excelProjects = ws 
+      ? [...new Set(
+          XLSX.utils.sheet_to_json(ws, { defval: '' })
+            .map(r => r['PROJE_KODU'])
+            .filter(Boolean)
+        )].sort()
+      : [];
+
+    // 2. Veritabanından tüm proje adlarını al (project_offers'dan)
+    const dbProjects = db.prepare(
+      'SELECT DISTINCT project_name FROM project_offers WHERE project_name IS NOT NULL AND project_name != "" ORDER BY project_name'
+    ).all().map(r => r.project_name).filter(p => p && !excelProjects.includes(p));
+
+    // 3. Birleştir (Excel projeleri önce, sonra veritabanı projeleri)
+    const allProjects = [...excelProjects, ...dbProjects];
+
+    res.json({ 
+      projeler: allProjects,
+      excelCount: excelProjects.length,
+      databaseCount: dbProjects.length,
+      toplam: allProjects.length
+    });
+  } catch (err) {
+    console.error('All projects error:', err);
     res.status(500).json({ error: err.message });
   }
 });

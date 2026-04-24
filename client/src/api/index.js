@@ -96,6 +96,7 @@ export const refreshMalzemeExcel = () => api.post('/malzeme-ihtiyac/refresh', {}
 export const getMalzemeUretimIhtiyac = (proje) => api.get('/malzeme-ihtiyac/uretim-ihtiyac', { params: { proje } });
 export const getMalzemeProjeMaliyet = () => api.get('/malzeme-ihtiyac/proje-maliyet');
 export const getMalzemeSatinalma = (proje) => api.get('/malzeme-ihtiyac/satinalma', { params: { proje } });
+export const getAllMalzemeProjects = () => api.get('/malzeme-ihtiyac/all-projects');
 export const downloadTedarikciPdf = (data) => api.post('/malzeme-ihtiyac/tedarikci-pdf', data, { responseType: 'blob' });
 
 // Department Requests

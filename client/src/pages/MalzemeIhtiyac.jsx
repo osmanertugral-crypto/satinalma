@@ -11,6 +11,7 @@ import {
   downloadTedarikciPdf,
   getFinanceCariler,
   getWarehouseStock,
+  getAllMalzemeProjects,
 } from '../api';
 
 const TABS = [
@@ -85,10 +86,10 @@ export default function MalzemeIhtiyac() {
     },
   });
 
-  // Proje listesi (üretim sorgusundan al)
+  // Proje listesi (tüm projeler: Excel + Database)
   const projelerQuery = useQuery({
     queryKey: ['malzeme-projeler'],
-    queryFn: () => getMalzemeUretimIhtiyac().then(r => r.data.projeler),
+    queryFn: () => getAllMalzemeProjects().then(r => r.data.projeler),
   });
 
   const projeler = projelerQuery.data || [];
