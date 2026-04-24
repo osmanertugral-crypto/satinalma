@@ -17,6 +17,7 @@ const navItems = [
   { to: '/malzeme-ihtiyac', icon: ClipboardList, label: 'Malzeme İhtiyaç', key: 'malzeme-ihtiyac' },
   { to: '/price-analysis', icon: LineChart, label: 'Fiyat Analizi', key: 'price-analysis' },
   { to: '/projeler', icon: TrendingUp, label: 'Projeler', key: 'projects' },
+  { to: '/department-requests', icon: ClipboardList, label: 'Departman Talepleri', key: 'department-requests' },
   { to: '/hasar-tutanaklari', icon: FileText, label: 'Hasar Tutanakları', key: 'damage-reports' },
   { to: '/ciro-raporu', icon: BarChart2, label: 'Ciro Raporu', key: 'ciro-raporu' },
   { to: '/outlook-tasks', icon: ListChecks, label: 'Outlook Yapılacaklar', key: 'outlook-tasks' },
