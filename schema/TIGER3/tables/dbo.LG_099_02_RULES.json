@@ -1,0 +1,208 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_099_02_RULES",
+    "full_name":  "dbo.LG_099_02_RULES",
+    "description":  "",
+    "total_rows":  "0",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PRIORITY",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DOCTYPE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EVENTKIND",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RULETYPE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DISABLED",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DATASOURCETYP",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "VERSION",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PWD",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LDATA",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "WTHEVKNDSEND",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I099_02_RULES_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I099_02_RULES_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CODE, RULETYPE"
+                    },
+                    {
+                        "index_name":  "I099_02_RULES_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "PRIORITY, DOCTYPE"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

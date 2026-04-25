@@ -1,0 +1,13 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "BELGENO",
+    "on_table":  "dbo.LG_001_01_INVOICE",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "INSERT",
+                   "UPDATE"
+               ],
+    "definition":  "-- =============================================\r\n-- Author:  \u003cAuthor,,Name\u003e\r\n-- Create date: \u003cCreate Date,,\u003e\r\n-- Description: \u003cbelgenoya nc yazma\u003e\r\n-- =============================================\r\nCREATE TRIGGER BELGENO \r\n   ON  LG_001_01_INVOICE\r\n   AFTER INSERT,UPDATE\r\nAS \r\n\r\nDECLARE @INVLOGI INT\r\nDECLARE @INVDOCODE NVARCHAR(11)\r\nDECLARE @SPECODE NVARCHAR(11)\r\nDECLARE @TRCODE SMALLINT\r\n\r\nSELECT @INVLOGI=LOGICALREF FROM inserted\r\nSELECT @INVDOCODE=DOCODE FROM inserted\r\nSELECT @TRCODE=TRCODE FROM inserted\r\nSELECT @SPECODE=SPECODE FROM inserted\r\n\r\nIF (@SPECODE=\u0027GR\u0027)\r\n\r\n\r\nBEGIN\r\n      UPDATE LG_001_01_INVOICE SET EINVOICE=0,FICHENO=\u0027GR\u0027+CONVERT(NVARCHAR,LOGICALREF),VATEXCEPTCODE=\u0027301\u0027,VATEXCEPTREASON=\u0027KDV\u0027 WHERE LOGICALREF=@INVLOGI\r\n \r\n\r\nEND\r\n\r\n\r\n--select VATEXCEPTCODE,VATEXCEPTREASON* from lg_001_01_INVOICE "
+}

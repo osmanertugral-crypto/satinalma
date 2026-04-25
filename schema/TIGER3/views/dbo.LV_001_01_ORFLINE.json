@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_001_01_ORFLINE",
+    "full_name":  "dbo.LV_001_01_ORFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_001_01_ORFLINE] AS\nSELECT\n    LGMAIN.LOGICALREF, LGMAIN.ORDFICHEREF, LGMAIN.STOCKREF, LGMAIN.LINENO_, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.DATE_, LGMAIN.LINETYPE, LGMAIN.TRCODE,   \n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.CODE WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.CODE ELSE \u0027\u0027 END AS CODE,\n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.DEFINITION_ WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_ WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.NAME ELSE \u0027\u0027 END AS LINEEXP\nFROM\n    LG_001_01_ORFLINE LGMAIN WITH(NOLOCK)\n LEFT OUTER JOIN LG_001_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF AND LGMAIN.LINETYPE NOT IN (2,3,4)\n    LEFT OUTER JOIN lg_001_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF AND LGMAIN.LINETYPE IN (4)\n    LEFT OUTER JOIN LG_001_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF AND LGMAIN.LINETYPE IN (2,3)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDFICHEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "216",
+                            "ORDFICHEREF":  "51",
+                            "STOCKREF":  "4282",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "50",
+                            "PRICE":  "40",
+                            "TOTAL":  "2000",
+                            "DATE_":  "24.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X196",
+                            "LINEEXP":  "SPANZET"
+                        },
+                        {
+                            "LOGICALREF":  "218",
+                            "ORDFICHEREF":  "53",
+                            "STOCKREF":  "4350",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "5",
+                            "PRICE":  "55,55",
+                            "TOTAL":  "277,75",
+                            "DATE_":  "26.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X264",
+                            "LINEEXP":  "KREM PELUŞ KUMAŞ"
+                        },
+                        {
+                            "LOGICALREF":  "220",
+                            "ORDFICHEREF":  "55",
+                            "STOCKREF":  "5187",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "53,765",
+                            "PRICE":  "85,00009",
+                            "TOTAL":  "4570,03",
+                            "DATE_":  "26.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X1068",
+                            "LINEEXP":  "SUNİ DERİ"
+                        },
+                        {
+                            "LOGICALREF":  "222",
+                            "ORDFICHEREF":  "57",
+                            "STOCKREF":  "4319",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "9,5",
+                            "PRICE":  "30",
+                            "TOTAL":  "285",
+                            "DATE_":  "25.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X233",
+                            "LINEEXP":  "A.GRİ PELUŞ KUMAŞ"
+                        },
+                        {
+                            "LOGICALREF":  "223",
+                            "ORDFICHEREF":  "58",
+                            "STOCKREF":  "4603",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "15",
+                            "PRICE":  "61",
+                            "TOTAL":  "915",
+                            "DATE_":  "26.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X521",
+                            "LINEEXP":  "HİDRAFOR FİLTRE"
+                        },
+                        {
+                            "LOGICALREF":  "224",
+                            "ORDFICHEREF":  "58",
+                            "STOCKREF":  "4332",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "10",
+                            "PRICE":  "631",
+                            "TOTAL":  "6310",
+                            "DATE_":  "26.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X246",
+                            "LINEEXP":  "DIŞ DUŞ SICAK/SOĞUK"
+                        },
+                        {
+                            "LOGICALREF":  "225",
+                            "ORDFICHEREF":  "58",
+                            "STOCKREF":  "4167",
+                            "LINENO_":  "3",
+                            "AMOUNT":  "30",
+                            "PRICE":  "76,5",
+                            "TOTAL":  "2295",
+                            "DATE_":  "26.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X78",
+                            "LINEEXP":  "BARA"
+                        },
+                        {
+                            "LOGICALREF":  "226",
+                            "ORDFICHEREF":  "58",
+                            "STOCKREF":  "4334",
+                            "LINENO_":  "4",
+                            "AMOUNT":  "5",
+                            "PRICE":  "450",
+                            "TOTAL":  "2250",
+                            "DATE_":  "26.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X248",
+                            "LINEEXP":  "EGSOZT UCU PAZLANMAZ ÇIKIŞI"
+                        },
+                        {
+                            "LOGICALREF":  "227",
+                            "ORDFICHEREF":  "59",
+                            "STOCKREF":  "4302",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "20",
+                            "PRICE":  "123,39",
+                            "TOTAL":  "2467,8",
+                            "DATE_":  "25.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X216",
+                            "LINEEXP":  "USD CHARGER BODY 2A USB "
+                        },
+                        {
+                            "LOGICALREF":  "228",
+                            "ORDFICHEREF":  "59",
+                            "STOCKREF":  "4648",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "20",
+                            "PRICE":  "42,48",
+                            "TOTAL":  "849,6",
+                            "DATE_":  "25.11.2021 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X568",
+                            "LINEEXP":  "ÇAKMAKLIK"
+                        }
+                    ]
+}

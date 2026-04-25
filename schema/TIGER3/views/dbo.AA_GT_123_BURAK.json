@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_GT_123_BURAK",
+    "full_name":  "dbo.AA_GT_123_BURAK",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[AA_GT_123_BURAK] AS\r\n\r\nselect \r\nH.CODE\r\n,H.DEFINITION_\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =1),0) \u002701_OCAK\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =2),0) \u002702_SUBAT\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =3),0) \u002703_MART\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =4),0) \u002704_NISAN\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =5),0) \u002705_MAYIS\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =6),0) \u002706_HAZIRAN\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =7),0) \u002707_TEMMUZ\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =8),0) \u002708_AGUSTOS\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =9),0) \u002709_EYLUL\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =10),0) \u002710_EKIM\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =11),0) \u002711_KASIM\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT) FROM LG_123_01_EMFLINE WHERE KEBIRCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2024 AND MONTH(DATE_) =12),0) \u002712_ARALIK\u0027\r\n\r\nfrom LG_123_EMUHACC  AS H\r\n\r\n\r\nWHERE (H.CODE LIKE\u00276%\u0027 OR H.CODE LIKE\u00277%\u0027)\r\nAND LEN(H.CODE)=3\r\nAND H.CODE IN (SELECT KEBIRCODE FROM LG_123_01_EMFLINE)\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "01_OCAK",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "02_SUBAT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "03_MART",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "04_NISAN",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "05_MAYIS",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "06_HAZIRAN",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "07_TEMMUZ",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "08_AGUSTOS",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "09_EYLUL",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "10_EKIM",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "11_KASIM",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "12_ARALIK",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CODE":  "600",
+                            "DEFINITION_":  "YURT İÇİ SATIŞLAR",
+                            "01_OCAK":  "4617800,62",
+                            "02_SUBAT":  "10934880,13",
+                            "03_MART":  "37441611,35",
+                            "04_NISAN":  "44375,09",
+                            "05_MAYIS":  "13299079,79",
+                            "06_HAZIRAN":  "27727961,34",
+                            "07_TEMMUZ":  "6479586,02",
+                            "08_AGUSTOS":  "6173163,33",
+                            "09_EYLUL":  "17590669,6",
+                            "10_EKIM":  "10307323,65",
+                            "11_KASIM":  "5981285,77",
+                            "12_ARALIK":  "177946281,85"
+                        },
+                        {
+                            "CODE":  "601",
+                            "DEFINITION_":  "YURTDIŞI SATIŞLAR",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "1430680,82",
+                            "08_AGUSTOS":  "5551268,27",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "2623645,27",
+                            "11_KASIM":  "2140151",
+                            "12_ARALIK":  "11745745,36"
+                        },
+                        {
+                            "CODE":  "602",
+                            "DEFINITION_":  "DİĞER GELİRLER",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "3000",
+                            "03_MART":  "48000",
+                            "04_NISAN":  "1700",
+                            "05_MAYIS":  "107852,78",
+                            "06_HAZIRAN":  "32666,67",
+                            "07_TEMMUZ":  "202237,33",
+                            "08_AGUSTOS":  "200433,33",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "19805,84",
+                            "11_KASIM":  "77863,34",
+                            "12_ARALIK":  "739602,63"
+                        },
+                        {
+                            "CODE":  "610",
+                            "DEFINITION_":  "SATIŞTAN İADELER (-)",
+                            "01_OCAK":  "997114,65",
+                            "02_SUBAT":  "32908,15",
+                            "03_MART":  "13019",
+                            "04_NISAN":  "3513470,74",
+                            "05_MAYIS":  "11162,83",
+                            "06_HAZIRAN":  "2240109,17",
+                            "07_TEMMUZ":  "1005112,14",
+                            "08_AGUSTOS":  "649566,6",
+                            "09_EYLUL":  "791058,03",
+                            "10_EKIM":  "11853,15",
+                            "11_KASIM":  "44644,91",
+                            "12_ARALIK":  "9603437,33"
+                        },
+                        {
+                            "CODE":  "611",
+                            "DEFINITION_":  "SATIŞ İSKONTOLARI (-)",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "817,08",
+                            "10_EKIM":  "13188,99",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "14006,07"
+                        },
+                        {
+                            "CODE":  "612",
+                            "DEFINITION_":  "DİĞER İNDİRİMLER (-)",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "0"
+                        },
+                        {
+                            "CODE":  "620",
+                            "DEFINITION_":  "SATILAN MAMULLER MALİYETİ (-)",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "204925366"
+                        },
+                        {
+                            "CODE":  "621",
+                            "DEFINITION_":  "SATILAN TİCARİ MALLAR MALİYETİ (-)",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "7396512"
+                        },
+                        {
+                            "CODE":  "622",
+                            "DEFINITION_":  "SATILAN HİZMET MALİYETİ (-)",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "666666,64"
+                        },
+                        {
+                            "CODE":  "630",
+                            "DEFINITION_":  "ARAŞTIRMA VE GELİŞTİRME GİDERLERİ (-)",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "8005383,42"
+                        }
+                    ]
+}

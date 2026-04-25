@@ -1,0 +1,120 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_CTYCODES",
+    "full_name":  "dbo.L_CTYCODES",
+    "description":  "",
+    "total_rows":  "93",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CPHCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CNAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "CTYCODES_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "CTYCODES_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CPHCODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CPHCODE":  "322",
+                            "CNAME":  "ADANA"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CPHCODE":  "416",
+                            "CNAME":  "ADIYAMAN"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CPHCODE":  "272",
+                            "CNAME":  "AFYON"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CPHCODE":  "472",
+                            "CNAME":  "AĞRI"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CPHCODE":  "382",
+                            "CNAME":  "AKSARAY"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CPHCODE":  "358",
+                            "CNAME":  "AMASYA"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CPHCODE":  "312",
+                            "CNAME":  "ANKARA"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CPHCODE":  "242",
+                            "CNAME":  "ANTALYA"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CPHCODE":  "478",
+                            "CNAME":  "ARDAHAN"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CPHCODE":  "466",
+                            "CNAME":  "ARTVİN"
+                        }
+                    ]
+}

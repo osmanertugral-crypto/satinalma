@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "LG_KSLINES_INS_002_01",
+    "on_table":  "dbo.LG_002_01_KSLINES",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "INSERT"
+               ],
+    "definition":  "CREATE TRIGGER LG_KSLINES_INS_002_01 ON LG_002_01_KSLINES\nFOR INSERT\nAS\nDECLARE @TRCODE    SMALLINT\nDECLARE @TRDATE    DATETIME\nDECLARE @TRSIGN    SMALLINT\nDECLARE @CASHREF   INT\nDECLARE @AMOUNT    FLOAT\nDECLARE @REPORTNET FLOAT\nDECLARE @TRNET FLOAT\nDECLARE @TRCURR SMALLINT\nDECLARE @CANCELLED SMALLINT\nDECLARE @STATUS    SMALLINT\nSELECT @TRCODE    = I.TRCODE,\n       @TRDATE    = I.DATE_,\n       @TRSIGN    = I.SIGN,\n       @CASHREF   = I.CARDREF,\n       @AMOUNT    = I.AMOUNT,\n       @REPORTNET = I.REPORTNET,\n       @TRNET = I.TRNET,\n       @TRCURR = I.TRCURR,\n       @CANCELLED = I.CANCELLED,\n       @STATUS    = I.STATUS FROM INSERTED I\nEXECUTE LG_UPDATE_CASHTRANS_002_01 1, @TRCODE, @TRDATE, @TRSIGN, @CASHREF,\n                                   @AMOUNT, @REPORTNET, @TRNET, @TRCURR, @CANCELLED, @STATUS"
+}

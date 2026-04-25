@@ -1,0 +1,212 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_DYNREPUSRR",
+    "full_name":  "dbo.L_DYNREPUSRR",
+    "description":  "",
+    "total_rows":  "5742",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERNR",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "REPID",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ALLOWCUSTDSGN",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ALLOWCUSTDSGNSEL",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ALLOWUSEREPORT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMNR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "DYNREPUSRR_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "DYNREPUSRR_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "USERNR, FIRMNR"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "USERNR":  "1",
+                            "REPID":  "800150013",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "USERNR":  "2",
+                            "REPID":  "800150013",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "USERNR":  "1",
+                            "REPID":  "800150014",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "USERNR":  "2",
+                            "REPID":  "800150014",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "USERNR":  "1",
+                            "REPID":  "804000004",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "USERNR":  "2",
+                            "REPID":  "804000004",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "USERNR":  "1",
+                            "REPID":  "804000001",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "USERNR":  "2",
+                            "REPID":  "804000001",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "USERNR":  "1",
+                            "REPID":  "804000006",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "USERNR":  "2",
+                            "REPID":  "804000006",
+                            "ALLOWCUSTDSGN":  "1",
+                            "ALLOWCUSTDSGNSEL":  "1",
+                            "ALLOWUSEREPORT":  "1",
+                            "FIRMNR":  "1"
+                        }
+                    ]
+}

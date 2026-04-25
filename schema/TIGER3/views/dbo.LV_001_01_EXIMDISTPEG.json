@@ -1,0 +1,40 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_001_01_EXIMDISTPEG",
+    "full_name":  "dbo.LV_001_01_EXIMDISTPEG",
+    "definition":  "CREATE VIEW [dbo].[LV_001_01_EXIMDISTPEG] AS\nSELECT LGMAIN.ITEMREF, LGMAIN.STTRANSREF, SUM(LGMAIN.ADDEXPENSE) AS ADDEXPENSE, SUM(LGMAIN.TOTALAMNT) AS TOTALAMNT\n FROM LG_001_01_EXIMDISTPEG LGMAIN\n WHERE (LGMAIN.ISDISTRIBUTED = 1) AND (LGMAIN.TOTALAMNT \u003e 0)\n GROUP BY LGMAIN.ITEMREF, LGMAIN.STTRANSREF\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ITEMREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STTRANSREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDEXPENSE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTALAMNT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

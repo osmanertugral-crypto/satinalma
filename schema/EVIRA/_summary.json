@@ -1,0 +1,1326 @@
+﻿{
+    "_meta":  {
+                  "server":  "10.10.10.241",
+                  "database":  "EVIRA",
+                  "export_date":  "2026-04-24 22:38:24",
+                  "table_count":  185,
+                  "view_count":  40,
+                  "procedure_count":  13,
+                  "trigger_count":  23,
+                  "aciklama":  "Ozet dosyasi. Detaylar icin tables/ views/ procedures/ triggers/ klasorlerine bakin."
+              },
+    "tables":  [
+                   {
+                       "full_name":  "dbo.ACTPROCESS",
+                       "total_rows":  "0",
+                       "columns":  "ACTPROCESS_REF, PID, PNAME, PROCESS",
+                       "primary_key":  "ACTPROCESS_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ADDLINK",
+                       "total_rows":  "0",
+                       "columns":  "ADDLINK_REF, LNAME, LLINK, LNUM, IMG",
+                       "primary_key":  "ADDLINK_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ADRESGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, GRUP_ADI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.ADRESOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.AMBAR",
+                       "total_rows":  "12",
+                       "columns":  "AMBAR_REF, AMBAR_KODU, AMBAR_ADI, NEGATIF_KONTROL, EK1, EK2, EK3, SIRA_NO, PALET_SAYISI, M3, ULKE, ULKEKODU, IL, ILKODU, ILCE, ILCEKODU, MAHALLE, MAHALLEKODU, ADRES1, ADRES2, TEL1, TEL2, EMAIL, TASIYICI_KODU, ENT_GUID, FIRMA_REF, ETIKET_REF_FIRMA, SIPARIS_AMBARI, IFS_LOCATIONNO, IMAGE1, IMAGE2",
+                       "primary_key":  "AMBAR_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.AMBARYETKI",
+                       "total_rows":  "10",
+                       "columns":  "AMBARYETKI_REF, KULLANICIGRUP_KODU, AMBAR_KODU",
+                       "primary_key":  "KULLANICIGRUP_KODU, AMBAR_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.APPGRDDEF",
+                       "total_rows":  "2244",
+                       "columns":  "APPGRDDEF_REF, KEY_, VALUE, VALUEMS",
+                       "primary_key":  "APPGRDDEF_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ARACBASLIK",
+                       "total_rows":  "0",
+                       "columns":  "AB_REF, YUKLEME_NO, TARIH, SAAT, KULLANICI_REF, RAMPA_KODU, ARAC_KODU, STATUS, PLAKA, SURUCU",
+                       "primary_key":  "AB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ARACBASLIKLOG",
+                       "total_rows":  "0",
+                       "columns":  "AB_REF, YUKLEME_NO, TARIH, SAAT, KULLANICI_REF, RAMPA_KODU, ARAC_KODU, STATUS, SILENKULLANICI_REF, SILME_NEDENI, SILME_TARIHI, PLAKA, SURUCU",
+                       "primary_key":  ""
+                   },
+                   {
+                       "full_name":  "dbo.ARACHAREKET",
+                       "total_rows":  "0",
+                       "columns":  "ARACHAREKET_REF, ARAC_REF, FIRMA_REF, TARIH, CIKIS_SAAT, CIKIS_KM, VARIS_SAAT, VARIS_KM, VARIS_BOLGESI, TOPLAM_DAKIKA, TOPLAM_KM, ACIKLAMA, SURUCU_REF",
+                       "primary_key":  "ARACHAREKET_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ARACTANIMLARI",
+                       "total_rows":  "0",
+                       "columns":  "ARAC_REF, ARAC_KODU, ARAC_ADI, PLAKA, MARKA, MODEL, HACIM, AGIRLIK",
+                       "primary_key":  "ARAC_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ARACYUKLEME",
+                       "total_rows":  "0",
+                       "columns":  "ARACYUKLEME_REF, RAMPA_KODU, ARAC_KODU, SB_REF, SIPARIS_NO, PB_REF, PLANLAMA_NO, KOLI_NO, KULLANICI_REF, KULLANICI_ADI, TARIHI, YAZDIRMA, AB_REF, FIRMA_REF, ALAN1, ALAN2, ALAN3, ALAN4, PLAKA, SURUCU",
+                       "primary_key":  "ARACYUKLEME_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ARACYUKLEMELOG",
+                       "total_rows":  "0",
+                       "columns":  "ARACYUKLEME_REF, RAMPA_KODU, ARAC_KODU, SB_REF, SIPARIS_NO, PB_REF, PLANLAMA_NO, KOLI_NO, KULLANICI_REF, KULLANICI_ADI, TARIHI, YAZDIRMA, AB_REF, SILENKULLANICI_REF, SILME_NEDENI, SILME_TARIHI, FIRMA_REF, ALAN1, ALAN2, ALAN3, ALAN4, PLAKA, SURUCU",
+                       "primary_key":  ""
+                   },
+                   {
+                       "full_name":  "dbo.ATALEPDURUM",
+                       "total_rows":  "0",
+                       "columns":  "DURUM_REF, DURUM_KODU, ACIKLAMASI, RENK_ZEMIN, RENK_YAZI, KILIT",
+                       "primary_key":  "DURUM_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.ATALEPGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, ACIKLAMASI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.ATALEPPGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, ACIKLAMASI",
+                       "primary_key":  "GRUP_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ATGEC",
+                       "total_rows":  "0",
+                       "columns":  "ATGEC_REF, TARIH, FB_REF, SB_REF, PB_REF, FIS_TURU, STOK_KODU, ADRES, SPMIKTAR, SMIKTAR, KULLANICI_REF, AMBAR_KODU, HEDEF_AMBAR, TMENUREF, TFICHEREF, ATG_KODU, TB_REF",
+                       "primary_key":  "ATGEC_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ATGECTANIM",
+                       "total_rows":  "0",
+                       "columns":  "ATGECTANIM_REF, ATG_KODU, ACIKLAMASI, ISSAYEK, BAGDETYEN",
+                       "primary_key":  "ATGECTANIM_REF"
+                   },
+                   {
+                       "full_name":  "dbo.BARKODTIPI",
+                       "total_rows":  "22",
+                       "columns":  "BARKODTIPI_REF, UZUNLUK, FORMUL, BASLANGIC_KARAKTER, MIKTAR_CARPANI, SQLQUERYKULLAN, SQLQUERY",
+                       "primary_key":  "BARKODTIPI_REF"
+                   },
+                   {
+                       "full_name":  "dbo.BOLUM",
+                       "total_rows":  "1",
+                       "columns":  "BOLUM_REF, BOLUM, ACIKLAMASI",
+                       "primary_key":  "BOLUM"
+                   },
+                   {
+                       "full_name":  "dbo.CARIHAREKET",
+                       "total_rows":  "0",
+                       "columns":  "CH_REF, CH_TURU, TARIH, BORC_ALACAK, BORC, ALACAK, FIS_NO, MAKBUZ_NO, ACIKLAMA, FIRMA_REF, FB_REF, SB_REF, DOVIZ_NO, DOVIZ_ORANI, AKTIF",
+                       "primary_key":  "CH_REF"
+                   },
+                   {
+                       "full_name":  "dbo.CITYILILCE",
+                       "total_rows":  "0",
+                       "columns":  "CITYILILCE_REF, IL, ILCE, IL_KODU, ILCE_KODU",
+                       "primary_key":  "CITYILILCE_REF"
+                   },
+                   {
+                       "full_name":  "dbo.DASHFILE",
+                       "total_rows":  "0",
+                       "columns":  "DASHFILE_REF, DNAME, DDATA, RTIME",
+                       "primary_key":  "DASHFILE_REF"
+                   },
+                   {
+                       "full_name":  "dbo.DEPOBOLGE",
+                       "total_rows":  "0",
+                       "columns":  "DEPOBOLGE_REF, DEPO_BOLGE, ACIKLAMA",
+                       "primary_key":  "DEPO_BOLGE"
+                   },
+                   {
+                       "full_name":  "dbo.DOVIZ",
+                       "total_rows":  "0",
+                       "columns":  "DOVIZ_REF, DOVIZ_KODU, DOVIZ_ADI, DOVIZ_NO",
+                       "primary_key":  "DOVIZ_REF"
+                   },
+                   {
+                       "full_name":  "dbo.DOVIZGUNLUK",
+                       "total_rows":  "0",
+                       "columns":  "DOVIZ_GUNLUK_REF, TARIH, DOVIZ_NO, TUR1, TUR2, TUR3, TUR4",
+                       "primary_key":  "DOVIZ_GUNLUK_REF"
+                   },
+                   {
+                       "full_name":  "dbo.EKFIS",
+                       "total_rows":  "2",
+                       "columns":  "EKFIS_REF, FIS_TURU, FIS_TURU2, AMBAR_KODU, ALT_URUN, FIRMA_REF, ISTASYON_KODU, HEDEF_AMBAR, HEDEF_DURUM, ADRES, FIFO, HEDEF_ADRES, DURUM_KODU, ANA_ADRES, ANA_HEDEF_ADRES, ALTURUN_AMBAR, ANAURUN_AMBAR, MIKTAR_HESAPLA, ANAFIS_FIRMA, ANAURUN_HEDEFAMBAR, ANAURUN_AMBARH, ANA_ADRES_HA, ANA_HEDEF_ADRES_AD, DURUM_KODU_DU, DURUM_KODU_HD, HEDEF_DURUM_HD, HEDEF_DURUM_DU, ISTASYON_KODU_IS, ANAURUN_HEDEFAMBARKA",
+                       "primary_key":  "EKFIS_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ENTGOREV",
+                       "total_rows":  "4",
+                       "columns":  "ENTGOREV_REF, AKTIF, GRUP_ADI, GOREV_ADI, TTURU, TZAMAN, TZAMANLAR, TGUNLER, SORGU, SONCALISMA, SIRA, TTYPE, TFIS_TURU, EFIS_TURU, ADRES, HEDEF_ADRES, DURUM_KODU, HEDEF_DURUM, ISTASYON_KODU, FILTRE, KAYNAK, KAYNAKDB, TAKIP_NO, FIS_TURU, YAZICI, RAPOR_REF, ENT_DURUM, FILTREYAZ, KOPYA_SAYISI, AMBAR_KODU, HEDEF_AMBAR, PALET, HEDEF_PALET, PAKET, HEDEF_PAKET, SIPARIS_REF, LCPRNT, SIPARIS_DURUM, SIPARIS_GRUP, RZVEKSTCKQ",
+                       "primary_key":  "ENTGOREV_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ENTGOREVTBL",
+                       "total_rows":  "0",
+                       "columns":  "ENTGOREVTBL_REF, KAYNAK, FB_REF, KAYNAK_REF, KAYNAK_NO, KAYNAKDB",
+                       "primary_key":  "ENTGOREVTBL_REF"
+                   },
+                   {
+                       "full_name":  "dbo.EPOSTA",
+                       "total_rows":  "5",
+                       "columns":  "EPOSTA_REF, STATUS, FISTUR, FISAKTAR, KIME, BILGI, BASLIK, DETAY, RAPORDATA, RAPORTYP, RAPORISIM, PQUERY, FFILTER",
+                       "primary_key":  "EPOSTA_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ETIKETDOSYASI",
+                       "total_rows":  "8",
+                       "columns":  "ETIKET_REF, ETIKET_ADI, ETIKET_DATA, ETKIN_YAZICI, ETKIN_FIS, ETKIN_ISTASYON, ETIKET_TURU, TARIH1, TARIH2, NALAN1, ALAN1, NALAN2, ALAN2, PARAMETRE1, SERINO1, PARAMETRE2, SERINO2, PARAMETRE3, SERINO3, PARAMETRE4, SERINO4, TARIH, PRNMOD, KOPYA, SESAYISI, ZPLCODE, ZPLSQL",
+                       "primary_key":  "ETIKET_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ETIKETYAZDIRMA",
+                       "total_rows":  "186",
+                       "columns":  "ETIKETYAZDIRMA_REF, LINK_REF, KULLANICI_REF, EMIKTAR, ALAN1, ALAN2, ALAN3, ALAN4, ALAN5, ALAN6, ALAN7, ALAN8, ALAN9, ALAN10, ETIKET_TURU, YNO, SERINO1, SERINO2, SERINO3, SERINO4, TAKIP_NO, BIRIM, BARKOD, BIRIM_REF, SKT_TARIHI, GBS_TARIHI, GBT_TARIHI, URT_TARIHI, MIKTAR, VARYANT_REF, RETEST_TARIHI, FB_REF, FD_REF, SB_REF, SD_REF, PB_REF, PD_REF, TB_REF, TD_REF, FIRMA_REF",
+                       "primary_key":  "ETIKETYAZDIRMA_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ETIKETYAZDIRMALOG",
+                       "total_rows":  "45267",
+                       "columns":  "ETIKETYAZDIRMALOG_REF, LINK_REF, KULLANICI_REF, EMIKTAR, ALAN1, ALAN2, ALAN3, ALAN4, ALAN5, ALAN6, ALAN7, ALAN8, ALAN9, ALAN10, TARIH, ETIKET_REF, YAZICI, ETIKET_TURU, YNO, SERINO1, SERINO2, SERINO3, SERINO4, TAKIP_NO, BIRIM, BARKOD, BIRIM_REF, SKT_TARIHI, GBS_TARIHI, GBT_TARIHI, URT_TARIHI, MIKTAR, VARYANT_REF, RETEST_TARIHI, FB_REF, FD_REF, SB_REF, SD_REF, PB_REF, PD_REF, TB_REF, TD_REF, FIRMA_REF",
+                       "primary_key":  "ETIKETYAZDIRMALOG_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ETIKETYETKI",
+                       "total_rows":  "0",
+                       "columns":  "ETIKETYETKI_REF, KULLANICIGRUP_KODU, ETIKET_REF",
+                       "primary_key":  "ETIKETYETKI_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FBCEVAP",
+                       "total_rows":  "0",
+                       "columns":  "FBCEVAP_REF, FB_REF, FISEKBILGI_REF, METIN, SAYI",
+                       "primary_key":  "FBCEVAP_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FDCEVAP",
+                       "total_rows":  "0",
+                       "columns":  "FDCEVAP_REF, FB_REF, FD_REF, FISEKBILGI_REF, METIN, SAYI",
+                       "primary_key":  "FDCEVAP_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FDOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI, TYP, MDL, FIS_TURU",
+                       "primary_key":  "OZELKOD_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FIRMABOLGE",
+                       "total_rows":  "0",
+                       "columns":  "REF, KOD, AD",
+                       "primary_key":  "KOD"
+                   },
+                   {
+                       "full_name":  "dbo.FIRMAGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, GRUP_ADI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.FIRMAKARTI",
+                       "total_rows":  "5851",
+                       "columns":  "FIRMA_REF, FIRMA_KODU, FIRMA_UNVANI, FIRMA_UNVANI2, ADRES1, ADRES2, ULKE, IL, ILCE, MAHALLE, ULKEKODU, ILKODU, ILCEKODU, MAHALLEKODU, POSTAKODU, IS_TELEFONU, IS_FAX, VERGI_DAIRESI, VERGI_NUMARASI, OZELKOD, GRUP_KODU, YETKILI, CEP_TELEFONU, EV_TELEFONU, FIRMA_TIPI, TICARI_GRUP, KAYIT_TARIHI, GUNCELLEME_TARIHI, AKTIF, TAHSILAT_TIPI, OZELKOD2, OZELKOD3, OZELKOD4, OZELKOD5, SINIF, SEVK_SEKLI, ETIKET_REF_FIRMA, ETIKET_REF_URUN, FIRMA_MAIL, MODIFIEDDATE, BOLGE_KODU, GIRISBLOKE, CIKISBLOKE, ABCKODU, TC_NUMARASI, ENT_GUID, YETKI_KODU, ENT_REF, ENLEM, BOYLAM",
+                       "primary_key":  "FIRMA_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FIRMAOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.FIRMASTOK",
+                       "total_rows":  "0",
+                       "columns":  "FIRMASTOK_REF, FIRMA_REF, STOK_REF, EK_ACIKLAMA",
+                       "primary_key":  "FIRMA_REF, STOK_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FIRMAYETKI",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, GRUP_ADI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.FIRMAYETKIY",
+                       "total_rows":  "0",
+                       "columns":  "FIRMAYETKIY_REF, KULLANICIGRUP_KODU, YETKI_KODU",
+                       "primary_key":  "FIRMAYETKIY_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FISEKBILGI",
+                       "total_rows":  "0",
+                       "columns":  "FISEKBILGI_REF, ISTASYON_REF, FIS_TURU, SORU, OZELLIK, SON_TAKI",
+                       "primary_key":  "FISEKBILGI_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FISONDEGER",
+                       "total_rows":  "0",
+                       "columns":  "FISONDEGER_REF, FIS_TURU, ADRES, DURUM_KODU, ISTASYON_REF, HEDEF_ADRES, HEDEF_DURUM, AMBAR_KODU, HEDEF_AMBAR, BOLUM, HEDEF_BOLUM",
+                       "primary_key":  "FISONDEGER_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FISOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI, TYP, MDL, FIS_TURU",
+                       "primary_key":  "OZELKOD_REF"
+                   },
+                   {
+                       "full_name":  "dbo.FISTURLERI",
+                       "total_rows":  "41",
+                       "columns":  "FISTUR_REF, FIS_TURU, FIS_ADI, FIS_TIPI, FIS_GCD, MENU_GRUP, KONSINYE_HAREKETI, LOGO_FIS_TURU, NETSIS_FIS_TURU, SIRA_NO, KONSINYE_TM, HIZLI_URETIM, DINAMIK_BIRIM, CSUBCHK, FISBOL, SERIBASLANGICI, SIPSEVK, PLNSEVK, TLPSEVK, UTLPSEVK, TAKIM_BOZMA, ENTNUMARATIPI, ENTNUMARASQL, STANDART, FIS_ADIENG, LGSEVKDR, LGIADETYP, SAVEBFQ, SAVEAFQ, MFISTURU, ENTSERISQL, LGDURUM, ENTFISTARIHI, ENTFIYAT, MALZEME_DOLASIM, MILLILESTIRME, LGDURUMH, OTOFIS_TAKIM_BOZMA, OTOFIS_TAKIM_BOZMA_FIS_TURU, EIRSALIYE, NETSIS_FIS_TIPI, NETSIS_FIS_HAREKET_TURU, NETSIS_FIS_CIKIS_YERI, NETSIS_FIS_FIYAT_HESAPLAMA, NETSIS_FIS_MASRAF_KODU, NETSIS_FIS_PROJE_KODU, IFS_FIS_TURU, NETSIS_FIS_MASRAF_KODU_SQL, EBELGE_GY, EBELGE_CMD, ENTSKKMP, SIPHRK, PLNHRK, TLPHRK, UTLPHRK, ETKILEME_YONU, IZLEME_LOT, IZLEME_SERI, ANAGRUP, IADE_FIS_TURU, IADE_AMBAR_KODU, IADE_BOLUM, IADE_ADRES, IADE_FISI, NUMSABUY_KAPAT, SAP_FIS_TURU, SAP_ISLEM_TURU, SIPBAG, SIPZRN, CANIAS_FIS_TURU, CANIAS_ADRES, VEGA_FIS_TURU",
+                       "primary_key":  "FIS_TURU"
+                   },
+                   {
+                       "full_name":  "dbo.FISYETKIKODU",
+                       "total_rows":  "0",
+                       "columns":  "FISYETKIKODU_REF, YETKI_KODU, ACIKLAMASI, TYP, MDL, FIS_TURU",
+                       "primary_key":  "FISYETKIKODU_REF"
+                   },
+                   {
+                       "full_name":  "dbo.GENELTANIMLAR",
+                       "total_rows":  "1",
+                       "columns":  "GENELTANIMLAR_REF, TAKIP_NO_ARTIS, DOVIZ2, DOVIZ, ADRES, DURUM_KODU, EKBILGI_SATIR, EKBILGI_TEMIZLE, LOGO_VERSIYON, URETIM_EMRI, KULLANICI_AKTIF, PALET_AKTIF, FIYAT_AKTIF, SIPARIS_MODULU, LOGO_SERVER, LOGO_VERITABANI, LOGO_FIRMA, LOGO_DONEM, LOGO_KULLANICI, LOGO_SIFRE, NETSIS_SERVER, NETSIS_VERITABANI, NETSIS_SERVER_KULLANICI, NETSIS_SERVER_SIFRE, NTOPX_KULLANICI, NTOPX_SIFRE, NETSIS_KULLANICI, NETSIS_SIFRE, NETSIS_ALIMIRSBELGENO, SATIS_ASIM_YUZDESI, SATINALMA_ASIM_YUZDESI, ADRES_KULLANIMI, DURUM_KULLANIMI, LOGO_SERVER_KULLANICI, LOGO_SERVER_SIFRE, ZAMAN_FIS, ZAMAN_MAIL, ZAMAN_STOK, ZAMAN_AMBAR, ZAMAN_URETIM, ZAMAN_FIRMA, ZAMAN_OTOTLP, ZAMAN_FIS_CHK, ZAMAN_MAIL_CHK, ZAMAN_STOK_CHK, ZAMAN_AMBAR_CHK, ZAMAN_URETIM_CHK, ZAMAN_FIRMA_CHK, ZAMAN_OTOTLP_CHK, STOK_OTOTLP_CHK, UPD_TLP_CHK, OTOTLP_ENT, OTOTLP_TURU, ENT_STOK_FILTRE, ENT_STOK_ASQ, ENT_AMBAR_FILTRE, ENT_AMBAR_ASQ, ENT_URETIM_FILTRE, ENT_URETIM_ASQ, ENT_FIRMA_FILTRE, ENT_FIRMA_ASQ, ENT_OTOTLP_FILTRE, ENT_OTOTLP_ASQ, ENT_OTOTLP_EKSQL, ENT_OTOTLP_EKCHK, ENT_OTOTLP_EKGUN, ENT_OTOTLP_SQLEKSTOK, ENT_FIS_ASQ, ENT_MAIL_ASQ, FIS_NO_KILIT, ENT_SIPDINBRM, FIRMATTYPE, FIRMATIMES, FIRMALASTRUN, AMBARTTYPE, AMBARTIMES, AMBARLASTRUN, ATALEPTTYPE, ATALEPTIMES, ATALEPLASTRUN, EPOSTATTYPE, EPOSTATIMES, EPOSTALASTRUN, FISLERTTYPE, FISLERTIMES, FISLERLASTRUN, NTSUTALEPTTYPE, NTSUTALEPTIMES, NTSUTALEPLASTRUN, STOKTTYPE, STOKTIMES, STOKLASTRUN, UEMRITTYPE, UEMRITIMES, UEMRILASTRUN, FSBIRLESTIR, FSBIRLESTIR_TAKIP_NO, FSBIRLESTIR_OZELKOD, FSBIRLESTIR_ACIKLAMA, FSBIRLESTIR_TAKIP_NO_FIELD, FSBIRLESTIR_OZELKOD_FIELD, FSBIRLESTIR_ACIKLAMA_FIELD, SIPARIS_BELGE_NO_KULLAN, SASA, SATA, SASASHIP, SATASHIP, TLPSHIP, SASANET, SATANET, SLPPG, ENT_GUNUN_KURU, SERINOKONTROL, ENT_SRC, SPGGK, SPDDK, TARIH_GERIAL1, TARIH_GERIAL2, ENT_NETSIS_IRSKURTURU, ENT_NETSIS_IRSKURSQL, ENT_SASA_IRS, ENT_SATA_IRS, ENT_SUBE, SPPLDURUMKODLARI, INDEMANASQ, INDEMANFILTER, INDEMANCHK, INDEMANTIME, ENT_NETSIS_SATIRSQUERY, ENT_NETSIS_SATIRSQUERYCHK, ENT_NETSIS_SATIRSPRNTCHK, ENT_NETSIS_SATFTRPRNTCHK, ENT_NETSIS_SATIRSPRNTDNO, ENT_NETSIS_SATFTRPRNTDNO, EKA1N, EKA2N, EKA3N, EKA4N, EKA5N, EKA6N, EKA7N, EKA8N, EKA9N, EKA10N, EKA11N, EKA12N, EKA13N, EKA14N, EKA15N, EKA16N, EKA17N, EKA18N, EKA19N, EKA20N, LOBJECTSCHK, LOGGUNSAYISI, PB4ONCESI, PB4ONCESIQ, PB4SONRASI, PB4SONRASIQ, PB4ONCESIR, PB4SONRASIR, PB3ONCESI, PB3ONCESIQ, PB3SONRASI, PB3SONRASIQ, PB3ONCESIR, PB3SONRASIR, PB2ONCESI, PB2ONCESIQ, PB2SONRASI, PB2SONRASIQ, PB2ONCESIR, PB2SONRASIR, FALAN1T, FALAN2T, FALAN3T, FALAN4T, TNOOTOMIK, SASASUB, SASASUBQ, SATASUB, SATASUBQ, EPOSTA_NAME, EPOSTA_MAIL, EPOSTA_USER, EPOSTA_PASS, EPOSTA_SRV, EPOSTA_PORT, EPOSTA_SSL, EPOSTA_TYP, EPOSTA_EXC_USER, EPOSTA_EXC_PASS, EPOSTA_EXC_URL, LOSERVICE, TAMLOG, BCKCHK, BCKTIME, BCKDAY, BCKPATH, SPFF, SPFH, SPFA, STPFWH, SAPFWH, FRMIMAGE, UPDATECHK, TE1, TE2, TE3, TE4, TE5, TE6, TE7, TE8, TE9, TE10, TE11, TE12, TE13, TE14, TE15, TE16, TE17, TE18, TE19, TE20, PE1, PE2, PE3, PE4, PE5, PE6, PE7, PE8, PE9, PE10, PKE1, PKE2, PKE3, PKE4, PKE5, PKE6, PKE7, PKE8, PKE9, PKE10, ELT_BCHK, EUE1, EUE2, EUE3, EUE4, EUE5, EUE6, EUE7, EUE8, EUE9, EUE10, EFE1, EFE2, EFE3, EFE4, EFE5, EFE6, EFE7, EFE8, EFE9, EFE10, ERE1, ERE2, ERE3, ERE4, ERE5, ERE6, ERE7, ERE8, ERE9, ERE10, TBLOTOTAKIP, UTLPMIKAS, EFATURASQL, ENT_NETSIS_SATIRSPRNTNAME, ENT_NETSIS_SATFTRPRNTNAME, VERSIYON, ENTNET_EFATIRS, PLNACIKFIS, JGUAR_SERVER, JGUAR_VERITABANI, JGUAR_FIRMA, JGUAR_DONEM, JGUAR_KULLANICI, JGUAR_SIFRE, JGUAR_SERVISIP, JGUAR_SERVISPORT, JGUAR_UPDATECHK, ENT_FISISTPRJ, GSAYIMTURU, STOKLISTMIKTAR, SATISPLANLAMA_ASIM_YUZDESI, SATINALMAPLANLAMA_ASIM_YUZDESI, AMBARTALEP_ASIM_YUZDESI, PYPSG, LSMOD, LINKEDSERVER, OTOPALETSQL, IZLEMETURUUP, MIKNEGSTOK, ENTMASTERDB, ENT_ORDERSERVICEADD, MIKSIPONAYSIZ, ENT_EARSIVTURU, FALAN1TB, FALAN2TB, FALAN3TB, FALAN4TB, LGCONVT, LGCONUS, LGCONPS, LGCONCA, ENTRESTLINKHTTP, PAKET_AKTIF, OTOPAKETSQL, MIKRO_SSYUZDE, MIKRO_SAYUZDE, ENT_SPSIZFDORDER, ENT_APPLYACCCODES, PBEKA1N, PBEKA2N, PBEKA3N, PBEKA4N, PBEKA5N, PBEKA6N, PBEKA7N, PBEKA8N, PBEKA9N, PBEKA10N, PBEKA11N, PBEKA12N, PBEKA13N, PBEKA14N, PBEKA15N, PBEKA16N, PBEKA17N, PBEKA18N, PBEKA19N, PBEKA20N, ENT_MUAFKODBSQL, ENT_MUAFKODDSQL, ENT_TICTIP, ENT_SABITKIYMET, FSBIRLESTIR_OZELKOD2, FSBIRLESTIR_OZELKOD2_FIELD, ENT_IHOP_FILTRE, ZAMAN_IHOP, ZAMAN_IHOP_CHK, UPD_IHOP_CHK, IHOPTTYPE, IHOPTIMES, ENT_IHOP_ASQ, IHOPLASTRUN, ENTIHOPKOSUL, BULKWHQ, BULKWHQAF, ENT_NETSIS_AMBARKABULNOLNK, ENT_FKUPDAY, ENT_SKUPDAY, ENT_WHDUPDAY, ENT_IHOPUPDAY, STPYSTOKEKQ, ENT_EIRSALIYETURU, MIKSIPBELGENOENT, ENT_MAMULALT, MIKSIPONAYSIZALIM, MIKSIPCARIDOVIZ, ENT_IFSURL, ENT_IFSUSER, ENT_IFSPASS, ATRUNMODE, STPORDBLOCK, SAPORDBLOCK, PB1ONCESI, PB1ONCESIQ, PB1SONRASI, PB1SONRASIQ, PB1ONCESIR, PB1SONRASIR, PYPSGM, STPKARSILAMAHESAPLA, LGCONPDFMTD, BULKWHQBF, ENT_ORDLOCK_ERP_RC_PLN_SAL, ENT_ORDLOCK_ERP_RC_PLN_PUR, ENT_ORDLOCK_ERP_OPN_SLP_SAL, ENT_ORDLOCK_ERP_OPN_SLP_PUR, MIKSIPRWKPUP, MIKRECTYPE, GENEL_DIL, ENT_LG_TALEPTURU, ENTATALEPKOSUL, ENT_OTOTLP_RECSAVE, ENT_CPM_DATABASE, STSSHIPUP_IFS, ENT_NETSIS_STASP_KAYNAK, ENT_NETSIS_STASP_KAYNAK_IADE, MATEKA1N, MATEKA2N, MATEKA3N, MATEKA4N, MATEKA5N, MATEKA6N, MATEKA7N, MATEKA8N, MATEKA9N, MATEKA10N, PYDTSCMTMZ, KGFISTUR, PYSGACTIVE, ENT_FIS_AOQ, ZAMAN_IFSSTOK, ZAMAN_IFSSTOK_CHK, ENT_IFSSTOK_ASQ, IFSSTOKTTYPE, IFSSTOKTIMES, IFSSTOKLASTRUN, KULA1, KULA2, KULA3, KULA4, KULA5, KULA6, KULA7, KULA8, KULA9, KULA10, KGKOLISQL, KGKOLIDESISQL, NETSIS_IFA_WQ, NETSIS_SSA_WQ, TB1ONCESI, TB1ONCESIQ, TB1ONCESIR, TB1SONRASI, TB1SONRASIQ, TB1SONRASIR, TB2ONCESI, TB2ONCESIQ, TB2SONRASI, TB2SONRASIQ, TB2ONCESIR, TB2SONRASIR, SPFBLKOD, VATEKA1N, VATEKA2N, VATEKA3N, VATEKA4N, VATEKA5N, VATEKA6N, VATEKA7N, VATEKA8N, VATEKA9N, VATEKA10N, CRGSVKADRVL, SASAMIK, SATAMIK, ENT_SAPURL, ENT_SAPUSER, ENT_SAPPASS, KOLILEMEKAYITKUL, TPTKGIRIS, TPTKGIRISAK, INT_ORDERS_PROP, SATISIADE_ASIM_YUZDESI, SATINALMAIADE_ASIM_YUZDESI, SIPRZVKUL, ENT_CANIASDEF, ENTSTOKKOSUL, ENTFIRMAKOSUL, RZVEKSTCKQ, TBEKA1N, TBEKA2N, TBEKA3N, TBEKA4N, TBEKA5N, TBEKA6N, TBEKA7N, TBEKA8N, TBEKA9N, TBEKA10N, TBEKA11N, TBEKA12N, TBEKA13N, TBEKA14N, TBEKA15N, TBEKA16N, TBEKA17N, TBEKA18N, TBEKA19N, TBEKA20N, KULTA1, KULTA2, KULTA3, KULTA4, ENT_VEGADEF",
+                       "primary_key":  "GENELTANIMLAR_REF"
+                   },
+                   {
+                       "full_name":  "dbo.GRIDOZEL",
+                       "total_rows":  "0",
+                       "columns":  "GRIDOZEL_REF, KULLANICI_KODU, FORM, OBJE, SIRA, KOLON, SIZE, VISIBLE, FIS_GCD",
+                       "primary_key":  "GRIDOZEL_REF"
+                   },
+                   {
+                       "full_name":  "dbo.HUISTASYON",
+                       "total_rows":  "0",
+                       "columns":  "HUISTASYON_REF, HUISTASYONID, CONFIGPROP",
+                       "primary_key":  "HUISTASYON_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ISLEMONAY",
+                       "total_rows":  "0",
+                       "columns":  "ONAY_REF, KAYIT_TARIH, ONAY_TARIHI, KULLANICI_REF, FIS_TURU, AMBAR_KODU, ISLEMNO",
+                       "primary_key":  "ONAY_REF"
+                   },
+                   {
+                       "full_name":  "dbo.ISTASYON",
+                       "total_rows":  "1",
+                       "columns":  "ISTASYON_REF, ISTASYON_KODU, ISTASYON_ADI, GRUP_KODU",
+                       "primary_key":  "ISTASYON_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.ITHALATDURUM",
+                       "total_rows":  "0",
+                       "columns":  "DURUM_REF, DURUM_KODU, ACIKLAMASI, RENK_ZEMIN, RENK_YAZI, KILIT",
+                       "primary_key":  "DURUM_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.ITHALATGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, ACIKLAMASI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.IZINADRES",
+                       "total_rows":  "0",
+                       "columns":  "IZINADRES_REF, KULLANICI_REF, ADRES",
+                       "primary_key":  "IZINADRES_REF"
+                   },
+                   {
+                       "full_name":  "dbo.IZINDURUM",
+                       "total_rows":  "0",
+                       "columns":  "IZINDURUM_REF, KULLANICI_REF, DURUM_KODU",
+                       "primary_key":  "IZINDURUM_REF"
+                   },
+                   {
+                       "full_name":  "dbo.KARGOGRUP",
+                       "total_rows":  "0",
+                       "columns":  "KARGOGRUP_REF, GRUP_KODU, AKTIF, KARGOFRM, TASIYICIKODU, WEBSERVICE, USERNAME, PASSWORD, WEBSERVICE2, WEBSERVICE3, MUSTERIKODU, ZPLKODYAZDIR, TASIYICI, STOKKODU, KTTCHK, KTTTYPE, KTTMIN, KTTLIST, KTTASQ, KTTLRUN, KTTDAY, KITCHK, KITTYPE, KITMIN, KITLIST, KITASQ, KITLRUN, ZPLKOD, GHESAPNO, ODEMETUR, AMBAR_KODU, GISIM, GADRES, GIL, GILCE, GULKE, ZAMANASIMI, SMSGONDER, DESIGONDER, PLTKISAAD, PLTSATISKODU, PLTURUNKODU, URNETKYAZDIR, KIGDAY, BARALIK1, BARALIK2, GMAHALLE, BARALIK3, GONDERINO, GONDERITUR",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.KARGOTESLIM",
+                       "total_rows":  "0",
+                       "columns":  "KARGOTESLIM_REF, FB_REF, TARIH, SAAT, CIKIS_TARIHI, VARIS_SUBE, ADET, DESI, TUTAR, TESLIM_ALAN, TESLIM_TARIHI, TESLIM_SAATI, DURUMU, TASIYICI_KODU, PLAKA, BARKOD, TAKIP_KODU, TAKIP_LINK",
+                       "primary_key":  "KARGOTESLIM_REF"
+                   },
+                   {
+                       "full_name":  "dbo.KOLILEME",
+                       "total_rows":  "0",
+                       "columns":  "KOLILEME_REF, PB_REF, SB_REF, FIRMA_REF, FB_REF, KULLANICI_REF, MIKTAR, DESI, SIRANO, NUMARA, TARIH, SAAT, YAZDIRMA, SEVKLISTENO, DESIS, SEVKGRUBU, TASIYICI_KODU, DAGITIMKODU, DAGITIMIMG, AMB_MIKTAR, AMB_KODU, AMBAR_KODU, AMB_SERINO, AMBM_REF, DO_DESI, DO_EN, DO_BOY, DO_YUKSEKLIK, DO_HACIM, DO_AGIRLIK, PTYPE, LG_NO, ALICI_KODU, ALICI_ADI, ALICI_SOYADI, ALICI_TELEFON, ALICI_GSM, ALICI_EPOSTA, ALICI_ULKE, ALICI_IL, ALICI_ILCE, ALICI_MAHALLE, ALICI_ADRES, ALICI_VD, ALICI_VNO, FD_REF, DAGITIMNO, TB_REF, ALICI_ILKODU, ALICI_ILCEKODU, ALICI_ENLEM, ALICI_BOYLAM, ALICI_BOLGEKODU, DAGITIM_NUMARA",
+                       "primary_key":  "KOLILEME_REF"
+                   },
+                   {
+                       "full_name":  "dbo.KONSINYEDURUM",
+                       "total_rows":  "718",
+                       "columns":  "KONSINYE_REF, FB_REF, TARIH, FIRMA_REF, STOK_REF, BIRIM_REF, MIKTAR, IADE_TARIHI, TAKIP_NO, DURUM_KODU, ACIKLAMA, CARPAN1, CARPAN2, ANABIRIM_REF, FD_REF, TM, VARYANT_REF",
+                       "primary_key":  "KONSINYE_REF"
+                   },
+                   {
+                       "full_name":  "dbo.KULLANICI",
+                       "total_rows":  "12",
+                       "columns":  "KULLANICI_REF, KULLANICI_ADI, KULLANICI_SIFRESI, KULLANICIGRUP_KODU, ISTASYON_KODU, AKTIF, TERMINAL_KULLANICISI, GOREVATAMA, TERMINALGRUP_KODU, ADI_SOYADI, KULLANICI, YONETICI, AMBAR1, AMBAR2, AMBAR3, AMBAR4, TPALET_YAZICISI, TPAKET_YAZICISI, TFIS_YAZICISI, TURUN_YAZICISI, TPALET_YAZICISI_AKTIF, TPAKET_YAZICISI_AKTIF, TFIS_YAZICISI_AKTIF, TURUN_YAZICISI_AKTIF, PASIF, DISHIZKUL, TALAN1, TALAN2, TALAN3, TALAN4, AMBAR5, AMBAR6, AMBAR7, AMBAR8, AMBAR9, AMBAR10, PIN_KODU, SVKKNTKUL, KAYIT_TARIHI, GUNCELLEME_TARIHI",
+                       "primary_key":  "KULLANICI_REF"
+                   },
+                   {
+                       "full_name":  "dbo.KULLANICIGRUP",
+                       "total_rows":  "5",
+                       "columns":  "KULLANICIGRUP_REF, KULLANICIGRUP_KODU, KULLANICIGRUP_ADI, KULSONSUR0, KULSONSUR1, KULSONSUR2, FISSIL_KONTROL, FISEDT_KONTROL",
+                       "primary_key":  "KULLANICIGRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.LISTEDIZAYN",
+                       "total_rows":  "0",
+                       "columns":  "LISTEDIZAYN_REF, ISIM, KEY_, KULLANICI_REF, VALUEMS",
+                       "primary_key":  "LISTEDIZAYN_REF"
+                   },
+                   {
+                       "full_name":  "dbo.LOGTABLE",
+                       "total_rows":  "927",
+                       "columns":  "LOG_REF, LOG_TIPI, TIMER_ON, TARIH, TARIH_SAAT, FB_REF, FIS_TURU, FIS_NO, ENT_HATA_KODU, AKTARIM_DURUM, LG_NO, LG_REF, MESAJ, ENT_INF, MACUSER, MACIP, MACAPP, LG_TYPE, FD_REF",
+                       "primary_key":  "LOG_REF"
+                   },
+                   {
+                       "full_name":  "dbo.MARKA",
+                       "total_rows":  "16",
+                       "columns":  "MARKA_REF, MARKA_KODU, MARKA_ADI, OZEL_KOD, YETKI_KODU, IMAGE1, IMAGE2, OLUSTURMA_TARIHI, GUNCELLEME_TARIHI",
+                       "primary_key":  "MARKA_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.MASRAFMERKEZI",
+                       "total_rows":  "229",
+                       "columns":  "MASRAF_REF, MASRAF_KODU, MASRAF_ADI, OZEL_KOD, YETKI_KODU, OLUSTURMA_TARIHI, GUNCELLEME_TARIHI, AKTIF",
+                       "primary_key":  "MASRAF_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.NUMARASABLON",
+                       "total_rows":  "31",
+                       "columns":  "NUMARASABLON_REF, TYP, FIS_TURU, SBTNO, BASNO, UZUNLUK, KULLANICIGRUP_KODU, AMBAR_KODU, BOLUM, FIRMA_GRUP_KODU, FIRMA_YETKI_KODU, FIRMA_TICARI_GRUP, FIRMA_OZELKOD1, FIRMA_OZELKOD2, FIRMA_OZELKOD3, FIRMA_OZELKOD4, FIRMA_OZELKOD5, AKTIF, LASTNO, OZELKOD, GRUP_KODU",
+                       "primary_key":  "NUMARASABLON_REF, TYP, FIS_TURU"
+                   },
+                   {
+                       "full_name":  "dbo.OTOPLANGRUP",
+                       "total_rows":  "0",
+                       "columns":  "OPG_REF, KOD, SIRALAMA, NPTURU, ORAN, FILTRE, TZAMAN, AKTIF, STOKTA, PLNTURU, TOLERANS, MMIKTAR, DMIKTAR, GRUPSEC, ASQ, TTURU, TZAMANLAR, EKKOSUL, SONCALISMA, FILTRESQL, ENTHCMTYPE, ENTHCMMIK, TGUNLER, AMBAR_KODU, GTURU, ACIKLAMA, YENIPLAN, MINSIPMIKPLAN, REZERVE_DURUM",
+                       "primary_key":  "OPG_REF"
+                   },
+                   {
+                       "full_name":  "dbo.OTOTAKIP",
+                       "total_rows":  "0",
+                       "columns":  "OTOTAKIP_REF, OTOTAKIP_MT, OTOTAKIP_SORGU",
+                       "primary_key":  "OTOTAKIP_REF"
+                   },
+                   {
+                       "full_name":  "dbo.PAKET",
+                       "total_rows":  "0",
+                       "columns":  "PAKET_REF, PAKET, AKTIF, FIRMA_REF, SB_REF, PB_REF, OLUSTURMA_TARIHI, PAKET_DURUMU, TB_REF",
+                       "primary_key":  "PAKET"
+                   },
+                   {
+                       "full_name":  "dbo.PAKETEK",
+                       "total_rows":  "0",
+                       "columns":  "PAKETEK_REF, PAKET, AGIRLIK, BURUTAGIRLIK, UZUNLUK, YUKSEKLIK, GENISLIK, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10",
+                       "primary_key":  "PAKET"
+                   },
+                   {
+                       "full_name":  "dbo.PALET",
+                       "total_rows":  "0",
+                       "columns":  "PALET_REF, PALET, AKTIF, FIRMA_REF, SB_REF, PB_REF, OLUSTURMA_TARIHI, PALET_DURUMU, TB_REF",
+                       "primary_key":  "PALET"
+                   },
+                   {
+                       "full_name":  "dbo.PALETEK",
+                       "total_rows":  "0",
+                       "columns":  "PALETEK_REF, PALET, AGIRLIK, BURUTAGIRLIK, UZUNLUK, YUKSEKLIK, GENISLIK, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10",
+                       "primary_key":  "PALET"
+                   },
+                   {
+                       "full_name":  "dbo.PBEKACIKLAMA",
+                       "total_rows":  "39",
+                       "columns":  "PBEKA_REF, PB_REF, EKA1, EKA2, EKA3, EKA4, EKA5, EKA6, EKA7, EKA8, EKA9, EKA10, EKA11, EKA12, EKA13, EKA14, EKA15, EKA16, EKA17, EKA18, EKA19, EKA20",
+                       "primary_key":  "PB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.PDOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.PLANLAMADURUM",
+                       "total_rows":  "0",
+                       "columns":  "DURUM_REF, DURUM_KODU, ACIKLAMASI, RENK_ZEMIN, RENK_YAZI, KILIT",
+                       "primary_key":  "DURUM_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.PLANLAMAFISLERI",
+                       "total_rows":  "15",
+                       "columns":  "PB_REF, PB_TURU, STATUS, AKTIF, ONCELIK, FIRMA_REF, FIS_NO, TARIH, SAAT, BELGE_NO, AMBAR_KODU, HEDEF_AMBAR, ISTASYON_KODU, TICARI_GRUP, OZELKOD, YETKI_KODU, SEVK_FIRMA_REF, SEVK_ADRES_REF, DURUM_KODU, GRUP_KODU, ACIKLAMA, OLUSTURMA_TARIHI, KAPATILMA_TARIHI, GUNCELLEME_TARIHI, YAZDIRMA_TARIHI, YM, KULLANICI_REF, PERSONEL_KODU, AKTAR, AKTARIM_NO, AKTARIM_REF, ENT_REF, MODIFIEDDATE, TESLIM_TARIHI, ONCELIK_ACIKLAMASI, ARAC_REF, RAMPA_REF, PROJE_REF, DEPO_BOLGE, BOLUM, HEDEF_BOLUM, MPB_REF, PD, KKULLANICI_REF, TASIYICI_KODU, KARGOWS, ENT_TYPE, KARGOERR, BOLGE_KODU, ENT_GUID, SPK",
+                       "primary_key":  "PB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.PLANLAMAGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, ACIKLAMASI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.PLANLAMAHAREKETLERI",
+                       "total_rows":  "931",
+                       "columns":  "PD_REF, PB_REF, PB_TURU, STATUS, STOK_REF, MIKTAR, SEVKEDILEN_MIKTAR, HAREKETEDEN_MIKTAR, BIRIM_REF, ANABIRIM_REF, CARPAN1, CARPAN2, TAKIP_NO, ADRES, HEDEF_ADRES, DURUM_KODU, HEDEF_DURUM, PALET, HEDEF_PALET, PAKET, HEDEF_PAKET, AMBAR_KODU, HEDEF_AMBAR, FIRMA_REF, SIPARIS_NO, SB_REF, SD_REF, PB_TARIHI, ISLEM_TARIHI, TESLIM_TARIHI, OZELKOD, ISTASYON_KODU, KARMA_KOLI, ACIKLAMA, ENT_REF, CSUB, PERSONEL_KODU, PROJE_REF, VARYANT_REF, BELGE_NO, MASRAF_REF, YUKLEME_TARIHI, ENT_GUID, MPB_REF, PD, DEPO_BOLGE, ENT_TYPE, MODIFIEDDATE, OZELKOD2, SIRA_NO, TB_REF, TD_REF",
+                       "primary_key":  "PD_REF, PB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.PLANLAMAOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.PLANLAMAYETKIKODU",
+                       "total_rows":  "0",
+                       "columns":  "YETKIKODU_REF, YETKI_KODU, YETKI_KODU_ACIKLAMASI",
+                       "primary_key":  "YETKI_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.PROJE",
+                       "total_rows":  "1083",
+                       "columns":  "PROJE_REF, PROJE_KODU, PROJE_ADI, PROJE_SORUMLU, OLUSTURMA_TARIHI, GUNCELLEME_TARIHI, BASLAMA_TARIHI, BITIS_TARIHI, AKTIF",
+                       "primary_key":  "PROJE_REF"
+                   },
+                   {
+                       "full_name":  "dbo.RAMPATANIMLARI",
+                       "total_rows":  "0",
+                       "columns":  "RAMPA_REF, RAMPA_KODU, RAMPA_ADI",
+                       "primary_key":  "RAMPA_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.RAPORDIZAYN",
+                       "total_rows":  "11",
+                       "columns":  "RAPORDIZAYN_REF, ISIM, TYP, VALUEMS, RAPOR_REF",
+                       "primary_key":  "RAPORDIZAYN_REF"
+                   },
+                   {
+                       "full_name":  "dbo.RAPORDOSYASI",
+                       "total_rows":  "67",
+                       "columns":  "RAPOR_REF, RAPOR_NO, RAPOR_ADI, GRUP_KODU, RAPOR_DATA, FIRMA_SECIM, AMBAR_SECIM, STOK_SECIM, TARIH_SECIM, FISTURU_SEC, FIS_TURU, SIRALAMA, FILITRELEME, DUZENLEME, MENU, STANDART_TASARIM, GIZLI, VERI_ALANI, SAAT_GIRILSIN, KULLANICI_SEC, GUN_TARIHI, LNG, RPTSRV",
+                       "primary_key":  "RAPOR_REF"
+                   },
+                   {
+                       "full_name":  "dbo.RAPORMENU",
+                       "total_rows":  "17",
+                       "columns":  "RAPORMENU_REF, MENU",
+                       "primary_key":  "RAPORMENU_REF"
+                   },
+                   {
+                       "full_name":  "dbo.REZERVEDETAY",
+                       "total_rows":  "0",
+                       "columns":  "REZERVEDETAY_REF, STOK_REF, VARYANT_REF, BIRIM_REF, ANABIRIM_REF, MIKTAR, ABMIKTAR, SB_REF, SD_REF, ADRES, DURUM_KODU, TAKIP_NO, PALET, PAKET, AMBAR_KODU, GCI, KAYIT_TARIH, KULLANICI_REF",
+                       "primary_key":  "REZERVEDETAY_REF"
+                   },
+                   {
+                       "full_name":  "dbo.RowNumber",
+                       "total_rows":  "0",
+                       "columns":  "RowNumber, CH_REF",
+                       "primary_key":  ""
+                   },
+                   {
+                       "full_name":  "dbo.SAYIMISARETKONTROL",
+                       "total_rows":  "0",
+                       "columns":  "SAYIMISARETKONTROL_REF, STATUS, FB_REF, FD_REF, KULLANICI_REF, STOK_REF, AMBAR_KODU, ADRES, TAKIP_NO, DURUM_KODU, PALET, KAYIT_TARIHI, SAYIM_TARIHI, PERSONEL_KODU, VARYANT_REF, PAKET, ACIKLAMA, EKULLANICI_REF",
+                       "primary_key":  "SAYIMISARETKONTROL_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SAYIMISARETOZELLIK",
+                       "total_rows":  "0",
+                       "columns":  "SAYIMISARETOZELLIK_REF, SKTYPE, SKAMBAR_KODU, AMBAR_KODU",
+                       "primary_key":  "SAYIMISARETOZELLIK_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SAYIMKONTROL",
+                       "total_rows":  "0",
+                       "columns":  "SAYIMKONTROL_REF, STOK_REF, AMBAR_KODU, ADRES, TAKIP_NO, DURUM_KODU, PALET, KAYIT_TARIHI, PERSONEL_KODU, VARYANT_REF, PAKET",
+                       "primary_key":  "SAYIMKONTROL_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SAYIMLISTE",
+                       "total_rows":  "0",
+                       "columns":  "SAYIMLISTE_REF, SAYIM_TURU, ACIKLAMA, AMBAR_KODU, PERSONEL_KODU, BASLANGIC_TARIHI, BITIS_TARIHI, STATUS, ATYPE, PTYPE, KORIDOR, HAFTA, SKTYPE, SKAMBAR_KODU, INOUTTYPE, SAYIMPLAN_REF",
+                       "primary_key":  "SAYIMLISTE_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SAYIMLISTEDETAY",
+                       "total_rows":  "0",
+                       "columns":  "SAYIMLISTEDETAY_REF, SAYIMLISTE_REF, FB_REF, AMBAR_KODU, ADRES, KULLANICI_REF, KAYIT_TARIHI",
+                       "primary_key":  "SAYIMLISTEDETAY_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SAYIMPLAN",
+                       "total_rows":  "0",
+                       "columns":  "SAYIMPLAN_REF, ACIKLAMA, AMBAR_KODU, PERSONEL_KODU, BASLANGIC_TARIHI, BITIS_TARIHI, STATUS, ATYPE, PTYPE, SKTYPE, SKAMBAR_KODU, INOUTTYPE",
+                       "primary_key":  "SAYIMPLAN_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SAYIMPLANKONTROL",
+                       "total_rows":  "0",
+                       "columns":  "SAYIMPLANKONTROL_REF, SAYIMPLAN_REF, SAYIMLISTE_REF, KLISTE_REF, STOK_REF, AMBAR_KODU, ADRES, TAKIP_NO, DURUM_KODU, PALET, KAYIT_TARIHI, PERSONEL_KODU, VARYANT_REF, PAKET",
+                       "primary_key":  "SAYIMPLANKONTROL_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SBEKACIKLAMA",
+                       "total_rows":  "8",
+                       "columns":  "SBEKA_REF, SB_REF, EKA1, EKA2, EKA3, EKA4, EKA5, EKA6, EKA7, EKA8, EKA9, EKA10, EKA11, EKA12, EKA13, EKA14, EKA15, EKA16, EKA17, EKA18, EKA19, EKA20",
+                       "primary_key":  "SB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SDOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.SENDEOILILCE",
+                       "total_rows":  "0",
+                       "columns":  "SENDEOILILCE_REF, IL, ILCE, IL_KODU, ILCE_KODU",
+                       "primary_key":  "SENDEOILILCE_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SESSIONDEF",
+                       "total_rows":  "42",
+                       "columns":  "SESSIONDEF_REF, SEID, TYP, VTEXT",
+                       "primary_key":  "SESSIONDEF_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SEVKAMBALAJ",
+                       "total_rows":  "0",
+                       "columns":  "AMB_REF, AMB_KODU, AMB_ACIKLAMASI, DESI_TURU, DESI_VALUE, SERI_TURU, STOK_KONTROLU",
+                       "primary_key":  "AMB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SEVKAMBALAJKST",
+                       "total_rows":  "0",
+                       "columns":  "KST_REF, AMB_KODU, FTYPE, DEGER, AMBAR_KODU",
+                       "primary_key":  "KST_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SEVKBEKLEME",
+                       "total_rows":  "0",
+                       "columns":  "SEVKBEKLEME_REF, NUMARA, ACIKLAMASI, AMBAR_KODU, STATUS, SB_REF, FIRMA_REF, MIKTAR, ATAMA_TARIHI, LINKREFS, HACIM, BLOKE",
+                       "primary_key":  "SEVKBEKLEME_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SEVKIYATADRES",
+                       "total_rows":  "2",
+                       "columns":  "SEVKIYATADRES_REF, KODU, ACIKLAMASI, UNVANI, ADRES1, ADRES2, ULKE, IL, ILCE, ULKEKODU, ILKODU, ILCEKODU, MAHALLE, MAHALLEKODU, POSTAKODU, TELEFON, FAX, VERGI_DAIRESI, VERGI_NUMARASI, OZELKOD, YETKILI, TICARI_GRUP, KAYIT_TARIHI, GUNCELLEME_TARIHI, FIRMA_REF, AKTIF, MODIFIEDDATE, ENT_GUID, ENLEM, BOYLAM, ENT_REF",
+                       "primary_key":  "SEVKIYATADRES_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SEVKIYATADRESOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.SIPARISDURUM",
+                       "total_rows":  "0",
+                       "columns":  "DURUM_REF, DURUM_KODU, ACIKLAMASI, RENK_ZEMIN, RENK_YAZI, KILIT",
+                       "primary_key":  "DURUM_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.SIPARISFISLERI",
+                       "total_rows":  "6933",
+                       "columns":  "SB_REF, TARIH, SAAT, SIPARIS_TURU, SIPARIS_NO, BELGE_NO, FIRMA_REF, AMBAR_KODU, OZELKOD, YETKI_KODU, ACIKLAMA, SEVK_FIRMA_REF, SEVK_ADRES_REF, KULLANICI_REF, FIS_TOPLAMI, INDIRIM_TOPLAMI, KDV_TOPLAMI, GENEL_TOPLAM, SISTEM_TARIHI, GUNCELLEME_TARIHI, STATUS, KAPALI, AKTIF, TICARI_GRUP, DURUM_KODU, GRUP_KODU, YAZDIRMA_TARIHI, ENT_REF, PB_REF, PD, TESLIM_TARIHI, TM, ACIKLAMA2, ACIKLAMA3, ACIKLAMA4, DOKUMAN_NO, MSPNO, TESLIM_SEKLI, TASIYICI_KODU, MODIFIEDDATE, KAPATMA_TARIHI, KKULLANICI_REF, PERSONEL_KODU, ONCELIK, YM, KARGOWS, PROJE_REF, BOLUM, DEPO_BOLGE, SVKNO, KARGOERR, ENT_GUID, BOLGE_KODU, RZV",
+                       "primary_key":  "SB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SIPARISFISLERIDK",
+                       "total_rows":  "0",
+                       "columns":  "DOKUMAN_REF, DOKUMAN_ADI, ACIKLAMA, SIRA_NO, SB_REF, DOKUMAN_DATA, KAYIT_TARIHI, GUNCELLEME_TARIHI, KULLANICI_REF, GKULLANICI_REF, DOKUMAN_TURU",
+                       "primary_key":  "DOKUMAN_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SIPARISGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, ACIKLAMASI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.SIPARISHAREKETLERI",
+                       "total_rows":  "18890",
+                       "columns":  "SD_REF, STOK_REF, SB_REF, FIRMA_REF, SIPARIS_TURU, TARIH, SAAT, OZELKOD, MIKTAR, SEVKEDILEN_MIKTAR, HAREKETEDEN_MIKTAR, ACIKLAMA, BIRIM_REF, CARPAN1, CARPAN2, ANABIRIM_REF, KAPALI, TESLIM_TARIHI, KARMA_KOLI, AMBAR_KODU, URETIM_EMRI, URETIM_EMRI2, URETIM_EMRI3, URETIM_EMRI4, URETIM_EMRI5, URETIM_EMRI6, TAKIP_NO, SISTEM_TARIHI, GUNCELLEME_TARIHI, TOPLAM_FIYAT, FIYAT, KDV_ORANI, KDV_TUTARI, DOVIZ_NO, DOVIZ_ORANI, INDIRIM_ORANI, INDIRIM_TUTARI, ONCELIK, ENT_REF, SIRA_NO, PB_REF, PD, TALAN1, TALAN2, TALAN3, TALAN4, NALAN1, NALAN2, NALAN3, NALAN4, CSUB, DURUM_KODU, ACIKLAMA2, ACIKLAMA3, ACIKLAMA4, PROJE_REF, VARYANT_REF, PERSONEL_KODU, MASRAF_REF, YUKLEME_TARIHI, ENT_GUID, DEPO_BOLGE, MODIFIEDDATE, ENT_TYPE, OZELKOD2",
+                       "primary_key":  "SD_REF, SB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SIPARISHAREKETLERIOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.SIPARISOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.SIPARISYETKIKODU",
+                       "total_rows":  "0",
+                       "columns":  "SIPARISYETKIKODU_REF, YETKI_KODU, YETKI_KODU_ACIKLAMASI",
+                       "primary_key":  "YETKI_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.SKGRUP",
+                       "total_rows":  "0",
+                       "columns":  "SKGRUP_REF, SVKGRUP_KODU, SVKRUNMOD, SVKAL1, SVKAL2, SVKAL3, SVKAL4, SVKAQ1, SVKAQ2, SVKAQ3, SVKAQ4, KLSEVKGRUBU, SVKTOPLANAN, SVKAMBAR_KODU, SVKPAKETNO, SVKKOLILE, SVKDESIGIR, SVKPAKETNOQ, SVKKOLILEQ, SVKTAMAMQ, SVKFDKONCESI, SVKKOLINOTYP, SVKKOLIETK, SVKTMMGIZLE, SVKURUNETK, SVKFISEKZOR, KLSATIRYAZDIR, SVKFIS_TURU, SVKKARGOGRUPREFS, EANOGOSTER, EFNOGOSTER, IRNOGOSTER, TRHGOSTER, CTURUNEKLE, SVKTAMAMCMD, SVKNUMOK, LISTQ, ADRES, HALISTQ, HATYP, BELGENOGIRISI, TASIMATIPIGIRISI, FDERRMSJ, SVKFBKONCESI, URUNOZELACIKLAMA, PSEVKDEVAM, FTQ, FTQQ, FTQFT, SAQ, SAQQ, SAQSA, OKMIKKL, OTOBNO, PPLBAC, URUNLISTEOZELALAN, UKONAYSESI, TASIYICIKODUGIRISI, SVKAMBAKTIF, SVKAMBDN, SVKAMBDNMHS, SVKGRSANABR, BARCODEMS, SVKBASONCESIQ, DETAYQ, SVKAMBMLZAKTIF, SVKAMBBRKQ, SVKFISEKACT, URUNRESAKTIF, SADETAIL, TASIYICI_KODLARI_AKTIF, TASIYICI_KODLARI, SVKEKAMB, SVKOTOKOLI, SVKOTOKOLI_DESI, SVKOTOKOLI_AMBALAJ_KODU, OTOTAMAM, CIKTIONAY, EKFISKONT, EKFISURUNKONTQ, SVKTMKLEKRAC, SVKAL1RNK, SVKAL2RNK, SVKAL3RNK, SVKAL4RNK",
+                       "primary_key":  "SVKGRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.SKISTASYON",
+                       "total_rows":  "0",
+                       "columns":  "SKISTASYON_REF, SKISTASYONID, FNO, FPRN, INO, IPRN, CMOD, MACUSER, FISIPTAL, FSER, ISER, FENT, FYAZ, FSS, ISS, INOGONDERME, ENTTURU, PRNTURU, URUNPRN, FIRMAPRN, LISTEPRN, TAKIPOTO, FSIRALAMA, FISBEKLET, SHELLCHKFATURA, SHELLTXTFATURA, SHELLCHKIRSALIYE, SHELLTXTIRSALIYE, FISYAZDIRMA, ENTTURU2, FNO2, FSER2, FSS2, SHELLTXTFATURA2, FPRN2, SHELLCHKFATURA2, FNOSQL, FNOSQL2, INOSQL, KARSILAMAADRES, KARSILAMAADRESSQL, SVKGRUPKODU, IRSFATSQL1, IRSFATSQL2, SABITADRES, BELGE_SERI, BELGE_ILKNO, BELGE_SONNO, BELGE_BASNO, SHELLSQLCMDF1, SHELLSQLCMDF2, SHELLSQLCMDI1, FYAZDETAY, FYAZDETAYSQL, NETSIS_KULLANICI, NETSIS_SIFRE, DESI_OLCER, DESI_OLCER_URL, TALAN1, WMS_REST_IP, WMS_REST_PORT, DOCFATURAPRN, DOCGARANTIPRN, DOCHEDIYEPRN, DOCKARGOPRN, FENTRTY, GRPCHANGE, FTIRCOPYCOUNT",
+                       "primary_key":  "SKISTASYON_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SKLOG",
+                       "total_rows":  "0",
+                       "columns":  "LOG_REF, LOG_TIPI, TARIH, TARIH_SAAT, FB_REF, SEPET_NO, HEDEF_AMBAR, SONHEDEFAMBAR, SONSIPARISNO, GIDEN, GELEN, MACUSER, MACIP, MACAPP",
+                       "primary_key":  "LOG_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKADRES",
+                       "total_rows":  "455",
+                       "columns":  "ADRES_REF, ADRES, ADRES_ACIKLAMASI, ADRES_TIPI, SEVK_ONCELIK, YERLESTIRME_ONCELIK, HACIM, PALET_SAYISI, GRUP_KODU, OZELKOD, KORIDOR, KAT, SIRA, DEPO_BOLGE, AMBAR_KODU, AGIRLIK, GIRIS_BLOKE, CIKIS_BLOKE, BLOKE_NEDENI, BLOKE_TARIHI, BKULLANICI_REF",
+                       "primary_key":  "ADRES, AMBAR_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.STOKALT",
+                       "total_rows":  "148715",
+                       "columns":  "STOKALT_REF, STOK_REF, STOKSUB_REF, MIKTAR, BIRIM_REF, FIYAT, AMBAR_KODU, FIRE, MALIYET, VARYANT_REF, SIRA_NO, KAYIT_TARIHI, GUNCELLEME_TARIHI",
+                       "primary_key":  "STOKALT_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKAMBALAJKST",
+                       "total_rows":  "0",
+                       "columns":  "KST_REF, STOK_REF, FTYPE, DEGER, AMBAR_KODU",
+                       "primary_key":  "KST_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKBARKOD",
+                       "total_rows":  "24094",
+                       "columns":  "BARKOD_REF, BIRIM_REF, STOK_REF, SIRA_NO, BARKOD, KAYIT_TARIHI, GUNCELLEME_TARIHI, TIPI, VARYANT_REF, ENT_GUID",
+                       "primary_key":  "BARKOD_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKBIRIM",
+                       "total_rows":  "24077",
+                       "columns":  "BIRIM_REF, BIRIM, BARKOD, CARPAN1, CARPAN2, BOLUM, AGIRLIK, YUKSEKLIK, EN, BOY, STOK_REF, SIRA_NO, NHACIM, BHACIM, NAGIRLIK, BAGIRLIK, KAYIT_TARIHI, GUNCELLEME_TARIHI, VARYANT_REF",
+                       "primary_key":  "BIRIM_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKDURUM",
+                       "total_rows":  "0",
+                       "columns":  "DURUM_REF, DURUM_KODU, DURUMU",
+                       "primary_key":  "DURUM_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.STOKEKALAN",
+                       "total_rows":  "0",
+                       "columns":  "STOKEKALAN_REF, ALAN",
+                       "primary_key":  "STOKEKALAN_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKEKBILGI",
+                       "total_rows":  "0",
+                       "columns":  "STOKEKBILGI_REF, STOKEKALAN_REF, STOK_REF, BILGI",
+                       "primary_key":  "STOKEKBILGI_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKFISLERI",
+                       "total_rows":  "43010",
+                       "columns":  "FB_REF, TARIH, SAAT, FIS_TURU, FIS_TIPI, FIS_GCD, FIS_NO, BELGE_NO, AMBAR_KODU, HEDEF_AMBAR, FIRMA_REF, ISTASYON_KODU, FIS_TOPLAMI, INDIRIM_TOPLAMI, KDV_TOPLAMI, GENEL_TOPLAM, KULLANICI_REF, AKTIF, SISTEM_TARIHI, ACIKLAMA, TICARI_GRUP, OZELKOD, VARDIYA, VARDIYA_TARIHI, FBO_REF, IADE_TARIHI, SB_REF, AKTAR, LG_NO, LG_REF, HU_NO, HU_REF, OLUSTURMA_TARIHI, KAPATILMA_TARIHI, GUNCELLEME_TARIHI, PB_REF, UB_REF, AKTAR_ERR, TMENUREF, TFICHEREF, ISEMRI_NO, ALAN1, ALAN2, ALAN3, ALAN4, SEVK_FIRMA_REF, SEVK_ADRES_REF, GKULLANICI_REF, EPOSTA, PAKET_NO, KARGO_AKTAR, KARGO_AKTARERR, SAYIM_TURU, SAYIM_STATUS, TASIYICI_KODU, TESLIM_SEKLI, PROJE_REF, LG_TYPE, YAZDIRMA_TARIHI, YM, TASIMA_TIPI, BOLUM, HEDEF_BOLUM, YETKI_KODU, ADRES_TIPI, SAYIMLISTE_REF, SAYIMPLAN_REF, IRSALIYE_TURU, SVKNO, ORGFB_REF, GUID, BOLGE_KODU, IFB_REF, TB_REF",
+                       "primary_key":  "FB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKFISLERIEK",
+                       "total_rows":  "42991",
+                       "columns":  "FB_REF, ADI1, SOYADI1, TCNO1, PLAKANO1, DORSENO1, ADI2, SOYADI2, TCNO2, PLAKANO2, DORSENO2, ADI3, SOYADI3, TCNO3, PLAKANO3, DORSENO3",
+                       "primary_key":  "FB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKFISLERIEKLOG",
+                       "total_rows":  "6172",
+                       "columns":  "FB_REF, ADI1, SOYADI1, TCNO1, PLAKANO1, DORSENO1, ADI2, SOYADI2, TCNO2, PLAKANO2, DORSENO2, ADI3, SOYADI3, TCNO3, PLAKANO3, DORSENO3",
+                       "primary_key":  ""
+                   },
+                   {
+                       "full_name":  "dbo.STOKFISLERILOG",
+                       "total_rows":  "3731",
+                       "columns":  "FB_REF, TARIH, SAAT, FIS_TURU, FIS_TIPI, FIS_GCD, FIS_NO, BELGE_NO, AMBAR_KODU, HEDEF_AMBAR, FIRMA_REF, ISTASYON_KODU, FIS_TOPLAMI, INDIRIM_TOPLAMI, KDV_TOPLAMI, GENEL_TOPLAM, KULLANICI_REF, AKTIF, SISTEM_TARIHI, ACIKLAMA, TICARI_GRUP, OZELKOD, VARDIYA, VARDIYA_TARIHI, FBO_REF, IADE_TARIHI, SB_REF, AKTAR, LG_NO, LG_REF, HU_NO, HU_REF, OLUSTURMA_TARIHI, KAPATILMA_TARIHI, GUNCELLEME_TARIHI, PB_REF, UB_REF, AKTAR_ERR, TMENUREF, TFICHEREF, SILENKULLANICI_REF, SILME_NEDENI, SILME_TARIHI, ISEMRI_NO, ALAN1, ALAN2, ALAN3, ALAN4, SEVK_FIRMA_REF, SEVK_ADRES_REF, GKULLANICI_REF, EPOSTA, PAKET_NO, KARGO_AKTAR, KARGO_AKTARERR, SAYIM_TURU, SAYIM_STATUS, TASIYICI_KODU, TESLIM_SEKLI, PROJE_REF, LG_TYPE, YAZDIRMA_TARIHI, YM, TASIMA_TIPI, BOLUM, HEDEF_BOLUM, YETKI_KODU, ADRES_TIPI, SAYIMLISTE_REF, SAYIMPLAN_REF, IRSALIYE_TURU, SVKNO, ORGFB_REF, GUID, BOLGE_KODU, IFB_REF, TB_REF",
+                       "primary_key":  ""
+                   },
+                   {
+                       "full_name":  "dbo.STOKFISLERITMP",
+                       "total_rows":  "0",
+                       "columns":  "FB_REF, TARIH, SAAT, FIS_TURU, FIS_TIPI, FIS_GCD, FIS_NO, BELGE_NO, AMBAR_KODU, HEDEF_AMBAR, FIRMA_REF, ISTASYON_KODU, FIS_TOPLAMI, INDIRIM_TOPLAMI, KDV_TOPLAMI, GENEL_TOPLAM, KULLANICI_REF, AKTIF, SISTEM_TARIHI, ACIKLAMA, TICARI_GRUP, OZELKOD, VARDIYA, VARDIYA_TARIHI, FBO_REF, IADE_TARIHI, SB_REF, AKTAR, LG_NO, LG_REF, HU_NO, HU_REF, OLUSTURMA_TARIHI, KAPATILMA_TARIHI, GUNCELLEME_TARIHI, PB_REF, UB_REF, AKTAR_ERR, TMENUREF, TFICHEREF, ISEMRI_NO, ALAN1, ALAN2, ALAN3, ALAN4, SEVK_FIRMA_REF, SEVK_ADRES_REF, GKULLANICI_REF, EPOSTA, PAKET_NO, KARGO_AKTAR, KARGO_AKTARERR, SAYIM_TURU, SAYIM_STATUS, TASIYICI_KODU, TESLIM_SEKLI, PROJE_REF, LG_TYPE, YAZDIRMA_TARIHI, YM, TASIMA_TIPI, BOLUM, HEDEF_BOLUM, YETKI_KODU, ADRES_TIPI, SAYIMLISTE_REF, SAYIMPLAN_REF, IRSALIYE_TURU, SVKNO, ORGFB_REF, GUID, BOLGE_KODU, IFB_REF, TB_REF",
+                       "primary_key":  ""
+                   },
+                   {
+                       "full_name":  "dbo.STOKFIYAT",
+                       "total_rows":  "0",
+                       "columns":  "FIYAT_REF, BIRIM_REF, DOVIZ_KODU, FIYAT, MALIYET, INDIRIM, LISTE_NO, STOK_REF, KDV, DOVIZ_NO",
+                       "primary_key":  "FIYAT_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, GRUP_ADI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.STOKHAREKETLERI",
+                       "total_rows":  "325445",
+                       "columns":  "FD_REF, STOK_REF, MIKTAR, BIRIM_REF, FIYAT, MALIYET, TOPLAM_FIYAT, TAKIP_NO, ACIKLAMA, AMBAR_KODU, FB_REF, ADRES, HEDEF_AMBAR, CARPAN1, CARPAN2, ANABIRIM_REF, URETIM_EMRI, URETIM_EMRI2, URETIM_EMRI3, URETIM_EMRI4, URETIM_EMRI5, URETIM_EMRI6, ISLEM_TARIHI, OZELKOD, HAREKET_TARIHI, DURUM_KODU, VARDIYA, VARDIYA_TARIHI, FBO_REF, FDO_REF, HEDEF_ADRES, HEDEF_DURUM, PALET, HEDEF_PALET, AUTO_PALET, KDV_ORANI, KDV_TUTARI, DOVIZ_NO, DOVIZ_ORANI, INDIRIM_ORANI, INDIRIM_TUTARI, KONSINYEFD_REF, KONSINYE_REF, STOKALT_REF, SB_REF, SD_REF, SIPARIS_NO, FIS_TURU, FIS_TIPI, FIS_GCD, FIRMA_REF, ISTASYON_KODU, GBS_TARIHI, GBT_TARIHI, PB_REF, PD_REF, UB_REF, UD_REF, STK_TARIHI, ALAN1, ALAN2, ALAN3, ALAN4, STOK, KONSINYE_HAREKETI, KONSINYE_TM, IZLEME_TURU, PAKET_NO, PROJE_REF, VARYANT_REF, PAKET, HEDEF_PAKET, AUTO_PAKET, URT_TARIHI, ABMIKTAR, MASRAF_REF, OZELKOD2, RETEST_TARIHI, ADRES_TIPI, SAYIMLISTE_REF, SAYIMPLAN_REF, IADE_REF, AKTAR, LG_NO, LG_REF, AKTAR_ERR, KULLANICI_REF, TMENUREF, TFICHEREF, ORGFB_REF, ACIKLAMA2, IFB_REF, IFD_REF, IADE_MIKTAR, ISLEM_ID, TB_REF, TD_REF",
+                       "primary_key":  "FD_REF, FB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKHAREKETLERILOG",
+                       "total_rows":  "16114",
+                       "columns":  "LOGFD_REF, FD_REF, STOK_REF, MIKTAR, BIRIM_REF, FIYAT, MALIYET, TOPLAM_FIYAT, TAKIP_NO, ACIKLAMA, AMBAR_KODU, FB_REF, ADRES, HEDEF_AMBAR, CARPAN1, CARPAN2, ANABIRIM_REF, URETIM_EMRI, URETIM_EMRI2, URETIM_EMRI3, URETIM_EMRI4, URETIM_EMRI5, URETIM_EMRI6, ISLEM_TARIHI, OZELKOD, HAREKET_TARIHI, DURUM_KODU, VARDIYA, VARDIYA_TARIHI, FBO_REF, FDO_REF, HEDEF_ADRES, HEDEF_DURUM, PALET, HEDEF_PALET, AUTO_PALET, KDV_ORANI, KDV_TUTARI, DOVIZ_NO, DOVIZ_ORANI, INDIRIM_ORANI, INDIRIM_TUTARI, KONSINYEFD_REF, KONSINYE_REF, STOKALT_REF, SB_REF, SD_REF, SIPARIS_NO, FIS_TURU, FIS_TIPI, FIS_GCD, FIRMA_REF, ISTASYON_KODU, GBS_TARIHI, GBT_TARIHI, PB_REF, PD_REF, UB_REF, UD_REF, STK_TARIHI, ALAN1, ALAN2, ALAN3, ALAN4, STOK, KONSINYE_HAREKETI, KONSINYE_TM, IZLEME_TURU, PAKET_NO, SILENKULLANICI_REF, SILME_NEDENI, SILME_TARIHI, PROJE_REF, VARYANT_REF, PAKET, HEDEF_PAKET, AUTO_PAKET, URT_TARIHI, ABMIKTAR, MASRAF_REF, OZELKOD2, RETEST_TARIHI, ADRES_TIPI, SAYIMLISTE_REF, SAYIMPLAN_REF, IADE_REF, AKTAR, LG_NO, LG_REF, AKTAR_ERR, KULLANICI_REF, TMENUREF, TFICHEREF, ORGFB_REF, ACIKLAMA2, IFB_REF, IFD_REF, IADE_MIKTAR, ISLEM_ID, TB_REF, TD_REF",
+                       "primary_key":  "LOGFD_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKHAREKETLERISERVIS",
+                       "total_rows":  "0",
+                       "columns":  "FD_REF, STOK_REF, MIKTAR, TAKIP_NO, AMBAR_KODU, ADRES, HEDEF_AMBAR, CARPAN1, CARPAN2, ANABIRIM_REF, ISLEM_TARIHI, HAREKET_TARIHI, DURUM_KODU, HEDEF_ADRES, HEDEF_DURUM, PALET, HEDEF_PALET, FIS_TURU, FIS_TIPI, FIS_GCD, GBS_TARIHI, GBT_TARIHI, STK_TARIHI, ALAN1, ALAN2, ALAN3, ALAN4, IZLEME_TURU, VARYANT_REF, PAKET, HEDEF_PAKET, URT_TARIHI, ABMIKTAR, RETEST_TARIHI",
+                       "primary_key":  "FD_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKHAREKETLERITMP",
+                       "total_rows":  "0",
+                       "columns":  "FD_REF, STOK_REF, MIKTAR, BIRIM_REF, FIYAT, MALIYET, TOPLAM_FIYAT, TAKIP_NO, ACIKLAMA, AMBAR_KODU, FB_REF, ADRES, HEDEF_AMBAR, CARPAN1, CARPAN2, ANABIRIM_REF, URETIM_EMRI, URETIM_EMRI2, URETIM_EMRI3, URETIM_EMRI4, URETIM_EMRI5, URETIM_EMRI6, ISLEM_TARIHI, OZELKOD, HAREKET_TARIHI, DURUM_KODU, VARDIYA, VARDIYA_TARIHI, FBO_REF, FDO_REF, HEDEF_ADRES, HEDEF_DURUM, PALET, HEDEF_PALET, AUTO_PALET, KDV_ORANI, KDV_TUTARI, DOVIZ_NO, DOVIZ_ORANI, INDIRIM_ORANI, INDIRIM_TUTARI, KONSINYEFD_REF, KONSINYE_REF, STOKALT_REF, SB_REF, SD_REF, SIPARIS_NO, FIS_TURU, FIS_TIPI, FIS_GCD, FIRMA_REF, ISTASYON_KODU, GBS_TARIHI, GBT_TARIHI, PB_REF, PD_REF, UB_REF, UD_REF, STK_TARIHI, ALAN1, ALAN2, ALAN3, ALAN4, STOK, KONSINYE_HAREKETI, KONSINYE_TM, IZLEME_TURU, PAKET_NO, PROJE_REF, VARYANT_REF, PAKET, HEDEF_PAKET, AUTO_PAKET, URT_TARIHI, ABMIKTAR, MASRAF_REF, OZELKOD2, RETEST_TARIHI, ADRES_TIPI, SAYIMLISTE_REF, SAYIMPLAN_REF, IADE_REF, AKTAR, LG_NO, LG_REF, AKTAR_ERR, KULLANICI_REF, TMENUREF, TFICHEREF, ORGFB_REF, ACIKLAMA2, IFB_REF, IFD_REF, IADE_MIKTAR, ISLEM_ID, TB_REF, TD_REF",
+                       "primary_key":  "FD_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKKARTI",
+                       "total_rows":  "6516",
+                       "columns":  "STOK_REF, STOK_KODU, STOK_ADI, STOK_ADI2, STOK_ADI3, STOK_ADI4, AKTIF, OZELKOD, GRUP_KODU, YETKI_KODU, URETICI_KODU, KDV_ALIS, KDV_SATIS, KDV_IADE, STOK_TIPI, IZLEME_TURU, URETICI_TAKIP, STOK_YERI_TAKIBI, OZELKOD2, OZELKOD3, OZELKOD4, OZELKOD5, ALT_BIRIM_ADEDI, ALT_BIRIM_REF, KAYIT_TARIHI, GUNCELLEME_TARIHI, UETUR, KULLANIM, MODIFIEDDATE, MINSIPMIK, VARYANT, ETIKET_REF_URUN, ENT_GUID, MARKA_REF, URETIM_YERI, RAF_OMRU, RAF_GHAY, ABC_KODU, MENSEI, TALAN1, TALAN2, TALAN3, TALAN4, TALAN5, TALAN6, TALAN7, TALAN8, TALAN9, TALAN10, AMBALAJ, AMBALAJ_ERP, ENT_REF, ULKE_KODU, ULKENR",
+                       "primary_key":  "STOK_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKMINMAX",
+                       "total_rows":  "1",
+                       "columns":  "STOKMINMAX_REF, AMBAR_KODU, STOK_REF, MIN_MIKTAR, MAX_MIKTAR, KRT_MIKTAR, MIN_KONTROL, MAX_KONTROL, KRT_KONTROL",
+                       "primary_key":  "STOKMINMAX_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKMUSTED",
+                       "total_rows":  "682",
+                       "columns":  "STOKMUSTED_REF, TIPI, TURU, STOK_REF, KOD, ACIKLAMA, FIRMA_REF, TICARI_GRUP, SIRA_NO, ONCELIK, BARKOD, ENT_REF, VARYANT_REF",
+                       "primary_key":  "STOKMUSTED_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.STOKRES",
+                       "total_rows":  "2",
+                       "columns":  "STOKRES_REF, STOK_REF, NR, STOK_IMAGE",
+                       "primary_key":  "STOKRES_REF"
+                   },
+                   {
+                       "full_name":  "dbo.STOKYETKI",
+                       "total_rows":  "2",
+                       "columns":  "GRUP_REF, GRUP_KODU, GRUP_ADI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.STOKYETKIY",
+                       "total_rows":  "0",
+                       "columns":  "STOKYETKIY_REF, KULLANICIGRUP_KODU, YETKI_KODU",
+                       "primary_key":  "STOKYETKIY_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SURUCU",
+                       "total_rows":  "0",
+                       "columns":  "SURUCU_REF, ADI, SOYADI, TCNO, PLAKANO, DORSENO, TELEFON, OLUSTURMA_TARIHI, GUNCELLEME_TARIHI, AKTIF, ENT_REF",
+                       "primary_key":  "SURUCU_REF"
+                   },
+                   {
+                       "full_name":  "dbo.SYSGOREV",
+                       "total_rows":  "0",
+                       "columns":  "SYSGOREV_REF, TURU, PID, DURUM, TARIH",
+                       "primary_key":  "SYSGOREV_REF"
+                   },
+                   {
+                       "full_name":  "dbo.TAKIPDTY",
+                       "total_rows":  "137",
+                       "columns":  "TAKIPDTY_REF, STOK_REF, VARYANT_REF, TAKIP_NO, GBS_TARIHI, GBT_TARIHI, URT_TARIHI, SKT_TARIHI, ALAN1, ALAN2, ALAN3, ALAN4, GIRIS_TARIHI, KAYIT_TARIHI, GUNCELLEME_TARIHI, GKULLANICI_REF, BLOKE, BLOKE_NEDENI, BLOKE_TARIHI, BKULLANICI_REF, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E20, RETEST_TARIHI",
+                       "primary_key":  "TAKIPDTY_REF"
+                   },
+                   {
+                       "full_name":  "dbo.TAKIPDTYDK",
+                       "total_rows":  "0",
+                       "columns":  "DOKUMAN_REF, STOK_REF, VARYANT_REF, TAKIP_NO, DOKUMAN_ADI, ACIKLAMA, KAYIT_TARIHI, GUNCELLEME_TARIHI, KULLANICI_REF, GKULLANICI_REF, DOKUMAN_DATA",
+                       "primary_key":  "DOKUMAN_REF"
+                   },
+                   {
+                       "full_name":  "dbo.TAKIPDTYLOG",
+                       "total_rows":  "3",
+                       "columns":  "TAKIPDTYLOG_REF, STOK_REF, VARYANT_REF, TAKIP_NO, HEDEF_TAKIP_NO, GBS_TARIHI, GBT_TARIHI, URT_TARIHI, SKT_TARIHI, ALAN1, ALAN2, ALAN3, ALAN4, GIRIS_TARIHI, KAYIT_TARIHI, GUNCELLEME_TARIHI, GKULLANICI_REF, BLOKE, BLOKE_NEDENI, BLOKE_TARIHI, BKULLANICI_REF, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E20, RETEST_TARIHI, DKULLANICI_REF, DKAYIT_TARIHI",
+                       "primary_key":  "TAKIPDTYLOG_REF"
+                   },
+                   {
+                       "full_name":  "dbo.TALEPFISLERI",
+                       "total_rows":  "690",
+                       "columns":  "TB_REF, TB_TURU, STATUS, AKTIF, ONCELIK, FIRMA_REF, FIS_NO, TARIH, SAAT, BELGE_NO, AMBAR_KODU, HEDEF_AMBAR, ISTASYON_KODU, OZELKOD, YETKI_KODU, SEVK_ADRES_REF, DURUM_KODU, GRUP_KODU, ACIKLAMA, OLUSTURMA_TARIHI, KAPATILMA_TARIHI, GUNCELLEME_TARIHI, YAZDIRMA_TARIHI, YM, KULLANICI_REF, PERSONEL_KODU, AKTAR, AKTARIM_NO, AKTARIM_REF, MODIFIEDDATE, TESLIM_TARIHI, ONCELIK_ACIKLAMASI, PROJE_REF, DEPO_BOLGE, BOLUM, HEDEF_BOLUM, PB_REF, PD, KKULLANICI_REF, TASIYICI_KODU, BOLGE_KODU, KARGOWS, ENT_TYPE, KARGOERR, ENT_REF, ENT_GUID, SPK",
+                       "primary_key":  "TB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.TALEPHAREKETLERI",
+                       "total_rows":  "78979",
+                       "columns":  "TD_REF, TB_REF, TB_TURU, STATUS, STOK_REF, MIKTAR, SEVKEDILEN_MIKTAR, HAREKETEDEN_MIKTAR, BIRIM_REF, ANABIRIM_REF, CARPAN1, CARPAN2, TAKIP_NO, ADRES, HEDEF_ADRES, DURUM_KODU, HEDEF_DURUM, PALET, HEDEF_PALET, PAKET, HEDEF_PAKET, AMBAR_KODU, HEDEF_AMBAR, FIRMA_REF, TB_TARIHI, ISLEM_TARIHI, TESLIM_TARIHI, OZELKOD, ISTASYON_KODU, KARMA_KOLI, ACIKLAMA, ENT_REF, CSUB, PERSONEL_KODU, PROJE_REF, VARYANT_REF, BELGE_NO, MASRAF_REF, YUKLEME_TARIHI, ENT_GUID, PB_REF, PD, DEPO_BOLGE, ENT_TYPE, MODIFIEDDATE, OZELKOD2, SIRA_NO",
+                       "primary_key":  "TD_REF, TB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.TALEPOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.TALEPYETKIKODU",
+                       "total_rows":  "0",
+                       "columns":  "YETKIKODU_REF, YETKI_KODU, YETKI_KODU_ACIKLAMASI",
+                       "primary_key":  "YETKI_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.TASIMATIPI",
+                       "total_rows":  "10",
+                       "columns":  "TASIMATIPI_REF, KODU, ADI, ADI2",
+                       "primary_key":  "KODU"
+                   },
+                   {
+                       "full_name":  "dbo.TASIYICI",
+                       "total_rows":  "51",
+                       "columns":  "TASIYICI_REF, KODU, ADI, EMAIL, WEB, ADRES1, ADRES2, ULKE, IL, ILCE, SEMT, POSTAKODU, TEL1, TEL2, FAX, ILGILI, TCNO, VERGINO, TIPI, IMAGE1, IMAGE2, TEMPLATEID, OZELKOD, GRUP_KODU",
+                       "primary_key":  "KODU"
+                   },
+                   {
+                       "full_name":  "dbo.TBEKACIKLAMA",
+                       "total_rows":  "690",
+                       "columns":  "TBEKA_REF, TB_REF, EKA1, EKA2, EKA3, EKA4, EKA5, EKA6, EKA7, EKA8, EKA9, EKA10, EKA11, EKA12, EKA13, EKA14, EKA15, EKA16, EKA17, EKA18, EKA19, EKA20",
+                       "primary_key":  "TB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.TDOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.TERMINALGRUP",
+                       "total_rows":  "2",
+                       "columns":  "TERMINALGRUP_REF, KODU, ACIKLAMASI, MENU, MENU_SIZE, FONT_SIZE, BOLD, MENU_ENTER, SIRANO_GIZLE, ACIKFISGOSTER, PALET_MENU, PALET_OLUSTURMA, PALET_URUN_CIKARMA, PALET_BOZMA, PALET_OLUSTURMA_NO, PALET_URUN_CIKARMA_NO, PALET_BOZMA_NO, PALET_OLUSTURMA_MENU, PALET_URUN_CIKARMA_MENU, PALET_BOZMA_MENU, SORGULAMA_MENU, SORGULAMA_BARKOD, SORGULAMA_URUN, SORGULAMA_RAF, SORGULAMA_PALET, SORGULAMA_PALET2, SORGULAMA_TAKIPNO, SORGULAMA_BARKOD_NO, SORGULAMA_URUN_NO, SORGULAMA_RAF_NO, SORGULAMA_PALET_NO, SORGULAMA_PALET_NO2, SORGULAMA_TAKIPNO_NO, SORGULAMA_BARKOD_MENU, SORGULAMA_URUN_MENU, SORGULAMA_RAF_MENU, SORGULAMA_PALET_MENU, SORGULAMA_PALET_MENU2, SORGULAMA_TAKIPNO_MENU, SADECE_MENU, SADECE_MENU_GRUBU, ARAC_YUKLEME, SEVK_AMBALAJ, BARKOD_ATAMA, FISIPTAL, FISBEKLET, SORGULAMA_URUN_SQL, SORGULAMA_PALET_SQL, SORGULAMA_PALET_SQL2, SORGULAMA_TAKIPNO_SQL, PALET_YAZICISI, SORGULAMA_RAF_SQL, PAKET_YAZICISI, SORGULAMA_PAKET, SORGULAMA_PAKET2, SORGULAMA_PAKET_SQL, SORGULAMA_PAKET_SQL2, SORGULAMA_PAKET_NO, SORGULAMA_PAKET_NO2, SORGULAMA_PAKET_MENU, SORGULAMA_PAKET_MENU2, URUNGECKAYDET, FISADRESMS, FISBARKODMS, FIS_YAZICISI, SORGULAMA_ADRESTASIMA, SORGULAMA_ADRESTASIMA_NO, SORGULAMA_ADRESTASIMA_MENU, SORGULAMA_URUN_LABELS, URUN_YAZICISI, FKGIZLE, FUGIZLE, SHKGIZLE, SHUGIZLE, SAKGIZLE, SAUGIZLE, URNETKTURU",
+                       "primary_key":  "KODU"
+                   },
+                   {
+                       "full_name":  "dbo.TESLIMTIPI",
+                       "total_rows":  "18",
+                       "columns":  "TESLIMTIPI_REF, KODU, ADI1, ADI2",
+                       "primary_key":  "KODU"
+                   },
+                   {
+                       "full_name":  "dbo.TFICDEL",
+                       "total_rows":  "0",
+                       "columns":  "TFICDELREF, TFICPRREF, TFICHEREF, TMENUREF, PNAME, PFIELD, PVALUE, PMESSAGE, PACTION",
+                       "primary_key":  "TFICDELREF"
+                   },
+                   {
+                       "full_name":  "dbo.TFICDT",
+                       "total_rows":  "162",
+                       "columns":  "TFICDTREF, TFICPRREF, TFICHEREF, TMENUREF, PRWN, PITMN, PNAME, PFSIZE, PLOCX, PLOCY, PLOCW, PLOCH, PHIDE, PINPUT, PVALUE, PFIXED, PFIXVL, PFIXCH, PADOPN, PADOPV, PPLOPL, PPLBAC, PQUERY, POTOP, POTOPP, POTOPA, PHIDELIST",
+                       "primary_key":  "TFICDTREF"
+                   },
+                   {
+                       "full_name":  "dbo.TFICESC",
+                       "total_rows":  "0",
+                       "columns":  "TFICESCREF, TFICPRREF, TFICHEREF, TMENUREF, PNAME, PFIELD, PVALUE, PMESSAGE, PACTION",
+                       "primary_key":  "TFICESCREF"
+                   },
+                   {
+                       "full_name":  "dbo.TFICHE",
+                       "total_rows":  "23",
+                       "columns":  "TFICHEREF, TMENUREF, FTYPE, FRWN, FNAME, TTYPE",
+                       "primary_key":  "TFICHEREF"
+                   },
+                   {
+                       "full_name":  "dbo.TFICPR",
+                       "total_rows":  "33",
+                       "columns":  "TFICPRREF, TFICHEREF, TMENUREF, NOR, FSIZE, OPLWH, OPLORD, OPLDTWH, FTPHIDE, FDTINF, FDTINFQ, FDTINFQF, FDTINFAF, FDTINFBF, FTPESCCAF, FTPESCCBF, FTPESCWAF, FTPESCWBF, FTPESCDAF, FTPESCDBF, FDMUNIT, FDINTRCKAUTO, FDOUTTRCKFIFO, AMOUNTCONVERT, USECONTROLTABLE, FDOUTFIFOSLC, FBTINFAF, FBTINFBF, FTPESCPRN, FQEDT, FDPRN, FTPESCDRVINFENTRY, FDPRNLBLREF, FDPRNAMNT, FDPRNAMNTASK, FDPRNCONF, FDPRNAMNTIN, BESHWIMG, FTPINTSTATUS, FDPRNZPL",
+                       "primary_key":  "TFICPRREF"
+                   },
+                   {
+                       "full_name":  "dbo.TFICTP",
+                       "total_rows":  "154",
+                       "columns":  "TFICTPREF, TFICPRREF, TFICHEREF, TMENUREF, PRWN, PITMN, PNAME, PFSIZE, PLOCX, PLOCY, PLOCW, PLOCH, PHIDE, PINPUT, PVALUE, PFIXED, PFIXVL, POTOPL, POTOPLWH, PQUERY, PHIDELIST",
+                       "primary_key":  "TFICTPREF"
+                   },
+                   {
+                       "full_name":  "dbo.TFICWAI",
+                       "total_rows":  "0",
+                       "columns":  "TFICWAIREF, TFICPRREF, TFICHEREF, TMENUREF, PNAME, PFIELD, PVALUE, PMESSAGE, PACTION",
+                       "primary_key":  "TFICWAIREF"
+                   },
+                   {
+                       "full_name":  "dbo.TGMENU",
+                       "total_rows":  "14",
+                       "columns":  "TGMENUREF, TGRUPREF, TMENUREF, TNAME, ROWN",
+                       "primary_key":  "TGMENUREF"
+                   },
+                   {
+                       "full_name":  "dbo.TMENU",
+                       "total_rows":  "5",
+                       "columns":  "TMENUREF, MNAME, FONTSIZE, BOLD, MENTER, RWNHIDE, MSIZE, MLNG",
+                       "primary_key":  "TMENUREF"
+                   },
+                   {
+                       "full_name":  "dbo.TMPE_FIRMADÖNEM",
+                       "total_rows":  "0",
+                       "columns":  "TMPE_REF, STOK_REF",
+                       "primary_key":  ""
+                   },
+                   {
+                       "full_name":  "dbo.ULKE",
+                       "total_rows":  "260",
+                       "columns":  "ULKE_REF, ULKE_KODU, ULKE_ADI, IMAGE1, IMAGE2",
+                       "primary_key":  "ULKE_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.UPSILILCE",
+                       "total_rows":  "0",
+                       "columns":  "UPSILILCE_REF, IL, ILCE, IL_KODU, ILCE_KODU",
+                       "primary_key":  "UPSILILCE_REF"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMAKOD",
+                       "total_rows":  "0",
+                       "columns":  "REF, KODU, ADI",
+                       "primary_key":  "KODU"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMBASLIK",
+                       "total_rows":  "0",
+                       "columns":  "UB_REF, ENT_REF, FIS_NO, STOK_REF, MIKTAR, GMIKTAR, BIRIM_REF, CARPAN1, CARPAN2, SB_REF, SD_REF, AMBAR_KODU, RECETE_KODU, ROTA_KODU, ISTASYON_KODU, BELGE_NO, OZELKOD, YETKI_KODU, DURUM_KODU, GRUP_KODU, TARIH, SAAT, BASLANGIC_TARIHI, BITIS_TARIHI, ACIKLAMA1, ACIKLAMA2, ACIKLAMA3, STATUS, AKTIF, ONCELIK, KULLANICI_REF, OLUSTURMA_TARIHI, KAPATILMA_TARIHI, GUNCELLEME_TARIHI, YAZDIRMA_TARIHI, MODIFIEDDATE, PROJE_REF",
+                       "primary_key":  "UB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMDETAY",
+                       "total_rows":  "0",
+                       "columns":  "UD_REF, UB_REF, ENT_REF, STOK_REF, MIKTAR, GMIKTAR, BIRIM_REF, CARPAN1, CARPAN2, AMBAR_KODU, OPERASYON_KODU, ACIKLAMA1, ACIKLAMA2, ACIKLAMA3, ACIKLAMA4, OLUSTURMA_TARIHI, GUNCELLEME_TARIHI, MODIFIEDDATE, PROJE_REF, VARYANT_REF, MASRAF_REF",
+                       "primary_key":  "UD_REF, UB_REF"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMDURUM",
+                       "total_rows":  "0",
+                       "columns":  "DURUM_REF, DURUM_KODU, ACIKLAMASI, RENK_ZEMIN, RENK_YAZI, KILIT",
+                       "primary_key":  "DURUM_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMGRUP",
+                       "total_rows":  "0",
+                       "columns":  "GRUP_REF, GRUP_KODU, ACIKLAMASI",
+                       "primary_key":  "GRUP_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMHAREKET",
+                       "total_rows":  "0",
+                       "columns":  "UH_REF, UB_REF, TARIH, SAAT, AKOD, DURUM1, DURUM2, KULLANICI_REF, ALAN1, ALAN2, ALAN3, ALAN4",
+                       "primary_key":  "UH_REF"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMOZELKOD",
+                       "total_rows":  "0",
+                       "columns":  "OZELKOD_REF, OZELKOD, OZELKOD_ADI",
+                       "primary_key":  "OZELKOD"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMYERI",
+                       "total_rows":  "0",
+                       "columns":  "URETIMYERI_REF, URETIMYERI_KODU, URETIMYERI_ADI, IMAGE1, IMAGE2",
+                       "primary_key":  "URETIMYERI_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.URETIMYETKIKODU",
+                       "total_rows":  "0",
+                       "columns":  "YETKIKODU_REF, YETKI_KODU, YETKI_KODU_ACIKLAMASI",
+                       "primary_key":  "YETKI_KODU"
+                   },
+                   {
+                       "full_name":  "dbo.URUNADRES",
+                       "total_rows":  "0",
+                       "columns":  "URUNADRES_REF, STOK_REF, ADRES, MINMIKTAR, MAXMIKTAR, KRTMIKTAR, AMBAR_KODU",
+                       "primary_key":  "URUNADRES_REF"
+                   },
+                   {
+                       "full_name":  "dbo.USERRES",
+                       "total_rows":  "0",
+                       "columns":  "USERRES_REF, USER_REF, USER_IMAGE",
+                       "primary_key":  "USERRES_REF"
+                   },
+                   {
+                       "full_name":  "dbo.VARDIYA",
+                       "total_rows":  "0",
+                       "columns":  "VARDIYA_REF, VARDIYA, BAS_SAATI, BIT_SAATI, ISTASYON_KODU",
+                       "primary_key":  "VARDIYA_REF"
+                   },
+                   {
+                       "full_name":  "dbo.VARYANT",
+                       "total_rows":  "0",
+                       "columns":  "VARYANT_REF, STOK_REF, VARYANT_KODU, VARYANT_ADI, VARYANT_ADI2, AKTIF, OZELKOD, OZELKOD2, OZELKOD3, OZELKOD4, OZELKOD5, GRUP_KODU, YETKI_KODU, URETICI_KODU, GTIP_KOD, STOK_TIPI, KAYIT_TARIHI, GUNCELLEME_TARIHI, KULLANIM, MODIFIEDDATE, TALAN1, TALAN2, TALAN3, TALAN4, TALAN5, TALAN6, TALAN7, TALAN8, TALAN9, TALAN10, ENT_GUID, ENT_REF",
+                       "primary_key":  "VARYANT_REF"
+                   },
+                   {
+                       "full_name":  "dbo.YAZGOREV",
+                       "total_rows":  "0",
+                       "columns":  "YAZGOREV_REF, GOREV_ADI, FIS_TURU, RAPOR_REF, YAZICI, TERMINALGRUP_KODU, KULLANICIGRUP_KODU, KULLANICI_REF, ONCELIK, STATUS",
+                       "primary_key":  "YAZGOREV_REF"
+                   },
+                   {
+                       "full_name":  "dbo.YETKI",
+                       "total_rows":  "227",
+                       "columns":  "YETKI_REF, KULLANICIGRUP_KODU, OBJ1, OBJ2",
+                       "primary_key":  "YETKI_REF"
+                   }
+               ],
+    "views":  [
+                  {
+                      "full_name":  "dbo.ACKPLN",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, ACIK_MIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.ACKPLN_GRUPURUN",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, ACIK_MIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.ACKPLN_GRUPURUND",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, ACIK_MIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.ACKPLN_URUN",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, ACIK_MIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.ALT_URUN_VIEW",
+                      "columns":  "STOK_REF, ANA_URUN_KODU, ANA_URUN_ADI, MIKTAR, STOK_ALT_REF, STOK_ALT_KOD, STOK_ALT_ADI"
+                  },
+                  {
+                      "full_name":  "dbo.AMBARTAKIP",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, BIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET, PAKET, MIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.AMBARTAKIPDETAY",
+                      "columns":  "HAREKET_TARIHI, AMBAR_KODU, STOK_REF, VARYANT_REF, BIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET, PAKET, MIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.AMBARTAKIPDETAYIN0",
+                      "columns":  "HAREKET_TARIHI, AMBAR_KODU, STOK_REF, VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET, PAKET, MIKTAR, C"
+                  },
+                  {
+                      "full_name":  "dbo.AMBARTAKIPDETAYIN2",
+                      "columns":  "HAREKET_TARIHI, AMBAR_KODU, STOK_REF, VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET, PAKET, MIKTAR, C"
+                  },
+                  {
+                      "full_name":  "dbo.AMBARTAKIPDETAYOUT",
+                      "columns":  "HAREKET_TARIHI, AMBAR_KODU, STOK_REF, VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET, PAKET, MIKTAR, C"
+                  },
+                  {
+                      "full_name":  "dbo.AMBARTAKIPIN0",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET, PAKET, MIKTAR, C"
+                  },
+                  {
+                      "full_name":  "dbo.AMBARTAKIPIN2",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET, PAKET, MIKTAR, C"
+                  },
+                  {
+                      "full_name":  "dbo.AMBARTAKIPOUT",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET, PAKET, MIKTAR, C"
+                  },
+                  {
+                      "full_name":  "dbo.DEMANDLIST",
+                      "columns":  "TB_REF, STATUS, YAZDIRMA_TARIHI, TARIH, SAAT, FIS_NO, BELGE_NO, AMBAR_KODU, HEDEF_AMBAR, ACIKLAMA, DURUM_KODU, GRUP_KODU, YETKI_KODU, KULLANICI_REF, PERSONEL_KODU, FIRMA_KODU, FIRMA_UNVANI, ADRES_FIRMA_KODU, ADRES_FIRMA_UNVANI, AKTIF, TB_TURU, TESLIM_TARIHI, ONCELIK_ACIKLAMASI, ONCELIK, OZELKOD, PROJE_REF, PROJE_KODU, DEPO_BOLGE, EKA1, EKA2, EKA3, EKA4, EKA5, EKA6, EKA7, EKA8, EKA9, EKA10, EKA11, EKA12, EKA13, EKA14, EKA15, EKA16, EKA17, EKA18, EKA19, EKA20, BOLUM, HEDEF_BOLUM, FIRMA_YETKI_KODU, KAPATILMA_TARIHI, KKULLANICI_REF, TASIYICI_KODU, PLANLAMA_NO, PB_REF, YMTF, BOLGE_KODU"
+                  },
+                  {
+                      "full_name":  "dbo.DEPO_STOK_RAPORU_TUM_DEPOLAR",
+                      "columns":  "AMBAR_KODU, STOK_KODU, STOK_ADI, BIRIM, MIKTAR, AMBAR_ADI"
+                  },
+                  {
+                      "full_name":  "dbo.EVIRA_HAREKET_RAPORU",
+                      "columns":  "PROJE_KODU, PROJE_ADI, TARIH, FIS_NO, AMBAR_KODU, HEDEF_AMBAR, FIS_TURU, ISLEMTIPI, FIRMA, STOK_KODU, STOK_ADI, MIKTAR, BIRIM, KULLANICI, TAKIP_NO"
+                  },
+                  {
+                      "full_name":  "dbo.FICHELIST",
+                      "columns":  "TARIH, SAAT, FIS_NO, BELGE_NO, FIRMA_KODU, FIRMA_UNVANI, SIPARIS_NO, TALEP_NO, PLANLAMA_NO, URETIM_NO, AMBAR_KODU, HEDEF_AMBAR, ISTASYON_KODU, KULLANICI_REF, HU_NO, ACIKLAMA, LG_NO, AKTAR_ERR, FIS_TURU, AKTIF, SEVK_FIRMA_KODU, SEVK_FIRMA_UNVANI, SEVK_ADRES_KODU, SEVK_ADRES_UNVANI, PAKET_NO, EPOSTA, EPOSTA_MESAJ, TASIYICI_KODU, TESLIM_SEKLI, ALAN1, ALAN2, ALAN3, ALAN4, AKTAR, TICARI_GRUP, OZELKOD, FB_REF, FIS_TIPI, FIS_GCD, FIRMA_REF, SB_REF, TB_REF, LG_REF, HU_REF, PB_REF, ISEMRI_NO, SEVK_FIRMA_REF, SEVK_ADRES_REF, GKULLANICI_REF, UB_REF, KARGO_AKTAR, KARGO_AKTARERR, SAYIM_TURU, SAYIM_STATUS, MENU_GRUP, PROJE_REF, PROJE_KODU, LG_TYPE, TASIMA_TIPI, SURE, KAPATILMA_TARIHI, OLUSTURMA_TARIHI, GUNCELLEME_TARIHI, BOLUM, HEDEF_BOLUM, FIRMA_YETKI_KODU, TMENUREF, TFICHEREF, FBO_REF, BFIS_TURU, BFIS_NO, YMTF, YAZDIRMA_TARIHI, BOLGE_KODU, SIP_DOKUMAN_NO, SIP_BELGE_NO"
+                  },
+                  {
+                      "full_name":  "dbo.FICHELISTLOG",
+                      "columns":  "TARIH, SAAT, FIS_NO, BELGE_NO, FIRMA_KODU, FIRMA_UNVANI, SIPARIS_NO, TALEP_NO, PLANLAMA_NO, URETIM_NO, AMBAR_KODU, HEDEF_AMBAR, ISTASYON_KODU, KULLANICI_REF, HU_NO, ACIKLAMA, LG_NO, AKTAR_ERR, FIS_TURU, AKTIF, SEVK_FIRMA_KODU, SEVK_FIRMA_UNVANI, SEVK_ADRES_KODU, SEVK_ADRES_UNVANI, PAKET_NO, EPOSTA, EPOSTA_MESAJ, TASIYICI_KODU, TESLIM_SEKLI, ALAN1, ALAN2, ALAN3, ALAN4, AKTAR, TICARI_GRUP, OZELKOD, FB_REF, FIS_TIPI, FIS_GCD, FIRMA_REF, SB_REF, TB_REF, LG_REF, HU_REF, PB_REF, ISEMRI_NO, SEVK_FIRMA_REF, SEVK_ADRES_REF, GKULLANICI_REF, UB_REF, KARGO_AKTAR, KARGO_AKTARERR, SAYIM_TURU, SAYIM_STATUS, MENU_GRUP, PROJE_REF, PROJE_KODU, LG_TYPE, TASIMA_TIPI, SURE, KAPATILMA_TARIHI, OLUSTURMA_TARIHI, GUNCELLEME_TARIHI, BOLUM, HEDEF_BOLUM, FIRMA_YETKI_KODU, SILENKULLANICI_REF, SILME_NEDENI, SILME_TARIHI, TMENUREF, TFICHEREF, FBO_REF, BFIS_TURU, BFIS_NO, YMTF, YAZDIRMA_TARIHI, BOLGE_KODU, SIP_DOKUMAN_NO, SIP_BELGE_NO"
+                  },
+                  {
+                      "full_name":  "dbo.GSTOT",
+                      "columns":  "AMBAR_KODU, STOK_REF, STOK_KODU, STOK_ADI, STOK_ADI2, STOK_ADI3, STOK_ADI4, VARYANT_REF, VARYANT_KODU, VARYANT_ADI, VARYANT_ADI2, ADRES, TAKIP_NO, DURUM_KODU, PALET, SAYIM1, SAYIM2, SAYIM3, KONTROL_SAYIM, EVIRA_SAYIM1, EVIRA_SAYIM2, EVIRA_SAYIM3"
+                  },
+                  {
+                      "full_name":  "dbo.MATERIALLIST",
+                      "columns":  "STOK_REF, STOK_KODU, STOK_ADI, STOK_ADI2, STOK_ADI3, STOK_ADI4, AKTIF, OZELKOD, GRUP_KODU, URETICI_KODU, KDV_ALIS, KDV_SATIS, KDV_IADE, STOK_TIPI, IZLEME_TURU, URETICI_TAKIP, STOK_YERI_TAKIBI, OZELKOD2, OZELKOD3, OZELKOD4, OZELKOD5, ALT_BIRIM_ADEDI, ALT_BIRIM_REF, KAYIT_TARIHI, GUNCELLEME_TARIHI, UETUR, KULLANIM, YETKI_KODU, MODIFIEDDATE, MINSIPMIK, MIKTAR, VARYANT, ENT_GUID, TALAN1, TALAN2, TALAN3, TALAN4, TALAN5, TALAN6, TALAN7, TALAN8, TALAN9, TALAN10, AMBALAJ"
+                  },
+                  {
+                      "full_name":  "dbo.ORDERLIST",
+                      "columns":  "TARIH, SAAT, SIPARIS_NO, BELGE_NO, FIRMA_KODU, FIRMA_UNVANI, AMBAR_KODU, DURUM_KODU, GRUP_KODU, PLANLAMA_NO, SEVK_FIRMA_KODU, SEVK_FIRMA_UNVANI, SEVK_ADRES_KODU, SEVK_ADRES_UNVANI, YETKI_KODU, TICARI_GRUP, MSPNO, ACIKLAMA, ACIKLAMA2, ACIKLAMA3, ACIKLAMA4, ADRES1, ADRES2, ULKE, IL, ILCE, IS_TELEFONU, IS_FAX, VERGI_DAIRESI, VERGI_NUMARASI, YETKILI, CEP_TELEFONU, EV_TELEFONU, SB_REF, STATUS, SIPARIS_TURU, AKTIF, EKA1, EKA2, EKA3, EKA4, EKA5, EKA6, EKA7, EKA8, EKA9, EKA10, EKA11, EKA12, EKA13, EKA14, EKA15, EKA16, EKA17, EKA18, EKA19, EKA20, FIRMA_OZELKOD, FIRMA_GRUP_KODU, FIRMA_TICARI_GRUP, DOKUMAN_NO, TESLIM_SEKLI, TASIYICI_KODU, KULLANICI_REF, KAPATMA_TARIHI, KAPALI, KKULLANICI_REF, PROJE_REF, PROJE_KODU, OZELKOD, FKGRISBLOKE, FKCIKISBLOKE, FSGIRISBLOKE, FSCIKISBLOKE, PERSONEL_KODU, BOLUM, FIRMA_YETKI_KODU, DEPO_BOLGE, YMTF, YAZDIRMA_TARIHI, BOLGE_KODU, SISTEM_TARIHI, RZV"
+                  },
+                  {
+                      "full_name":  "dbo.PACKAGELIST",
+                      "columns":  "PAKET_REF, PAKET, AKTIF, FIRMA_REF, SB_REF, TB_REF, PB_REF, OLUSTURMA_TARIHI, PAKET_DURUMU, PAKETEK_REF, AGIRLIK, BURUTAGIRLIK, UZUNLUK, YUKSEKLIK, GENISLIK, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, SIPARIS_NO, TALEP_NO, PLANLAMA_NO, FIRMA_KODU, FIRMA_UNVANI, AMBAR_KODU, ADRES"
+                  },
+                  {
+                      "full_name":  "dbo.PACKAGESHELF",
+                      "columns":  "ADRES, PAKET, AMBAR_KODU"
+                  },
+                  {
+                      "full_name":  "dbo.PALETTELIST",
+                      "columns":  "PALET_REF, PALET, AKTIF, FIRMA_REF, SB_REF, TB_REF, PB_REF, OLUSTURMA_TARIHI, PALET_DURUMU, PALETEK_REF, AGIRLIK, BURUTAGIRLIK, UZUNLUK, YUKSEKLIK, GENISLIK, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, SIPARIS_NO, TALEP_NO, PLANLAMA_NO, FIRMA_KODU, FIRMA_UNVANI, AMBAR_KODU, ADRES"
+                  },
+                  {
+                      "full_name":  "dbo.PALETTESHELF",
+                      "columns":  "ADRES, PALET, AMBAR_KODU"
+                  },
+                  {
+                      "full_name":  "dbo.PLANNINGLIST",
+                      "columns":  "PB_REF, STATUS, YAZDIRMA_TARIHI, TARIH, SAAT, FIS_NO, BELGE_NO, AMBAR_KODU, HEDEF_AMBAR, ACIKLAMA, DURUM_KODU, GRUP_KODU, YETKI_KODU, KULLANICI_REF, PERSONEL_KODU, FIRMA_KODU, FIRMA_UNVANI, SEVK_FIRMA_KODU, SEVK_FIRMA_UNVANI, ADRES_FIRMA_KODU, ADRES_FIRMA_UNVANI, AKTIF, PB_TURU, TESLIM_TARIHI, ONCELIK_ACIKLAMASI, ONCELIK, OZELKOD, ARAC_REF, RAMPA_REF, PROJE_REF, PROJE_KODU, DEPO_BOLGE, EKA1, EKA2, EKA3, EKA4, EKA5, EKA6, EKA7, EKA8, EKA9, EKA10, EKA11, EKA12, EKA13, EKA14, EKA15, EKA16, EKA17, EKA18, EKA19, EKA20, BOLUM, HEDEF_BOLUM, FIRMA_YETKI_KODU, KAPATILMA_TARIHI, KKULLANICI_REF, TASIYICI_KODU, YMTF, BOLGE_KODU"
+                  },
+                  {
+                      "full_name":  "dbo.PLNALTSTOK1",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, STOK"
+                  },
+                  {
+                      "full_name":  "dbo.PLNALTSTOK2",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, STOK"
+                  },
+                  {
+                      "full_name":  "dbo.PLNALTSTOKAP",
+                      "columns":  "AMBAR_KODU, STOK_REF, VARYANT_REF, SA_APM"
+                  },
+                  {
+                      "full_name":  "dbo.PLNSPDETAY1",
+                      "columns":  "SB_REF, SD_REF, STOK_REF, VARYANT_REF, MIKTAR, SEVK_EDILEN, BEKLEYEN, SEVK_STOK"
+                  },
+                  {
+                      "full_name":  "dbo.PLNSPDETAY2",
+                      "columns":  "SB_REF, SD_REF, STOK_REF, VARYANT_REF, MIKTAR, SEVK_EDILEN, BEKLEYEN, SEVK_STOK"
+                  },
+                  {
+                      "full_name":  "dbo.PRODUCTIONLIST",
+                      "columns":  "UB_REF, STATUS, YAZDIRMA_TARIHI, TARIH, SAAT, FIS_NO, BELGE_NO, AMBAR_KODU, ACIKLAMA1, ACIKLAMA2, ACIKLAMA3, DURUM_KODU, GRUP_KODU, YETKI_KODU, KULLANICI_REF, FIRMA_KODU, FIRMA_UNVANI, MIKTAR, GMIKTAR, BASLANGIC_TARIHI, BITIS_TARIHI, ISTASYON_KODU, OZELKOD, RECETE_KODU, ROTA_KODU, AKTIF, ONCELIK, STOK_REF, BIRIM_REF, SB_REF, SIPARIS_NO, STOK_KODU, STOK_ADI, PROJE_REF, PROJE_KODU"
+                  },
+                  {
+                      "full_name":  "dbo.PRODUCTIONTRANS",
+                      "columns":  "UH_REF, FIS_NO, TARIH, SAAT, AKOD, AADI, RECETE_KODU, DURUM1, ADURUM1, DURUM2, ADURUM2, KULLANICI_ADI, ADI_SOYADI, STOK_KODU, STOK_ADI, STOK_ADI2, STOK_ADI3, STOK_ADI4, SIPARIS_NO, FIRMA_KODU, FIRMA_UNVANI, ALAN1, ALAN2, ALAN3, ALAN4"
+                  },
+                  {
+                      "full_name":  "dbo.REZERVESB",
+                      "columns":  "SB_REF, MIKTAR, ABMIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.REZERVESD",
+                      "columns":  "SD_REF, MIKTAR, ABMIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.STOKDURUMRAPORU",
+                      "columns":  "KULLANIM, STOK_REF, STOK_KODU, STOK_ADI, GRUP_KODU, SATINALMA_MIKTAR, ALIM_IADE_MIKTAR, NET_MIKTAR, 2 nolu ambardan verılenler, 2 nolu ambara gerı gelenler, DÖNEM SONU STOK, DÖNEM BAŞI STOK, DIGER AMB DÖNEM SONU STOK, DIGER AMB DÖNEM BASI STOK, HARICI SATIN ALMA, VIRMAN GIRIS, VIRMAN CIKIS, DIGER VIRMAN GIRIS, DIGER VIRMAN CIKIS, KONSINYE GIRIS, KONSINYE CIKIS, DIGER KONSINYE GIRIS, DIGER KONSINYE CIKIS, SATIS"
+                  },
+                  {
+                      "full_name":  "dbo.STOKDURUMRAPORU1",
+                      "columns":  "KULLANIM, STOK_REF, STOK_KODU, STOK_ADI, GRUP_KODU, SATINALMA_MIKTAR, ALIM_IADE_MIKTAR, NET_MIKTAR, 2 nolu ambardan verılenler, 2 nolu ambara gerı gelenler, DÖNEM SONU STOK, DÖNEM BAŞI STOK, DIGER DÖNEM SONU STOK, DIGER AMB DÖNEM SONU STOK, HARICI SATIN ALMA, VIRMAN GIRIS, VIRMAN CIKIS, SATIS"
+                  },
+                  {
+                      "full_name":  "dbo.TALEP_KARSILAMA_DURUM_RAPORU",
+                      "columns":  "TARIH, GRUP, FIS_NO, PROJE, STOK_KODU, STOK_ADI, TALEP_MIKTAR, TALEP_KARSILAMA_MIKTAR, GEBZE_STOK, MONTAJ_STOK, URETIM_STOK, SIPARIS_MIKTAR"
+                  },
+                  {
+                      "full_name":  "dbo.TRACKINGLIST",
+                      "columns":  "TAKIPDTY_REF, STOK_KODU, STOK_ADI, STOK_ADI2, STOK_ADI3, STOK_ADI4, URETICI_KODU, STOK_REF, TAKIP_NO, GBS_TARIHI, GBT_TARIHI, URT_TARIHI, RETEST_TARIHI, SKT_TARIHI, ALAN1, ALAN2, ALAN3, ALAN4, GIRIS_TARIHI, KAYIT_TARIHI, GUNCELLEME_TARIHI, GKULLANICI_REF, BLOKE, BLOKE_NEDENI, BLOKE_TARIHI, BKULLANICI_REF, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E20, IZLEME_TURU, BKULLANICI, VARYANT_REF, VARYANT_KODU, VARYANT_ADI, VARYANT_ADI2, BIRIM, CHK, SMIK, INSTOCK"
+                  },
+                  {
+                      "full_name":  "dbo.URUNADRESW",
+                      "columns":  "URUNADRES_REF, STOK_REF, ADRES, MINMIKTAR, MAXMIKTAR, KRTMIKTAR, STOK_KODU, STOK_ADI, STOK_ADI2, STOK_ADI3, STOK_ADI4, ADRES_ACIKLAMASI, AMBAR_KODU"
+                  }
+              ],
+    "procedures":  [
+                       "dbo.CARIEXTRE",
+                       "dbo.ENT",
+                       "dbo.REZERVEIPTALSB",
+                       "dbo.REZERVEIPTALSD",
+                       "dbo.REZERVEIPTALSDM",
+                       "dbo.SEVKNUMATA",
+                       "dbo.SFFISBOL",
+                       "dbo.SFFISBOLBELGENO",
+                       "dbo.SFFISBOLSEVAKDRES",
+                       "dbo.SP_BARKODCOZ_EAN128",
+                       "dbo.TC",
+                       "dbo.YAZI",
+                       "dbo.YENI_NUMARA"
+                   ],
+    "triggers":  [
+                     "PLNCLOSEDELSH ON dbo.SIPARISHAREKETLERI",
+                     "CHECKROWUSETDREF ON dbo.TALEPHAREKETLERI",
+                     "TLPHRKTUP ON dbo.TALEPHAREKETLERI",
+                     "ERPORDLOCK ON dbo.STOKFISLERI",
+                     "STKHRKTR ON dbo.STOKHAREKETLERI",
+                     "RZVCONT ON dbo.SIPARISHAREKETLERI",
+                     "SIPHRKTINSDEL ON dbo.SIPARISHAREKETLERI",
+                     "STKHRKTE ON dbo.STOKHAREKETLERI",
+                     "TLPCLOSEDELSH ON dbo.TALEPHAREKETLERI",
+                     "TLPHRKTINSDEL ON dbo.TALEPHAREKETLERI",
+                     "PLNHRKTUP ON dbo.PLANLAMAHAREKETLERI",
+                     "UPDORD ON dbo.REZERVEDETAY",
+                     "MLTPCONTROL ON dbo.STOKHAREKETLERI",
+                     "PLNCLOSEUPDSH ON dbo.SIPARISHAREKETLERI",
+                     "RZVDUPD ON dbo.SIPARISFISLERI",
+                     "CHKRZV ON dbo.REZERVEDETAY",
+                     "PLNTUP ON dbo.PLANLAMAFISLERI",
+                     "TLPCLOSEUPDSH ON dbo.TALEPHAREKETLERI",
+                     "CHECKROWUSESDREF ON dbo.SIPARISHAREKETLERI",
+                     "CHECKROWUSETBREF ON dbo.TALEPFISLERI",
+                     "RZVDDEL ON dbo.SIPARISFISLERI",
+                     "CHECKROWUSESBREF ON dbo.SIPARISFISLERI",
+                     "SIPHRKTUP ON dbo.SIPARISHAREKETLERI"
+                 ]
+}

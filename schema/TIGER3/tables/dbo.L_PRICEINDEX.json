@@ -1,0 +1,143 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_PRICEINDEX",
+    "full_name":  "dbo.L_PRICEINDEX",
+    "description":  "",
+    "total_rows":  "780",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "IDXTYPREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "IDXDATE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICEIDX",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PRICEINDEX_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "PRICEINDEX_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "IDXTYPREF, IDXDATE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.01.1970 00:00:00",
+                            "PRICEIDX":  "0,01877"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.02.1970 00:00:00",
+                            "PRICEIDX":  "0,01899"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.03.1970 00:00:00",
+                            "PRICEIDX":  "0,01883"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.04.1970 00:00:00",
+                            "PRICEIDX":  "0,01879"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.05.1970 00:00:00",
+                            "PRICEIDX":  "0,01869"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.06.1970 00:00:00",
+                            "PRICEIDX":  "0,0184"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.07.1970 00:00:00",
+                            "PRICEIDX":  "0,018"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.08.1970 00:00:00",
+                            "PRICEIDX":  "0,01839"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.09.1970 00:00:00",
+                            "PRICEIDX":  "0,01869"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "IDXTYPREF":  "1",
+                            "IDXDATE":  "1.10.1970 00:00:00",
+                            "PRICEIDX":  "0,01891"
+                        }
+                    ]
+}

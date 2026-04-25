@@ -1,0 +1,189 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_FIRMPARAMS",
+    "full_name":  "dbo.L_FIRMPARAMS",
+    "description":  "",
+    "total_rows":  "16200",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMNR",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MODULENR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GROUPNR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "VALUE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "FIRMPARAMS_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "FIRMPARAMS_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "FIRMNR, CODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "1",
+                            "CODE":  "ITEM_USAGE_MTRLMGMT",
+                            "VALUE":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "1",
+                            "CODE":  "ITEM_USAGE_PURCHASE",
+                            "VALUE":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "1",
+                            "CODE":  "ITEM_USAGE_SALEDIST",
+                            "VALUE":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "2",
+                            "CODE":  "ITEM_ISATOOL",
+                            "VALUE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "3",
+                            "CODE":  "ITEM_TRACKTYPE",
+                            "VALUE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "4",
+                            "CODE":  "ITEM_DIVISIBLELOTSIZE",
+                            "VALUE":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "5",
+                            "CODE":  "ITEM_LOCATIONTRACKING",
+                            "VALUE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "6",
+                            "CODE":  "ITEM_SHELFLIFE_DAYS",
+                            "VALUE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "40",
+                            "CODE":  "ITEM_UNITSETREF",
+                            "VALUE":  "5"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "FIRMNR":  "1",
+                            "MODULENR":  "1",
+                            "GROUPNR":  "7",
+                            "CODE":  "ITEM_UNITUSG_MTRLMGMT",
+                            "VALUE":  "1"
+                        }
+                    ]
+}

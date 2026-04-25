@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KS_STOCK_WH_LEVEL_CONTROL_REPORT",
+    "full_name":  "dbo.KS_STOCK_WH_LEVEL_CONTROL_REPORT",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[KS_STOCK_WH_LEVEL_CONTROL_REPORT] AS\r\nSELECT ITMSC.LOGICALREF,INVDEF.LOGICALREF INVDEF_LREF,  ITMSC.CODE KODU, ITMSC.NAME ACIKLAMASI, ITMSC.SPECODE OZEL_KOD, ITMSC.SPECODE3 OZEL_KOD_3 , ITMSC.STGRPCODE GRUP_CODE, CASE ITMSC.CARDTYPE WHEN 10 THEN \u0027Hammadde\u0027 WHEN 11 THEN \u0027Yarımamül\u0027WHEN 12 THEN \u0027Mamül\u0027WHEN 1 THEN \u0027Ticarimal\u0027ELSE \u0027DIGER\u0027END AS MALZEME_TURU, INVDEF.MAXLEVEL AZAMI_STOK, INVDEF.MINLEVEL ASGARI_STOK, INVDEF.SAFELEVEL GUVENLI_STOK, INVDEF.INVENNO AMBAR_NO , WHOUSE.NAME AMBAR_ADI,\r\n\r\nROUND((SELECT SUM(STITOTS.ONHAND) FROM LV_123_01_STINVTOT STITOTS WITH(NOLOCK) WHERE (STITOTS.STOCKREF = ITMSC.LOGICALREF) AND (STITOTS.INVENNO = INVDEF.INVENNO) AND (STITOTS.LASTTRDATE \u003c= CONVERT(dateTime, GETDATE(), 101)) ),2) STOK_MIKTARI\r\n FROM LG_123_ITEMS ITMSC WITH(NOLOCK) \r\n LEFT OUTER JOIN LG_123_INVDEF INVDEF WITH(NOLOCK) ON (INVDEF.ITEMREF = ITMSC.LOGICALREF)\r\n LEFT OUTER JOIN L_CAPIWHOUSE WHOUSE WITH(NOLOCK) ON (INVDEF.INVENNO = WHOUSE.NR) AND (WHOUSE.FIRMNR = 123)\r\n\r\n WHERE \r\n(INVDEF.INVENNO IN (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) AND ((INVDEF.MINLEVEL \u003c\u003e 0) OR (INVDEF.MAXLEVEL \u003c\u003e 0)) AND (ITMSC.ACTIVE = 0)\r\n\r\n--ORDER BY ITMSC.CODE, INVDEF.INVENNO\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVDEF_LREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIKLAMASI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OZEL_KOD",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OZEL_KOD_3",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GRUP_CODE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZEME_TURU",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "AZAMI_STOK",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ASGARI_STOK",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GUVENLI_STOK",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_NO",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_ADI",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_MIKTARI",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "6868",
+                            "INVDEF_LREF":  "117",
+                            "KODU":  "KMPY0099H008",
+                            "ACIKLAMASI":  "POLYESTER",
+                            "OZEL_KOD":  "KİMYASAL",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "KİMYASAL",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "2706",
+                            "ASGARI_STOK":  "677",
+                            "GUVENLI_STOK":  "1353",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "-690"
+                        },
+                        {
+                            "LOGICALREF":  "6508",
+                            "INVDEF_LREF":  "282",
+                            "KODU":  "HRXX0099H032",
+                            "ACIKLAMASI":  "POST RULO- 20LİK POLYESTER",
+                            "OZEL_KOD":  "HIRDAVAT",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "HIRDAVAT",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "42",
+                            "ASGARI_STOK":  "11",
+                            "GUVENLI_STOK":  "21",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8684",
+                            "INVDEF_LREF":  "293",
+                            "KODU":  "HRXX0099H394",
+                            "ACIKLAMASI":  "POST RULO- 10luk POLYESTER",
+                            "OZEL_KOD":  "",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "HIRDAVAT",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "10",
+                            "ASGARI_STOK":  "3",
+                            "GUVENLI_STOK":  "5",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6869",
+                            "INVDEF_LREF":  "304",
+                            "KODU":  "KMPY0099H009",
+                            "ACIKLAMASI":  "POLYESTER  İNCELTİCİ STREN",
+                            "OZEL_KOD":  "KİMYASAL",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "KİMYASAL",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "220",
+                            "ASGARI_STOK":  "55",
+                            "GUVENLI_STOK":  "110",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "14"
+                        },
+                        {
+                            "LOGICALREF":  "6870",
+                            "INVDEF_LREF":  "315",
+                            "KODU":  "KMPY0099H010",
+                            "ACIKLAMASI":  "POLYESTER ÇELİK MACUN",
+                            "OZEL_KOD":  "KİMYASAL",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "KİMYASAL",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "122",
+                            "ASGARI_STOK":  "31",
+                            "GUVENLI_STOK":  "61",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "49,2"
+                        },
+                        {
+                            "LOGICALREF":  "6871",
+                            "INVDEF_LREF":  "326",
+                            "KODU":  "KMPY0099H011",
+                            "ACIKLAMASI":  "POLYESTER TEMİZLEYİCİ ASETON",
+                            "OZEL_KOD":  "KİMYASAL",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "KİMYASAL",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "260",
+                            "ASGARI_STOK":  "65",
+                            "GUVENLI_STOK":  "130",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6284",
+                            "INVDEF_LREF":  "6200",
+                            "KODU":  "DSXX00990011",
+                            "ACIKLAMASI":  "KUMAŞ INDİANA 9852 KREM",
+                            "OZEL_KOD":  "DÖŞEME",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "DÖŞEME",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "26",
+                            "ASGARI_STOK":  "7",
+                            "GUVENLI_STOK":  "13",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6286",
+                            "INVDEF_LREF":  "6211",
+                            "KODU":  "DSXX00990013",
+                            "ACIKLAMASI":  "KUMAŞ NEOWOOL STONE",
+                            "OZEL_KOD":  "DÖŞEME",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "DÖŞEME",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "12",
+                            "ASGARI_STOK":  "3",
+                            "GUVENLI_STOK":  "6",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6274",
+                            "INVDEF_LREF":  "6222",
+                            "KODU":  "DSXX0099H001",
+                            "ACIKLAMASI":  "BASKILI ASTAR TELA",
+                            "OZEL_KOD":  "DÖŞEME",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "DÖŞEME",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "114",
+                            "ASGARI_STOK":  "29",
+                            "GUVENLI_STOK":  "57",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6275",
+                            "INVDEF_LREF":  "6233",
+                            "KODU":  "DSXX0099H002",
+                            "ACIKLAMASI":  "ÇELİK TABANLI HALI",
+                            "OZEL_KOD":  "DÖŞEME",
+                            "OZEL_KOD_3":  "10",
+                            "GRUP_CODE":  "DÖŞEME",
+                            "MALZEME_TURU":  "Hammadde",
+                            "AZAMI_STOK":  "4",
+                            "ASGARI_STOK":  "1",
+                            "GUVENLI_STOK":  "2",
+                            "AMBAR_NO":  "2",
+                            "AMBAR_ADI":  "GEBZE",
+                            "STOK_MIKTARI":  "0"
+                        }
+                    ]
+}

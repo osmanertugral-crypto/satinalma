@@ -1,0 +1,150 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_RECETE_FIYAT_RAPORU",
+    "full_name":  "dbo.AA_RECETE_FIYAT_RAPORU",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[AA_RECETE_FIYAT_RAPORU] AS \r\n\r\nSELECT KARAVAN_KODU,KARAVAN_ADI,ALT_KOD,ALT_ADI,MIKTAR,BIRIM_FIYATLAR , (MIKTAR*BIRIM_FIYATLAR) AS TUTAR FROM (\r\nSELECT ANAMLZ.LOGICALREF AS MLZ_ID,\r\n\r\nANAMLZ.CODE AS KARAVAN_KODU,\r\nANAMLZ.NAME AS KARAVAN_ADI,\r\nALT_MLZ.CODE AS ALT_KOD,\r\nALT_MLZ.NAME AS ALT_ADI\r\n,BAGTBL.AMNT AS MIKTAR\r\n,(SELECT TOP 1 LINENET/AMOUNT FROM LG_001_01_STLINE WHERE LINETYPE=0 AND PRICE\u003c\u003e0 AND STOCKREF=BAGTBL.STCREF AND TRCODE IN (1,50) ORDER BY DATE_ DESC ) BIRIM_FIYATLAR\r\n--,CASE WHEN (SELECT TOP 1 FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND FIYAT IS NOT NULL ORDER BY FIYAT DESC) IS NULL THEN\r\n--(SELECT TOP 1 TANIMLI_FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND TANIMLI_FIYAT IS NOT NULL ORDER BY TANIMLI_FIYAT DESC) \r\n--ELSE (SELECT TOP 1 FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND FIYAT IS NOT NULL ORDER BY FIYAT DESC)\r\n--END AS BIRIM_FIYATLAR\r\nFROM lg_001_ITEMS ANAMLZ\r\nINNER JOIN LG_001_STCOMPLN BAGTBL ON ANAMLZ.LOGICALREF=BAGTBL.MAINCREF\r\nLEFT OUTER JOIN LG_001_ITEMS ALT_MLZ ON ALT_MLZ.LOGICALREF=BAGTBL.STCREF\r\n WHERE ANAMLZ.SPECODE5=\u0027ANAMLZ\u0027 \r\n\r\n ) AS RAPOR\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KARAVAN_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KARAVAN_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALT_KOD",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALT_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYATLAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "KARAVAN_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "KARAVAN_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "ALT_KOD":  "2021X8",
+                            "ALT_ADI":  "3/4 SARI NİPEL",
+                            "MIKTAR":  "2",
+                            "BIRIM_FIYATLAR":  "3,2",
+                            "TUTAR":  "6,4"
+                        },
+                        {
+                            "KARAVAN_KODU":  "G0.TÜRKİYE.SALON.01",
+                            "KARAVAN_ADI":  "GLADIATOR MOBİL YAŞAM KABİNİ",
+                            "ALT_KOD":  "2021X8",
+                            "ALT_ADI":  "3/4 SARI NİPEL",
+                            "MIKTAR":  "2",
+                            "BIRIM_FIYATLAR":  "3,2",
+                            "TUTAR":  "6,4"
+                        },
+                        {
+                            "KARAVAN_KODU":  "G0.YURTDIŞI.01",
+                            "KARAVAN_ADI":  "GLADIATOR MOBİL YAŞAM KABİNİ ",
+                            "ALT_KOD":  "2021X8",
+                            "ALT_ADI":  "3/4 SARI NİPEL",
+                            "MIKTAR":  "2",
+                            "BIRIM_FIYATLAR":  "3,2",
+                            "TUTAR":  "6,4"
+                        },
+                        {
+                            "KARAVAN_KODU":  "G0.YUTDIŞI.SALON.01",
+                            "KARAVAN_ADI":  "GLADIATOR MOBİL YAŞAM KABİNİ",
+                            "ALT_KOD":  "2021X8",
+                            "ALT_ADI":  "3/4 SARI NİPEL",
+                            "MIKTAR":  "2",
+                            "BIRIM_FIYATLAR":  "3,2",
+                            "TUTAR":  "6,4"
+                        },
+                        {
+                            "KARAVAN_KODU":  "G0.YURTDIŞI.01.",
+                            "KARAVAN_ADI":  "GLADIATOR MOBİL YAŞAM KABİNİ ",
+                            "ALT_KOD":  "2021X8",
+                            "ALT_ADI":  "3/4 SARI NİPEL",
+                            "MIKTAR":  "2",
+                            "BIRIM_FIYATLAR":  "3,2",
+                            "TUTAR":  "6,4"
+                        },
+                        {
+                            "KARAVAN_KODU":  "G0.YUTDIŞI.SALON.01.",
+                            "KARAVAN_ADI":  "GLADIATOR MOBİL YAŞAM KABİNİ",
+                            "ALT_KOD":  "2021X8",
+                            "ALT_ADI":  "3/4 SARI NİPEL",
+                            "MIKTAR":  "2",
+                            "BIRIM_FIYATLAR":  "3,2",
+                            "TUTAR":  "6,4"
+                        },
+                        {
+                            "KARAVAN_KODU":  "RV.01.15 MT3.TÜRKİYE",
+                            "KARAVAN_ADI":  "REVİVA KARAVAN",
+                            "ALT_KOD":  "2021X12",
+                            "ALT_ADI":  "1/2X 3/4 REDİKSİYON",
+                            "MIKTAR":  "5",
+                            "BIRIM_FIYATLAR":  "3,14",
+                            "TUTAR":  "15,7"
+                        },
+                        {
+                            "KARAVAN_KODU":  "RV.02.15 MT3.YURTDIŞI",
+                            "KARAVAN_ADI":  "REVİVA KARAVAN",
+                            "ALT_KOD":  "2021X12",
+                            "ALT_ADI":  "1/2X 3/4 REDİKSİYON",
+                            "MIKTAR":  "5",
+                            "BIRIM_FIYATLAR":  "3,14",
+                            "TUTAR":  "15,7"
+                        },
+                        {
+                            "KARAVAN_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "KARAVAN_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "ALT_KOD":  "2021X15",
+                            "ALT_ADI":  "1/2 MAŞON",
+                            "MIKTAR":  "4",
+                            "BIRIM_FIYATLAR":  "3,96",
+                            "TUTAR":  "15,84"
+                        },
+                        {
+                            "KARAVAN_KODU":  "G0.TÜRKİYE.SALON.01",
+                            "KARAVAN_ADI":  "GLADIATOR MOBİL YAŞAM KABİNİ",
+                            "ALT_KOD":  "2021X15",
+                            "ALT_ADI":  "1/2 MAŞON",
+                            "MIKTAR":  "4",
+                            "BIRIM_FIYATLAR":  "3,96",
+                            "TUTAR":  "15,84"
+                        }
+                    ]
+}

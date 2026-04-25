@@ -1,0 +1,167 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_PROJELERDEKI_MALZEMELER",
+    "full_name":  "dbo.BRK_PROJELERDEKI_MALZEMELER",
+    "definition":  "CREATE VIEW [dbo].[BRK_PROJELERDEKI_MALZEMELER] AS\r\n\r\nSELECT\r\n    ITEMS.CODE AS ITEMS_CODE,\r\n    ITEMS.NAME AS ITEMS_NAME,\r\n    ITEMS.STGRPCODE AS ITEMS_STGRPCODE,\r\n    SUM(SH.MIKTAR * (SH.CARPAN2 / NULLIF(SH.CARPAN1, 0))) AS MIKTAR,\r\n    UNITSETF.CODE AS UNITSETF_CODE,\r\n    SH.HEDEF_ADRES AS ADRES,\r\n    CASE WHEN SH.IZLEME_TURU IN (0, 3, 4) THEN \u0027\u0027 ELSE SH.TAKIP_NO END AS TAKIP_NO,\r\n    SH.HEDEF_DURUM AS DURUM_KODU\r\nFROM\r\n    EVIRA.dbo.STOKHAREKETLERI SH WITH (NOLOCK)\r\n    LEFT JOIN TIGER3.dbo.LG_123_ITEMS ITEMS ON SH.STOK_REF = ITEMS.LOGICALREF\r\n    LEFT JOIN TIGER3.dbo.LG_123_UNITSETF UNITSETF ON ITEMS.UNITSETREF = UNITSETF.LOGICALREF\r\nWHERE\r\n    SH.FIS_GCD = \u00272\u0027\r\n    AND SH.HEDEF_AMBAR = 5\r\nGROUP BY\r\n    ITEMS.CODE,\r\n    ITEMS.NAME,\r\n    ITEMS.STGRPCODE,\r\n    UNITSETF.CODE,\r\n    SH.HEDEF_ADRES,\r\n    CASE WHEN SH.IZLEME_TURU IN (0, 3, 4) THEN \u0027\u0027 ELSE SH.TAKIP_NO END,\r\n    SH.HEDEF_DURUM;\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ITEMS_CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ITEMS_NAME",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ITEMS_STGRPCODE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "UNITSETF_CODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADRES",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TAKIP_NO",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DURUM_KODU",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "ITEMS_CODE":  "153-KRXX0099H152",
+                            "ITEMS_NAME":  "TENTE DOMETİC 2.6 ",
+                            "ITEMS_STGRPCODE":  "",
+                            "MIKTAR":  "1",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0217"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "CYBERG01"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0346"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0347"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0355"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0356"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0361"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0369"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0374"
+                        },
+                        {
+                            "ITEMS_CODE":  "3DBK0099H004",
+                            "ITEMS_NAME":  "MERDİVEN AYAK",
+                            "ITEMS_STGRPCODE":  "3D-BASKI",
+                            "MIKTAR":  "2",
+                            "UNITSETF_CODE":  "ADET",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "G0379"
+                        }
+                    ]
+}

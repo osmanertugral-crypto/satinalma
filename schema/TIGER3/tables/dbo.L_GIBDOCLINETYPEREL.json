@@ -1,0 +1,136 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_GIBDOCLINETYPEREL",
+    "full_name":  "dbo.L_GIBDOCLINETYPEREL",
+    "description":  "",
+    "total_rows":  "147",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBBOOKTYPE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBDOCTYPREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBLINETYPREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "GIBDOCLINETYPEREL_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "16",
+                            "GIBLINETYPREF":  "6"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "16",
+                            "GIBLINETYPREF":  "7"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "16",
+                            "GIBLINETYPREF":  "8"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "16",
+                            "GIBLINETYPREF":  "9"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "16",
+                            "GIBLINETYPREF":  "10"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "16",
+                            "GIBLINETYPREF":  "11"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "25",
+                            "GIBLINETYPREF":  "15"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "25",
+                            "GIBLINETYPREF":  "12"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "27",
+                            "GIBLINETYPREF":  "6"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "GIBBOOKTYPE":  "2",
+                            "GIBDOCTYPREF":  "27",
+                            "GIBLINETYPREF":  "15"
+                        }
+                    ]
+}

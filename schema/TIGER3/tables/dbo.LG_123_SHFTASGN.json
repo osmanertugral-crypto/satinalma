@@ -1,0 +1,213 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_SHFTASGN",
+    "full_name":  "dbo.LG_123_SHFTASGN",
+    "description":  "",
+    "total_rows":  "1",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SOURCETYPE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SOURCEREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIFTREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "BEGDATE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIFTTREF",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SITEID",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RECSTATUS",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORGLOGICREF",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_SHFTASGN_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_SHFTASGN_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "SOURCEREF, SHIFTREF, SHIFTTREF, SOURCETYPE"
+                    },
+                    {
+                        "index_name":  "I123_SHFTASGN_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "SHIFTREF, SOURCEREF, SHIFTTREF, SOURCETYPE"
+                    },
+                    {
+                        "index_name":  "I123_SHFTASGN_I4",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "SOURCEREF, LINENR"
+                    },
+                    {
+                        "index_name":  "I123_SHFTASGN_I5",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "SOURCETYPE, SOURCEREF, SHIFTREF"
+                    },
+                    {
+                        "index_name":  "I123_SHFTASGN_I6",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "SOURCETYPE, SHIFTREF, SOURCEREF"
+                    },
+                    {
+                        "index_name":  "I123_SHFTASGN_I7",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "SOURCETYPE, SOURCEREF, LINENR"
+                    },
+                    {
+                        "index_name":  "I123_SHFTASGN_I8",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "SOURCEREF, SHIFTREF, SOURCETYPE, BEGDATE"
+                    }
+                ],
+    "sample_data":  {
+                        "LOGICALREF":  "1",
+                        "SOURCETYPE":  "2",
+                        "SOURCEREF":  "1",
+                        "SHIFTREF":  "1",
+                        "BEGDATE":  "1.01.1900 00:00:00",
+                        "LINENR":  "0",
+                        "SHIFTTREF":  "0",
+                        "SITEID":  "0",
+                        "RECSTATUS":  "0",
+                        "ORGLOGICREF":  "0"
+                    }
+}

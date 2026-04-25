@@ -1,0 +1,236 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_002_01_EXIMHISTORY",
+    "full_name":  "dbo.LG_002_01_EXIMHISTORY",
+    "description":  "",
+    "total_rows":  "8",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EXIMINFOREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SOURCETYPE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SOURCEREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PROCESSNR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SITEID",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RECSTATUS",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORGLOGICREF",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "WFSTATUS",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I002_01_EXIMHISTORY_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I002_01_EXIMHISTORY_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "EXIMINFOREF, PROCESSNR"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "EXIMINFOREF":  "1",
+                            "SOURCETYPE":  "1",
+                            "SOURCEREF":  "1",
+                            "PROCESSNR":  "1",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "WFSTATUS":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "EXIMINFOREF":  "3",
+                            "SOURCETYPE":  "1",
+                            "SOURCEREF":  "3",
+                            "PROCESSNR":  "1",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "WFSTATUS":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "EXIMINFOREF":  "4",
+                            "SOURCETYPE":  "1",
+                            "SOURCEREF":  "4",
+                            "PROCESSNR":  "1",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "WFSTATUS":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "EXIMINFOREF":  "5",
+                            "SOURCETYPE":  "1",
+                            "SOURCEREF":  "5",
+                            "PROCESSNR":  "1",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "WFSTATUS":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "EXIMINFOREF":  "6",
+                            "SOURCETYPE":  "1",
+                            "SOURCEREF":  "6",
+                            "PROCESSNR":  "1",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "WFSTATUS":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "EXIMINFOREF":  "7",
+                            "SOURCETYPE":  "1",
+                            "SOURCEREF":  "7",
+                            "PROCESSNR":  "1",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "WFSTATUS":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "EXIMINFOREF":  "8",
+                            "SOURCETYPE":  "1",
+                            "SOURCEREF":  "8",
+                            "PROCESSNR":  "1",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "WFSTATUS":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "EXIMINFOREF":  "9",
+                            "SOURCETYPE":  "1",
+                            "SOURCEREF":  "9",
+                            "PROCESSNR":  "1",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "WFSTATUS":  "0"
+                        }
+                    ]
+}

@@ -1,0 +1,303 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_KUMULATIF_STOK_RAPORU_123",
+    "full_name":  "dbo.AA_KUMULATIF_STOK_RAPORU_123",
+    "definition":  "\r\n\r\n\r\n\r\n--SELECT * FROM [AA_KUMULATIF_STOK_RAPORU_123]\r\n\r\n\r\n\r\n--3606\r\nCREATE VIEW [dbo].[AA_KUMULATIF_STOK_RAPORU_123] AS\r\n\r\n\r\nselect \r\n\r\nKOD,\tTANIM\t ,GEBZE_STOK, URETIM_STOK, MONTAJ_STOK, E_TICARET_STOK, SHOWROOM_STOK ,\r\n--,MOBILYA_ON_IMALAT,\tMONTAJ_STOK,\tPOLYESTER_STOK\t,ELEKTRIK_STOK,\r\n--DOSEME_STOK,\tTESISAT_STOK,\t\r\n--KAYNARCA_STOK,MLM_STOK,URETIM_STOK,SARTLI_STOK,E_TICARET_STOK,\r\n\r\nTOPLAM_STOK, cast (ALAN*BR_FIYAT as float) as BIRIM_FIYAT\t------URT_STOK\r\n\r\n---,cast (ALAN1*BR_FIYAT_YENI as float) as BIRIM_FIYAT_YENI\r\n\r\n,GEBZE_STOK*BR_FIYAT as GEBZE_TUTAR,URETIM_STOK*BR_FIYAT as URETIM_TUTAR,E_TICARET_STOK*BR_FIYAT as E_TICARET_TUTAR,SHOWROOM_STOK*BR_FIYAT as SHOWROOM_TUTAR,TOPLAM_STOK*BR_FIYAT AS GENEL_TUTAR,KART_TİPİ , STGRPCODE AS GRUP_KODU\r\n\r\nfrom\r\n\r\n(\r\nSELECT MLZ.CODE AS KOD, \r\nMLZ.STGRPCODE,\r\nCASE MLZ.CARDTYPE WHEN 1 THEN \u0027Ticari Mal\u0027 WHEN 3 THEN \u0027Depozitolu Mal\u0027 WHEN 10 THEN \u0027Ham Madde\u0027WHEN 11 THEN \u0027Yarı Mamül\u0027 WHEN 12 THEN \u0027Mamül\u0027WHEN 4 THEN \u0027Sabit Kıymet\u0027 else \u0027Diğer\u0027end as KART_TİPİ,\r\n-- MLZ.CARDTYPE  KART_TİPİ,\r\n\r\nMLZ.NAME AS TANIM,\r\n\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE DEPO=0 AND MLZ.LOGICALREF=MLZ_ID),0) DEPO\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE DEPO=1 AND MLZ.LOGICALREF=MLZ_ID),0) SHOWROOM\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE DEPO=2 AND MLZ.LOGICALREF=MLZ_ID),0) URETIM\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE DEPO=3 AND MLZ.LOGICALREF=MLZ_ID),0) GENEL\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE DEPO=4 AND MLZ.LOGICALREF=MLZ_ID),0) IDARI,\r\n\r\n ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=2),0) AS GEBZE_STOK,\r\n --ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=0),0) AS KAYNARCA_STOK,\r\n ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=1),0) AS SHOWROOM_STOK,\r\n --ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=3),0) AS SERVIS_STOK,\r\n -----------------------------------------------------------------------------------------------------------------------\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=4),0) AS MOBILYA_ON_IMALAT,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=5),0) AS MONTAJ_STOK,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=6),0) AS POLYESTER_STOK,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=7),0) AS ELEKTRIK_STOK,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=8),0) AS DOSEME_STOK,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=9),0) AS TESISAT_STOK,\r\n\r\n -------------------------------------------------------------------------------------------------------------------------\r\n  --ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=10),0) AS MLM_STOK,\r\n  ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=11),0) AS URETIM_STOK,\r\n  ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=5),0) AS MONTAJ_STOK,\r\n  --ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=12),0) AS SARTLI_STOK,\r\n  ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=14),0) AS E_TICARET_STOK,\r\n  ----------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO IN (4,5,6,7,8,9)),0) AS URT_STOK,\r\n\r\n\r\n\r\n\r\n\r\nISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU_123 WHERE  MLZ.LOGICALREF=MLZ_ID  AND DEPO IN (1,2,5,11,14)),0) TOPLAM_STOK\r\n,(CAST(ISNULL(\r\nCASE WHEN (sELECT TOP 1 LINENET/NULLIF(AMOUNT,0) FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ DESC) IS NULL THEN \r\n\t(SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK) WHERE CARDREF=MLZ.LOGICALREF ORDER BY BEGDATE DESC) ELSE \r\n\t(sELECT TOP 1 LINENET/NULLIF(AMOUNT,0) FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ DESC) END \r\n\t\r\n\t,0) AS DECIMAL(18,2))*1) AS BR_FIYAT, cast(1 as DECIMAL(18,2)) AS ALAN\r\n\r\n\t--------------\r\n--\t,(CAST(ISNULL(\r\n--CASE WHEN (sELECT TOP 1 LINENET/NULLIF(AMOUNT,0) FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ DESC) IS NULL THEN \r\n--\t(SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK) WHERE CARDREF=MLZ.LOGICALREF ORDER BY BEGDATE DESC) ELSE \r\n--\t(sELECT TOP 1 LINENET/NULLIF(AMOUNT,0) FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ DESC) END \r\n\t\r\n--\t,0) AS DECIMAL(18,2))*1) AS BR_FIYAT_YENI, cast(1 as DECIMAL(18,2)) AS ALAN1\r\n\r\n\t-----\r\n\r\n FROM LG_123_ITEMS MLZ  WHERE ACTIVE=0 ---AND MLZ.CODE=\u0027A2023X001\u0027\r\n ) as rapor\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KOD",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TANIM",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GEBZE_STOK",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_STOK",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTAJ_STOK",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "E_TICARET_STOK",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SHOWROOM_STOK",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM_STOK",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYAT",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GEBZE_TUTAR",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_TUTAR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E_TICARET_TUTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SHOWROOM_TUTAR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GENEL_TUTAR",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KART_TİPİ",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "14",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "GRUP_KODU",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "KOD":  "ECTWLD100006",
+                            "TANIM":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "0",
+                            "SHOWROOM_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "1355,45",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "0",
+                            "SHOWROOM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTWLD100008",
+                            "TANIM":  "WILD LAND UNIVERSAL TARP",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "5",
+                            "SHOWROOM_STOK":  "0",
+                            "TOPLAM_STOK":  "5",
+                            "BIRIM_FIYAT":  "2052,57",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "10262,85",
+                            "SHOWROOM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "10262,85",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTURB100008",
+                            "TANIM":  "URBAN BADGER TEK KISILIK UYKU TULUMU",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "246",
+                            "SHOWROOM_STOK":  "2",
+                            "TOPLAM_STOK":  "248",
+                            "BIRIM_FIYAT":  "170,13",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "41851,98",
+                            "SHOWROOM_TUTAR":  "340,26",
+                            "GENEL_TUTAR":  "42192,24",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTURB100009",
+                            "TANIM":  "URBAN BADGER HAFIF CADIR",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "8",
+                            "SHOWROOM_STOK":  "4",
+                            "TOPLAM_STOK":  "12",
+                            "BIRIM_FIYAT":  "285,42",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "2283,36",
+                            "SHOWROOM_TUTAR":  "1141,68",
+                            "GENEL_TUTAR":  "3425,04",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTURB100010",
+                            "TANIM":  "URBAN BADGER 3-4 KISILIK OTOMATIK TENTELI CADIR",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "103",
+                            "SHOWROOM_STOK":  "4",
+                            "TOPLAM_STOK":  "107",
+                            "BIRIM_FIYAT":  "2793,38",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "287718,14",
+                            "SHOWROOM_TUTAR":  "11173,52",
+                            "GENEL_TUTAR":  "298891,66",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTURB100011",
+                            "TANIM":  "URBAN BADGER GECMELI CATAL BICAK KASIK SETI",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "0",
+                            "SHOWROOM_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "37,35",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "0",
+                            "SHOWROOM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTURB100012",
+                            "TANIM":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "0",
+                            "SHOWROOM_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "28,67",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "0",
+                            "SHOWROOM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTURB100013",
+                            "TANIM":  "URBAN BADGER KAMP DUSU",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "0",
+                            "SHOWROOM_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "39,26",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "0",
+                            "SHOWROOM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTURB100014",
+                            "TANIM":  "URBAN BADGER KATLANIR KOVA",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "414",
+                            "SHOWROOM_STOK":  "6",
+                            "TOPLAM_STOK":  "420",
+                            "BIRIM_FIYAT":  "35,21",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "14576,94",
+                            "SHOWROOM_TUTAR":  "211,26",
+                            "GENEL_TUTAR":  "14788,2",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        },
+                        {
+                            "KOD":  "ECTURB100015",
+                            "TANIM":  "URBAN BADGER IKI KISILIK SISME YATAK",
+                            "GEBZE_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "MONTAJ_STOK":  "0",
+                            "E_TICARET_STOK":  "12",
+                            "SHOWROOM_STOK":  "0",
+                            "TOPLAM_STOK":  "12",
+                            "BIRIM_FIYAT":  "426,58",
+                            "GEBZE_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "E_TICARET_TUTAR":  "5118,96",
+                            "SHOWROOM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "5118,96",
+                            "KART_TİPİ":  "Ticari Mal",
+                            "GRUP_KODU":  "ETİCARET"
+                        }
+                    ]
+}

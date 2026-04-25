@@ -1,0 +1,136 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_GIBLINETYPE",
+    "full_name":  "dbo.L_GIBLINETYPE",
+    "description":  "",
+    "total_rows":  "14",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBDEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FCTYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "GIBLINETYPE_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "GIBCODE":  "1",
+                            "GIBDEF":  "Normal Alım",
+                            "FCTYPE":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "GIBCODE":  "2",
+                            "GIBDEF":  "Satıştan İade",
+                            "FCTYPE":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "GIBCODE":  "4",
+                            "GIBDEF":  "Bedeli Ödenmeyen Alımlar - Normal Alım",
+                            "FCTYPE":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "GIBCODE":  "5",
+                            "GIBDEF":  "Daha Önceden Düzenlenen Makbuz Ödemeleri - Normal Alım",
+                            "FCTYPE":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "GIBCODE":  "1",
+                            "GIBDEF":  "Normal Satışlar",
+                            "FCTYPE":  "2"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "GIBCODE":  "2",
+                            "GIBDEF":  "Kısmi Tevkifat Uygulanan İşlemler",
+                            "FCTYPE":  "2"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "GIBCODE":  "3",
+                            "GIBDEF":  "Diğer İşlemler (KDV Beyannamesi)",
+                            "FCTYPE":  "2"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "GIBCODE":  "4",
+                            "GIBDEF":  "Kısmi İstisna Kapsamına Giren İşlemler",
+                            "FCTYPE":  "2"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "GIBCODE":  "5",
+                            "GIBDEF":  "Tam İstisna Kapsamına Giren İşlemler",
+                            "FCTYPE":  "2"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "GIBCODE":  "6",
+                            "GIBDEF":  "Özel Matrah",
+                            "FCTYPE":  "2"
+                        }
+                    ]
+}

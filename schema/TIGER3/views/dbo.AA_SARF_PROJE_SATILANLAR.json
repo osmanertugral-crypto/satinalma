@@ -1,0 +1,286 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_SARF_PROJE_SATILANLAR",
+    "full_name":  "dbo.AA_SARF_PROJE_SATILANLAR",
+    "definition":  "\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[AA_SARF_PROJE_SATILANLAR] AS\r\n\r\n\r\nselect \r\nYEAR(F.DATE_) YEAR_\r\n,MONTH(F.DATE_) MONTH_\r\n,F.DATE_ DATE_\r\n,F.FICHENO FISNO\r\n,(SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF) IS_EMRI_N0\r\n,(SELECT NAME FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF) IS_EMRI_ADI\r\n,S.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,AMOUNT MIKTAR\r\n,U.CODE BRIM\r\n,(SELECT TOP 1 PRICE FROM LG_001_01_STLINE WHERE LINETYPE=0 AND STOCKREF=L.STOCKREF AND  TRCODE IN (50,1) AND DATE_\u003c= L.DATE_ ORDER BY DATE_ DESC) BRIM_FIYAT\r\n,(SELECT TOP 1 PRICE FROM LG_001_01_STLINE WHERE LINETYPE=0 AND STOCKREF=L.STOCKREF AND   TRCODE IN (50,1)  AND DATE_\u003c= L.DATE_ ORDER BY DATE_ DESC)*L.AMOUNT  TUTAR\r\n,CASE SUBSTRING((SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF),1,2) \r\nWHEN \u0027G0\u0027 THEN \u0027GLADIATOR KABIN\u0027 \r\nWHEN \u0027G1\u0027 THEN \u0027GLADIATOR KABIN\u0027 \r\nWHEN \u0027R0\u0027 THEN \u0027RONIN KABIN\u0027\r\nWHEN \u0027RX\u0027 THEN \u0027RONIN XL\u0027\r\nWHEN \u0027FO\u0027 THEN \u0027RONIN KABINR\u0027\r\nWHEN \u0027F0\u0027 THEN \u0027FREDOOM\u0027\r\nWHEN \u0027T0\u0027 THEN \u0027TROY\u0027\r\nWHEN \u0027MC\u0027 THEN \u0027MOHICAN\u0027\r\nWHEN \u0027RV\u0027 THEN \u0027REVIVA\u0027\r\nWHEN \u0027GL\u0027 THEN \u0027GLADIATOR XL\u0027\r\nWHEN \u0027GL\u0027 THEN \u0027GLADIATOR XL\u0027\r\nWHEN \u0027PA\u0027 THEN \u0027PAN ANATOLIA\u0027 \r\nWHEN \u002720\u0027 THEN \u0027AKSESUAR\u0027 \r\nEND TUR\r\n,(SELECT MAX(MONTH(DATE_)) FROM LG_001_01_STLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE IN (7,8) ) SATIS_AY\r\n,(SELECT MAX(YEAR(DATE_)) FROM LG_001_01_STLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE IN (7,8) ) SATIS_YIL\r\n\r\n\r\n\r\n\r\n\r\nFROM LG_001_01_STLINE AS L\r\nINNER JOIN LG_001_01_STFICHE AS F ON F.LOGICALREF=L.STFICHEREF\r\nINNER JOIN LG_001_ITEMS AS S ON S.LOGICALREF=L.STOCKREF\r\nINNER JOIN LG_001_UNITSETL AS U ON U.LOGICALREF=L.UOMREF\r\n\r\nWHERE F.TRCODE=12 \r\n--AND S.CODE=\u00272021X201\u0027\r\nAND (SELECT MAX(MONTH(DATE_)) FROM LG_001_01_STLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE IN (7,8) and YEAR(DATE_)\u003e2021 ) IS NOT NULL\r\nand YEAR(F.DATE_)\u003e2021\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTH_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FISNO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "IS_EMRI_N0",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "IS_EMRI_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRIM",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRIM_FIYAT",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "15",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIS_AY",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIS_YIL",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "5",
+                            "DATE_":  "21.05.2022 00:00:00",
+                            "FISNO":  "000248",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "2021X287",
+                            "STOK_ADI":  "THERME SU ISITICI (220 V)",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "2592,9255",
+                            "TUTAR":  "2592,9255",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "6",
+                            "DATE_":  "22.06.2022 00:00:00",
+                            "FISNO":  "000261",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "2021X195",
+                            "STOK_ADI":  "SOSİS SİKA",
+                            "MIKTAR":  "7",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "105,9322",
+                            "TUTAR":  "741,5254",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "7",
+                            "DATE_":  "7.07.2022 00:00:00",
+                            "FISNO":  "000267",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "KRXX0099H047",
+                            "STOK_ADI":  "MASA KATLANIR AYAK",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "254,2373",
+                            "TUTAR":  "254,2373",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "7",
+                            "DATE_":  "7.07.2022 00:00:00",
+                            "FISNO":  "000267",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "KRXX0099H083",
+                            "STOK_ADI":  "BUZDOLABI BERHİMİ 49 LT ",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "6317,748",
+                            "TUTAR":  "6317,748",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "7",
+                            "DATE_":  "7.07.2022 00:00:00",
+                            "FISNO":  "000267",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "HRXX0099H189",
+                            "STOK_ADI":  "VİDA PASLANMAZ MERCİMEK BAŞLI 4,2X25",
+                            "MIKTAR":  "50",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "0,55",
+                            "TUTAR":  "27,5",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "7",
+                            "DATE_":  "7.07.2022 00:00:00",
+                            "FISNO":  "000267",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "HRXX0099H137",
+                            "STOK_ADI":  "VİDA SUNTA 3,5X50",
+                            "MIKTAR":  "50",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "0,16",
+                            "TUTAR":  "8",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "7",
+                            "DATE_":  "7.07.2022 00:00:00",
+                            "FISNO":  "000267",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "HRXX0099H011",
+                            "STOK_ADI":  "BANT TEFLON",
+                            "MIKTAR":  "10",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  null,
+                            "TUTAR":  null,
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "6",
+                            "DATE_":  "30.06.2022 00:00:00",
+                            "FISNO":  "000264",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELSF0099H084",
+                            "STOK_ADI":  "SİGORTA KUTUSU 3/4",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  null,
+                            "TUTAR":  null,
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "3",
+                            "DATE_":  "13.03.2022 00:00:00",
+                            "FISNO":  "000271",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "MKSF0099H013",
+                            "STOK_ADI":  "CİVATA PASLANMAZ M10X100",
+                            "MIKTAR":  "7",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  null,
+                            "TUTAR":  null,
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        },
+                        {
+                            "YEAR_":  "2022",
+                            "MONTH_":  "6",
+                            "DATE_":  "7.06.2022 00:00:00",
+                            "FISNO":  "000253",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "HRXX0099H013",
+                            "STOK_ADI":  "BEZ HURDA",
+                            "MIKTAR":  "1",
+                            "BRIM":  "KG",
+                            "BRIM_FIYAT":  null,
+                            "TUTAR":  null,
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2022"
+                        }
+                    ]
+}

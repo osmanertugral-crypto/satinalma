@@ -1,0 +1,258 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_01_RULEHISTORY",
+    "full_name":  "dbo.LG_123_01_RULEHISTORY",
+    "description":  "",
+    "total_rows":  "734",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "APPROVALREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RULEREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TIME_",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTION_",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EVENT",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DOCTYPE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LDATA",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_01_RULEHISTORY_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_01_RULEHISTORY_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "DOCTYPE, APPROVALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "APPROVALREF":  "32405",
+                            "RULEREF":  "1",
+                            "DATE_":  "11.06.2025 00:00:00",
+                            "TIME_":  "268437003",
+                            "ACTION_":  "5",
+                            "EVENT":  "9",
+                            "DOCTYPE":  "2",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "APPROVALREF":  "32415",
+                            "RULEREF":  "1",
+                            "DATE_":  "11.06.2025 00:00:00",
+                            "TIME_":  "268437559",
+                            "ACTION_":  "5",
+                            "EVENT":  "9",
+                            "DOCTYPE":  "2",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "APPROVALREF":  "33243",
+                            "RULEREF":  "1",
+                            "DATE_":  "28.06.2025 00:00:00",
+                            "TIME_":  "153160717",
+                            "ACTION_":  "5",
+                            "EVENT":  "9",
+                            "DOCTYPE":  "2",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "APPROVALREF":  "33262",
+                            "RULEREF":  "1",
+                            "DATE_":  "28.06.2025 00:00:00",
+                            "TIME_":  "153160981",
+                            "ACTION_":  "5",
+                            "EVENT":  "9",
+                            "DOCTYPE":  "2",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "APPROVALREF":  "33264",
+                            "RULEREF":  "1",
+                            "DATE_":  "28.06.2025 00:00:00",
+                            "TIME_":  "153161227",
+                            "ACTION_":  "5",
+                            "EVENT":  "9",
+                            "DOCTYPE":  "2",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "APPROVALREF":  "33307",
+                            "RULEREF":  "1",
+                            "DATE_":  "28.06.2025 00:00:00",
+                            "TIME_":  "153161311",
+                            "ACTION_":  "5",
+                            "EVENT":  "9",
+                            "DOCTYPE":  "2",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "APPROVALREF":  "33351",
+                            "RULEREF":  "1",
+                            "DATE_":  "28.06.2025 00:00:00",
+                            "TIME_":  "153161524",
+                            "ACTION_":  "5",
+                            "EVENT":  "9",
+                            "DOCTYPE":  "2",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "APPROVALREF":  "33372",
+                            "RULEREF":  "1",
+                            "DATE_":  "28.06.2025 00:00:00",
+                            "TIME_":  "153161790",
+                            "ACTION_":  "5",
+                            "EVENT":  "9",
+                            "DOCTYPE":  "2",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "APPROVALREF":  "33633",
+                            "RULEREF":  "1",
+                            "DATE_":  "4.07.2025 00:00:00",
+                            "TIME_":  "287840607",
+                            "ACTION_":  "5",
+                            "EVENT":  "2",
+                            "DOCTYPE":  "110",
+                            "LDATA":  null
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "APPROVALREF":  "33371",
+                            "RULEREF":  "1",
+                            "DATE_":  "4.07.2025 00:00:00",
+                            "TIME_":  "287902002",
+                            "ACTION_":  "5",
+                            "EVENT":  "2",
+                            "DOCTYPE":  "110",
+                            "LDATA":  null
+                        }
+                    ]
+}

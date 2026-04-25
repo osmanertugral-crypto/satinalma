@@ -162,9 +162,15 @@ export default function SuppliersOrdersPage() {
               <ComposedChart data={chartMonthly}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis dataKey="ay" />
-                <YAxis yAxisId="left" />
-                <YAxis yAxisId="right" orientation="right" />
-                <Tooltip />
+                <YAxis yAxisId="left" tick={{ fontSize: 11 }} tickFormatter={v => v >= 1e6 ? `${(v/1e6).toFixed(1)}M` : v >= 1e3 ? `${(v/1e3).toFixed(0)}K` : v} />
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} />
+                <Tooltip
+                  formatter={(value, name) => {
+                    if (name === 'Tutar') return [`₺${Number(value).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, name];
+                    return [value, name];
+                  }}
+                  labelFormatter={(label, payload) => payload?.[0]?.payload?.ayFull || label}
+                />
                 <Legend />
                 <Bar yAxisId="left" dataKey="toplam_tutar" name="Tutar" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                 <Line yAxisId="right" dataKey="siparis_sayisi" name="Siparis" stroke="#ef4444" />
@@ -181,7 +187,7 @@ export default function SuppliersOrdersPage() {
                   {chartPieStatus.map((entry, index) => <Cell key={index} fill={entry.color} />)}
                 </Pie>
                 <Legend />
-                <Tooltip />
+                <Tooltip formatter={(value) => [`${Number(value).toLocaleString('tr-TR')} sipariş`]} />
               </PieChart>
             </ResponsiveContainer>
           </div>

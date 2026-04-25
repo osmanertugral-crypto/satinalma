@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_PROJE_MALZEME_DAGILIMI_123",
+    "full_name":  "dbo.AA_PROJE_MALZEME_DAGILIMI_123",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[AA_PROJE_MALZEME_DAGILIMI_123] AS\r\n\r\nSELECT \r\nS.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,L.DATE_ TARIH\r\n,L.AMOUNT MIKTAR\r\n,(SELECT CODE FROM LG_123_PROJECT WHERE LOGICALREF=L.PROJECTREF) PROJE_KODU \r\n,(SELECT NAME FROM LG_123_PROJECT WHERE LOGICALREF=L.PROJECTREF) PROJE_ADI\r\n\r\n\r\n\r\n\r\nFROM LG_123_01_STLINE AS L\r\nINNER JOIN LG_123_ITEMS AS S ON S.LOGICALREF=L.STOCKREF\r\n\r\nWHERE L.TRCODE=12\r\nAND LINETYPE=0\r\n--AND (SELECT CODE FROM LG_123_PROJECT WHERE LOGICALREF=L.PROJECTREF) IN (SELECT PROJE_KODU FROM AA_SATIS_SIPARIS_OZET_123  WHERE GERCEKLESEN_URETIM_TARIHI IS NULL)\r\n\r\n--AND S.CODE=\u00272021X23\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "STOK_KODU":  "ECTWLD100006",
+                            "STOK_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "TARIH":  "22.04.2025 00:00:00",
+                            "MIKTAR":  "1",
+                            "PROJE_KODU":  "X",
+                            "PROJE_ADI":  "X"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100010",
+                            "STOK_ADI":  "URBAN BADGER 3-4 KISILIK OTOMATIK TENTELI CADIR",
+                            "TARIH":  "12.07.2025 00:00:00",
+                            "MIKTAR":  "1",
+                            "PROJE_KODU":  "X",
+                            "PROJE_ADI":  "X"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100011",
+                            "STOK_ADI":  "URBAN BADGER GECMELI CATAL BICAK KASIK SETI",
+                            "TARIH":  "18.02.2025 00:00:00",
+                            "MIKTAR":  "3",
+                            "PROJE_KODU":  "X",
+                            "PROJE_ADI":  "X"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100011",
+                            "STOK_ADI":  "URBAN BADGER GECMELI CATAL BICAK KASIK SETI",
+                            "TARIH":  "20.05.2025 00:00:00",
+                            "MIKTAR":  "4",
+                            "PROJE_KODU":  "X",
+                            "PROJE_ADI":  "X"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100011",
+                            "STOK_ADI":  "URBAN BADGER GECMELI CATAL BICAK KASIK SETI",
+                            "TARIH":  "28.11.2025 00:00:00",
+                            "MIKTAR":  "2",
+                            "PROJE_KODU":  null,
+                            "PROJE_ADI":  null
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100012",
+                            "STOK_ADI":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "TARIH":  "1.01.2026 00:00:00",
+                            "MIKTAR":  "1",
+                            "PROJE_KODU":  "X",
+                            "PROJE_ADI":  "X"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100013",
+                            "STOK_ADI":  "URBAN BADGER KAMP DUSU",
+                            "TARIH":  "2.12.2025 00:00:00",
+                            "MIKTAR":  "1",
+                            "PROJE_KODU":  null,
+                            "PROJE_ADI":  null
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100013",
+                            "STOK_ADI":  "URBAN BADGER KAMP DUSU",
+                            "TARIH":  "1.01.2026 00:00:00",
+                            "MIKTAR":  "2",
+                            "PROJE_KODU":  "X",
+                            "PROJE_ADI":  "X"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100016",
+                            "STOK_ADI":  "URBAN BADGER TEK KISILIK SISME YATAK",
+                            "TARIH":  "3.04.2026 00:00:00",
+                            "MIKTAR":  "1",
+                            "PROJE_KODU":  null,
+                            "PROJE_ADI":  null
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100016",
+                            "STOK_ADI":  "URBAN BADGER TEK KISILIK SISME YATAK",
+                            "TARIH":  "3.04.2026 00:00:00",
+                            "MIKTAR":  "8",
+                            "PROJE_KODU":  "X",
+                            "PROJE_ADI":  "X"
+                        }
+                    ]
+}

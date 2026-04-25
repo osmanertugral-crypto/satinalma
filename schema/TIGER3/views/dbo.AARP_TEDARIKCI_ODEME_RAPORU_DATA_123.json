@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AARP_TEDARIKCI_ODEME_RAPORU_DATA_123",
+    "full_name":  "dbo.AARP_TEDARIKCI_ODEME_RAPORU_DATA_123",
+    "definition":  "\r\n\r\n\r\n \r\n CREATE VIEW [dbo].[AARP_TEDARIKCI_ODEME_RAPORU_DATA_123] AS \r\n select (CARI_KOD + \u0027 / \u0027 +CARI_AD) CARI,VADE,ISLEM_TARIHI,ISLEMNO,ISLEM,GUN,TUTAR_BORC,TUTAR_ALACAK,BAKIYE,DOVIZ,KUR\r\n\r\n \r\n from (\r\n\r\nSELECT *,SUM(T.TUTAR_BORC + T.TUTAR_ALACAK) OVER (ORDER BY RowId ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE\r\n,\t   ISNULL((SELECT SUM(TRNET) FROM LG_123_01_BNFLINE WHERE YEAR(DATE_)\u003e2021 \r\nAND DATE_\u003c=T.ISLEM_TARIHI AND  CLIENTREF=T.CARI_ID AND SIGN=1 AND TRCODE=4) ,0) ODEME\r\n,DATEDIFF(DAY, GETDATE(), cast(VADE as date)) GUN\r\n FROM (\r\n\r\n\r\n    SELECT ROW_NUMBER() OVER (ORDER BY DATEDIFF(DAY, GETDATE(), INVOICE.DATE_) ASC) AS RowId,\r\n\t CLCARD.LOGICALREF CARI_ID,\r\n           CLCARD.CODE CARI_KOD,\r\n           CLCARD.DEFINITION_ CARI_AD,\r\n           INVOICE.FICHENO ISLEMNO,\r\n           CASE PAYTRANS.MODULENR\r\n               WHEN 7 THEN\r\n                   CASE PAYTRANS.TRCODE\r\n                       WHEN 3 THEN\r\n                           \u0027Gelen Havale\u0027\r\n                       WHEN 4 THEN\r\n                           \u0027Gönderilen Havale\u0027\r\n                       WHEN 16 THEN\r\n                           \u0027Banka - Alınan Hizmet Faturası\u0027\r\n                       WHEN 17 THEN\r\n                           \u0027Banka - Verilen Hizmet Faturası\u0027\r\n                   END\r\n               WHEN 4 THEN\r\n                   CASE PAYTRANS.TRCODE\r\n                       WHEN 1 THEN\r\n                           \u0027Satınalama Faturası\u0027\r\n                       WHEN 4 THEN\r\n                           \u0027Alınan Hizmet Faturası\u0027\r\n                       WHEN 6 THEN\r\n                           \u0027Satınalma İade Faturası\u0027\r\n                       WHEN 13 THEN\r\n                           \u0027Satınalma Fiyat Farkı Faturası\u0027\r\n                       WHEN 2 THEN\r\n                           \u0027Perakende Satış İade Faturası\u0027\r\n                       WHEN 3 THEN\r\n                           \u0027Toptan Satış İade Faturası\u0027\r\n                       WHEN 7 THEN\r\n                           \u0027Perkande Satış Faturası\u0027\r\n                       WHEN 8 THEN\r\n                           \u0027Toptan Satış Faturası\u0027\r\n                       WHEN 9 THEN\r\n                           \u0027Verilen Hizmet Faturası\u0027\r\n                       WHEN 14 THEN\r\n                           \u0027Satış Fiyat Farkı Faturası\u0027\r\n                   END\r\n               WHEN 5 THEN\r\n                   CASE PAYTRANS.TRCODE\r\n                       WHEN 70 THEN\r\n                           \u0027Kredi Kartı Fişi\u0027\r\n                       WHEN 2 THEN\r\n                           \u0027Nakit Ödeme\u0027\r\n                       WHEN 1 THEN\r\n                           \u0027Nakit Tahsilat\u0027\r\n                       WHEN 3 THEN\r\n                           \u0027Borç Dekontu\u0027\r\n                       WHEN 4 THEN\r\n                           \u0027Alacak Dekontu\u0027\r\n                       WHEN 5 THEN\r\n                           \u0027Virman Fişi\u0027\r\n                       WHEN 6 THEN\r\n                           \u0027Kurfarkı Fişi\u0027\r\n                       WHEN 14 THEN\r\n                           \u0027Açılış Fişi\u0027\r\n                       WHEN 41 THEN\r\n                           \u0027Verilen Vade Farkı Faturası\u0027\r\n                       WHEN 42 THEN\r\n                           \u0027Alınan Vade Farkı Faturası\u0027\r\n                       WHEN 71 THEN\r\n                           \u0027Kredi Kartı İade Fişi\u0027\r\n                       WHEN 72 THEN\r\n                           \u0027Firma Kredi Kartı Fişi\u0027\r\n                       WHEN 73 THEN\r\n                           \u0027Firma Kredi Kartı İade Fişi\u0027\r\n                   END\r\n               WHEN 6 THEN\r\n                   CASE PAYTRANS.TRCODE\r\n                       WHEN 1 THEN\r\n                           \u0027Müşteri Çeki\u0027\r\n                       WHEN 3 THEN\r\n                           \u0027Kendi Çekimiz\u0027\r\n                   END\r\n               WHEN 3 THEN\r\n                   CASE PAYTRANS.TRCODE\r\n                       WHEN 2 THEN\r\n                           \u0027Satınalama Siparişi\u0027\r\n                       WHEN 1 THEN\r\n                           \u0027Satış Siparişi\u0027\r\n                   END\r\n               WHEN 10 THEN\r\n                   CASE PAYTRANS.TRCODE\r\n                       WHEN 1 THEN\r\n                           \u0027Nakit Tahsilat\u0027\r\n                       WHEN 2 THEN\r\n                           \u0027Nakit Ödeme\u0027\r\n                   END\r\n               WHEN 61 THEN\r\n                   CASE PAYTRANS.TRCODE\r\n                       WHEN 3 THEN\r\n                           \u0027Borç Dekontu\u0027\r\n                       WHEN 4 THEN\r\n                           \u0027Alacak Dekontu\u0027\r\n                   END\r\n               WHEN 62 THEN\r\n                   CASE PAYTRANS.TRCODE\r\n                       WHEN 3 THEN\r\n                           \u0027Borç Dekontu\u0027\r\n                       WHEN 4 THEN\r\n                           \u0027Alacak Dekontu\u0027\r\n                   END\r\n           END AS ISLEM,\r\n           INVOICE.DATE_ ISLEM_TARIHI,\r\n\t\t   (SELECT TOP 1 DATEADD(day,CAST(SUBSTRING(DAY_,1,50)AS INT),INVOICE.DATE_)   \r\n\t\t   FROM LG_123_PAYLINES WHERE PAYPLANREF=INVOICE.PAYDEFREF) AS VADE,\r\n\t\t   \r\n           --DATEDIFF(DAY, GETDATE(), INVOICE.DATE_) GUN,\r\n           CASE\r\n               WHEN PAYTRANS.SIGN = 0 THEN\r\n                   TOTAL\r\n               ELSE\r\n                   0\r\n           END TUTAR_BORC,\r\n           CASE\r\n               WHEN PAYTRANS.SIGN = 1 THEN\r\n                   TOTAL * -1\r\n               ELSE\r\n                   0\r\n           END TUTAR_ALACAK,\r\n\t\t    CASE \r\n\t\t\tWHEN INVOICE.TRCURR=0 THEN \u0027TL\u0027\r\n\t\t\tWHEN INVOICE.TRCURR=160 THEN \u0027TL\u0027\r\n\t\t\tWHEN INVOICE.TRCURR=20 THEN \u0027EUR\u0027\r\n\t\t\tWHEN INVOICE.TRCURR=1 THEN \u0027USD\u0027\r\n\t\t\tELSE \u0027NFD ARA\u0027 END AS DOVIZ,\r\n\t\t\tINVOICE.TRRATE KUR\r\n\r\n\r\n\r\n\r\n\r\n    FROM dbo.LG_123_01_PAYTRANS PAYTRANS WITH (NOLOCK)\r\n        LEFT JOIN dbo.LG_123_CLCARD CLCARD\r\n            ON CLCARD.LOGICALREF = PAYTRANS.CARDREF\r\n        LEFT JOIN dbo.LG_123_01_INVOICE INVOICE\r\n            ON INVOICE.LOGICALREF = PAYTRANS.FICHEREF\r\n    WHERE PAID = 0\r\n          AND PAYTRANS.MODULENR = 4\r\n          /*AND CODE = \u0027ALC.01644\u0027*/\r\n          AND PAYTRANS.CANCELLED = 0 AND INVOICE.TRCODE IN (1,4) AND CLCARD.CODE LIKE \u0027320%\u0027 AND PAYTRANS.PAIDINCASH=0\r\n) AS T\r\n\r\nWHERE YEAR(ISLEM_TARIHI)\u003e2021 \r\n--AND T.CARI_KOD=\u0027320.01.00467\u0027  \r\n) as SUNANIN_RAPORU where  CARI_KOD + \u0027-\u0027 + DOVIZ NOT IN (\u0027320.01.00001-TL\u0027,\u0027320.01.00467-TL\u0027,\u0027320.01.00074-TL\u0027,\u0027320.01.00150-TL\u0027,\u0027320.01.00453-TL\u0027) --AND CARI_KOD=\u0027320.01.00206\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CARI",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "221",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_TARIHI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEMNO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "31",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GUN",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR_BORC",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR_ALACAK",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DOVIZ",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "7",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KUR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CARI":  "32050.KÜHNE - EU / KÜEHNE + NAGEL   (AG \u0026 Co.) -  Eu",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "10.09.2023 00:00:00",
+                            "ISLEMNO":  "001019",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-1000",
+                            "BAKIYE":  "-1000",
+                            "DOVIZ":  "EUR",
+                            "KUR":  "28,7034"
+                        },
+                        {
+                            "CARI":  "320.GÜLTEKİ / GÜLTEKİN AĞAÇ İŞLEME MAKİNALARI SAN.TİC.LTD.ŞTİ.",
+                            "VADE":  "21.12.2023 00:00:00",
+                            "ISLEM_TARIHI":  "21.11.2023 00:00:00",
+                            "ISLEMNO":  "GLT2023000000356",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  "-855",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-11625",
+                            "BAKIYE":  "-20739",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.KERİMP / KERİM PALABIYIK",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "25.04.2024 00:00:00",
+                            "ISLEMNO":  "FT02024000000311",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-1200",
+                            "BAKIYE":  "-40704,76",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.GREA / GREA TEST BELGELENDİRME A.Ş.",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "26.08.2024 00:00:00",
+                            "ISLEMNO":  "GTA2024000000012",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-115524,54",
+                            "BAKIYE":  "-228218,03",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.KURUM / KURUMSOFT KURUMSAL BİLİŞİM TEKNOLOJİLERİ VE DANIŞMANLIK HİZMETLERİ A.Ş.",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "6.11.2024 00:00:00",
+                            "ISLEMNO":  "002889",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-4400",
+                            "BAKIYE":  "-236038,03",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.TERMO - EUES / TERMOSA MOBİL SİSTEMLERİ ANONİM ŞİRKETİ",
+                            "VADE":  "21.12.2024 00:00:00",
+                            "ISLEM_TARIHI":  "21.11.2024 00:00:00",
+                            "ISLEMNO":  "000777",
+                            "ISLEM":  "Satınalama Faturası",
+                            "GUN":  "-489",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-1085,04",
+                            "BAKIYE":  "-257492,86",
+                            "DOVIZ":  "EUR",
+                            "KUR":  "36,55"
+                        },
+                        {
+                            "CARI":  "320.TERMO - EUES / TERMOSA MOBİL SİSTEMLERİ ANONİM ŞİRKETİ",
+                            "VADE":  "26.12.2024 00:00:00",
+                            "ISLEM_TARIHI":  "26.11.2024 00:00:00",
+                            "ISLEMNO":  "000831",
+                            "ISLEM":  "Satınalama Faturası",
+                            "GUN":  "-484",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-259,2",
+                            "BAKIYE":  "-261080,86",
+                            "DOVIZ":  "EUR",
+                            "KUR":  "36,25"
+                        },
+                        {
+                            "CARI":  "320.KURUM / KURUMSOFT KURUMSAL BİLİŞİM TEKNOLOJİLERİ VE DANIŞMANLIK HİZMETLERİ A.Ş.",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "1.12.2024 00:00:00",
+                            "ISLEMNO":  "003065",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-19800",
+                            "BAKIYE":  "-462372,3",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.TERMO - EUES / TERMOSA MOBİL SİSTEMLERİ ANONİM ŞİRKETİ",
+                            "VADE":  "5.01.2025 00:00:00",
+                            "ISLEM_TARIHI":  "6.12.2024 00:00:00",
+                            "ISLEMNO":  "000869",
+                            "ISLEM":  "Satınalama Faturası",
+                            "GUN":  "-474",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-472,8",
+                            "BAKIYE":  "-464222,46",
+                            "DOVIZ":  "EUR",
+                            "KUR":  "36,7"
+                        },
+                        {
+                            "CARI":  "320.ÖZÇELİK / ÖZÇELİK TORNA MAKİNA GEMİ ALMY DEMİR ÇELİK İNŞ SAN TİC LTD ŞTİ",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "19.12.2024 00:00:00",
+                            "ISLEMNO":  "003199",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-3840",
+                            "BAKIYE":  "-488178,54",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        }
+                    ]
+}

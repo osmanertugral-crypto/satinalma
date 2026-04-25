@@ -1,0 +1,346 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_01_STLNIOPEGGING",
+    "full_name":  "dbo.LG_123_01_STLNIOPEGGING",
+    "description":  "",
+    "total_rows":  "2069",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OUTSTTRREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OUTSTFCREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OUTSTTRDATE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INSTTRREF",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INSTFCREF",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INSTTRDATE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "VARIANTREF",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_01_STLNIOPEGGING_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_01_STLNIOPEGGING_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "STOCKREF, VARIANTREF"
+                    },
+                    {
+                        "index_name":  "I123_01_STLNIOPEGGING_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "OUTSTTRREF"
+                    },
+                    {
+                        "index_name":  "I123_01_STLNIOPEGGING_I4",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "INSTTRREF"
+                    },
+                    {
+                        "index_name":  "I123_01_STLNIOPEGGING_I5",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "STOCKREF, VARIANTREF, OUTSTTRDATE"
+                    },
+                    {
+                        "index_name":  "I123_01_STLNIOPEGGING_I6",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "STOCKREF, VARIANTREF, INSTTRREF"
+                    },
+                    {
+                        "index_name":  "I123_01_STLNIOPEGGING_I7",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "OUTSTTRREF, LINENR"
+                    },
+                    {
+                        "index_name":  "I123_01_STLNIOPEGGING_I8",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "INSTTRREF, LINENR"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "STOCKREF":  "9933",
+                            "OUTSTTRREF":  "24755",
+                            "OUTSTFCREF":  "1367",
+                            "OUTSTTRDATE":  "26.01.2023 00:00:00",
+                            "INSTTRREF":  "52676",
+                            "INSTFCREF":  "6186",
+                            "INSTTRDATE":  "4.01.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "1",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "STOCKREF":  "9933",
+                            "OUTSTTRREF":  "24777",
+                            "OUTSTFCREF":  "1370",
+                            "OUTSTTRDATE":  "26.01.2023 00:00:00",
+                            "INSTTRREF":  "52676",
+                            "INSTFCREF":  "6186",
+                            "INSTTRDATE":  "4.01.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "1",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "STOCKREF":  "9933",
+                            "OUTSTTRREF":  "26054",
+                            "OUTSTFCREF":  "1574",
+                            "OUTSTTRDATE":  "31.01.2023 00:00:00",
+                            "INSTTRREF":  "52676",
+                            "INSTFCREF":  "6186",
+                            "INSTTRDATE":  "4.01.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "1",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "STOCKREF":  "10731",
+                            "OUTSTTRREF":  "71678",
+                            "OUTSTFCREF":  "9467",
+                            "OUTSTTRDATE":  "15.06.2023 00:00:00",
+                            "INSTTRREF":  "71651",
+                            "INSTFCREF":  "9460",
+                            "INSTTRDATE":  "15.06.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "2",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "STOCKREF":  "9817",
+                            "OUTSTTRREF":  "19114",
+                            "OUTSTFCREF":  "367",
+                            "OUTSTTRDATE":  "10.01.2023 00:00:00",
+                            "INSTTRREF":  "52681",
+                            "INSTFCREF":  "6186",
+                            "INSTTRDATE":  "4.01.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "100",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "STOCKREF":  "11239",
+                            "OUTSTTRREF":  "110921",
+                            "OUTSTFCREF":  "15365",
+                            "OUTSTTRDATE":  "17.10.2023 00:00:00",
+                            "INSTTRREF":  "110920",
+                            "INSTFCREF":  "15364",
+                            "INSTTRDATE":  "17.10.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "1",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "STOCKREF":  "10117",
+                            "OUTSTTRREF":  "42336",
+                            "OUTSTFCREF":  "3427",
+                            "OUTSTTRDATE":  "28.02.2023 00:00:00",
+                            "INSTTRREF":  "42277",
+                            "INSTFCREF":  "3413",
+                            "INSTTRDATE":  "28.02.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "1",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "STOCKREF":  "10115",
+                            "OUTSTTRREF":  "42334",
+                            "OUTSTFCREF":  "3427",
+                            "OUTSTTRDATE":  "28.02.2023 00:00:00",
+                            "INSTTRREF":  "42268",
+                            "INSTFCREF":  "3413",
+                            "INSTTRDATE":  "28.02.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "1",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "STOCKREF":  "10116",
+                            "OUTSTTRREF":  "42335",
+                            "OUTSTFCREF":  "3427",
+                            "OUTSTTRDATE":  "28.02.2023 00:00:00",
+                            "INSTTRREF":  "42269",
+                            "INSTFCREF":  "3413",
+                            "INSTTRDATE":  "28.02.2023 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "2",
+                            "VARIANTREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "STOCKREF":  "12783",
+                            "OUTSTTRREF":  "155592",
+                            "OUTSTFCREF":  "22945",
+                            "OUTSTTRDATE":  "1.02.2024 00:00:00",
+                            "INSTTRREF":  "155591",
+                            "INSTFCREF":  "22944",
+                            "INSTTRDATE":  "1.02.2024 00:00:00",
+                            "LINENR":  "1",
+                            "AMOUNT":  "200",
+                            "VARIANTREF":  "0"
+                        }
+                    ]
+}

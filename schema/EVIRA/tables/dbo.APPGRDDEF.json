@@ -1,0 +1,136 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "APPGRDDEF",
+    "full_name":  "dbo.APPGRDDEF",
+    "description":  "",
+    "total_rows":  "2244",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "APPGRDDEF_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KEY_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "500",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "VALUE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "text",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "VALUEMS",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__APPGRDDE__B02B08D403288926",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "APPGRDDEF_REF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "APPGRDDEF_REF":  "1",
+                            "KEY_":  "bughVtSefS22mPtGgqPcut3Sx0yOJA3dNfkADGLht0ErxKcS/c/d4qxTlOT6rXHsL8dz0g4m9NXNmKngSiq0juHxPCI0Alk4",
+                            "VALUE":  null,
+                            "VALUEMS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "APPGRDDEF_REF":  "2",
+                            "KEY_":  "bughVtSefS22mPtGgqPcut3Sx0yOJA3dNfkADGLht0ErxKcS/c/d4qxTlOT6rXHsL8dz0g4m9NXNmKngSiq0juHxPCI0Alk4__FS",
+                            "VALUE":  "Arz86TJGsww=",
+                            "VALUEMS":  null
+                        },
+                        {
+                            "APPGRDDEF_REF":  "3",
+                            "KEY_":  "bughVtSefS22mPtGgqPcut3Sx0yOJA3dNfkADGLht0ErxKcS/c/d4qxTlOT6rXHsL8dz0g4m9NXNmKngSiq0js0tnOzbGQMT",
+                            "VALUE":  null,
+                            "VALUEMS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "APPGRDDEF_REF":  "4",
+                            "KEY_":  "bughVtSefS22mPtGgqPcut3Sx0yOJA3dNfkADGLht0ErxKcS/c/d4qxTlOT6rXHsL8dz0g4m9NXNmKngSiq0js0tnOzbGQMT__FS",
+                            "VALUE":  "Arz86TJGsww=",
+                            "VALUEMS":  null
+                        },
+                        {
+                            "APPGRDDEF_REF":  "5",
+                            "KEY_":  "t67GWwiBidDvkqE3WyfVTY0cXBm0xODH9L6ikBTn6RSHqf65vdhUXkuW9V8jlqhufuffUN8fZxYC9qWmWj+W48gZweqbjx+0JXY3xsPXsCdUxMYOzgrIIw==",
+                            "VALUE":  "DrhJLK5Geg0CvPzpMkazDA==",
+                            "VALUEMS":  null
+                        },
+                        {
+                            "APPGRDDEF_REF":  "6",
+                            "KEY_":  "bughVtSefS0gwlv9V+CB85HAkNQYCjGV40CxPgJEBwkw7jQZ38FdC2S6GRQchijkdkZ86umTDVp0ImklaQ4+Uz5VqSkU43TZ",
+                            "VALUE":  null,
+                            "VALUEMS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "APPGRDDEF_REF":  "7",
+                            "KEY_":  "bughVtSefS0gwlv9V+CB85HAkNQYCjGV40CxPgJEBwkw7jQZ38FdC2S6GRQchijkdkZ86umTDVp0ImklaQ4+Uz5VqSkU43TZ__FS",
+                            "VALUE":  "Arz86TJGsww=",
+                            "VALUEMS":  null
+                        },
+                        {
+                            "APPGRDDEF_REF":  "8",
+                            "KEY_":  "bughVtSefS14XPgZc7YXORMA4JZRhPFvzuuPfRdvKA4CnAjuneYqDMJ6hYM4CPqOfRxJNfMnE7ptsIwmXtGXHoNdJJI6lteuL8dz0g4m9NXNmKngSiq0jreb0EvM/IAk2+2liMtJnkVKenQheUNIGA==",
+                            "VALUE":  null,
+                            "VALUEMS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "APPGRDDEF_REF":  "9",
+                            "KEY_":  "bughVtSefS14XPgZc7YXORMA4JZRhPFvzuuPfRdvKA4CnAjuneYqDMJ6hYM4CPqOfRxJNfMnE7ptsIwmXtGXHoNdJJI6lteuL8dz0g4m9NXNmKngSiq0jreb0EvM/IAk2+2liMtJnkVKenQheUNIGA==__FS",
+                            "VALUE":  "Arz86TJGsww=",
+                            "VALUEMS":  null
+                        },
+                        {
+                            "APPGRDDEF_REF":  "10",
+                            "KEY_":  "wWos3/jkViz6NXVG04AJblkOggyuv1VLJ1NuLEj+1dBizKzz3Ky0/YD4l6x9eLe5QZGNyKROhdnEWkB0j4g8GjwxhF0L6yxE",
+                            "VALUE":  null,
+                            "VALUEMS":  "\u003cbinary\u003e"
+                        }
+                    ]
+}

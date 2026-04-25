@@ -1,0 +1,150 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "ALT_URUN_VIEW",
+    "full_name":  "dbo.ALT_URUN_VIEW",
+    "definition":  "\r\nCREATE VIEW [dbo].[ALT_URUN_VIEW]\r\nAS\r\nSELECT \r\nSK.STOK_REF,\r\nSK.STOK_KODU ANA_URUN_KODU,\r\nSK.STOK_ADI ANA_URUN_ADI,\r\nSA.MIKTAR,\r\nSK2.STOK_REF STOK_ALT_REF , \r\nSK2.STOK_KODU AS STOK_ALT_KOD,\r\nSK2.STOK_ADI AS STOK_ALT_ADI\r\n\r\nFROM \r\nSTOKALT SA LEFT OUTER JOIN STOKKARTI SK ON SA.STOK_REF=SK.STOK_REF\r\nLEFT OUTER JOIN STOKKARTI SK2 ON SK2.STOK_REF=SA.STOKSUB_REF\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ANA_URUN_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ANA_URUN_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ALT_REF",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ALT_KOD",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ALT_ADI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "2",
+                            "STOK_ALT_REF":  "6441",
+                            "STOK_ALT_KOD":  "ELTS0099H048",
+                            "STOK_ALT_ADI":  "OKUMA LAMBASI SIYAH"
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "2",
+                            "STOK_ALT_REF":  "6446",
+                            "STOK_ALT_KOD":  "ELSF0099H081",
+                            "STOK_ALT_ADI":  "TOPRAKLI PRIZ Ç.K. KAPAKLI SIYAH"
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "1",
+                            "STOK_ALT_REF":  "6450",
+                            "STOK_ALT_KOD":  "ELSF0099H083",
+                            "STOK_ALT_ADI":  "SIGORTA 16 AH 220 W"
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "1",
+                            "STOK_ALT_REF":  "6451",
+                            "STOK_ALT_KOD":  "ELSF0099H084",
+                            "STOK_ALT_ADI":  "SIGORTA KUTUSU 3/4 KAPAKLI"
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "4",
+                            "STOK_ALT_REF":  "6452",
+                            "STOK_ALT_KOD":  "ELSF0099H085",
+                            "STOK_ALT_ADI":  "SOLAR MONTAJ KÖSE BRAKET"
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "1",
+                            "STOK_ALT_REF":  "6461",
+                            "STOK_ALT_KOD":  "ELTS0099H060",
+                            "STOK_ALT_ADI":  "USB 12V 2LI SIYAH"
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "1",
+                            "STOK_ALT_REF":  "6571",
+                            "STOK_ALT_KOD":  "HRXX0099H095",
+                            "STOK_ALT_ADI":  "KILIT SIFRELI ASMA"
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "3",
+                            "STOK_ALT_REF":  "6573",
+                            "STOK_ALT_KOD":  "HRXX0099H097",
+                            "STOK_ALT_ADI":  "MENFEZ ALIMINYUM 30X7 "
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "1",
+                            "STOK_ALT_REF":  "6575",
+                            "STOK_ALT_KOD":  "HRXX0099H099",
+                            "STOK_ALT_ADI":  "MENTESE LALE MAKAS"
+                        },
+                        {
+                            "STOK_REF":  "17114",
+                            "ANA_URUN_KODU":  "GSE0142-1",
+                            "ANA_URUN_ADI":  "GLADIATOR MOBIL YASAM KABINI",
+                            "MIKTAR":  "8",
+                            "STOK_ALT_REF":  "6580",
+                            "STOK_ALT_KOD":  "HRXX0099H104",
+                            "STOK_ALT_ADI":  "MENTESE YAPRAK OVAL 6.5CM KROM"
+                        }
+                    ]
+}

@@ -1,0 +1,201 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_123_01_CSCARD",
+    "full_name":  "dbo.LV_123_01_CSCARD",
+    "definition":  "CREATE VIEW [dbo].[LV_123_01_CSCARD] AS\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.PORTFOYNO, LGMAIN.SERINO, LGMAIN.NEWSERINO, LGMAIN.OWING, LGMAIN.DUEDATE,  LGMAIN.BANKNAME ,LGMAIN.AMOUNT TOTAL,\n      LGMAIN.SETDATE, TRANS.ROLLREF\nFROM\n     LG_123_01_CSCARD LGMAIN LEFT OUTER JOIN LG_123_01_CSTRANS TRANS WITH(NOLOCK) ON LGMAIN.LOGICALREF = TRANS.CSREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "PORTFOYNO",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SERINO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "NEWSERINO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "31",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OWING",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DUEDATE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BANKNAME",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SETDATE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ROLLREF",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "PORTFOYNO":  "000001",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51769",
+                            "OWING":  "DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİC. LTD. ŞTİ.",
+                            "DUEDATE":  "13.01.2023 00:00:00",
+                            "BANKNAME":  "TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "460000",
+                            "SETDATE":  null,
+                            "ROLLREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1",
+                            "PORTFOYNO":  "000001",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51769",
+                            "OWING":  "DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİC. LTD. ŞTİ.",
+                            "DUEDATE":  "13.01.2023 00:00:00",
+                            "BANKNAME":  "TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "460000",
+                            "SETDATE":  null,
+                            "ROLLREF":  "5"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "PORTFOYNO":  "000002",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51770",
+                            "OWING":  "DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİC. LTD. ŞTİ.",
+                            "DUEDATE":  "20.01.2023 00:00:00",
+                            "BANKNAME":  "TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "735000",
+                            "SETDATE":  null,
+                            "ROLLREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "PORTFOYNO":  "000002",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51770",
+                            "OWING":  "DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİC. LTD. ŞTİ.",
+                            "DUEDATE":  "20.01.2023 00:00:00",
+                            "BANKNAME":  "TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "735000",
+                            "SETDATE":  null,
+                            "ROLLREF":  "2"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "PORTFOYNO":  "000003",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51771",
+                            "OWING":  "KURSAN CİVATA MAK. İNŞ. GIDA SAN. TİC. LTD. ŞTİ.",
+                            "DUEDATE":  "28.02.2023 00:00:00",
+                            "BANKNAME":  "VAKIFBANK - TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "227740",
+                            "SETDATE":  null,
+                            "ROLLREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "PORTFOYNO":  "000003",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51771",
+                            "OWING":  "KURSAN CİVATA MAK. İNŞ. GIDA SAN. TİC. LTD. ŞTİ.",
+                            "DUEDATE":  "28.02.2023 00:00:00",
+                            "BANKNAME":  "VAKIFBANK - TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "227740",
+                            "SETDATE":  null,
+                            "ROLLREF":  "6"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "PORTFOYNO":  "000004",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51772",
+                            "OWING":  "ALP ERDEM ELEKTRİK İNŞAAT TİC. A.Ş.",
+                            "DUEDATE":  "17.02.2023 00:00:00",
+                            "BANKNAME":  "TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "200000",
+                            "SETDATE":  null,
+                            "ROLLREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "PORTFOYNO":  "000004",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51772",
+                            "OWING":  "ALP ERDEM ELEKTRİK İNŞAAT TİC. A.Ş.",
+                            "DUEDATE":  "17.02.2023 00:00:00",
+                            "BANKNAME":  "TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "200000",
+                            "SETDATE":  null,
+                            "ROLLREF":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "PORTFOYNO":  "000005",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51773",
+                            "OWING":  "ALP ERDEM ELEKTRİK İNŞAAT TİC. A.Ş.",
+                            "DUEDATE":  "17.03.2023 00:00:00",
+                            "BANKNAME":  "VAKIFBANK - TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "204032,37",
+                            "SETDATE":  null,
+                            "ROLLREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "PORTFOYNO":  "000005",
+                            "SERINO":  "",
+                            "NEWSERINO":  "51773",
+                            "OWING":  "ALP ERDEM ELEKTRİK İNŞAAT TİC. A.Ş.",
+                            "DUEDATE":  "17.03.2023 00:00:00",
+                            "BANKNAME":  "VAKIFBANK - TL - VAKIFBANK - TL hesabı",
+                            "TOTAL":  "204032,37",
+                            "SETDATE":  null,
+                            "ROLLREF":  "11"
+                        }
+                    ]
+}

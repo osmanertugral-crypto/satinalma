@@ -1,0 +1,176 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "TG_EMFICHE_GLOBLINENO",
+    "full_name":  "dbo.TG_EMFICHE_GLOBLINENO",
+    "description":  "",
+    "total_rows":  "4281",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "SIRANO",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "19",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ACCFICHEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GLOBLINENO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NEW_GLOBLINENO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "19",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+
+                ],
+    "sample_data":  [
+                        {
+                            "SIRANO":  "1",
+                            "ACCFICHEREF":  "39590",
+                            "LOGICALREF":  "144227",
+                            "LINENO_":  "1",
+                            "GLOBLINENO":  "19094",
+                            "NEW_GLOBLINENO":  "19094"
+                        },
+                        {
+                            "SIRANO":  "2",
+                            "ACCFICHEREF":  "39590",
+                            "LOGICALREF":  "144228",
+                            "LINENO_":  "2",
+                            "GLOBLINENO":  "19095",
+                            "NEW_GLOBLINENO":  "19095"
+                        },
+                        {
+                            "SIRANO":  "3",
+                            "ACCFICHEREF":  "39590",
+                            "LOGICALREF":  "144229",
+                            "LINENO_":  "3",
+                            "GLOBLINENO":  "19096",
+                            "NEW_GLOBLINENO":  "19096"
+                        },
+                        {
+                            "SIRANO":  "4",
+                            "ACCFICHEREF":  "40211",
+                            "LOGICALREF":  "146644",
+                            "LINENO_":  "1",
+                            "GLOBLINENO":  "19097",
+                            "NEW_GLOBLINENO":  "19097"
+                        },
+                        {
+                            "SIRANO":  "5",
+                            "ACCFICHEREF":  "40211",
+                            "LOGICALREF":  "146645",
+                            "LINENO_":  "2",
+                            "GLOBLINENO":  "19098",
+                            "NEW_GLOBLINENO":  "19098"
+                        },
+                        {
+                            "SIRANO":  "6",
+                            "ACCFICHEREF":  "40213",
+                            "LOGICALREF":  "146649",
+                            "LINENO_":  "1",
+                            "GLOBLINENO":  "19099",
+                            "NEW_GLOBLINENO":  "19099"
+                        },
+                        {
+                            "SIRANO":  "7",
+                            "ACCFICHEREF":  "40213",
+                            "LOGICALREF":  "146650",
+                            "LINENO_":  "2",
+                            "GLOBLINENO":  "19100",
+                            "NEW_GLOBLINENO":  "19100"
+                        },
+                        {
+                            "SIRANO":  "8",
+                            "ACCFICHEREF":  "40213",
+                            "LOGICALREF":  "146651",
+                            "LINENO_":  "3",
+                            "GLOBLINENO":  "19101",
+                            "NEW_GLOBLINENO":  "19101"
+                        },
+                        {
+                            "SIRANO":  "9",
+                            "ACCFICHEREF":  "40213",
+                            "LOGICALREF":  "146652",
+                            "LINENO_":  "4",
+                            "GLOBLINENO":  "19102",
+                            "NEW_GLOBLINENO":  "19102"
+                        },
+                        {
+                            "SIRANO":  "10",
+                            "ACCFICHEREF":  "40213",
+                            "LOGICALREF":  "146653",
+                            "LINENO_":  "5",
+                            "GLOBLINENO":  "19103",
+                            "NEW_GLOBLINENO":  "19103"
+                        }
+                    ]
+}

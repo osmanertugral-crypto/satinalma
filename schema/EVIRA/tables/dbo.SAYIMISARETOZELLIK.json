@@ -1,0 +1,77 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "SAYIMISARETOZELLIK",
+    "full_name":  "dbo.SAYIMISARETOZELLIK",
+    "description":  "",
+    "total_rows":  "0",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "SAYIMISARETOZELLIK_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SKTYPE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SKAMBAR_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__SAYIMISA__51B7C7B0EC6A9818",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "SAYIMISARETOZELLIK_REF"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

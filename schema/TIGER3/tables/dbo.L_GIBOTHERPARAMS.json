@@ -1,0 +1,159 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_GIBOTHERPARAMS",
+    "full_name":  "dbo.L_GIBOTHERPARAMS",
+    "description":  "",
+    "total_rows":  "1603",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBDEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "256",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FCTYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RATE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "GIBOTHERPARAMS_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "GIBCODE":  "011",
+                            "GIBDEF":  "011-Asgari Ücretli (GVK Md. 94/1)",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "GIBCODE":  "012",
+                            "GIBDEF":  "012-Diğer Ücretler ile Ücret Sayılan Ödemeler (GVK Md. 94/1)",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "GIBCODE":  "013",
+                            "GIBDEF":  "013-Kıdem Tazminatı",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "GIBCODE":  "014",
+                            "GIBDEF":  "014-Huzur Hakkı",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "GIBCODE":  "015",
+                            "GIBDEF":  "015-İhbar Tazminatı",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "GIBCODE":  "016",
+                            "GIBDEF":  "016-Yeraltı Maden İşçileri",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "GIBCODE":  "017",
+                            "GIBDEF":  "017-4691 Sayılı Kanun Kapsamı",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "GIBCODE":  "018",
+                            "GIBDEF":  "018-Döner Sermaye/Performans/Ek Ders Odemesi/Ek ödeme/Kayyum-Bilirkişi ödemesi/Diğer",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "GIBCODE":  "019",
+                            "GIBDEF":  "019-Gemi Çalışanları/Dar Mükellef Kurumların İrtibat Buroları/Apartman Kapıcıları",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "GIBCODE":  "020",
+                            "GIBDEF":  "020-4691 sayılı kanun kapsamında çalışan işverenler/Muhtarlar/Elçiliklerde Çalışan Personel/GVK23/11 Kapsamında Çalışanlar/Diğer",
+                            "FCTYPE":  "1",
+                            "RATE":  "0"
+                        }
+                    ]
+}

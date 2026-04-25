@@ -1,0 +1,99 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KREKPOT_BIRIM_FIYAT_LISTESI",
+    "full_name":  "dbo.KREKPOT_BIRIM_FIYAT_LISTESI",
+    "definition":  "\r\n\r\nCREATE view [dbo].[KREKPOT_BIRIM_FIYAT_LISTESI] as\r\nSELECT MLZ.CODE AS KOD,\r\n       MLZ.NAME AS TANIM,\r\n       (CAST(ISNULL(\r\n               CASE WHEN (SELECT TOP 1 (LINENET+DIFFPRICE)/NULLIF(AMOUNT,0) FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ + dbo.LG_INTTOTIME(FTIME)  DESC) IS NULL THEN\r\n                        (SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK) WHERE CARDREF=MLZ.LOGICALREF ORDER BY BEGDATE DESC) ELSE\r\n                        (SELECT TOP 1 (LINENET+DIFFPRICE)/NULLIF(AMOUNT,0) FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ + dbo.LG_INTTOTIME(FTIME)  DESC) END\r\n\r\n           ,0) AS DECIMAL(18,2))*1) AS BR_FIYAT,\r\n\t\t   ISNULL(\r\n               CASE WHEN (SELECT TOP 1 DATE_ FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ + dbo.LG_INTTOTIME(FTIME)  DESC) IS NULL THEN\r\n                        (SELECT TOP 1 BEGDATE FROM LG_123_PRCLIST WITH (NOLOCK) WHERE CARDREF=MLZ.LOGICALREF ORDER BY BEGDATE DESC) ELSE\r\n                        (SELECT TOP 1 DATE_ FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ + dbo.LG_INTTOTIME(FTIME)  DESC) END\r\n\r\n           ,0) AS TARIH \r\n\r\nFROM LG_123_ITEMS MLZ WHERE ACTIVE=0\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KOD",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TANIM",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BR_FIYAT",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "KOD":  "ECTWLD100006",
+                            "TANIM":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "BR_FIYAT":  "2095,40",
+                            "TARIH":  "11.03.2024 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTWLD100008",
+                            "TANIM":  "WILD LAND UNIVERSAL TARP",
+                            "BR_FIYAT":  "3465,43",
+                            "TARIH":  "31.10.2024 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTURB100008",
+                            "TANIM":  "URBAN BADGER TEK KISILIK UYKU TULUMU",
+                            "BR_FIYAT":  "263,01",
+                            "TARIH":  "11.03.2024 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTURB100009",
+                            "TANIM":  "URBAN BADGER HAFIF CADIR",
+                            "BR_FIYAT":  "441,24",
+                            "TARIH":  "11.03.2024 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTURB100010",
+                            "TANIM":  "URBAN BADGER 3-4 KISILIK OTOMATIK TENTELI CADIR",
+                            "BR_FIYAT":  "2793,38",
+                            "TARIH":  "3.04.2026 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTURB100011",
+                            "TANIM":  "URBAN BADGER GECMELI CATAL BICAK KASIK SETI",
+                            "BR_FIYAT":  "37,35",
+                            "TARIH":  "11.08.2025 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTURB100012",
+                            "TANIM":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "BR_FIYAT":  "44,32",
+                            "TARIH":  "11.03.2024 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTURB100013",
+                            "TANIM":  "URBAN BADGER KAMP DUSU",
+                            "BR_FIYAT":  "60,70",
+                            "TARIH":  "11.03.2024 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTURB100014",
+                            "TANIM":  "URBAN BADGER KATLANIR KOVA",
+                            "BR_FIYAT":  "54,43",
+                            "TARIH":  "11.03.2024 00:00:00"
+                        },
+                        {
+                            "KOD":  "ECTURB100015",
+                            "TANIM":  "URBAN BADGER IKI KISILIK SISME YATAK",
+                            "BR_FIYAT":  "659,46",
+                            "TARIH":  "11.03.2024 00:00:00"
+                        }
+                    ]
+}

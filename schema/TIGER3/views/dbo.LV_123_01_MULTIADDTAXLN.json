@@ -1,0 +1,116 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_123_01_MULTIADDTAXLN",
+    "full_name":  "dbo.LV_123_01_MULTIADDTAXLN",
+    "definition":  "CREATE VIEW [dbo].[LV_123_01_MULTIADDTAXLN] AS\nSELECT S.INVOICEREF AS FICHEREF, S.LOGICALREF AS LINEREF, I.ADDTAXREF, ISNULL(S.ADDTAXAMOUNT, 0) AS ADDTAXAMOUNT, ISNULL(E.ADDTAXAMOUNTX, 0) AS ADDTAXAMOUNTX\nFROM LG_123_01_STLINE S\n     LEFT OUTER JOIN LG_123_ITEMS I ON S.STOCKREF = I.LOGICALREF\n     LEFT OUTER JOIN LG_123_01_STLINEEXCH E ON S.LOGICALREF = E.TRANSREF\nWHERE ISNULL(I.MULTIADDTAX, 0) = 0\nAND ISNULL(S.ADDTAXAMOUNT, 0) \u003e 0\nAND ISNULL(I.ADDTAXREF, 0) \u003e 0\nUNION ALL\nSELECT FICHEREF, LINEREF, ADDTAXREF, ADDTAXAMOUNT, ADDTAXAMOUNTX\nFROM LG_123_01_MULTIADDTAXLN",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FICHEREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDTAXREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDTAXAMOUNT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDTAXAMOUNTX",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FICHEREF":  "1844",
+                            "LINEREF":  "44389",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "23820,25",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "5342",
+                            "LINEREF":  "74407",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "24462,37",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "25141",
+                            "LINEREF":  "297288",
+                            "ADDTAXREF":  "1",
+                            "ADDTAXAMOUNT":  "360097,32",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "4618",
+                            "LINEREF":  "67980",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "27112,3",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "13815",
+                            "LINEREF":  "158987",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "42486,36",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "9446",
+                            "LINEREF":  "121998",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "77017,09",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "3090",
+                            "LINEREF":  "58276",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "25505,24",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "1415",
+                            "LINEREF":  "40928",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "19295,96",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "4996",
+                            "LINEREF":  "71640",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "22157,93",
+                            "ADDTAXAMOUNTX":  "0"
+                        },
+                        {
+                            "FICHEREF":  "2131",
+                            "LINEREF":  "47884",
+                            "ADDTAXREF":  "3",
+                            "ADDTAXAMOUNT":  "23820,25",
+                            "ADDTAXAMOUNTX":  "0"
+                        }
+                    ]
+}

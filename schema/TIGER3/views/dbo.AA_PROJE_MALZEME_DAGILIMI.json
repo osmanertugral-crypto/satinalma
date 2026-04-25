@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_PROJE_MALZEME_DAGILIMI",
+    "full_name":  "dbo.AA_PROJE_MALZEME_DAGILIMI",
+    "definition":  "CREATE VIEW AA_PROJE_MALZEME_DAGILIMI AS\r\n\r\nSELECT \r\nS.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,L.DATE_ TARIH\r\n,L.AMOUNT MIKTAR\r\n,(SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF) PROJE_KODU \r\n,(SELECT NAME FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF) PROJE_ADI\r\n\r\n\r\n\r\n\r\nFROM LG_001_01_STLINE AS L\r\nINNER JOIN LG_001_ITEMS AS S ON S.LOGICALREF=L.STOCKREF\r\n\r\nWHERE L.TRCODE=12\r\nAND LINETYPE=0\r\nAND (SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF) IN (SELECT PROJE_KODU FROM AA_SATIS_SIPARIS_OZET  WHERE GERCEKLESEN_URETIM_TARIHI IS NULL)\r\n\r\n--AND S.CODE=\u00272021X23\u0027",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "STOK_KODU":  "2021X76",
+                            "STOK_ADI":  "AYAK -GÖVDE BAĞLANTISI",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "4",
+                            "PROJE_KODU":  "G0133",
+                            "PROJE_ADI":  "RESTAR SHOWROOM"
+                        },
+                        {
+                            "STOK_KODU":  "2021X678",
+                            "STOK_ADI":  "ÇAMURLUK",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "2",
+                            "PROJE_KODU":  "MC010",
+                            "PROJE_ADI":  "ADRİAN BERLİNGER 2022-1"
+                        },
+                        {
+                            "STOK_KODU":  "2021X30",
+                            "STOK_ADI":  "2X1.5  KABLO",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "25",
+                            "PROJE_KODU":  "G0131",
+                            "PROJE_ADI":  "CAMPER NORGE AS 2022-2"
+                        },
+                        {
+                            "STOK_KODU":  "2021X58",
+                            "STOK_ADI":  "6 MM SİYAH KABLO",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "25",
+                            "PROJE_KODU":  "G0131",
+                            "PROJE_ADI":  "CAMPER NORGE AS 2022-2"
+                        },
+                        {
+                            "STOK_KODU":  "2021X58",
+                            "STOK_ADI":  "6 MM SİYAH KABLO",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "25",
+                            "PROJE_KODU":  "G0133",
+                            "PROJE_ADI":  "RESTAR SHOWROOM"
+                        },
+                        {
+                            "STOK_KODU":  "2021X30",
+                            "STOK_ADI":  "2X1.5  KABLO",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "25",
+                            "PROJE_KODU":  "G0133",
+                            "PROJE_ADI":  "RESTAR SHOWROOM"
+                        },
+                        {
+                            "STOK_KODU":  "2021X389",
+                            "STOK_ADI":  "KÜREK",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "1",
+                            "PROJE_KODU":  "G0131",
+                            "PROJE_ADI":  "CAMPER NORGE AS 2022-2"
+                        },
+                        {
+                            "STOK_KODU":  "2021X637",
+                            "STOK_ADI":  "BALTA",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "1",
+                            "PROJE_KODU":  "G0131",
+                            "PROJE_ADI":  "CAMPER NORGE AS 2022-2"
+                        },
+                        {
+                            "STOK_KODU":  "2021X668",
+                            "STOK_ADI":  "KUM PALETİ ASKI HAZIRLIĞI ",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "2",
+                            "PROJE_KODU":  "G0131",
+                            "PROJE_ADI":  "CAMPER NORGE AS 2022-2"
+                        },
+                        {
+                            "STOK_KODU":  "2021X140",
+                            "STOK_ADI":  "KRİKO KPL 140X ÇEVİRME  KOLU",
+                            "TARIH":  "26.02.2022 00:00:00",
+                            "MIKTAR":  "1",
+                            "PROJE_KODU":  "T006",
+                            "PROJE_ADI":  "MÜLLER İÇİN ÜRETİLEN SATILMADI"
+                        }
+                    ]
+}

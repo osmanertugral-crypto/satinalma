@@ -1,0 +1,272 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_CITY",
+    "full_name":  "dbo.L_CITY",
+    "description":  "",
+    "total_rows":  "6887",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "COUNTRY",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "41",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SITEID",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RECSTATUS",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORGLOGICREF",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME2",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "41",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NETFLAG",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "37",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "CITY_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "CITY_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "COUNTRY, NAME"
+                    },
+                    {
+                        "index_name":  "CITY_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "NAME"
+                    },
+                    {
+                        "index_name":  "CITY_I4",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "COUNTRY, CODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "COUNTRY":  "179",
+                            "NAME":  "Adana",
+                            "CODE":  "01",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "COUNTRY":  "179",
+                            "NAME":  "Adıyaman",
+                            "CODE":  "02",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "COUNTRY":  "179",
+                            "NAME":  "Afyonkarahisar",
+                            "CODE":  "03",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "COUNTRY":  "179",
+                            "NAME":  "Ağrı",
+                            "CODE":  "04",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "COUNTRY":  "179",
+                            "NAME":  "Amasya",
+                            "CODE":  "05",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "COUNTRY":  "179",
+                            "NAME":  "Ankara",
+                            "CODE":  "06",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "COUNTRY":  "179",
+                            "NAME":  "Antalya",
+                            "CODE":  "07",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "COUNTRY":  "179",
+                            "NAME":  "Artvin",
+                            "CODE":  "08",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "COUNTRY":  "179",
+                            "NAME":  "Aydın",
+                            "CODE":  "09",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "COUNTRY":  "179",
+                            "NAME":  "Balıkesir",
+                            "CODE":  "10",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        }
+                    ]
+}

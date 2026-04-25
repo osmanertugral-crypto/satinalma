@@ -1,0 +1,339 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_STKHANDLENUMBERS_099_02",
+    "full_name":  "dbo.LG_STKHANDLENUMBERS_099_02",
+    "created":  "Sep  1 2025 12:03PM",
+    "last_altered":  "Sep  1 2025 12:03PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@itemRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@variantRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@transDate",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@trCode",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@coef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@cancelFlg",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@lineType",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@billedFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@decPrDiffFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@lProdStat",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@sourceType",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@destType",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@sourceWSRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@destWSRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@sourceIndex",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@destIndex",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@amount",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@price",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@unit1CFact",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@unit2CFact",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@vatPer",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@distCost",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@distAddExp",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@diffPrice",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@diffRepPrice",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@reportRate",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@vatIInvFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@invoiceRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ordTransRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@distOrdLineRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@stFicheRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@IOCode",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@rlsAmount",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@pOrdClsPlnAmnt",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@fcStat",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@reserveFlg",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@Month",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@Year",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@UOMRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@offTrRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@offerRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_STKHANDLENUMBERS_099_02\n       @itemRef        INT,\n       @variantRef     INT,\n       @transDate      DATETIME,\n       @trCode         SMALLINT,\n       @coef           SMALLINT,\n       @cancelFlg      SMALLINT,\n       @lineType       SMALLINT,\n       @billedFlag     SMALLINT,\n       @decPrDiffFlag  SMALLINT,\n       @lProdStat      SMALLINT,\n       @sourceType     SMALLINT,\n       @destType       SMALLINT,\n       @sourceWSRef    SMALLINT,\n       @destWSRef      SMALLINT,\n       @sourceIndex    SMALLINT,\n       @destIndex      SMALLINT,\n       @amount         FLOAT,\n       @price          FLOAT,\n       @unit1CFact     FLOAT,\n       @unit2CFact     FLOAT,\n       @vatPer         FLOAT,\n       @distCost       FLOAT,\n       @distAddExp     FLOAT,\n       @diffPrice      FLOAT,\n       @diffRepPrice   FLOAT,\n       @reportRate     FLOAT,\n       @vatIInvFlag    SMALLINT,\n       @invoiceRef     INT,\n       @ordTransRef    INT,\n       @distOrdLineRef INT,\n       @stFicheRef     INT,\n       @IOCode         SMALLINT,\n       @rlsAmount      FLOAT,\n       @pOrdClsPlnAmnt FLOAT,\n       @fcStat         SMALLINT,\n       @reserveFlg     SMALLINT,\n       @Month          SMALLINT,\n       @Year           SMALLINT,\n       @UOMRef         INT,\n       @offTrRef       INT,\n       @offerRef       INT AS\nDECLARE @c_PStatPlanned   SMALLINT\nDECLARE @c_PStatRealized  SMALLINT\nDECLARE @c_STrans         SMALLINT\nDECLARE @c_Promotion      SMALLINT\nDECLARE @c_LDiscount      SMALLINT\nDECLARE @c_LExpense       SMALLINT\nDECLARE @c_Service        SMALLINT\nDECLARE @c_Deposit        SMALLINT\nDECLARE @c_Composite      SMALLINT\nDECLARE @c_CompLine       SMALLINT\nDECLARE @c_FATrans        SMALLINT\nDECLARE @c_SubContract    SMALLINT\nDECLARE @c_LOption        SMALLINT\nDECLARE @c_LClass         SMALLINT\nDECLARE @ft_MalAlim       SMALLINT\nDECLARE @ft_PerSatIade    SMALLINT    \nDECLARE @ft_TopSatIade    SMALLINT    \nDECLARE @ft_KonsCikIade   SMALLINT    \nDECLARE @ft_KonsGiris     SMALLINT    \nDECLARE @ft_AlimIade      SMALLINT    \nDECLARE @ft_PerSatis      SMALLINT\nDECLARE @ft_TopSatis      SMALLINT    \nDECLARE @ft_KonsCikis     SMALLINT    \nDECLARE @ft_KonsGirIade   SMALLINT    \nDECLARE @ft_Fire          SMALLINT    \nDECLARE @ft_Sarf          SMALLINT    \nDECLARE @ft_UretGiris     SMALLINT    \nDECLARE @ft_Devir         SMALLINT    \nDECLARE @ft_AlFiyatFarki  SMALLINT    \nDECLARE @ft_VerFiyatFarki SMALLINT    \nDECLARE @ft_MalzGirIlk    SMALLINT    \nDECLARE @ft_MalzGirSon    SMALLINT\nDECLARE @ft_MalzCikIlk    SMALLINT\nDECLARE @ft_MalzCikSon    SMALLINT\nDECLARE @ft_Ambar         SMALLINT    \nDECLARE @ft_Mustahsil     SMALLINT    \nDECLARE @ft_IrsGirIlk     SMALLINT    \nDECLARE @ft_IrsGirSon     SMALLINT    \nDECLARE @ft_IrsCikIlk     SMALLINT    \nDECLARE @ft_IrsCikSon     SMALLINT    \nDECLARE @ft_SayimFazlasi  SMALLINT    \nDECLARE @ft_SayimEksigi   SMALLINT\nDECLARE @transMonth         SMALLINT\nDECLARE @calcSign           SMALLINT\nDECLARE @updTransferFlag    SMALLINT\nDECLARE @updTempInFlag      SMALLINT\nDECLARE @updTempOutFlag     SMALLINT\nDECLARE @updSaleFlag        SMALLINT\nDECLARE @updPurchaseFlag    SMALLINT\nDECLARE @updOrdersFlag      SMALLINT\nDECLARE @updWasteFlag       SMALLINT\nDECLARE @updProdInFlag      SMALLINT\nDECLARE @updCntAddFlag      SMALLINT\nDECLARE @updCntDecFlag      SMALLINT\nDECLARE @updOtherInFlag     SMALLINT\nDECLARE @updOtherOutFlag    SMALLINT\nDECLARE @ordRecvFlag        SMALLINT\nDECLARE @ordResFlag         SMALLINT\nDECLARE @updStcFlag         SMALLINT\nDECLARE @updAvgFlag         SMALLINT\nDECLARE @ordDoReserveFlg    SMALLINT\nDECLARE @ordClosedFlag      SMALLINT\nDECLARE @ordInvenNum        SMALLINT\nDECLARE @ordUnit1CFact      FLOAT\nDECLARE @ordUnit2CFact      FLOAT\nDECLARE @ordAmount          FLOAT\nDECLARE @ordDetLine         SMALLINT\nDECLARE @ordPrevLineRef     INT\nDECLARE @ordPrefLineNo      SMALLINT\nDECLARE @ordFicheRef        INT\nDECLARE @ordUOMRef          INT\nDECLARE @updInvenStc        SMALLINT\nDECLARE @updOrdOnVehFlag    SMALLINT\nDECLARE @par_Year           SMALLINT\nDECLARE @sRetEffect         SMALLINT\nDECLARE @pRetEffect         SMALLINT\nDECLARE @updResFlag         SMALLINT\nSELECT @c_PStatPlanned = 1,\n       @c_PStatRealized = 0\nSELECT @c_STrans = 0,\n       @c_Promotion = 1,\n       @c_LDiscount = 2,\n       @c_LExpense = 3,\n       @c_Service = 4,\n       @c_Deposit = 5,\n       @c_Composite = 6,\n       @c_CompLine = 7,\n       @c_FATrans = 8,\n       @c_LOption = 9,\n       @c_LClass = 10,\n       @c_SubContract = 11\nSELECT @ft_MalAlim       = 1,\n       @ft_PerSatIade    = 2,\n       @ft_TopSatIade    = 3,\n       @ft_KonsCikIade   = 4,\n       @ft_KonsGiris     = 5,\n       @ft_AlimIade      = 6,\n       @ft_PerSatis      = 7,\n       @ft_TopSatis      = 8,\n       @ft_KonsCikis     = 9,\n       @ft_KonsGirIade   = 10,\n       @ft_Fire          = 11,\n       @ft_Sarf          = 12,\n       @ft_UretGiris     = 13,\n       @ft_Devir         = 14,\n       @ft_AlFiyatFarki  = 13,\n       @ft_VerFiyatFarki = 14,\n       @ft_MalzGirIlk    = 15,\n       @ft_MalzGirSon    = 19,\n       @ft_MalzCikIlk    = 20,\n       @ft_MalzCikSon    = 24,\n       @ft_Ambar         = 25,\n       @ft_Mustahsil     = 26,\n       @ft_IrsGirIlk     = 30,\n       @ft_IrsGirSon     = 34,\n       @ft_IrsCikIlk     = 35,\n       @ft_IrsCikSon     = 39,\n       @ft_SayimFazlasi  = 50,\n       @ft_SayimEksigi   = 51\nIF (@lProdStat = @c_PStatPlanned)\n    BEGIN\n        SELECT @amount = @amount - (@rlsAmount + @pOrdClsPlnAmnt)\n        IF (@amount \u003c 0)\n             SELECT @amount = 0\n    END\nSELECT @transMonth = ISNULL(@month, 0), @par_Year = ISNULL(@year, 0)\nIF ((@transMonth = 0) OR (@par_Year = 0 ) )\n   EXECUTE LG_FINDRELATIVEMONTH_099_02 @transDate, @transMonth OUTPUT, @par_Year OUTPUT\nIF (@cancelFlg = 0) AND\n   (@lineType IN (@c_STrans, @c_Promotion, @c_Deposit, @c_Composite,\n                  @c_FATrans,@c_LOption, @c_LClass))\n    BEGIN\n        IF ((@transMonth = 0) OR (@par_Year = 0 ) )\n        EXECUTE LG_FINDRELATIVEMONTH_099_02 @transDate, @transMonth OUTPUT, @par_Year OUTPUT\n        IF (@lineType \u003c\u003e @c_Deposit)\n            BEGIN\n                IF ((@trCode \u003e= @ft_MalAlim) AND (@trCode \u003c= @ft_KonsGiris)) OR\n                   ((@trCode \u003e= @ft_UretGiris) AND (@trCode \u003c= @ft_MalzGirSon)) OR\n                   (@trCode = @ft_Mustahsil) OR\n                   ((@trCode \u003e= @ft_IrsGirIlk) AND (@trCode \u003c= @ft_IrsGirSon))\n                    SELECT @calcSign = 1\n                ELSE\n                    SELECT @calcSign = -1\n                IF (@trCode = @ft_VerFiyatFarki) AND (@billedFlag = 1)\n                    SELECT @calcSign = -1\n                IF (@trCode IN (@ft_AlFiyatFarki, @ft_VerFiyatFarki)) AND\n                   (@billedFlag = 1) AND\n                   (@decPrDiffFlag = 1)\n                    SELECT @calcSign = -1 * @calcSign\n            END\n        IF (@lineType = @c_Deposit)\n            BEGIN\n                IF (@trCode IN (@ft_MalAlim, @ft_PerSatIade, @ft_TopSatIade)) OR\n                   ((@trCode \u003e= @ft_IrsGirIlk) AND (@trCode \u003c= @ft_IrsGirSon))\n                    SELECT @calcSign = 1\n                ELSE\n                    SELECT @calcSign = -1\n                EXECUTE LG_STKHANDLEINOUT_099_02 @coef, @itemRef, @variantRef, 0, 0.0, 0.0,\n                                                 0.0, 0.0, @amount,\n                                                 @unit1CFact, @unit2CFact,\n                                                 @price, 0.0, 0,\n                                                 @trCode, @billedFlag,\n                                                 0.0, @calcSign, 0.0,\n                                                 0.0, 0.0,\n                                                 @sourceType,\n                                                 @sourceIndex,\n                                                 @sourceWSRef,\n                                                 0,\n                                                 @transDate, @transMonth,\n                                                 @lineType, 0, 0, 0,\n                                                 0, 0, 0, 0, 0, 0, 0,\n                                                 0, 0, 0, 0, 0, 0, 0, 1,\n                                                 @ordTransRef, @distOrdLineRef,\n                                                 0, 0, 0, 0, @lProdStat, @fcStat, @par_Year, 0, 0, 0, @offTrRef, @offerRef\n            END\n        ELSE\n            IF (@trCode = @ft_Ambar)\n                BEGIN\n                    IF (@lProdStat = @c_PStatRealized) AND ((@fcStat = 0) OR (@fcStat IS NULL))\n                        SELECT @updInvenStc = 1\n                    ELSE\n                        SELECT @updInvenStc = 0\n                    IF (@IOCode = 2)\n                        EXECUTE LG_STKHANDLEINOUT_099_02 @coef, @itemRef, @variantRef,\n                                                         @invoiceRef, @diffPrice,\n                                                         @diffRepPrice, @distCost,\n                                                         @distAddExp, @amount,\n                                                         @unit1CFact, @unit2CFact,\n                                                         @price, @vatPer,\n                                                         @vatIInvFlag, @trCode,\n                                                         @billedFlag, 0.0, 1,\n                                                         0.0, 0.0, @reportRate,\n                                                         @sourceType,\n                                                         @sourceIndex,\n                                                         @sourceWSRef,\n                                                         0, @transDate,\n                                                         @transMonth, @lineType,\n                                                         0, 0, 0, 0, 0, 0, 0, 0,\n                                                         0, 0, 0, 1,\n                                                         0, 0, @updInvenStc, 0, 0, 1,\n                                                         @ordTransRef, @distOrdLineRef,\n                                                         0, 0, 0, 0, @lProdStat, @fcStat, @par_Year, 0, 0, 0, @offTrRef, @offerRef\n                    ELSE\n                        EXECUTE LG_STKHANDLEINOUT_099_02 @coef, @itemRef, @variantRef,\n                                                         @invoiceRef, @diffPrice,\n                                                         @diffRepPrice, @distCost,\n                                                         @distAddExp, @amount,\n                                                         @unit1CFact, @unit2CFact,\n                                                         @price, @vatPer,\n                                                         @vatIInvFlag,\n                                                         @trCode, @billedFlag,\n                                                         0.0, -1, 0.0, 0.0,\n                                                         @reportRate,\n                                                         @sourceType,\n                                                         @sourceIndex,\n                                                         @sourceWSRef,\n                                                         0, @transDate, @transMonth,\n                                                         @lineType, 0, 0, 0, 0,\n                                                         0, 0, 0, 0, 0, 0, 0, 0,\n                                                         0, 0, @updInvenStc, 0, 0, 1,\n                                                         @ordTransRef, @distOrdLineRef,\n                                                         0, 0, 0, 0, @lProdStat, @fcStat, @par_Year, 0, 0, 0, @offTrRef, @offerRef\n                END\n            ELSE\n                BEGIN\n                    SELECT @pRetEffect = PRETURNEFFECTORDER, @sRetEffect = SRETURNEFFECTORDER FROM LG_099_TRGPAR\n                    IF (@ordTransRef \u003c\u003e 0) AND\n                       (\n                        (@trCode IN (@ft_MalAlim, @ft_KonsGiris, @ft_PerSatis, @ft_TopSatis, @ft_KonsCikis)) OR\n                        ((@pRetEffect = 1) AND (@trCode IN (@ft_AlimIade, @ft_KonsGirIade))) OR\n                        ((@sRetEffect = 1) AND (@trCode IN (@ft_PerSatIade, @ft_TopSatIade, @ft_KonsCikIade))) OR\n                        ((@trCode \u003e=  @ft_MalzGirIlk) AND (@trCode \u003c= @ft_MalzCikSon)) OR\n                        (@trCode = @ft_Mustahsil) OR\n                        ((@trCode \u003e=  @ft_IrsGirIlk) AND (@trCode \u003c= @ft_IrsCikSon))\n                       )\n                        SELECT @updOrdersFlag = 1\n                    ELSE\n                        SELECT @updOrdersFlag = 0\n                    SELECT @ordDoReserveFlg = 0,\n                           @ordClosedFlag = 0,\n                           @ordInvenNum = 0,\n                           @ordUnit1CFact = 0.0,\n                           @ordUnit2CFact = 0.0,\n                           @ordAmount = 0.0,\n                           @ordDetLine = 0,\n                           @ordPrevLineRef = 0,\n                           @ordPrefLineNo = 0,\n                           @ordFicheRef = 0,\n                           @ordUOMRef = 0\n                    IF (@updOrdersFlag = 1) AND\n                       EXISTS(SELECT LOGICALREF FROM LG_099_02_ORFLINE\n                              WHERE LOGICALREF = @ordTransRef)\n                        SELECT @ordDoReserveFlg = DORESERVE,\n                               @ordClosedFlag = CLOSED,\n                               @ordInvenNum = SOURCEINDEX,\n                               @ordAmount = AMOUNT,\n                               @ordUnit1CFact = UINFO1,\n                               @ordUnit2CFact = UINFO2,\n                               @ordDetLine = DETLINE,\n                               @ordPrevLineRef = PREVLINEREF,\n                               @ordPrefLineNo = PREVLINENO,\n                               @ordFicheRef = ORDFICHEREF,\n                               @ordUOMRef   = UOMREF\n                        FROM LG_099_02_ORFLINE\n                        WHERE LOGICALREF = @ordTransRef\n                    IF (@lProdStat = @c_PStatRealized) AND\n                       ((@trCode IN (@ft_MalAlim, @ft_AlimIade, @ft_UretGiris, @ft_Mustahsil, @ft_SayimFazlasi)) OR\n                        ((@trCode \u003e= @ft_MalzGirIlk) AND (@trCode \u003c= @ft_MalzGirSon)) OR\n                        ((@trCode \u003e= @ft_IrsGirIlk) AND (@trCode \u003c= @ft_IrsGirSon)) OR\n                        ((@trCode = @ft_KonsGiris) AND (@billedFlag = 1)) OR\n                        ((@trCode = @ft_VerFiyatFarki) AND (@billedFlag = 0))) AND\n                       ((@fcStat = 0) OR (@fcStat IS NULL))\n                        SELECT @updAvgFlag = 1\n                    ELSE\n                        SELECT @updAvgFlag = 0\n                    IF (\n                        (@trCode IN (@ft_PerSatIade, @ft_TopSatIade, @ft_PerSatis, @ft_TopSatis)) OR\n                        ((@trCode \u003e= @ft_IrsCikIlk) AND (@trCode \u003c= @ft_IrsCikSon)) OR\n                        ((@trCode IN (@ft_KonsCikis, @ft_Devir)) AND (@billedFlag = 1))) AND ((@fcStat = 0) OR (@fcStat IS NULL))\n                        SELECT @updSaleFlag = 1\n                    ELSE\n                        SELECT @updSaleFlag = 0\n                    IF (\n                        (@trCode IN (@ft_MalAlim, @ft_AlimIade, @ft_Mustahsil)) OR\n                        ((@trCode \u003e= @ft_IrsGirIlk) AND (@trCode \u003c= @ft_IrsGirSon)) OR\n                        ((@trCode IN (@ft_KonsGiris, @ft_AlFiyatFarki)) AND (@billedFlag = 1))\n                       ) AND ((@fcStat = 0) OR (@fcStat IS NULL))\n                        SELECT @updPurchaseFlag = 1\n                    ELSE\n                        SELECT @updPurchaseFlag = 0\n                    IF (@trCode IN (@ft_Fire, @ft_Sarf)) AND (@billedFlag = 0)\n                        SELECT @updWasteFlag = 1\n                    ELSE\n                        SELECT @updWasteFlag = 0\n                    IF (@trCode = @ft_UretGiris) AND (@billedFlag = 0)\n                        SELECT @updProdInFlag = 1\n                    ELSE\n                        SELECT @updProdInFlag = 0\n                    IF (@trCode = @ft_SayimFazlasi)\n                        SELECT @updCntAddFlag = 1\n                    ELSE\n                        SELECT @updCntAddFlag = 0\n                    IF (@trCode = @ft_SayimEksigi)\n                        SELECT @updCntDecFlag = 1\n                    ELSE\n                        SELECT @updCntDecFlag = 0\n                    IF (@trCode IN (@ft_KonsGiris, @ft_KonsGirIade)) AND\n                       (@billedFlag = 0) AND (@stFicheRef \u003c\u003e 0) AND ((@fcStat = 0) OR (@fcStat IS NULL))\n                        SELECT @updTempInFlag = 1\n                    ELSE\n                        SELECT @updTempInFlag = 0\n                    IF (@trCode IN (@ft_KonsCikIade, @ft_KonsCikis)) AND\n                       (@billedFlag = 0) AND (@stFicheRef \u003c\u003e 0) AND ((@fcStat = 0) OR (@fcStat IS NULL))\n                        SELECT @updTempOutFlag = 1\n                    ELSE\n                        SELECT @updTempOutFlag = 0\n                    IF (@trCode \u003e= @ft_MalzGirIlk) AND (@trCode \u003c= @ft_MalzGirSon)\n                        SELECT @updOtherInFlag = 1\n                    ELSE\n                        SELECT @updOtherInFlag = 0\n                    IF ((@trCode \u003e= @ft_MalzCikIlk) AND (@trCode \u003c= @ft_MalzCikSon))\n                        SELECT @updOtherOutFlag = 1\n                    ELSE\n                        SELECT @updOtherOutFlag = 0\n                    IF (@trCode = @ft_Devir) AND (@billedFlag = 0)\n                        SELECT @updTransferFlag = 1\n                    ELSE\n                        SELECT @updTransferFlag = 0\n                    IF (\n                        (@lProdStat = @c_PStatRealized) AND ((@fcStat = 0) OR (@fcStat IS NULL)) AND\n                        ((@stFicheRef \u003c\u003e 0) OR\n                         (@trCode NOT IN (@ft_KonsCikIade, @ft_KonsGiris,\n                                          @ft_KonsCikis, @ft_KonsGirIade)))\n                       )\n                        SELECT @updStcFlag = 1\n                    ELSE\n                        SELECT @updStcFlag = 0\n                    IF (\n                        (@trCode IN (@ft_PerSatIade, @ft_TopSatIade, @ft_PerSatis,\n                                     @ft_TopSatis, @ft_KonsCikis ,@ft_KonsCikIade)) OR\n                        ((@trCode \u003e= @ft_PerSatis) AND (@trCode \u003c= @ft_KonsCikis)) OR\n                        ((@trCode \u003e= @ft_MalzCikIlk) AND (@trCode \u003c= @ft_MalzCikSon)) OR\n                        ((@trCode \u003e= @ft_IrsCikIlk) AND (@trCode \u003c= @ft_IrsCikSon))\n                       )\n                        SELECT @ordRecvFlag = 1\n                    ELSE\n                        SELECT @ordRecvFlag = 0\n                    IF (@ordDoReserveFlg = 1)\n                        SELECT @ordResFlag = 1\n                    ELSE\n                        SELECT @ordResFlag = 0\n                    IF (@distOrdLineRef \u003c\u003e 0) AND\n                       (@trCode NOT IN (@ft_AlimIade, @ft_TopSatIade, @ft_PerSatIade, @ft_KonsGirIade,@ft_KonsCikIade))\n                        SELECT @updOrdOnVehFlag = 1\n                    ELSE\n                        SELECT @updOrdOnVehFlag = 0\n                    IF (@trCode = @ft_KonsGirIade) AND ((@fcStat = 0) OR (@fcStat IS NULL)) AND\n                       (@stFicheRef = 0) AND (@reserveFlg =  1)\n                        SELECT @updResFlag = 1\n                    ELSE\n                        SELECT @updResFlag = 0\n                    EXECUTE LG_STKHANDLEINOUT_099_02 @coef, @itemRef, @variantRef, @invoiceRef,\n                                                     @diffPrice, @diffRepPrice,\n                                                     @distCost, @distAddExp,\n                                                     @amount, @unit1CFact,\n                                                     @unit2CFact, @price,\n                                                     @vatPer, @vatIInvFlag,\n                                                     @trCode, @billedFlag,\n                                                     @ordAmount, @calcSign,\n                                                     @ordUnit1CFact, @ordUnit2CFact,\n                                                     @reportRate,\n                                                     @sourceType,\n                                                     @sourceIndex,\n                                                     @sourceWSRef,\n                                                     @ordInvenNum, @transDate,\n                                                     @transMonth, @lineType,\n                                                     @updWasteFlag, @updProdInFlag,\n                                                     @updCntAddFlag, @updCntDecFlag,\n                                                     @updOtherInFlag, @updOtherOutFlag,\n                                                     @updTransferFlag, @updOrdersFlag,\n                                                     @updOrdOnVehFlag,\n                                                     @updSaleFlag, @updPurchaseFlag,\n                                                     @updAvgFlag,\n                                                     @ordRecvFlag, @ordResFlag,\n                                                     @updStcFlag, @updTempInFlag,\n                                                     @updTempOutFlag, 1,\n                                                     @ordTransRef, @distOrdLineRef,\n                                                     @ordFicheRef, @ordPrevLineRef,\n                                                     @ordDetLine, @ordPrefLineNo,\n                                                     @lProdStat, @fcStat, @par_Year, @updResFlag, @UOMRef, @ordUOMRef, @offTrRef, @offerRef\n                   END\n END"
+}

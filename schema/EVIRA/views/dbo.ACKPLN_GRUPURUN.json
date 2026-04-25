@@ -1,0 +1,40 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "ACKPLN_GRUPURUN",
+    "full_name":  "dbo.ACKPLN_GRUPURUN",
+    "definition":  "CREATE VIEW [dbo].[ACKPLN_GRUPURUN] AS\r\nSELECT     PF.AMBAR_KODU, PH.STOK_REF,PH.VARYANT_REF , SUM((PH.MIKTAR - PH.SEVKEDILEN_MIKTAR) / PH.CARPAN1 * PH.CARPAN2) AS ACIK_MIKTAR\r\nFROM         dbo.PLANLAMAHAREKETLERI AS PH WITH(NOLOCK) INNER JOIN\r\n                      dbo.PLANLAMAFISLERI AS PF WITH(NOLOCK) ON PH.PB_REF = PF.PB_REF\r\nWHERE     (PF.PB_TURU = 2) AND (PF.STATUS = 0) AND (PH.CSUB = 1)\r\nGROUP BY PH.STOK_REF,PH.VARYANT_REF, PF.AMBAR_KODU",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARYANT_REF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIK_MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

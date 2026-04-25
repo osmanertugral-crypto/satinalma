@@ -1,0 +1,84 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "PNET_BNK_EXPENSESLIP_TYPECODES_123",
+    "full_name":  "dbo.PNET_BNK_EXPENSESLIP_TYPECODES_123",
+    "description":  "",
+    "total_rows":  "96",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "500",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DESCRIPTION",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2000",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+
+                ],
+    "sample_data":  [
+                        {
+                            "CODE":  "011",
+                            "DESCRIPTION":  "Asgari Ücretli (GVK.Mad.94-1)"
+                        },
+                        {
+                            "CODE":  "012",
+                            "DESCRIPTION":  "Diğer Ücretler ile Ücret Sayılan Ödemeler (GVK.Mad.94-1)"
+                        },
+                        {
+                            "CODE":  "013",
+                            "DESCRIPTION":  "Kıdem Tazminatı"
+                        },
+                        {
+                            "CODE":  "014",
+                            "DESCRIPTION":  "Huzur Hakkı"
+                        },
+                        {
+                            "CODE":  "015",
+                            "DESCRIPTION":  "İhbar Tazminatı"
+                        },
+                        {
+                            "CODE":  "016",
+                            "DESCRIPTION":  "Yeraltı ve Yerüstü Maden İşçileri"
+                        },
+                        {
+                            "CODE":  "017",
+                            "DESCRIPTION":  "6550 sayılı Kanunlar Kapsamı"
+                        },
+                        {
+                            "CODE":  "018",
+                            "DESCRIPTION":  "Döner Sermaye/Performans/Ek Ders Odemesi/Ek ödeme/Kayyum-Bilirkişi ödemesi/Diğer"
+                        },
+                        {
+                            "CODE":  "019",
+                            "DESCRIPTION":  "Gemi Çalışanları/Dar Mükellef Kurumların İrtibat Buroları/Apartman Kapıcıları"
+                        },
+                        {
+                            "CODE":  "020",
+                            "DESCRIPTION":  "Muhtarlar/Elçiliklerde Çalışan Personel/GVK23/11 Kapsamında Çalışanlar/Diğer"
+                        }
+                    ]
+}

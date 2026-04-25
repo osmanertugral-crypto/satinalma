@@ -1,0 +1,51 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "STOKEKALAN",
+    "full_name":  "dbo.STOKEKALAN",
+    "description":  "",
+    "total_rows":  "0",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "STOKEKALAN_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ALAN",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__STOKEKAL__BF20AA99D86793C7",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "STOKEKALAN_REF"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

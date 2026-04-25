@@ -1,0 +1,40 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "ACKPLN_GRUPURUND",
+    "full_name":  "dbo.ACKPLN_GRUPURUND",
+    "definition":  "CREATE VIEW [dbo].[ACKPLN_GRUPURUND] AS\r\nSELECT     AG.AMBAR_KODU, SA.STOKSUB_REF AS STOK_REF,0 VARYANT_REF, SUM(AG.ACIK_MIKTAR * ((SA.MIKTAR / SBA.CARPAN1 * SBA.CARPAN2) \r\n                      / (S.ALT_BIRIM_ADEDI / SBS.CARPAN1 * SBS.CARPAN2))) AS ACIK_MIKTAR\r\nFROM         dbo.STOKALT AS SA WITH(NOLOCK) INNER JOIN\r\n                      dbo.ACKPLN_GRUPURUN AS AG WITH(NOLOCK) ON AG.VARYANT_REF=0 AND SA.STOK_REF = AG.STOK_REF INNER JOIN\r\n                      dbo.STOKKARTI AS S WITH(NOLOCK) ON  S.VARYANT=0 AND SA.STOK_REF = S.STOK_REF INNER JOIN\r\n                      dbo.STOKBIRIM AS SBS WITH(NOLOCK) ON SBS.VARYANT_REF=0 AND S.ALT_BIRIM_REF = SBS.BIRIM_REF INNER JOIN\r\n                      dbo.STOKBIRIM AS SBA WITH(NOLOCK) ON SBA.VARYANT_REF=0 AND SA.BIRIM_REF = SBA.BIRIM_REF\r\nGROUP BY SA.STOKSUB_REF, AG.AMBAR_KODU",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARYANT_REF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIK_MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

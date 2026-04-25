@@ -1,0 +1,19 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "TC",
+    "full_name":  "dbo.TC",
+    "created":  "Oct 30 2024 12:56PM",
+    "last_altered":  "Oct 30 2024 12:56PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@TBLNAME",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "nvarchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "-1",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE [dbo].[TC] @TBLNAME AS NVARCHAR(MAX)\r\n\r\nAS\r\nSET NOCOUNT ON\r\n  DECLARE @RC AS INT\r\n  DECLARE @RX AS INT SET @RX=1\r\n  DECLARE @CC AS NVARCHAR(MAX) SET @CC=\u0027\u0027\r\n  SET @RC=(SELECT COUNT(1) FROM sys.columns WITH(NOLOCK) WHERE [OBJECT_ID]=(SELECT [OBJECT_ID] FROM sys.tables WITH(NOLOCK) WHERE name=@TBLNAME) )\r\n  T:\r\n  IF @RX\u003e=@RC \r\n  BEGIN goto sn END\r\n  SET @CC = @CC + \r\n   (SELECT name  FROM (SELECT ROW_NUMBER() OVER(ORDER BY column_id ASC) AS \u0027Row\u0027,* FROM sys.columns WITH(NOLOCK) WHERE [OBJECT_ID]=(SELECT [OBJECT_ID] FROM sys.tables WITH(NOLOCK) WHERE name=@TBLNAME))T\r\n    WHERE Row =@RX)+\u0027,\u0027\r\n    SET @RX=@RX+1\r\n   GOTO T\r\n sn:\r\n IF LEN(@CC)\u003e0 SET @CC=SUBSTRING(@CC,1,LEN(@CC)-1)\r\n SELECT @CC"
+}

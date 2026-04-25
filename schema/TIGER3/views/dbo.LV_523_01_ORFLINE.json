@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_523_01_ORFLINE",
+    "full_name":  "dbo.LV_523_01_ORFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_523_01_ORFLINE] AS\nSELECT\n    LGMAIN.LOGICALREF, LGMAIN.ORDFICHEREF, LGMAIN.STOCKREF, LGMAIN.LINENO_, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.DATE_, LGMAIN.LINETYPE, LGMAIN.TRCODE,   \n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.CODE WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.CODE ELSE \u0027\u0027 END AS CODE,\n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.DEFINITION_ WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_ WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.NAME ELSE \u0027\u0027 END AS LINEEXP\nFROM\n    LG_523_01_ORFLINE LGMAIN WITH(NOLOCK)\n LEFT OUTER JOIN LG_523_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF AND LGMAIN.LINETYPE NOT IN (2,3,4)\n    LEFT OUTER JOIN lg_523_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF AND LGMAIN.LINETYPE IN (4)\n    LEFT OUTER JOIN LG_523_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF AND LGMAIN.LINETYPE IN (2,3)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDFICHEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "2",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "3",
+                            "PRICE":  "10",
+                            "TOTAL":  "30",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "3",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "3",
+                            "PRICE":  "10",
+                            "TOTAL":  "30",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "002",
+                            "LINEEXP":  "MANGAL"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "4",
+                            "LINENO_":  "3",
+                            "AMOUNT":  "3",
+                            "PRICE":  "10",
+                            "TOTAL":  "30",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "003",
+                            "LINEEXP":  "HAMAK"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "ORDFICHEREF":  "2",
+                            "STOCKREF":  "2",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "10",
+                            "PRICE":  "20",
+                            "TOTAL":  "200",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "ORDFICHEREF":  "2",
+                            "STOCKREF":  "3",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "1",
+                            "PRICE":  "20",
+                            "TOTAL":  "20",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "002",
+                            "LINEEXP":  "MANGAL"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "ORDFICHEREF":  "2",
+                            "STOCKREF":  "4",
+                            "LINENO_":  "3",
+                            "AMOUNT":  "3",
+                            "PRICE":  "20",
+                            "TOTAL":  "60",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "003",
+                            "LINEEXP":  "HAMAK"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "ORDFICHEREF":  "3",
+                            "STOCKREF":  "2",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "10",
+                            "PRICE":  "20",
+                            "TOTAL":  "200",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "ORDFICHEREF":  "3",
+                            "STOCKREF":  "3",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "2",
+                            "PRICE":  "20",
+                            "TOTAL":  "40",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "002",
+                            "LINEEXP":  "MANGAL"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "ORDFICHEREF":  "3",
+                            "STOCKREF":  "4",
+                            "LINENO_":  "3",
+                            "AMOUNT":  "5",
+                            "PRICE":  "20",
+                            "TOTAL":  "100",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "003",
+                            "LINEEXP":  "HAMAK"
+                        },
+                        {
+                            "LOGICALREF":  "12",
+                            "ORDFICHEREF":  "6",
+                            "STOCKREF":  "2",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "7",
+                            "PRICE":  "10",
+                            "TOTAL":  "70",
+                            "DATE_":  "21.09.2023 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        }
+                    ]
+}

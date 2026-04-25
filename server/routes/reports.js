@@ -6,9 +6,259 @@ const path = require('path');
 const { getDb } = require('../db/schema');
 const { authenticate } = require('../middleware/auth');
 const { normTr } = require('../utils/searchUtils');
+const tiger3 = require('../utils/tiger3');
 
 const router = express.Router();
 router.use(authenticate);
+
+// ── Kategori normalizasyonu (üst seviye gruplama) ────────────────────────────
+const RAW_MATERIAL_GROUPS_SET = new Set([
+  'HAMMADDE', 'HIRDAVAT', 'KARAVAN EKIPMAN', 'MEKANIK', '3D-BASKI', 'BEDELSIZ',
+  'CADIR', 'DOSEME', 'DÖŞEME', 'ELEKTRIK', 'KARAVAN', 'KIMYASAL',
+  'MOBILYA', 'YEDEK PARCA',
+]);
+
+function normalizeText(v) {
+  return String(v || '').trim().toUpperCase()
+    .replace(/İ/g, 'I').replace(/ı/g, 'I').replace(/Ş/g, 'S').replace(/ş/g, 'S')
+    .replace(/Ğ/g, 'G').replace(/ğ/g, 'G').replace(/Ü/g, 'U').replace(/ü/g, 'U')
+    .replace(/Ö/g, 'O').replace(/ö/g, 'O').replace(/Ç/g, 'C').replace(/ç/g, 'C');
+}
+
+function mapCategory(groupName) {
+  const g = normalizeText(groupName);
+  if (!g || g === 'GENEL') return 'DIGER';
+  if (RAW_MATERIAL_GROUPS_SET.has(g)) return 'HAMMADDE';
+  if (g === 'ETICARET' || g === 'E-TICARET') return 'E-TICARET';
+  if (g === 'ARGE' || g === 'AR-GE') return 'ARGE';
+  if (g === 'NUMUNE') return 'NUMUNE';
+  if (g === 'MARKETING' || g === 'PAZARLAMA') return 'MARKETING';
+  if (g === 'UYKU KAPSULU') return 'UYKU KAPSULU';
+  if (g === 'KABIN') return 'KABIN';
+  return 'DIGER';
+}
+
+// ── Tiger3 purchase history sync ─────────────────────────────────────────────
+async function syncPurchaseHistory() {
+  const db = getDb();
+
+  const lg123Rows = await tiger3.query(`
+    SELECT
+      CONVERT(VARCHAR(10), F.DATE_, 120)        AS tarih,
+      F.FICHENO                                  AS fis_no,
+      ISNULL(C.DEFINITION_, '')                  AS tedarikci,
+      S.CODE                                     AS malzeme_kodu,
+      ISNULL(S.NAME, '')                         AS malzeme_adi,
+      ISNULL(L.AMOUNT, 0)                        AS miktar,
+      ISNULL(L.AMOUNT - L.SHIPPEDAMOUNT, 0)      AS bekleyen,
+      0                                          AS iade,
+      ISNULL(L.PRICE, 0)                         AS birim_fiyat,
+      ISNULL(L.TOTAL, 0)                         AS net_tutar,
+      ISNULL(FT.fatura_tutar, 0)                 AS fatura_tutar,
+      CASE ISNULL(F.TRCURR, 0)
+        WHEN 1 THEN 'USD' WHEN 2 THEN 'EUR' ELSE 'TRY'
+      END                                        AS para_birimi,
+      'LG_123'                                   AS firma
+    FROM LG_123_01_ORFLINE L
+    JOIN LG_123_01_ORFICHE F  ON F.LOGICALREF = L.ORDFICHEREF
+    JOIN LG_123_ITEMS       S  ON S.LOGICALREF = L.STOCKREF
+    JOIN LG_123_CLCARD      C  ON C.LOGICALREF = F.CLIENTREF
+    LEFT JOIN (
+      SELECT ORDTRANSREF, SUM(LINENET) AS fatura_tutar
+      FROM LG_123_01_STLINE
+      WHERE ORDTRANSREF > 0
+      GROUP BY ORDTRANSREF
+    ) FT ON FT.ORDTRANSREF = L.LOGICALREF
+    WHERE L.TRCODE = 2 AND L.CANCELLED = 0 AND L.AMOUNT > 0
+  `);
+
+  const lg001Rows = await tiger3.query(`
+    SELECT
+      CONVERT(VARCHAR(10), L.DATE_, 120)  AS tarih,
+      ISNULL(SF.FICHENO, '')              AS fis_no,
+      ISNULL(C.DEFINITION_, '')           AS tedarikci,
+      S.CODE                              AS malzeme_kodu,
+      ISNULL(S.NAME, '')                  AS malzeme_adi,
+      ISNULL(L.AMOUNT, 0)                 AS miktar,
+      0                                   AS bekleyen,
+      0                                   AS iade,
+      ISNULL(L.PRICE, 0)                  AS birim_fiyat,
+      ISNULL(L.LINENET, 0)                AS net_tutar,
+      ISNULL(L.LINENET, 0)                AS fatura_tutar,
+      CASE ISNULL(SF.TRCURR, 0)
+        WHEN 1 THEN 'USD' WHEN 2 THEN 'EUR' ELSE 'TRY'
+      END                                 AS para_birimi,
+      'LG_001'                            AS firma
+    FROM LG_001_01_STLINE L
+    JOIN LG_001_ITEMS  S  ON S.LOGICALREF = L.STOCKREF
+    JOIN LG_001_CLCARD C  ON C.LOGICALREF = L.CLIENTREF
+    LEFT JOIN LG_001_01_STFICHE SF ON SF.LOGICALREF = L.STFICHEREF
+    WHERE L.TRCODE = 1 AND L.CANCELLED = 0 AND L.LINETYPE = 0
+      AND L.AMOUNT > 0
+  `);
+
+  const allRows = [...lg123Rows, ...lg001Rows];
+
+  const insert = db.prepare(`
+    INSERT INTO tiger_purchase_history
+      (tarih, fis_no, malzeme_kodu, malzeme_adi, tedarikci,
+       miktar, bekleyen, iade, birim_fiyat, net_tutar, fatura_tutar,
+       para_birimi, firma)
+    VALUES
+      (@tarih, @fis_no, @malzeme_kodu, @malzeme_adi, @tedarikci,
+       @miktar, @bekleyen, @iade, @birim_fiyat, @net_tutar, @fatura_tutar,
+       @para_birimi, @firma)
+  `);
+
+  db.prepare('DELETE FROM tiger_purchase_history').run();
+  const insertMany = db.transaction(rows => { for (const r of rows) insert.run(r); });
+  insertMany(allRows);
+
+  db.prepare(`
+    INSERT INTO tiger_reports_sync_log (type, row_count, status, message)
+    VALUES ('purchase_history', ?, 'success', ?)
+  `).run(allRows.length, `LG_123: ${lg123Rows.length}, LG_001: ${lg001Rows.length}`);
+
+  return allRows.length;
+}
+
+// ── Tiger3 price analysis sync ───────────────────────────────────────────────
+async function syncPriceAnalysis() {
+  const db = getDb();
+
+  const rows = await tiger3.query(`
+    WITH lines AS (
+      SELECT
+        S.CODE        AS stok_kodu,
+        S.NAME        AS stok_adi,
+        S.STGRPCODE   AS stok_grup,
+        L.AMOUNT      AS miktar,
+        L.PRICE       AS fiyat,
+        F.DATE_       AS tarih,
+        YEAR(F.DATE_) AS yil,
+        MONTH(F.DATE_) AS ay,
+        ROW_NUMBER() OVER (PARTITION BY S.CODE ORDER BY F.DATE_ ASC,  L.LOGICALREF ASC)  AS rn_asc,
+        ROW_NUMBER() OVER (PARTITION BY S.CODE ORDER BY F.DATE_ DESC, L.LOGICALREF DESC) AS rn_desc
+      FROM LG_123_01_ORFLINE L
+      JOIN LG_123_01_ORFICHE F ON F.LOGICALREF = L.ORDFICHEREF
+      JOIN LG_123_ITEMS       S ON S.LOGICALREF = L.STOCKREF
+      WHERE L.TRCODE = 2 AND L.CANCELLED = 0 AND L.PRICE > 0 AND L.AMOUNT > 0
+    )
+    SELECT
+      stok_kodu,
+      MAX(stok_adi)                                                        AS malzeme_adi,
+      MAX(stok_grup)                                                       AS stok_grup,
+      SUM(miktar)                                                          AS toplam_miktar,
+      COUNT(*)                                                             AS adet,
+      CONVERT(VARCHAR(10), MIN(tarih), 120)                                AS ilk_tarih,
+      MAX(CASE WHEN rn_asc  = 1 THEN fiyat ELSE NULL END)                  AS ilk_fiyat,
+      CONVERT(VARCHAR(10), MAX(tarih), 120)                                AS son_tarih,
+      MAX(CASE WHEN rn_desc = 1 THEN fiyat ELSE NULL END)                  AS son_fiyat,
+      AVG(fiyat)                                                           AS ort_fiyat,
+      AVG(CASE WHEN yil=2024 AND ay IN (10,11,12) THEN fiyat ELSE NULL END) AS q4_ort,
+      AVG(CASE WHEN yil=2026 AND ay IN (1,2,3)    THEN fiyat ELSE NULL END) AS recent_ort
+    FROM lines
+    GROUP BY stok_kodu
+  `);
+
+  const upsert = db.prepare(`
+    INSERT OR REPLACE INTO tiger_price_analysis
+      (malzeme_kodu, malzeme_adi, stok_grup, toplam_miktar, adet,
+       ilk_tarih, ilk_fiyat, son_tarih, son_fiyat, ort_fiyat, q4_ort, recent_ort)
+    VALUES
+      (@stok_kodu, @malzeme_adi, @stok_grup, @toplam_miktar, @adet,
+       @ilk_tarih, @ilk_fiyat, @son_tarih, @son_fiyat, @ort_fiyat, @q4_ort, @recent_ort)
+  `);
+
+  db.prepare('DELETE FROM tiger_price_analysis').run();
+  const upsertMany = db.transaction(rs => { for (const r of rs) upsert.run(r); });
+  upsertMany(rows);
+
+  db.prepare(`
+    INSERT INTO tiger_reports_sync_log (type, row_count, status, message)
+    VALUES ('price_analysis', ?, 'success', ?)
+  `).run(rows.length, `${rows.length} malzeme fiyat analizi güncellendi`);
+
+  return rows.length;
+}
+
+// ── Cache-first okuma fonksiyonları ──────────────────────────────────────────
+function getPurchaseRows() {
+  const db = getDb();
+  const count = db.prepare('SELECT COUNT(*) AS c FROM tiger_purchase_history WHERE iade = 0').get().c;
+  if (count > 0) {
+    return db.prepare(`
+      SELECT
+        tarih          AS date_str,
+        fis_no         AS fisNo,
+        malzeme_kodu   AS code,
+        malzeme_adi    AS name,
+        tedarikci      AS supplier,
+        miktar         AS qty,
+        bekleyen       AS waitingQty,
+        birim_fiyat    AS price,
+        net_tutar      AS amount,
+        COALESCE(NULLIF(fatura_tutar, 0), net_tutar) AS invoiceAmount,
+        para_birimi    AS currency,
+        substr(tarih, 1, 7) AS monthKey
+      FROM tiger_purchase_history
+      WHERE iade = 0 AND tarih IS NOT NULL
+    `).all().map(r => ({ ...r, date: new Date(r.date_str) }));
+  }
+  return getPurchaseRowsFromExcel();
+}
+
+function getProductAnalysisRows() {
+  const db = getDb();
+  const count = db.prepare('SELECT COUNT(*) AS c FROM tiger_price_analysis').get().c;
+  if (count > 0) {
+    return db.prepare('SELECT * FROM tiger_price_analysis').all().map(item => {
+      const firstPrice = item.ilk_fiyat;
+      const lastPrice  = item.son_fiyat;
+      const firstDate  = item.ilk_tarih ? new Date(item.ilk_tarih) : null;
+      const lastDate   = item.son_tarih ? new Date(item.son_tarih)  : null;
+      const overallChange = firstPrice && lastPrice && firstPrice > 0
+        ? Math.round(((lastPrice - firstPrice) / firstPrice) * 10000) / 100 : null;
+      const q4ToRecentChange = item.q4_ort && item.recent_ort && item.q4_ort > 0
+        ? Math.round(((item.recent_ort - item.q4_ort) / item.q4_ort) * 10000) / 100 : null;
+
+      const trend = [];
+      if (firstDate && firstPrice != null) trend.push({ month: firstDate.toISOString().slice(0, 7), avgPrice: firstPrice, minPrice: firstPrice, maxPrice: firstPrice, count: 1 });
+      if (item.q4_ort   != null) trend.push({ month: '2024-Q4', avgPrice: item.q4_ort,    minPrice: item.q4_ort,    maxPrice: item.q4_ort,    count: 1 });
+      if (item.recent_ort != null) trend.push({ month: '2026-01', avgPrice: item.recent_ort, minPrice: item.recent_ort, maxPrice: item.recent_ort, count: 1 });
+      if (lastDate && lastPrice != null) {
+        const lm = lastDate.toISOString().slice(0, 7);
+        if (!trend.some(t => t.month === lm && t.avgPrice === lastPrice))
+          trend.push({ month: lm, avgPrice: lastPrice, minPrice: lastPrice, maxPrice: lastPrice, count: 1 });
+      }
+
+      return {
+        product_id: item.malzeme_kodu,
+        code:       item.malzeme_kodu,
+        name:       item.malzeme_adi || '',
+        category:   item.stok_grup   || 'Genel',
+        anaGrup:    mapCategory(item.stok_grup),
+        firstDate:  firstDate ? firstDate.toISOString().slice(0, 10) : null,
+        firstPrice,
+        lastDate:   lastDate  ? lastDate.toISOString().slice(0, 10)  : null,
+        lastPrice,
+        avgPrice:   item.ort_fiyat,
+        priceCount: item.adet || 0,
+        totalQty:   item.toplam_miktar || 0,
+        overallChange,
+        q4Avg:            item.q4_ort,
+        recentAvg:        item.recent_ort,
+        q4ToRecentChange,
+        firstToEkaChange: null,
+        janToLastChange:  null,
+        trend: trend.sort((a, b) => String(a.month).localeCompare(String(b.month))),
+        _lastDateObj:  lastDate,
+        _firstDateObj: firstDate,
+      };
+    });
+  }
+  return getProductAnalysisRowsFromExcel();
+}
 
 const PRODUCT_ANALYSIS_EXCEL_PATH = path.join(__dirname, '..', '..', 'gecici', 'Urun Fiyat Analiz.xlsx');
 const PRODUCT_ANALYSIS_SHEET_NAME = 'URUN FIYAT ANALIZ';
@@ -246,7 +496,7 @@ router.get('/dashboard', (req, res) => {
 
   // DB bossa dashboard kartlari icin excel fallback kullan.
   if (totalSuppliers === 0 && totalProducts === 0 && activePo === 0) {
-    const excelRows = getPurchaseRowsFromExcel();
+    const excelRows = getPurchaseRows();
     const supplierSet = new Set();
     const productSet = new Set();
     const poMap = new Map();
@@ -357,7 +607,7 @@ router.get('/dashboard', (req, res) => {
   `).all();
 
   if (!topPriceIncreasesSliced.length) {
-    const excelPriceRows = getProductAnalysisRowsFromExcel();
+    const excelPriceRows = getProductAnalysisRows();
     topPriceIncreasesSliced = excelPriceRows
       .filter(item => Number(item.overallChange || 0) > 0)
       .sort((a, b) => Number(b.overallChange || 0) - Number(a.overallChange || 0))
@@ -791,7 +1041,7 @@ router.get('/export/po', async (req, res) => {
 // Aylık kategori bazlı satınalma toplamları (15 aylık özet)
 // GET /api/reports/monthly-summary
 router.get('/monthly-summary', (req, res) => {
-  const excelRows = getPurchaseRowsFromExcel();
+  const excelRows = getPurchaseRows();
   if (excelRows.length > 0) {
     const monthMap = new Map();
     for (const row of excelRows) {
@@ -881,33 +1131,6 @@ router.get('/monthly-summary', (req, res) => {
 
   const db = getDb();
 
-  // Hammadde alt gruplarını ana gruba map'leyen yardımcı
-  const RAW_MATERIAL_GROUPS = new Set([
-    'HAMMADDE', 'HIRDAVAT', 'KARAVAN EKIPMAN', 'MEKANIK', '3D-BASKI', 'BEDELSIZ',
-    'CADIR', 'CADIR', 'DOSEME', 'DÖŞEME', 'ELEKTRIK', 'KARAVAN', 'KIMYASAL',
-    'MOBILYA', 'YEDEK PARCA'
-  ]);
-
-  function normalizeText(v) {
-    return String(v || '').trim().toUpperCase()
-      .replace(/İ/g,'I').replace(/ı/g,'I').replace(/Ş/g,'S').replace(/ş/g,'S')
-      .replace(/Ğ/g,'G').replace(/ğ/g,'G').replace(/Ü/g,'U').replace(/ü/g,'U')
-      .replace(/Ö/g,'O').replace(/ö/g,'O').replace(/Ç/g,'C').replace(/ç/g,'C');
-  }
-
-  function mapCategory(groupName) {
-    const g = normalizeText(groupName);
-    if (!g || g === 'GENEL') return 'DIGER';
-    if (RAW_MATERIAL_GROUPS.has(g)) return 'HAMMADDE';
-    if (g === 'ETICARET' || g === 'E-TICARET') return 'E-TICARET';
-    if (g === 'ARGE' || g === 'AR-GE') return 'ARGE';
-    if (g === 'NUMUNE') return 'NUMUNE';
-    if (g === 'MARKETING' || g === 'PAZARLAMA') return 'MARKETING';
-    if (g === 'UYKU KAPSULU') return 'UYKU KAPSULU';
-    if (g === 'KABIN') return 'KABIN';
-    return 'DIGER';
-  }
-
   // PO kalemlerinden aylık toplamları çek
   const rows = db.prepare(`
     SELECT
@@ -957,7 +1180,7 @@ router.get('/product-price-analysis', (req, res) => {
   const selectedMonth = month ? Number(month) : null;
   const normalizedSearch = search ? normTr(search) : '';
 
-  let rows = getProductAnalysisRowsFromExcel();
+  let rows = getProductAnalysisRows();
 
   const maxDate = rows.reduce((acc, row) => {
     const d = row._lastDateObj;
@@ -999,7 +1222,7 @@ router.get('/product-price-analysis', (req, res) => {
     month: selectedMonth || null,
   };
 
-  const availableYears = [...new Set(getProductAnalysisRowsFromExcel().map(r => r._lastDateObj?.getFullYear()).filter(Boolean))].sort((a, b) => b - a);
+  const availableYears = [...new Set(getProductAnalysisRows().map(r => r._lastDateObj?.getFullYear()).filter(Boolean))].sort((a, b) => b - a);
 
   const data = rows
     .map(({ _lastDateObj, _firstDateObj, ...rest }) => rest)
@@ -1013,4 +1236,41 @@ router.get('/product-price-analysis', (req, res) => {
   res.json({ summary, availableYears, data });
 });
 
-module.exports = router;
+// POST /api/reports/sync/purchase-history
+router.post('/sync/purchase-history', async (req, res) => {
+  try {
+    const count = await syncPurchaseHistory();
+    res.json({ success: true, count, message: `${count} satır yüklendi` });
+  } catch (err) {
+    const db = getDb();
+    db.prepare(`INSERT INTO tiger_reports_sync_log (type, row_count, status, message) VALUES ('purchase_history', 0, 'error', ?)`).run(err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/reports/sync/price-analysis
+router.post('/sync/price-analysis', async (req, res) => {
+  try {
+    const count = await syncPriceAnalysis();
+    res.json({ success: true, count, message: `${count} malzeme fiyat analizi güncellendi` });
+  } catch (err) {
+    const db = getDb();
+    db.prepare(`INSERT INTO tiger_reports_sync_log (type, row_count, status, message) VALUES ('price_analysis', 0, 'error', ?)`).run(err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET /api/reports/sync/status
+router.get('/sync/status', (req, res) => {
+  const db = getDb();
+  const purchaseCount = db.prepare('SELECT COUNT(*) AS c FROM tiger_purchase_history').get().c;
+  const priceCount    = db.prepare('SELECT COUNT(*) AS c FROM tiger_price_analysis').get().c;
+  const lastPurchase  = db.prepare(`SELECT synced_at, status, message FROM tiger_reports_sync_log WHERE type='purchase_history' ORDER BY id DESC LIMIT 1`).get();
+  const lastPrice     = db.prepare(`SELECT synced_at, status, message FROM tiger_reports_sync_log WHERE type='price_analysis'    ORDER BY id DESC LIMIT 1`).get();
+  res.json({
+    purchase_history: { count: purchaseCount, last_sync: lastPurchase || null },
+    price_analysis:   { count: priceCount,    last_sync: lastPrice    || null },
+  });
+});
+
+module.exports = Object.assign(router, { syncPurchaseHistory, syncPriceAnalysis });

@@ -1,0 +1,75 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDSHIPPEDAMOUNT_123_01",
+    "full_name":  "dbo.LG_UPDSHIPPEDAMOUNT_123_01",
+    "created":  "Sep  1 2025 11:44AM",
+    "last_altered":  "Sep  1 2025 11:44AM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@stTransRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ordTransRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@sourceLink",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@amount",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@stTransDate",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@stUinfo1",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@stUinfo2",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@coef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDSHIPPEDAMOUNT_123_01 (\n @stTransRef INT\n ,@ordTransRef INT\n ,@sourceLink INT\n ,@amount FLOAT\n ,@stTransDate DATETIME\n ,@stUinfo1 FLOAT\n ,@stUinfo2 FLOAT\n ,@coef INT\n )\nAS\nBEGIN\n DECLARE @stShippedAmount FLOAT\n  ,@stShippedRsrvAmount FLOAT\n  ,@shippedAmount FLOAT\n  ,@existsShpAmount FLOAT\n  ,@orfShippedAmount FLOAT\n  ,@c_amount FLOAT\n  ,@orfAmount FLOAT\n  ,@orfRsrvAmount FLOAT\n  ,@uinfo1 FLOAT\n  ,@uinfo2 FLOAT\n  ,@convFactor FLOAT\n  ,@stConvFactor FLOAT\n  ,@diffAmount FLOAT\n  ,@diffRsrvAmount FLOAT\n  DECLARE @FRMNR INT\n  DECLARE @EFFORDVAL VARCHAR(101)\n  SELECT @FRMNR = CAST(\u0027123\u0027 AS SMALLINT)\n  SELECT @EFFORDVAL = VALUE FROM \"TIGER3\"..L_FIRMPARAMS\n WHERE FIRMNR = @FRMNR AND CODE=\u0027SALES_RETEFFECTORDER\u0027\n IF (@coef = - 1)\n BEGIN\n  DELETE\n  FROM LG_123_01_STSHIPPEDAMOUNT\n  WHERE TRANSREF = @stTransRef\n END\n ELSE\n BEGIN\n  SELECT @stShippedAmount = 0\n  SELECT @stShippedRsrvAmount = 0\n  SELECT @shippedAmount = 0\n  SELECT @orfAmount = AMOUNT\n   ,@orfRsrvAmount = RESERVEAMOUNT\n   ,@orfShippedAmount = SHIPPEDAMOUNT\n   ,@uinfo1 = UINFO1\n   ,@uinfo2 = UINFO2\n  FROM LG_123_01_ORFLINE WITH (NOLOCK)\n  WHERE LOGICALREF = @ordTransRef\n  EXECUTE LG_CONVFACT @uinfo1\n   ,@uinfo2\n   ,@convFactor OUTPUT\n  EXECUTE LG_CONVFACT @stUinfo1\n   ,@stUinfo2\n   ,@stConvFactor OUTPUT\n  SELECT @c_amount = @amount * @stConvFactor\n  SELECT @orfAmount = @orfAmount * @convFactor\n  SELECT @orfRsrvAmount = @orfRsrvAmount * @convFactor\n  IF (@sourcelink \u003c\u003e 0)\n  BEGIN\n   SET @diffAmount = @orfShippedAmount - @orfAmount\n   IF (@diffAmount \u003e 0)\n   BEGIN\n    IF (@c_amount \u003e @diffAmount)\n     SELECT @stShippedAmount = - 1 * (@c_amount - @diffAmount)\n    ELSE\n     SELECT @stShippedAmount = 0\n   END\n   ELSE\n    SELECT @stShippedAmount = - 1 * @c_amount\n   SET @diffRsrvAmount = @orfShippedAmount - @orfRsrvAmount\n   IF (@diffRsrvAmount \u003e= 0)\n   BEGIN\n    IF (@c_amount \u003e @diffRsrvAmount)\n     SELECT @stShippedRsrvAmount = - 1 * (@c_amount - @diffRsrvAmount)\n    ELSE\n     SELECT @stShippedRsrvAmount = 0\n   END\n   ELSE\n    SELECT @stShippedRsrvAmount = - 1 * @c_amount\n  END\n  ELSE\n  BEGIN\n   SELECT @shippedAmount = COALESCE(SUM(ST.AMOUNT * (ST.UINFO2 / ST.UINFO1)), 0)\n    ,@existsShpAmount = COALESCE(SUM(SHP.SHIPPEDAMOUNT), 0)\n   FROM LG_123_01_STLINE ST WITH (NOLOCK)\n   LEFT OUTER JOIN LG_123_01_STSHIPPEDAMOUNT SHP WITH (NOLOCK)\n    ON (ST.LOGICALREF = SHP.TRANSREF)\n   WHERE ST.ORDTRANSREF = @ordTransRef\n    AND ST.LOGICALREF \u003c\u003e @stTransRef\n    AND ST.DATE_ \u003c= @stTransDate\n    AND ST.CANCELLED = 0\n    AND ST.SOURCELINK = 0 --- Yeni kosul eklenmistir.\n        AND ST.LOGICALREF NOT IN (SELECT SOURCELINK from LG_123_01_STLINE WHERE ORDTRANSREF = @ordTransRef)\n   IF (@existsShpAmount \u003c\u003e 0)\n    SELECT @shippedAmount = @existsShpAmount\n   IF (@orfAmount - @shippedAmount \u003e 0)\n   BEGIN\n    IF (@c_amount \u003e (@orfAmount - @shippedAmount))\n     SELECT @stShippedAmount = @orfAmount - @shippedAmount\n    ELSE\n     SELECT @stShippedAmount = @c_amount\n   END\n   ELSE\n    SELECT @stShippedAmount = 0\n   IF (@orfRsrvAmount - @shippedAmount \u003e 0)\n   BEGIN\n    IF (@c_amount \u003e (@orfRsrvAmount - @shippedAmount))\n     SELECT @stShippedRsrvAmount = @orfRsrvAmount - @shippedAmount\n    ELSE\n     SELECT @stShippedRsrvAmount = @c_amount\n   END\n   ELSE\n    SELECT @stShippedRsrvAmount = 0\n  END\n  IF NOT EXISTS (\n    SELECT *\n    FROM LG_123_01_STSHIPPEDAMOUNT\n    WHERE TRANSREF = @stTransRef\n    )\n  BEGIN\n   IF (@sourcelink \u003c\u003e 0)\n   BEGIN\n    INSERT INTO LG_123_01_STSHIPPEDAMOUNT (\n     TRANSREF\n     ,ORDTRANSREF\n     ,SHIPPEDAMOUNT\n     ,SHIPPEDRSRVAMT\n     )\n    VALUES (\n     @stTransRef\n     ,@ordTransRef\n     ,0\n     ,0\n     )\n    IF (LTRIM(@EFFORDVAL) = \u00271\u0027)\n         BEGIN UPDATE LG_123_01_STSHIPPEDAMOUNT\n        SET SHIPPEDAMOUNT = SHIPPEDAMOUNT + @stShippedAmount\n              ,SHIPPEDRSRVAMT = SHIPPEDRSRVAMT + @stShippedRsrvAmount\n           WHERE TRANSREF = @sourcelink\n         END\n   END\n   ELSE\n   BEGIN\n    INSERT INTO LG_123_01_STSHIPPEDAMOUNT (\n     TRANSREF\n     ,ORDTRANSREF\n     ,SHIPPEDAMOUNT\n     ,SHIPPEDRSRVAMT\n     )\n    VALUES (\n     @stTransRef\n     ,@ordTransRef\n     ,@stShippedAmount\n     ,@stShippedRsrvAmount\n     )\n   END\n  END\n  ELSE\n  BEGIN\n   IF (@sourcelink \u003c\u003e 0)\n    BEGIN IF (LTRIM(@EFFORDVAL) = \u00271\u0027)\n             BEGIN UPDATE LG_123_01_STSHIPPEDAMOUNT\n                     SET SHIPPEDAMOUNT = SHIPPEDAMOUNT + @stShippedAmount\n                 ,SHIPPEDRSRVAMT = SHIPPEDRSRVAMT + @stShippedRsrvAmount\n            WHERE TRANSREF = @sourcelink\n               END\n        END\n   ELSE\n    UPDATE LG_123_01_STSHIPPEDAMOUNT\n    SET SHIPPEDAMOUNT = @stShippedAmount\n     ,SHIPPEDRSRVAMT = @stShippedRsrvAmount\n    WHERE TRANSREF = @stTransRef\n  END\n END\nEND"
+}

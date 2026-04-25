@@ -1,0 +1,96 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_323_02_ORFLINE",
+    "full_name":  "dbo.LV_323_02_ORFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_323_02_ORFLINE] AS\nSELECT\n    LGMAIN.LOGICALREF, LGMAIN.ORDFICHEREF, LGMAIN.STOCKREF, LGMAIN.LINENO_, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.DATE_, LGMAIN.LINETYPE, LGMAIN.TRCODE,   \n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.CODE WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.CODE ELSE \u0027\u0027 END AS CODE,\n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.DEFINITION_ WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_ WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.NAME ELSE \u0027\u0027 END AS LINEEXP\nFROM\n    LG_323_02_ORFLINE LGMAIN WITH(NOLOCK)\n LEFT OUTER JOIN LG_323_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF AND LGMAIN.LINETYPE NOT IN (2,3,4)\n    LEFT OUTER JOIN lg_323_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF AND LGMAIN.LINETYPE IN (4)\n    LEFT OUTER JOIN LG_323_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF AND LGMAIN.LINETYPE IN (2,3)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDFICHEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

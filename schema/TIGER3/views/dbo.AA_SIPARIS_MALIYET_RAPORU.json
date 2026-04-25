@@ -1,0 +1,99 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_SIPARIS_MALIYET_RAPORU",
+    "full_name":  "dbo.AA_SIPARIS_MALIYET_RAPORU",
+    "definition":  "\r\nCREATE VIEW [dbo].[AA_SIPARIS_MALIYET_RAPORU] AS \r\nSELECT DISTINCT PROJE, OZEL_KOD, \r\nCAST(SUM(TUTAR) AS DECIMAL(18,2)) AS SIPARIS_TUTARI, \r\nCAST(SUM(SARF_EDILEN_TUTAR) AS DECIMAL(18,2)) AS MALIYET_TUTARI\r\n FROM (\r\n\r\n\r\nSELECT * ,\r\n\r\nISNULL((SELECT SUM(MIKTAR) FROM AA_RECETE_LISTESI WHERE MAMUL_KODU=MALZEME_KODU),0) AS RECETE_MIKTARI\r\n\r\n,ISNULL(\r\nISNULL(\r\n(sELECT SUM(MIKTAR) FROM AA_SARF_PROJE WHERE IS_EMRI_N0=PROJE AND STOK_KODU IN (SELECT STOK_KODU FROM AA_RECETE_LISTESI WHERE MAMUL_KODU=MALZEME_KODU)) ,\r\n(sELECT SUM(MIKTAR) FROM AA_SARF_PROJE WHERE IS_EMRI_N0=PROJE AND STOK_KODU=MALZEME_KODU)\r\n),0)AS SARF_EDILEN_MIKTAR\r\n,ISNULL(\r\nISNULL(\r\n(sELECT SUM(TUTAR) FROM AA_SARF_PROJE WHERE IS_EMRI_N0=PROJE AND STOK_KODU IN (SELECT STOK_KODU FROM AA_RECETE_LISTESI WHERE MAMUL_KODU=MALZEME_KODU)) ,\r\n(sELECT SUM(TUTAR) FROM AA_SARF_PROJE WHERE IS_EMRI_N0=PROJE AND STOK_KODU=MALZEME_KODU)\r\n),0)AS SARF_EDILEN_TUTAR\r\n\r\n\r\nFROM (\r\nSELECT MLZ.LOGICALREF MLZID,\r\nFIS.DATE_ AS TARIH,\r\nFIS.FICHENO AS FISNO,\r\n(SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=FIS.PROJECTREF) AS PROJE,\r\nMLZ.CODE AS MALZEME_KODU,\r\nMLZ.NAME AS MALZEME_ADI,\r\n--CASE WHEN MLZ.SPECODE5=\u0027ANAMLZ\u0027 THEN \u0027STANDART\u0027 \r\n--WHEN MLZ.CYPHCODE=\u0027ARABA\u0027 THEN \u0027ARABA\u0027 \r\n--ELSE \u0027BOŞ\u0027 END AS OZEL_KOD,\r\nCASE WHEN MLZ.LOGICALREF IN (SELECT STCREF FROM LG_001_STCOMPLN WHERE STCREF=MLZ.LOGICALREF) THEN \u0027OPSİYONEL\u0027 WHEN MLZ.CYPHCODE=\u0027ARABA\u0027 THEN \u0027ARABA\u0027 ELSE \u0027STANDART\u0027 END AS OZEL_KOD,\r\nSAT.AMOUNT AS SIPARIS_MIKTARI,\r\nSAT.LINENET AS TUTAR\r\n\r\nFROM LG_001_01_ORFLINE SAT\r\n\r\nINNER JOIN LG_001_01_ORFICHE FIS ON SAT.ORDFICHEREF=FIS.LOGICALREF\r\nINNER JOIN LG_001_ITEMS MLZ ON MLZ.LOGICALREF=SAT.STOCKREF\r\nINNER JOIN LG_001_CLCARD CAR ON CAR.LOGICALREF=SAT.CLIENTREF\r\n\r\nWHERE SAT.TRCODE=1 \r\n\r\n) AS RAPOR \r\n\r\n) AS RAPOR_2 \r\n--WHERE PROJE=\u0027RV04\u0027 \r\n\r\n\r\nGROUP BY  PROJE, OZEL_KOD\r\nUNION ALL \r\nSELECT \r\n(SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=AAA.PROJECTREF) AS PROJE,\u0027ÖTV\u0027 AS OZEL_KOD,\r\n0 AS SIPARIS_TUTARI,\r\nLINENET AS MALIYET_TUTARI \r\nFROM LG_001_01_STLINE AAA WHERE \r\nTRCODE=12 AND STOCKREF IN (sELECT LOGICALREF FROM LG_001_ITEMS WHERE SPECODE5=\u0027ÖTV\u0027) \r\n--AND (SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=AAA.PROJECTREF)=\u0027RV04\u0027\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n--SELECT * FROM AA_SARF_PROJE WHERE IS_EMRI_N0=\u0027RV04\u0027\r\n\r\n\r\n--SELECT * FROM LG_001_01_ORFICHE WHERE PROJECTREF=(SELECT LOGICALREF FROM LG_001_PROJECT WHERE CODE=\u0027RV04\u0027)\r\n\r\n\r\n--SELECT \r\n--MLZ.CODE, MLZ.NAME, SAT.AMOUNT AS MIKTAR\r\n\r\n-- FROM \r\n-- LG_001_01_ORFLINE SAT\r\n\r\n--INNER JOIN LG_001_01_ORFICHE FIS ON SAT.ORDFICHEREF=FIS.LOGICALREF\r\n--INNER JOIN LG_001_ITEMS MLZ ON MLZ.LOGICALREF=SAT.STOCKREF\r\n--INNER JOIN LG_001_CLCARD CAR ON CAR.LOGICALREF=SAT.CLIENTREF\r\n--WHERE FIS.FICHENO=\u0027000056\u0027\r\n\r\n\r\n\r\n--SELECT * FROM AA_RECETE_FIYAT_RAPORU WHERE KARAVAN_KODU=\u0027RV.01.15 MT3.TÜRKİYE\u0027\r\n\r\n\r\n\r\n--SELECT SUM(TUTAR) FROM  AA_SARF_PROJE WHERE IS_EMRI_N0=\u0027RV04\u0027 and STOK_KODU IN (SELECT ALT_KOD FROM AA_RECETE_FIYAT_RAPORU WHERE KARAVAN_KODU=\u0027RV.01.15 MT3.TÜRKİYE\u0027)\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PROJE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OZEL_KOD",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIPARIS_TUTARI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALIYET_TUTARI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "PROJE":  "G0117",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "9361,02",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "G0118",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "9361,02",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "G0121",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "7316,41",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "G0134",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "9328,99",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "G0155",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "18080,16",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "MC008",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "20870,11",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "RV05",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "8699,26",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "RXL020",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "39929,76",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "T004",
+                            "OZEL_KOD":  "OPSİYONEL",
+                            "SIPARIS_TUTARI":  "11266,18",
+                            "MALIYET_TUTARI":  "0"
+                        },
+                        {
+                            "PROJE":  "DİĞER GELİRLER",
+                            "OZEL_KOD":  "STANDART",
+                            "SIPARIS_TUTARI":  "200,00",
+                            "MALIYET_TUTARI":  "0"
+                        }
+                    ]
+}

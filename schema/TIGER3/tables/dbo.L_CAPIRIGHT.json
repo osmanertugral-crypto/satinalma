@@ -1,0 +1,189 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_CAPIRIGHT",
+    "full_name":  "dbo.L_CAPIRIGHT",
+    "description":  "",
+    "total_rows":  "6886",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OWNER",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ID",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ITEM",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RIGHTS",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "CAPIRIGHT_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "CAPIRIGHT_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "TYP, OWNER, ID, ITEM"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "2",
+                            "TYP":  "63",
+                            "OWNER":  "0",
+                            "ID":  "13",
+                            "ITEM":  "1",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "1",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "2",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "3",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "4",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "5",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "6",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "7",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "8",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "TYP":  "165",
+                            "OWNER":  "1",
+                            "ID":  "13",
+                            "ITEM":  "9",
+                            "RIGHTS":  "\u003cbinary\u003e"
+                        }
+                    ]
+}

@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "CHECKROWUSETBREF",
+    "on_table":  "dbo.TALEPFISLERI",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "DELETE"
+               ],
+    "definition":  "CREATE TRIGGER [dbo].[CHECKROWUSETBREF] ON [dbo].[TALEPFISLERI]\r\nAFTER DELETE \r\nAS \r\nBEGIN\r\n    SET NOCOUNT ON;     \r\n\tIF EXISTS ( SELECT * FROM\tSTOKHAREKETLERI WITH(NOLOCK) WHERE TB_REF\u003e0 AND TB_REF IN (SELECT TB_REF FROM deleted))\r\n\tbegin rollback transaction RAISERROR (\u0027TB_REF in use.\u0027 , 16, 1) end\r\nEND"
+}

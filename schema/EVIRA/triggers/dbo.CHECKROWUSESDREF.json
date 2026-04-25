@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "CHECKROWUSESDREF",
+    "on_table":  "dbo.SIPARISHAREKETLERI",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "DELETE"
+               ],
+    "definition":  "CREATE TRIGGER [dbo].[CHECKROWUSESDREF] ON [dbo].[SIPARISHAREKETLERI]\r\nAFTER DELETE \r\nAS \r\nBEGIN\r\n    SET NOCOUNT ON;     \r\n\tIF EXISTS ( SELECT * FROM STOKHAREKETLERI WITH(NOLOCK) WHERE SD_REF IN (SELECT SD_REF FROM deleted))\r\n\tbegin rollback transaction RAISERROR (\u0027SD_REF in use.\u0027 , 16, 1) end\r\n    IF EXISTS ( SELECT * FROM PLANLAMAHAREKETLERI WITH(NOLOCK) WHERE SD_REF IN (SELECT SD_REF FROM deleted))\r\n\tbegin rollback transaction RAISERROR (\u0027SD_REF in use.\u0027 , 16, 1) end\r\nEND"
+}

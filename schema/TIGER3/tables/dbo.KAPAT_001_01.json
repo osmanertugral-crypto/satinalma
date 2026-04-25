@@ -1,0 +1,61 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "KAPAT_001_01",
+    "full_name":  "dbo.KAPAT_001_01",
+    "description":  "",
+    "total_rows":  "54",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "7452"
+                        },
+                        {
+                            "LOGICALREF":  "8529"
+                        },
+                        {
+                            "LOGICALREF":  "9137"
+                        },
+                        {
+                            "LOGICALREF":  "9181"
+                        },
+                        {
+                            "LOGICALREF":  "9616"
+                        },
+                        {
+                            "LOGICALREF":  "9812"
+                        },
+                        {
+                            "LOGICALREF":  "10300"
+                        },
+                        {
+                            "LOGICALREF":  "7490"
+                        },
+                        {
+                            "LOGICALREF":  "6162"
+                        },
+                        {
+                            "LOGICALREF":  "7145"
+                        }
+                    ]
+}

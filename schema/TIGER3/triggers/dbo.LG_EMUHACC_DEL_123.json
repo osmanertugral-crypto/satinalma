@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "LG_EMUHACC_DEL_123",
+    "on_table":  "dbo.LG_123_EMUHACC",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "DELETE"
+               ],
+    "definition":  "CREATE TRIGGER LG_EMUHACC_DEL_123 ON LG_123_EMUHACC\nFOR DELETE\nAS\nDECLARE @old_accountRef INT\nSELECT @old_accountRef = D.LOGICALREF\nFROM DELETED D\nDELETE FROM LG_123_EMUHACCSUBACCASGN WHERE (SUBACCOUNTREF = @old_accountRef)\n"
+}

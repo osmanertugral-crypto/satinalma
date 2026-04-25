@@ -1,0 +1,178 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_FIYATLANDIRMA_RAPORU",
+    "full_name":  "dbo.AA_FIYATLANDIRMA_RAPORU",
+    "definition":  "\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[AA_FIYATLANDIRMA_RAPORU] AS \r\n\r\nSELECT \r\nS.LOGICALREF MLZ_ID,\r\nyear(F.DATE_) YIL\r\n,MONTH(F.DATE_) AY \r\n,F.DATE_ TARIH\r\n,F.FICHENO FISNO\r\n,C.CODE CARI_KODU\r\n,C.DEFINITION_ CARI_UNVANI\r\n,S.STGRPCODE STOK_GRUP\r\n,S.CODE STOK_KODU\r\n,s.NAME STOK_ADI\r\n,L.AMOUNT  MIKTAR\r\n,U.CODE BIRIM\r\n,L.SHIPPEDAMOUNT TESLIM_ALINAN\r\n,AMOUNT-L.SHIPPEDAMOUNT BEKLEYEN\r\n,L.PRICE FIYAT\r\n,L.TOTAL TUTAR\r\n,L.REPORTRATE KUR\r\n,ROUND(NULLIF(L.TOTAL,0)/NULLIF(L.REPORTRATE,0),2) EUR_TUTAR\r\n,(SELECT MAX(REPORTRATE) FROM LG_123_01_STLINE WHERE ORDTRANSREF=L.LOGICALREF) FATURA_KUR\r\n,(SELECT MAX(DATE_) FROM LG_123_01_STLINE WHERE ORDTRANSREF=L.LOGICALREF) FATURA_TARIHI\r\n,(SELECT SUM(LINENET) FROM LG_123_01_STLINE WHERE ORDTRANSREF=L.LOGICALREF) FATURA_TUTAR\r\n\r\n,CAST(ISNULL((SELECT SUM(NULLIF(LINENET,0)/NULLIF(REPORTRATE,0)) FROM LG_123_01_STLINE WHERE ORDTRANSREF=L.LOGICALREF AND LINENET\u003c\u003e0 AND REPORTRATE\u003c\u003e0),0) AS decimal(18,4)) FATURA_EUR\r\n,cast(ISNULL((SELECT SUM((NULLIF(LINENET,0)/NULLIF(REPORTRATE,0))/AMOUNT) FROM LG_123_01_STLINE WHERE ORDTRANSREF=L.LOGICALREF AND LINENET\u003c\u003e0 AND REPORTRATE\u003c\u003e0),0) as decimal(18,4)) EUR_BIRIM_FIYAT\r\n\r\n\r\n\r\n,PARASI.PRICE AS TANIMLI_FIYAT\r\n\r\nFROM \r\nLG_123_ITEMS AS S \r\n\r\nLEFT OUTER JOIN LG_123_PRCLIST PARASI ON PARASI.CARDREF=S.LOGICALREF\r\n\r\n\r\nLEFT OUTER  JOIN LG_123_01_ORFLINE AS L ON S.LOGICALREF=L.STOCKREF AND L.TRCODE=2\r\nLEFT OUTER JOIN LG_123_01_ORFICHE AS F ON F.LOGICALREF=L.ORDFICHEREF\r\nLEFT  OUTER JOIN LG_123_CLCARD AS C ON C.LOGICALREF=F.CLIENTREF\r\nLEFT  OUTER JOIN LG_123_UNITSETL AS U ON U.LOGICALREF=L.UOMREF\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MLZ_ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "YIL",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FISNO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI_KODU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI_UNVANI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_GRUP",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TESLIM_ALINAN",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BEKLEYEN",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIYAT",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KUR",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "EUR_TUTAR",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FATURA_KUR",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FATURA_TARIHI",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FATURA_TUTAR",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FATURA_EUR",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "EUR_BIRIM_FIYAT",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TANIMLI_FIYAT",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  "ATLANDI: Exception calling \"Fill\" with \"1\" argument(s): \"Divide by zero error encountered.\""
+}

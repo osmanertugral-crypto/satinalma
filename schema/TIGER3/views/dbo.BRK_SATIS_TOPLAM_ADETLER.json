@@ -1,0 +1,201 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_SATIS_TOPLAM_ADETLER",
+    "full_name":  "dbo.BRK_SATIS_TOPLAM_ADETLER",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[BRK_SATIS_TOPLAM_ADETLER] AS\r\n\r\nSELECT\r\n    I.CARDTYPE AS MalzemeTuru,\r\n    I.CODE AS MalzemeKodu,\r\n    I.NAME AS MalzemeAdi,\r\n    I.SPECODE AS MalzemeOzelKodu,\r\n    I.CYPHCODE AS MalzemeYetkiKodu,\r\n    U.CODE AS BirimSeti,\r\n    T.CODE AS BirimKodu,\r\n    SUM(CASE WHEN L.IOCODE \u003e 1 THEN L.AMOUNT ELSE 0 END) AS SatisMiktari,\r\n    SUM(CASE WHEN L.IOCODE \u003c 4 THEN L.AMOUNT ELSE 0 END) AS IadeMiktari,\r\n    SUM(CASE WHEN L.IOCODE \u003e 1 THEN L.TOTAL ELSE 0 END) AS SatisTutari\r\nFROM\r\n    LG_123_01_STLINE L\r\n    LEFT OUTER JOIN LG_123_01_STFICHE F ON L.STFICHEREF = F.LOGICALREF\r\n    LEFT OUTER JOIN LG_123_ITEMS I ON L.STOCKREF = I.LOGICALREF AND L.LINETYPE NOT IN (1,2,3,4)\r\n    LEFT OUTER JOIN LG_123_UNITSETF U ON I.UNITSETREF = U.LOGICALREF\r\n    LEFT OUTER JOIN LG_123_UNITSETL T ON U.LOGICALREF = T.UNITSETREF\r\nWHERE\r\n    I.LOGICALREF IS NOT NULL\r\n    AND F.GRPCODE = 2\r\n    AND T.LINENR = 1\r\nGROUP BY\r\n    I.CARDTYPE,\r\n    I.CODE,\r\n    I.NAME,\r\n    U.CODE,\r\n    T.CODE,\r\n    I.SPECODE,\r\n    I.CYPHCODE",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MalzemeTuru",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MalzemeKodu",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MalzemeAdi",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MalzemeOzelKodu",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MalzemeYetkiKodu",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BirimSeti",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BirimKodu",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SatisMiktari",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "IadeMiktari",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SatisTutari",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MalzemeTuru":  "1",
+                            "MalzemeKodu":  ".",
+                            "MalzemeAdi":  "MOTORİN YANSITMA",
+                            "MalzemeOzelKodu":  "",
+                            "MalzemeYetkiKodu":  "",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "1029",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "49735"
+                        },
+                        {
+                            "MalzemeTuru":  "1",
+                            "MalzemeKodu":  "..",
+                            "MalzemeAdi":  "HASAR YANSITMA",
+                            "MalzemeOzelKodu":  "",
+                            "MalzemeYetkiKodu":  "",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "1",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "20833,33"
+                        },
+                        {
+                            "MalzemeTuru":  "12",
+                            "MalzemeKodu":  "1.74.A",
+                            "MalzemeAdi":  "POLYESTER İNŞAAT KALIBI",
+                            "MalzemeOzelKodu":  ":",
+                            "MalzemeYetkiKodu":  "POLYESTER",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "2",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "43155,68"
+                        },
+                        {
+                            "MalzemeTuru":  "12",
+                            "MalzemeKodu":  "1.82",
+                            "MalzemeAdi":  "POLYESTER İNŞAAT KALIBI",
+                            "MalzemeOzelKodu":  "",
+                            "MalzemeYetkiKodu":  "POLYESTER",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "3",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "18786,3"
+                        },
+                        {
+                            "MalzemeTuru":  "12",
+                            "MalzemeKodu":  "1.83",
+                            "MalzemeAdi":  "POLYESTER İNŞAAT KALIBI",
+                            "MalzemeOzelKodu":  ":",
+                            "MalzemeYetkiKodu":  "POLYESTER",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "2",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "145173,6"
+                        },
+                        {
+                            "MalzemeTuru":  "12",
+                            "MalzemeKodu":  "1.84",
+                            "MalzemeAdi":  "POLYESTER İNŞAAT KALIBI",
+                            "MalzemeOzelKodu":  ":",
+                            "MalzemeYetkiKodu":  "POLYESTER",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "2",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "145173,6"
+                        },
+                        {
+                            "MalzemeTuru":  "12",
+                            "MalzemeKodu":  "1.85",
+                            "MalzemeAdi":  "POLYESTER İNŞAAT KALIBI",
+                            "MalzemeOzelKodu":  ":",
+                            "MalzemeYetkiKodu":  "POLYESTER",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "2",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "145173,6"
+                        },
+                        {
+                            "MalzemeTuru":  "12",
+                            "MalzemeKodu":  "1.86",
+                            "MalzemeAdi":  "POLYESTER İNŞAAT KALIBI",
+                            "MalzemeOzelKodu":  ":",
+                            "MalzemeYetkiKodu":  "POLYESTER",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "2",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "145173,6"
+                        },
+                        {
+                            "MalzemeTuru":  "12",
+                            "MalzemeKodu":  "10 CM MAÇA POL. KALIP",
+                            "MalzemeAdi":  "10 CM MAÇA POLYESTER İNŞAAT KALIBI",
+                            "MalzemeOzelKodu":  "",
+                            "MalzemeYetkiKodu":  "",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "100",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "148155,02"
+                        },
+                        {
+                            "MalzemeTuru":  "1",
+                            "MalzemeKodu":  "153-2021X760",
+                            "MalzemeAdi":  "CAM 55*110",
+                            "MalzemeOzelKodu":  "",
+                            "MalzemeYetkiKodu":  "",
+                            "BirimSeti":  "ADET",
+                            "BirimKodu":  "ADET",
+                            "SatisMiktari":  "2",
+                            "IadeMiktari":  "0",
+                            "SatisTutari":  "1694,92"
+                        }
+                    ]
+}

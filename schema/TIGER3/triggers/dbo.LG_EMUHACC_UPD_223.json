@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "LG_EMUHACC_UPD_223",
+    "on_table":  "dbo.LG_223_EMUHACC",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "UPDATE"
+               ],
+    "definition":  "CREATE TRIGGER LG_EMUHACC_UPD_223 ON LG_223_EMUHACC\nFOR UPDATE\nAS\nDECLARE @sBuffer        VARCHAR(110),\n        @upperRef       INT,\n        @old_Code       VARCHAR(110),\n        @old_accountRef INT,\n        @new_Code       VARCHAR(110),\n        @new_accountRef INT,\n        @new_level      INT\nSELECT @old_accountRef = D.LOGICALREF,\n       @old_Code= D.CODE\nFROM DELETED D\nSELECT @new_accountRef = I.LOGICALREF,\n       @new_Code = I.CODE,\n       @new_level = I.LEVEL_\nFROM INSERTED I\nIF @old_Code \u003c\u003e @new_Code\nBEGIN\n      SET @upperRef = @new_accountRef\n      WHILE (@upperRef \u003c\u003e 0)\n       BEGIN\n          IF NOT EXISTS(SELECT * FROM LG_223_EMUHACCSUBACCASGN\n                        WHERE ACCOUNTREF = @upperRef AND SUBACCOUNTREF = @new_accountRef)\n           INSERT INTO LG_223_EMUHACCSUBACCASGN VALUES(@upperRef,@new_accountRef)\n          EXEC LG_GETEMUHACCUPPERCODE_223 @new_Code, @new_level, @sBuffer OUTPUT, @upperRef OUTPUT\n          SET @new_level = @new_level -1\n       END\nEND\n"
+}

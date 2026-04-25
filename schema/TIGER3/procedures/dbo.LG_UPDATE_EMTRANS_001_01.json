@@ -1,0 +1,227 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDATE_EMTRANS_001_01",
+    "full_name":  "dbo.LG_UPDATE_EMTRANS_001_01",
+    "created":  "Sep  1 2025 11:48AM",
+    "last_altered":  "Sep  1 2025 11:48AM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@DT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@SIGN",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ACCOUNTREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CENTERREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRCODE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ACCOUNTCODE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "100",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNDEBIT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNCREDIT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNEMUDEBIT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNEMUCREDIT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CANCELLED",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPORTNET",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@AMNT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@COEF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@INFIDX",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NOTINFLATED",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NOTCALCULATED",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNBRANCH",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNDEPARTMENT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STATUS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@FROMDEMTYPE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@BDGTLNTYPE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@EMDEMLNREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@MONTH",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@YEAR",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRNET",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRCURR",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDATE_EMTRANS_001_01\n       @DT     DATETIME,\n       @SIGN  SMALLINT,\n       @ACCOUNTREF INT,\n       @CENTERREF       INT,\n       @TRCODE  SMALLINT,\n       @ACCOUNTCODE     VARCHAR(100),\n       @LNDEBIT  FLOAT,\n       @LNCREDIT FLOAT,\n       @LNEMUDEBIT   FLOAT,\n       @LNEMUCREDIT FLOAT,\n       @CANCELLED SMALLINT,\n       @REPORTNET FLOAT,\n       @AMNT  FLOAT,\n       @COEF  SMALLINT,\n       @INFIDX          FLOAT,\n       @NOTINFLATED     INT,\n       @NOTCALCULATED   INT,\n       @LNBRANCH SMALLINT,\n       @LNDEPARTMENT SMALLINT,\n       @STATUS          SMALLINT,\n       @FROMDEMTYPE     SMALLINT,\n       @BDGTLNTYPE      SMALLINT,\n       @EMDEMLNREF      INT,\n       @MONTH          SMALLINT,\n       @YEAR          SMALLINT,\n       @TRNET           FLOAT,\n       @TRCURR          SMALLINT\n       AS\nDECLARE @VALID  SMALLINT\nDECLARE @EPSILON FLOAT\nDECLARE @DEMPAYTOTINC   FLOAT\nDECLARE @DEMLNCLOSE     SMALLINT\nDECLARE @DEMLNDEBIT     FLOAT\nDECLARE @DEMLNCREDIT    FLOAT\nDECLARE @DEMPAYEDTOTAL  FLOAT\nSELECT  @EPSILON     = 0.0000001\nSELECT @VALID = 0\nIF (((@ACCOUNTREF \u003c\u003e 0) OR (@CENTERREF\u003c\u003e0) ) AND ((ABS(@LNDEBIT) \u003e @EPSILON) OR (ABS(@LNCREDIT) \u003e @EPSILON) OR (ABS(@LNEMUDEBIT) \u003e @EPSILON) OR (ABS(@LNEMUCREDIT) \u003e @EPSILON)) AND\n    (@CANCELLED = 0) AND (@TRCODE \u003c\u003e 5) AND (@TRCODE \u003c\u003e 8) AND (@TRCODE \u003c\u003e 9) AND (@TRCODE \u003c\u003e 10) AND ((@STATUS = 0) OR (@STATUS IS NULL)) AND (@LNDEPARTMENT IS NOT NULL))\n  SELECT @VALID = 1\nIF (@VALID = 1)\n  BEGIN\n       IF  (@ACCOUNTREF \u003c\u003e 0) AND (@FROMDEMTYPE = 1) AND (@EMDEMLNREF \u003c\u003e 0)\n        BEGIN SELECT @DEMLNDEBIT = DEBIT,\n                     @DEMLNCREDIT = CREDIT,\n                     @DEMPAYEDTOTAL = PAIDTOTAL\n              FROM LG_001_01_EMDEMFLINE\n              WHERE ((BDGTLINETYPE = @bdgtLnType) AND (LOGICALREF = @emDemLnRef)) OR\n                    ((BDGTLINETYPE = @bdgtLnType) AND (PARENTLNREF = @emDemLnRef))\n              SELECT @DEMPAYTOTINC = ((@LNDEBIT + @LNCREDIT) * @COEF)\n              IF @DEMPAYTOTINC + @DEMPAYEDTOTAL \u003e= @DEMLNDEBIT + @DEMLNCREDIT\n                SELECT @DEMLNCLOSE = 1\n               ELSE SELECT @DEMLNCLOSE = 0\n              UPDATE LG_001_01_EMDEMFLINE\n              SET PAIDTOTAL = PAIDTOTAL + @DEMPAYTOTINC,\n                  CLOSED = @DEMLNCLOSE\n              WHERE ((BDGTLINETYPE = @bdgtLnType) AND (LOGICALREF = @emDemLnRef)) OR\n                    ((BDGTLINETYPE = @bdgtLnType) AND (PARENTLNREF = @emDemLnRef))\n        END\n  END"
+}

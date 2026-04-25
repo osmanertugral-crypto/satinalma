@@ -1,0 +1,227 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "CLCSRISK_001_01",
+    "full_name":  "dbo.CLCSRISK_001_01",
+    "created":  "Jan 25 2023  5:55PM",
+    "last_altered":  "Jan 25 2023  5:55PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@CEKREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CLREF",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CLCIRO",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@RISKCEK",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPRISKCEK",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@RISKCEKC",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPRISKCEKC",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NUMSREF",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@KC",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@PS",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPKC",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPPS",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DOC",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STATUS",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@PREVST",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DEVIR",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CEKAMNT",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CEKREP",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@UPDAMNT",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@RISKCOLLATRL",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPRISKCOLLATRL",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@COLLATRLREF",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NEWRISKCEK",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NEWREPRISKCEK",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NEWRISKCEKC",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NEWREPRISKCEKC",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CIROFLG",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE CLCSRISK_001_01\n@CEKREF INT,\n@CLREF INT OUTPUT,\n@CLCIRO INT OUTPUT,\n@RISKCEK FLOAT OUTPUT,\n@REPRISKCEK FLOAT OUTPUT,\n@RISKCEKC FLOAT OUTPUT,\n@REPRISKCEKC FLOAT OUTPUT,\n@NUMSREF INT OUTPUT,\n@KC FLOAT OUTPUT,\n@PS FLOAT OUTPUT,\n@REPKC FLOAT OUTPUT,\n@REPPS FLOAT OUTPUT,\n@DOC INT OUTPUT,\n@STATUS INT OUTPUT,\n@PREVST INT OUTPUT,\n@DEVIR INT OUTPUT,\n@CEKAMNT FLOAT OUTPUT,\n@CEKREP FLOAT OUTPUT,\n@UPDAMNT INT OUTPUT,\n@RISKCOLLATRL FLOAT OUTPUT,\n@REPRISKCOLLATRL FLOAT OUTPUT,\n@COLLATRLREF INT OUTPUT,\n@NEWRISKCEK FLOAT OUTPUT,\n@NEWREPRISKCEK FLOAT OUTPUT,\n@NEWRISKCEKC FLOAT OUTPUT,\n@NEWREPRISKCEKC FLOAT OUTPUT,\n@CIROFLG SMALLINT OUTPUT\nAS\nDECLARE\n@LREF INT,\n@CARDREF INT,\n@CSREF INT,\n@STATNO INT,\n@TRCODE INT,\n@RFACT FLOAT,\n@RFACTC FLOAT,\n@SIGN INT,\n@RISKTIPI SMALLINT,\n@AMNT FLOAT,\n@REPNET FLOAT,\n@MAXSTAT INT,\n@ROLLREF INT,\n@ROLLTRCODE INT,\n@ROLLPROCTYPE INT,\n@ROLLCARDMD INT,\n@RISKTYPE SMALLINT,\n@NEWRFACT FLOAT,\n@NEWRFACTC FLOAT,\n@CURRSTAT FLOAT\nDECLARE C_CURSOR CURSOR FOR\nSELECT LOGICALREF,CSREF,STATNO,TRCODE,STATUS,CARDREF,DEVIR,ROLLREF\nFROM LG_001_01_CSTRANS\nWHERE LOGICALREF=@CEKREF\nORDER BY CSREF,STATNO DESC\n OPEN C_CURSOR\n   FETCH NEXT FROM C_CURSOR\n INTO @LREF, @CSREF, @STATNO,@TRCODE,@STATUS,@CARDREF,@DEVIR,@ROLLREF\n    WHILE @@FETCH_STATUS = 0\n  BEGIN\n         SELECT @RISKCEK = 0\n  SELECT @REPRISKCEK = 0\n  SELECT @KC = 0\n  SELECT @PS = 0\n  SELECT @REPKC = 0\n  SELECT @REPPS = 0\n  SELECT @CLREF = @CARDREF\n  SELECT @AMNT = 0\n  SELECT @REPNET = 0\n  SELECT @DOC = 0\n                SELECT @PREVST = 0\n  SELECT @CEKAMNT = 0\n                SELECT @CEKREP = 0\n  SELECT @UPDAMNT = 1\n                SELECT @RISKCOLLATRL = 0\n  SELECT @REPRISKCOLLATRL = 0\n                SELECT @NEWRISKCEK = 0\n  SELECT @NEWREPRISKCEK = 0\n    SELECT @CIROFLG = 0\n    SELECT @AMNT = AMOUNT , @REPNET = REPORTNET, @DOC = DOC, @CIROFLG = CIRO, @CURRSTAT = CURRSTAT  FROM LG_001_01_CSCARD WHERE LOGICALREF = @CSREF\n    SELECT @MAXSTAT = MAX(STATNO) FROM LG_001_01_CSTRANS WHERE  CSREF = @CSREF\n    SELECT @PREVST =  STATUS FROM LG_001_01_CSTRANS  WHERE STATNO = @STATNO + 1 AND CSREF = @CSREF\n                IF @DEVIR = 0\n                  BEGIN SELECT @ROLLTRCODE = TRCODE , @ROLLPROCTYPE = PROCTYPE, @ROLLCARDMD = CARDMD  FROM LG_001_01_CSROLL WHERE LOGICALREF = @ROLLREF\n                        IF (@ROLLTRCODE IN (9,10)) AND (@ROLLPROCTYPE = 7) AND (@ROLLCARDMD = 0)\n                           SELECT @UPDAMNT = 0\n                  END\n  IF @CLREF = 0\n   BEGIN\n      SELECT @CLREF = CARDREF FROM LG_001_01_CSTRANS  WHERE STATNO = @MAXSTAT AND CSREF = @CSREF\n   END\n    EXECUTE LG_GETCLNUMSREF_001_01 @CLREF, @NUMSREF OUTPUT, @RISKTIPI OUTPUT\n                  EXECUTE LG_GETCOLLTRLREF_001_01 @CLREF, @COLLATRLREF OUTPUT, @RISKTYPE OUTPUT\n      IF @DOC IN (1,3)\n                      SELECT @RFACT = CEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE LOGICALREF=@NUMSREF\n                    IF @DOC IN (2,4)\n                      SELECT @RFACT = SENETRISKFACTOR FROM LG_001_01_CLRNUMS WHERE LOGICALREF=@NUMSREF\n         IF @DOC = 1\n           BEGIN\n             IF @CIROFLG = 1\n              SELECT @NEWRFACT = CSTCIROCEKRISKFAC FROM LG_001_01_CLRNUMS WHERE LOGICALREF=@NUMSREF\n             ELSE\n              SELECT @NEWRFACT = CSTCEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE LOGICALREF=@NUMSREF\n           END\n          IF @DOC = 2\n           BEGIN\n             IF @CIROFLG = 1\n              SELECT @NEWRFACT = CSTCIROSENETRISKFAC FROM LG_001_01_CLRNUMS WHERE LOGICALREF=@NUMSREF\n             ELSE\n              SELECT @NEWRFACT = CSTSENETRISKFACTOR FROM LG_001_01_CLRNUMS WHERE LOGICALREF=@NUMSREF\n           END\n                    IF @DOC = 3\n                      SELECT @NEWRFACT = CEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE LOGICALREF=@NUMSREF\n                    IF @DOC = 4\n                      SELECT @NEWRFACT = SENETRISKFACTOR FROM LG_001_01_CLRNUMS WHERE LOGICALREF=@NUMSREF\n         IF @DOC = 1\n                  BEGIN\n         IF (@TRCODE = 0) AND (@STATUS IN (1,2))\n                         BEGIN\n                     SELECT @RISKCEK = ((1-@RFACT) * @AMNT)\n       SELECT @REPRISKCEK = ((1-@RFACT) * @REPNET)\n                            SELECT @RISKCOLLATRL = -1 * @AMNT\n       SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                            SELECT @NEWRISKCEK = ((1-@NEWRFACT) * @AMNT)\n       SELECT @NEWREPRISKCEK = ((1-@NEWRFACT) * @REPNET)\n                         END\n                       IF (@TRCODE = 1) AND (@STATUS = 1)\n                         BEGIN\n                            SELECT @RISKCEK = -@RFACT * @AMNT\n                     SELECT @REPRISKCEK = -@RFACT * @REPNET\n                            SELECT @RISKCOLLATRL = -1 * @AMNT\n                     SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                            SELECT @NEWRISKCEK = -@NEWRFACT * @AMNT\n                     SELECT @NEWREPRISKCEK = -@NEWRFACT * @REPNET\n                         END\n         IF (@TRCODE = 3) AND (@STATUS = 2)\n                         BEGIN\n                            SELECT @RISKCEK = -@RFACT * @AMNT\n              SELECT @REPRISKCEK = -@RFACT * @REPNET\n                            SELECT @RISKCOLLATRL = -1 * @AMNT\n              SELECT @REPRISKCEK = -1 * @REPNET\n                            SELECT @NEWRISKCEK = -@NEWRFACT * @AMNT\n              SELECT @NEWREPRISKCEK = -@NEWRFACT * @REPNET\n                         END\n         IF @TRCODE IN (5,7)\n    BEGIN\n       SELECT @RISKCEK = 0\n       SELECT @REPRISKCEK = 0\n                            SELECT @RISKCOLLATRL = 0\n                            SELECT @REPRISKCOLLATRL = 0\n                            SELECT @NEWRISKCEK = 0\n       SELECT @NEWREPRISKCEK = 0\n                         END\n         IF @TRCODE = 9\n                         BEGIN\n                              IF @STATUS IN (1,6)\n    BEGIN\n                     SELECT @RISKCEK = -@RFACT * @AMNT\n                             SELECT @REPRISKCEK = -@RFACT * @REPNET\n                                   SELECT @RISKCOLLATRL = -1 * @AMNT\n                             SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                                   SELECT @NEWRISKCEK = -@NEWRFACT * @AMNT\n                             SELECT @NEWREPRISKCEK = -@NEWRFACT * @REPNET\n                                   IF @PREVST IN (2,3,4)\n                         BEGIN\n              SELECT @RISKCEK = 0\n                     SELECT @REPRISKCEK = 0\n                                          SELECT @RISKCOLLATRL = 0\n                     SELECT @REPRISKCOLLATRL = 0\n                                          SELECT @NEWRISKCEK = 0\n                     SELECT @NEWREPRISKCEK = 0\n           END\n    END\n                              IF @STATUS = 8\n           BEGIN\n              SELECT @RISKCEK = -((1-@RFACT) * @AMNT )\n       SELECT @REPRISKCEK = -((1-@RFACT) * @REPNET )\n                                   SELECT @RISKCOLLATRL = 0\n       SELECT @REPRISKCOLLATRL = 0\n                                   SELECT @NEWRISKCEK = -((1-@NEWRFACT) * @AMNT )\n       SELECT @NEWREPRISKCEK = -((1-@NEWRFACT) * @REPNET )\n       IF @PREVST = 2\n         BEGIN\n                          SELECT @CLCIRO = CARDREF FROM LG_001_01_CSTRANS WHERE STATNO = @STATNO + 1 AND CSREF = @CSREF\n              IF @CLCIRO \u003c\u003e 0\n       BEGIN\n          SELECT @RFACTC = CEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLCIRO\n                                SELECT @RFACT = CEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n                                 IF @CIROFLG = 1\n                                   SELECT @NEWRFACTC = CSTCIROCEKRISKFAC FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLCIRO\n                                  ELSE\n                                    SELECT @NEWRFACTC = CSTCEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLCIRO\n                                SELECT @NEWRFACT = CEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n          EXECUTE LG_GETCLNUMSREF_001_01 @CLREF, @NUMSREF OUTPUT, @RISKTIPI OUTPUT\n                                             EXECUTE LG_GETCOLLTRLREF_001_01 @CLREF, @COLLATRLREF OUTPUT, @RISKTYPE OUTPUT\n          SELECT @RISKCEK = -((1-@RFACT) * @AMNT )\n          SELECT @REPRISKCEK = -((1-@RFACT) * @REPNET )\n                                             SELECT @NEWRISKCEK = -((1-@NEWRFACT) * @AMNT )\n          SELECT @NEWREPRISKCEK = -((1-@NEWRFACT) * @REPNET )\n          SELECT @RISKCOLLATRL = -1 * @AMNT\n          SELECT @REPRISKCOLLATRL = -1 * @REPNET\n       END\n                 END\n             IF @PREVST IN (3,4)\n         BEGIN\n          SELECT @CLREF = CARDREF FROM LG_001_01_CSTRANS WHERE STATNO = @MAXSTAT AND CSREF = @CSREF\n          SELECT @RFACT = CEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n               IF @CIROFLG = 1\n                 SELECT @NEWRFACT = CSTCIROCEKRISKFAC FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n               ELSE\n                   SELECT @NEWRFACT = CSTCEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n          EXECUTE LG_GETCLNUMSREF_001_01 @CLREF, @NUMSREF OUTPUT, @RISKTIPI OUTPUT\n                                             EXECUTE LG_GETCOLLTRLREF_001_01 @CLREF, @COLLATRLREF OUTPUT, @RISKTYPE OUTPUT\n          SELECT @RISKCEK = -((1-@RFACT) * @AMNT )\n          SELECT @REPRISKCEK = -((1-@RFACT) * @REPNET )\n                                             SELECT @NEWRISKCEK = -((1-@NEWRFACT) * @AMNT )\n          SELECT @NEWREPRISKCEK = -((1-@NEWRFACT) * @REPNET )\n                                     END\n                                END\n                              IF (@STATUS = 11) AND (@CURRSTAT IN (11,12,13,14))\n                                BEGIN\n                     SELECT @KC = 1 * @AMNT\n       SELECT @REPKC = 1 * @REPNET\n              IF @PREVST = 2\n         BEGIN\n                          SELECT @CLCIRO = CARDREF FROM LG_001_01_CSTRANS WHERE STATNO = @MAXSTAT AND CSREF = @CSREF\n                   IF @CLCIRO \u003c\u003e 0\n              BEGIN\n                                             SELECT @CLREF = @CLCIRO\n                                SELECT @RFACT = CEKRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLCIRO\n                               EXECUTE LG_GETCLNUMSREF_001_01 @CLREF, @NUMSREF OUTPUT, @RISKTIPI OUTPUT\n                                             EXECUTE LG_GETCOLLTRLREF_001_01 @CLREF, @COLLATRLREF OUTPUT, @RISKTYPE OUTPUT\n            SELECT @KC = 1 * @AMNT\n          SELECT @REPKC = 1 * @REPNET\n       END\n                                     END\n                                END\n                         END\n           END\n  IF @DOC = 2\n    BEGIN\n         IF (@TRCODE = 0) AND (@STATUS IN (1,2))\n           BEGIN\n              SELECT @RISKCEK = ((1-@RFACT) * @AMNT)\n                            SELECT @REPRISKCEK = ((1-@RFACT) * @REPNET)\n                            SELECT @RISKCOLLATRL = -1 * @AMNT\n                            SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                            SELECT @NEWRISKCEK = ((1-@NEWRFACT) * @AMNT)\n                            SELECT @NEWREPRISKCEK = ((1-@NEWRFACT) * @REPNET)\n           END\n         IF (@TRCODE = 2) AND (@STATUS = 1)\n           BEGIN\n              SELECT @RISKCEK = -@RFACT * @AMNT\n              SELECT @REPRISKCEK = -@RFACT * @REPNET\n              SELECT @RISKCOLLATRL = -1 * @AMNT\n              SELECT @REPRISKCOLLATRL = -1 * @REPNET\n              SELECT @NEWRISKCEK = -@NEWRFACT * @AMNT\n              SELECT @NEWREPRISKCEK = -@NEWRFACT * @REPNET\n           END\n         IF (@TRCODE = 4) AND (@STATUS = 2)\n           BEGIN\n              SELECT @RISKCEK = -@RFACT * @AMNT\n              SELECT @REPRISKCEK = -@RFACT * @REPNET\n              SELECT @RISKCOLLATRL = -1 * @AMNT\n              SELECT @REPRISKCOLLATRL = -1 * @REPNET\n              SELECT @NEWRISKCEK = -@NEWRFACT * @AMNT\n              SELECT @NEWREPRISKCEK = -@NEWRFACT * @REPNET\n           END\n         IF @TRCODE IN (6,8)\n           BEGIN\n              SELECT @RISKCEK = 0\n              SELECT @REPRISKCEK = 0\n              SELECT @RISKCOLLATRL = 0\n              SELECT @REPRISKCOLLATRL = 0\n              SELECT @NEWRISKCEK = 0\n              SELECT @NEWREPRISKCEK = 0\n           END\n         IF @TRCODE = 10\n           BEGIN\n                IF @STATUS IN (1,6,11)\n                 BEGIN\n                     SELECT @RISKCEK = -@RFACT * @AMNT\n                     SELECT @REPRISKCEK = -@RFACT * @REPNET\n                     SELECT @RISKCOLLATRL = -1 * @AMNT\n                     SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                     SELECT @NEWRISKCEK = -@NEWRFACT * @AMNT\n                     SELECT @NEWREPRISKCEK = -@NEWRFACT * @REPNET\n                     IF (@PREVST IN (3,4,5))\n                      BEGIN\n                        SELECT @RISKCEK = 0\n                               SELECT @REPRISKCEK = 0\n                        SELECT @RISKCOLLATRL = 0\n                               SELECT @REPRISKCOLLATRL = 0\n                                                    SELECT @NEWRISKCEK = 0\n                               SELECT @NEWREPRISKCEK = 0\n                      END\n                 END\n                 IF (@STATUS = 7) AND (@CURRSTAT IN (7,12,13,14))\n                  BEGIN\n                         SELECT @PS =  @AMNT\n                         SELECT @REPPS = @REPNET\n                  END\n                 IF @STATUS = 8\n                   BEGIN\n                          SELECT @RISKCEK = -((1-@RFACT) * @AMNT )\n                          SELECT @REPRISKCEK = -((1-@RFACT) * @REPNET )\n                          SELECT @RISKCOLLATRL = 0\n                          SELECT @REPRISKCOLLATRL = 0\n                          SELECT @NEWRISKCEK = -((1-@NEWRFACT) * @AMNT )\n                          SELECT @NEWREPRISKCEK = -((1-@NEWRFACT) * @REPNET )\n                          IF @PREVST = 2\n                           BEGIN\n                                 SELECT @CLCIRO = CARDREF FROM LG_001_01_CSTRANS WHERE STATNO = @STATNO + 1 AND CSREF = @CSREF\n                                 IF @CLCIRO \u003c\u003e 0\n                                   BEGIN\n                                      SELECT @RFACTC = SENETRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLCIRO\n                                                                         SELECT @NEWRFACTC = SENETRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLCIRO\n                                                            SELECT @RFACT = SENETRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n                                      EXECUTE LG_GETCLNUMSREF_001_01 @CLREF, @NUMSREF OUTPUT, @RISKTIPI OUTPUT\n                                                                         EXECUTE LG_GETCOLLTRLREF_001_01 @CLREF, @COLLATRLREF OUTPUT, @RISKTYPE OUTPUT\n                                      SELECT @RISKCEK = -((1-@RFACT) * @AMNT )\n                                      SELECT @REPRISKCEK = -((1-@RFACT) * @REPNET )\n                                      SELECT @RISKCEKC = -((1-@RFACTC) * @AMNT )\n                                      SELECT @REPRISKCEKC = -((1-@RFACTC) * @REPNET )\n                                                                         SELECT @RISKCOLLATRL = -1 * @AMNT\n                                      SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                                                                         SELECT @NEWRISKCEK = -((1-@NEWRFACT) * @AMNT )\n                                      SELECT @NEWREPRISKCEK = -((1-@NEWRFACT) * @REPNET )\n                                                                         SELECT @NEWRISKCEKC = -((1-@NEWRFACTC) * @AMNT )\n                                      SELECT @NEWREPRISKCEKC = -((1-@NEWRFACTC) * @REPNET )\n                                   END\n                           END\n                           IF @PREVST IN (3,5)\n                            BEGIN\n                                  SELECT @CLREF = CARDREF FROM LG_001_01_CSTRANS WHERE STATNO = @MAXSTAT AND CSREF = @CSREF\n                                  SELECT @RFACT = SENETRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n                                  IF @CIROFLG = 1\n                                   SELECT @NEWRFACT = CSTCIROCEKRISKFAC FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n                                  ELSE\n                                     SELECT @NEWRFACT = CSTSENETRISKFACTOR FROM LG_001_01_CLRNUMS WHERE CLCARDREF = @CLREF\n                                  EXECUTE LG_GETCLNUMSREF_001_01 @CLREF, @NUMSREF OUTPUT, @RISKTIPI OUTPUT\n                                  EXECUTE LG_GETCOLLTRLREF_001_01 @CLREF, @COLLATRLREF OUTPUT, @RISKTYPE OUTPUT\n                                  SELECT @RISKCEK = -((1-@RFACT) * @AMNT )\n                                  SELECT @REPRISKCEK = -((1-@RFACT) * @REPNET )\n                                  SELECT @RISKCOLLATRL = -1* @AMNT\n                                  SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                                  SELECT @NEWRISKCEK = -((1-@NEWRFACT) * @AMNT )\n                                  SELECT @NEWREPRISKCEK = -((1-@NEWRFACT) * @REPNET )\n                            END\n                   END\n                   END\n    END\n  IF @DOC = 3\n    BEGIN\n         IF (@TRCODE = 0) AND (@STATUS = 9)\n    BEGIN\n                      SELECT @RISKCEK = 0\n        SELECT @REPRISKCEK = 0\n                             SELECT @RISKCOLLATRL = 0\n        SELECT @REPRISKCOLLATRL = 0\n                             SELECT @NEWRISKCEK = 0\n        SELECT @NEWREPRISKCEK = 0\n    END\n                       IF (@TRCODE = 3) AND (@STATUS = 9)\n    BEGIN\n       SELECT @RISKCEK = @RFACT * @AMNT\n       SELECT @REPRISKCEK = @RFACT * @REPNET\n           SELECT @RISKCOLLATRL = @AMNT\n       SELECT @REPRISKCOLLATRL = @REPNET\n                            SELECT @NEWRISKCEK = @NEWRFACT * @AMNT\n       SELECT @NEWREPRISKCEK = @NEWRFACT * @REPNET\n    END\n                       IF (@TRCODE = 11) AND (@STATUS = 6)\n    BEGIN\n              SELECT @RISKCEK = -@RFACT * @AMNT\n       SELECT @REPRISKCEK = -@RFACT * @REPNET\n                            SELECT @RISKCOLLATRL = -1 * @AMNT\n       SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                            SELECT @NEWRISKCEK = -@NEWRFACT * @AMNT\n       SELECT @NEWREPRISKCEK = -@NEWRFACT * @REPNET\n    END\n                       IF (@TRCODE = 11) AND (@STATUS = 8)\n    BEGIN\n              SELECT @RISKCEK = ((1-@RFACT) * @AMNT )\n       SELECT @REPRISKCEK = ((1-@RFACT) * @REPNET )\n                    SELECT @RISKCOLLATRL = @AMNT\n       SELECT @REPRISKCOLLATRL = @REPNET\n                            SELECT @NEWRISKCEK = ((1-@NEWRFACT) * @AMNT )\n       SELECT @NEWREPRISKCEK = ((1-@NEWRFACT) * @REPNET )\n    END\n    END\n  IF @DOC = 4\n                  BEGIN\n          IF (@TRCODE = 4) AND (@STATUS = 10)\n                         BEGIN\n                            SELECT @RISKCEK = @RFACT * @AMNT\n                     SELECT @REPRISKCEK = @RFACT * @REPNET\n                            SELECT @RISKCOLLATRL =  @AMNT\n                     SELECT @REPRISKCOLLATRL =  @REPNET\n                            SELECT @NEWRISKCEK = @NEWRFACT * @AMNT\n                     SELECT @NEWREPRISKCEK = @NEWRFACT * @REPNET\n                         END\n                       IF (@TRCODE = 12) AND (@STATUS = 6)\n                         BEGIN\n               SELECT @RISKCEK = -@RFACT * @AMNT\n        SELECT @REPRISKCEK = -@RFACT * @REPNET\n               SELECT @RISKCOLLATRL = -1 * @AMNT\n        SELECT @REPRISKCOLLATRL = -1 * @REPNET\n                             SELECT @NEWRISKCEK = -@NEWRFACT * @AMNT\n        SELECT @NEWREPRISKCEK = -@NEWRFACT * @REPNET\n    END\n                       IF (@TRCODE = 12) AND (@STATUS = 8)\n                         BEGIN\n              SELECT @RISKCEK = ((1-@RFACT) * @AMNT )\n       SELECT @REPRISKCEK = ((1-@RFACT) * @REPNET)\n                     SELECT @RISKCOLLATRL = @AMNT\n       SELECT @REPRISKCOLLATRL = @REPNET\n                            SELECT @NEWRISKCEK = ((1-@NEWRFACT) * @AMNT )\n       SELECT @NEWREPRISKCEK = ((1-@NEWRFACT) * @REPNET)\n    END\n    END\n                  IF (@STATUS NOT IN (1,6,8,9,10)) OR (@TRCODE IN (13,14))\n                    BEGIN\n                        SELECT @CEKAMNT = 0\n                        SELECT @CEKREP = 0\n                    END\n                  IF (@STATUS IN (1,9,10)) AND (@TRCODE NOT IN (13,14))\n                    BEGIN\n                         IF @PREVST IN (2,3,4)\n                           BEGIN\n                                SELECT @CEKAMNT = 0\n                                SELECT @CEKREP = 0\n                           END\n                         IF @PREVST NOT IN (2,3,4)\n                           BEGIN\n                                SELECT @CEKAMNT = @AMNT\n                                SELECT @CEKREP = @REPNET\n                           END\n                    END\n                  IF @STATUS IN (6,8)\n                    BEGIN\n                        SELECT @CEKAMNT = -1 * @AMNT\n                        SELECT @CEKREP = -1 * @REPNET\n                    END\n FETCH NEXT FROM C_CURSOR\nINTO @LREF, @CSREF, @STATNO,@TRCODE,@STATUS,@CARDREF,@DEVIR,@ROLLREF\nEND\nCLOSE C_CURSOR\nDEALLOCATE C_CURSOR"
+}

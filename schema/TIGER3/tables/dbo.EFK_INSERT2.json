@@ -1,0 +1,245 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "EFK_INSERT2",
+    "full_name":  "dbo.EFK_INSERT2",
+    "description":  "",
+    "total_rows":  "407",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KOD",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "-1",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "YIL",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "YUZDE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FIYAT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SATUS1",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS2",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS3",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+
+                ],
+    "sample_data":  [
+                        {
+                            "KOD":  "253.02.0001  -  DÜZ BROTHER DİKİŞ MAKİNASI ",
+                            "LOGICALREF":  "14130",
+                            "YIL":  "10",
+                            "YUZDE":  "10",
+                            "FIYAT":  "1250",
+                            "TARIH":  "2022-03-01",
+                            "SATUS1":  "2022-03-01",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0001"
+                        },
+                        {
+                            "KOD":  "253.02.0002  -  OV BROTHER DİKİŞ MAKİNASI ",
+                            "LOGICALREF":  "14131",
+                            "YIL":  "10",
+                            "YUZDE":  "10",
+                            "FIYAT":  "3000",
+                            "TARIH":  "2022-03-01",
+                            "SATUS1":  "2022-03-01",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0002"
+                        },
+                        {
+                            "KOD":  "253.02.0003  -  SÜNGER KESME MAKİNASI",
+                            "LOGICALREF":  "14132",
+                            "YIL":  "10",
+                            "YUZDE":  "10",
+                            "FIYAT":  "8229,15",
+                            "TARIH":  "2022-03-02",
+                            "SATUS1":  "2022-03-02",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0003"
+                        },
+                        {
+                            "KOD":  "253.02.0004  -  ZIMBA TABANCASI",
+                            "LOGICALREF":  "14133",
+                            "YIL":  "7",
+                            "YUZDE":  "14,2857142857143",
+                            "FIYAT":  "1001,69",
+                            "TARIH":  "2022-03-02",
+                            "SATUS1":  "2022-03-02",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0004"
+                        },
+                        {
+                            "KOD":  "253.02.0005  -  İPLİK KESME MAKİNASI",
+                            "LOGICALREF":  "14134",
+                            "YIL":  "10",
+                            "YUZDE":  "10",
+                            "FIYAT":  "25000",
+                            "TARIH":  "2022-03-01",
+                            "SATUS1":  "2022-03-01",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0005"
+                        },
+                        {
+                            "KOD":  "253.02.0006  -  ÜRETİM YERİ ISITMA SİSTEMİ",
+                            "LOGICALREF":  "14135",
+                            "YIL":  "25",
+                            "YUZDE":  "4",
+                            "FIYAT":  "55600",
+                            "TARIH":  "2022-06-27",
+                            "SATUS1":  "2022-06-27",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0006"
+                        },
+                        {
+                            "KOD":  "253.02.0007  -  PRES ELEKTRİKLİ MAKİNE",
+                            "LOGICALREF":  "14136",
+                            "YIL":  "20",
+                            "YUZDE":  "5",
+                            "FIYAT":  "231000",
+                            "TARIH":  "2022-06-22",
+                            "SATUS1":  "2022-06-22",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0007"
+                        },
+                        {
+                            "KOD":  "253.02.0008  -  KENAR BANTLAMA MAKİNESİ",
+                            "LOGICALREF":  "14137",
+                            "YIL":  "10",
+                            "YUZDE":  "10",
+                            "FIYAT":  "40000",
+                            "TARIH":  "2022-06-22",
+                            "SATUS1":  "2022-06-22",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0008"
+                        },
+                        {
+                            "KOD":  "253.02.0008  -  KENAR BANTLAMA MAKİNESİ",
+                            "LOGICALREF":  "14137",
+                            "YIL":  "10",
+                            "YUZDE":  "10",
+                            "FIYAT":  "79000",
+                            "TARIH":  "2022-06-22",
+                            "SATUS1":  "2022-06-22",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0008"
+                        },
+                        {
+                            "KOD":  "253.02.0009  -  TALAŞ EMME MAKİNESİ",
+                            "LOGICALREF":  null,
+                            "YIL":  "10",
+                            "YUZDE":  "10",
+                            "FIYAT":  "70000",
+                            "TARIH":  "2022-06-22",
+                            "SATUS1":  "2022-06-22",
+                            "STATUS2":  "",
+                            "STATUS3":  "253.02.0009"
+                        }
+                    ]
+}

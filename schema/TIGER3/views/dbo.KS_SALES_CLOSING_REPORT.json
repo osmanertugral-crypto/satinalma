@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KS_SALES_CLOSING_REPORT",
+    "full_name":  "dbo.KS_SALES_CLOSING_REPORT",
+    "definition":  "\r\nCREATE VIEW [dbo].[KS_SALES_CLOSING_REPORT] AS\r\n\r\n\r\nSELECT \r\nYEAR(F.DATE_) YIL\r\n,MONTH(F.DATE_) AY\r\n,S.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,S.STGRPCODE \r\n,CASE F.trcode WHEN 3 THEN L.AMOUNT*-1 ELSE L.AMOUNT END MIKTAR\r\n---,L.AMOUNT MIKTAR\r\n---,L.PRICE FIYAT\r\n,CASE F.trcode WHEN 3 THEN L.PRICE*-1 ELSE L.PRICE END FIYAT\r\n,CASE F.trcode WHEN 3 THEN CASE WHEN L.TRCODE=7 THEN L.TOTAL-L.VATAMNT ELSE L.TOTAL END *-1\r\nELSE CASE WHEN L.TRCODE=7 THEN L.TOTAL-L.VATAMNT ELSE L.TOTAL END END TUTAR\r\n,ISNULL ((SELECT S.DISCPER FROM LG_123_01_STLINE S WITH (NOLOCK) WHERE LINETYPE=2 AND INVOICEREF=F.LOGICALREF AND S.DISCPER\u003e0 AND S.PARENTLNREF=L.LOGICALREF),0) \u0027S INDIRIM ORANI\u0027\r\n,ISNULL ((SELECT S.DISCPER FROM LG_123_01_STLINE S WITH (NOLOCK) WHERE LINETYPE=2 AND INVOICEREF=F.LOGICALREF AND S.DISCPER\u003e0 AND S.PARENTLNREF=0),0) \u0027G INDIRIM ORANI\u0027\r\n,ISNULL ((SELECT S.TOTAL/(INVOICELNNO-1) FROM LG_123_01_STLINE S WITH (NOLOCK) WHERE LINETYPE=3 AND INVOICEREF=F.LOGICALREF AND S.DISCPER\u003e0),0) \u0027MASRAF TUTARI\u0027\r\n\r\n,(SELECT DEFINITION_ FROM LG_123_SPECODES WITH (NOLOCK) WHERE SPECODETYPE=25 AND SPECODE=L.SPECODE) TUR\r\n\r\nFROM LG_123_01_STLINE AS L WITH (NOLOCK)\r\nINNER JOIN LG_123_ITEMS AS S WITH (NOLOCK) ON S.LOGICALREF=L.STOCKREF\r\nINNER JOIN LG_123_01_INVOICE AS F WITH (NOLOCK) ON F.LOGICALREF=L.INVOICEREF\r\nINNER JOIN LG_123_CLCARD AS C WITH (NOLOCK) ON C.LOGICALREF=F.CLIENTREF\r\nLEFT JOIN LG_123_EMUHACC EMU WITH (NOLOCK) ON EMU.LOGICALREF = L.ACCOUNTREF\r\nWHERE LINETYPE=0 AND F.TRCODE IN (8,9,7,3,6,14)----8,9,7,\r\nAND F.CANCELLED=0\r\nAND YEAR(F.DATE_)\u003e2021\r\n--AND F.FICHENO=\u0027RST2023000000096\u0027\r\n\r\nUNION ALL\r\n\r\nSELECT \r\nYEAR(F.DATE_) YIL\r\n,MONTH(F.DATE_) AY\r\n,S.CODE STOK_KODU\r\n,S.DEFINITION_ STOK_ADI\r\n,\u0027\u0027 STGRPCODE \r\n,CASE F.trcode WHEN 3 THEN L.AMOUNT*-1 ELSE L.AMOUNT END MIKTAR\r\n--,L.AMOUNT MIKTAR\r\n,CASE F.trcode WHEN 3 THEN L.PRICE*-1 ELSE L.PRICE END FIYAT\r\n--,L.PRICE FIYAT\r\n\r\n--,CASE WHEN L.TRCODE=7 THEN L.TOTAL-L.VATAMNT ELSE L.TOTAL END TUTARESKI\r\n----\r\n,CASE F.trcode WHEN 3 THEN CASE WHEN L.TRCODE=7 THEN L.TOTAL-L.VATAMNT ELSE L.TOTAL END *-1\r\n\r\n\r\nELSE CASE WHEN L.TRCODE=7 THEN L.TOTAL-L.VATAMNT ELSE L.TOTAL END END TUTAR\r\n\r\n,ISNULL ((SELECT S.DISCPER FROM LG_123_01_STLINE S WITH (NOLOCK) WHERE LINETYPE=2 AND INVOICEREF=F.LOGICALREF AND S.DISCPER\u003e0 AND S.PARENTLNREF=L.LOGICALREF),0) \u0027S INDIRIM ORANI\u0027\r\n,ISNULL ((SELECT S.DISCPER FROM LG_123_01_STLINE S WITH (NOLOCK) WHERE LINETYPE=2 AND INVOICEREF=F.LOGICALREF AND S.DISCPER\u003e0 AND S.PARENTLNREF=0),0) \u0027G INDIRIM ORANI\u0027\r\n,ISNULL ((SELECT S.TOTAL/(INVOICELNNO-1) FROM LG_123_01_STLINE S WITH (NOLOCK) WHERE LINETYPE=3 AND INVOICEREF=F.LOGICALREF AND S.DISCPER\u003e0),0) \u0027MASRAF TUTARI\u0027\r\n\r\n-----\r\n\r\n,(SELECT DEFINITION_ FROM LG_123_SPECODES WITH (NOLOCK) WHERE SPECODETYPE=25 AND SPECODE=L.SPECODE) TUR\r\n\r\n\t\t\t\t\t\r\nFROM LG_123_01_STLINE AS L WITH (NOLOCK)\r\nINNER JOIN LG_123_SRVCARD AS S WITH (NOLOCK) ON S.LOGICALREF=L.STOCKREF\r\nINNER JOIN LG_123_01_INVOICE AS F WITH (NOLOCK) ON F.LOGICALREF=L.INVOICEREF\r\nINNER JOIN LG_123_CLCARD AS C WITH (NOLOCK) ON C.LOGICALREF=F.CLIENTREF\r\nLEFT JOIN LG_123_EMUHACC EMU WITH (NOLOCK) ON EMU.LOGICALREF = L.ACCOUNTREF\r\nWHERE LINETYPE=4 AND F.TRCODE IN (9,8,7,3,6,14)--9,8,7,\r\nAND F.CANCELLED=0\r\nAND YEAR(F.DATE_)\u003e2021\r\n\r\nUNION ALL\r\n\r\nSELECT \r\nYEAR(F.DATE_) YIL\r\n,MONTH(F.DATE_) AY\r\n,S.CODE STOK_KODU\r\n,S.DEFINITION_ STOK_ADI\r\n,\u0027\u0027 STGRPCODE \r\n,L.AMOUNT MIKTAR\r\n,L.PRICE FIYAT\r\n,L.PRICE TUTAR\r\n,\u0027\u0027 \u0027S INDIRIM ORANI\u0027\r\n,\u0027\u0027 \u0027G INDIRIM ORANI\u0027\r\n,\u0027\u0027 \u0027MASRAF TUTARI\u0027\r\n,S.DEFINITION2 TUR\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t--   \u0027\u0027 [Fatura muhasebe Kodu]\r\n\r\nFROM LG_123_01_DEMANDLINE AS L WITH (NOLOCK)\r\nINNER JOIN LG_123_SRVCARD AS S  WITH (NOLOCK) ON S.LOGICALREF=L.ITEMREF\r\nINNER JOIN LG_123_CLCARD AS C  WITH (NOLOCK) ON C.LOGICALREF=L.CLIENTREF\r\nINNER JOIN LG_123_01_DEMANDFICHE AS F WITH (NOLOCK) ON F.LOGICALREF=L.DEMANDFICHEREF\r\n\r\nWHERE S.CODE LIKE\u0027X 6%\u0027\r\nAND YEAR(F.DATE_)\u003e2021\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "YIL",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STGRPCODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIYAT",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "S INDIRIM ORANI",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "G INDIRIM ORANI",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MASRAF TUTARI",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "YIL":  "2024",
+                            "AY":  "2",
+                            "STOK_KODU":  "153-AKSESUAR 0007",
+                            "STOK_ADI":  "KARAVAN AYAK ",
+                            "STGRPCODE":  "",
+                            "MIKTAR":  "-8",
+                            "FIYAT":  "-245,85525",
+                            "TUTAR":  "-1966,84",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "SATIŞ İADE"
+                        },
+                        {
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "STOK_KODU":  "153-AKSESUAR 0007",
+                            "STOK_ADI":  "KARAVAN AYAK ",
+                            "STGRPCODE":  "",
+                            "MIKTAR":  "8",
+                            "FIYAT":  "245,855175",
+                            "TUTAR":  "1966,84528287",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "DİĞER"
+                        },
+                        {
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "STOK_KODU":  "153-DSXX0099H040",
+                            "STOK_ADI":  "YATAK SÜNGER KATLANIR 3 PARÇA",
+                            "STGRPCODE":  "",
+                            "MIKTAR":  "-1",
+                            "FIYAT":  "-2000",
+                            "TUTAR":  "-2000",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "SATIŞ İADE"
+                        },
+                        {
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "STOK_KODU":  "153-KRXX0099H129",
+                            "STOK_ADI":  "YATAK MEKANİZMA KATLANIR",
+                            "STGRPCODE":  "",
+                            "MIKTAR":  "-1",
+                            "FIYAT":  "-2500",
+                            "TUTAR":  "-2500",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "SATIŞ İADE"
+                        },
+                        {
+                            "YIL":  "2025",
+                            "AY":  "9",
+                            "STOK_KODU":  "ECTURB100012",
+                            "STOK_ADI":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "STGRPCODE":  "ETİCARET",
+                            "MIKTAR":  "3",
+                            "FIYAT":  "299,0039978",
+                            "TUTAR":  "747,51",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "ETİCARET"
+                        },
+                        {
+                            "YIL":  "2025",
+                            "AY":  "9",
+                            "STOK_KODU":  "ECTURB100009",
+                            "STOK_ADI":  "URBAN BADGER HAFIF CADIR",
+                            "STGRPCODE":  "ETİCARET",
+                            "MIKTAR":  "1",
+                            "FIYAT":  "1799,12006836",
+                            "TUTAR":  "1499,27",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "ETİCARET"
+                        },
+                        {
+                            "YIL":  "2025",
+                            "AY":  "9",
+                            "STOK_KODU":  "ECTURB100012",
+                            "STOK_ADI":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "STGRPCODE":  "ETİCARET",
+                            "MIKTAR":  "1",
+                            "FIYAT":  "269,1",
+                            "TUTAR":  "224,25",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "ETİCARET"
+                        },
+                        {
+                            "YIL":  "2025",
+                            "AY":  "9",
+                            "STOK_KODU":  "ECTURB100012",
+                            "STOK_ADI":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "STGRPCODE":  "ETİCARET",
+                            "MIKTAR":  "1",
+                            "FIYAT":  "269,1",
+                            "TUTAR":  "224,25",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "ETİCARET"
+                        },
+                        {
+                            "YIL":  "2025",
+                            "AY":  "9",
+                            "STOK_KODU":  "ECTURB100007",
+                            "STOK_ADI":  "URBAN BADGER PIKNIK ORTUSU 1,5X2M MAVI-BEYAZ",
+                            "STGRPCODE":  "ETİCARET",
+                            "MIKTAR":  "1",
+                            "FIYAT":  "1239,00001221",
+                            "TUTAR":  "1126,36",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "ETİCARET"
+                        },
+                        {
+                            "YIL":  "2025",
+                            "AY":  "9",
+                            "STOK_KODU":  "ECTURB100012",
+                            "STOK_ADI":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "STGRPCODE":  "ETİCARET",
+                            "MIKTAR":  "1",
+                            "FIYAT":  "269,1",
+                            "TUTAR":  "224,25",
+                            "S INDIRIM ORANI":  "0",
+                            "G INDIRIM ORANI":  "0",
+                            "MASRAF TUTARI":  "0",
+                            "TUR":  "ETİCARET"
+                        }
+                    ]
+}

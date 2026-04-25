@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_001_01_CARI_MUHASEBE_KONTROL",
+    "full_name":  "dbo.DST_001_01_CARI_MUHASEBE_KONTROL",
+    "definition":  "CREATE VIEW DST_001_01_CARI_MUHASEBE_KONTROL\r\n\r\nAS\r\n\r\nSELECT  CLCARD.CODE \u0027C/H KODU\u0027 ,CLCARD.DEFINITION_ \u0027C/H UNVANI\u0027 \r\n,ISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_CLFLINE WHERE SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027\r\nAND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) \u0027C/H BORÇ\u0027 ,ISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_CLFLINE WHERE SIGN=1 AND CANCELLED=0 \r\nAND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) \u0027C/H ALACAK\u0027 \r\n,ISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_CLFLINE WHERE SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) - ISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_CLFLINE WHERE SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) \u0027C/H BAKİYE\u0027 \r\n,EMUHACC.CODE \u0027HESAP KODU\u0027 ,EMUHACC.DEFINITION_ \u0027HESAP AÇIKLAMASI\u0027 ,ISNULL((SELECT SUM(DEBIT) FROM LG_001_01_EMFLINE WHERE SPECODE NOT IN  (\u0027D\u0027) AND SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) \u0027MUHASEBE BORÇ\u0027 \r\n,ISNULL((SELECT SUM(CREDIT) FROM LG_001_01_EMFLINE WHERE SPECODE NOT IN (\u0027D\u0027) AND SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) \u0027MUHASEBE ALACAK\u0027\r\n,ISNULL((SELECT SUM(DEBIT) FROM LG_001_01_EMFLINE WHERE  SPECODE NOT IN  (\u0027D\u0027) AND SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) - ISNULL((SELECT SUM(CREDIT) FROM LG_001_01_EMFLINE WHERE SPECODE NOT IN  (\u0027D\u0027) AND SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) \u0027MUHASEBE BAKİYE\u0027 \r\n\r\n---\r\n,(ISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_CLFLINE WHERE SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) - ISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_CLFLINE WHERE SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0))-\r\n(ISNULL((SELECT SUM(DEBIT) FROM LG_001_01_EMFLINE WHERE  SPECODE NOT IN  (\u0027D\u0027) AND SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) - ISNULL((SELECT SUM(CREDIT) FROM LG_001_01_EMFLINE WHERE SPECODE NOT IN  (\u0027D\u0027) AND SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720210101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0)) \u0027FARK\u0027 \r\n\r\nFROM LG_001_CRDACREF CRDACREF \r\nLEFT JOIN LG_001_CLCARD CLCARD ON CLCARD.LOGICALREF=CRDACREF.CARDREF \r\nLEFT JOIN LG_001_EMUHACC EMUHACC ON EMUHACC.LOGICALREF=CRDACREF.ACCOUNTREF \r\nWHERE CRDACREF.TRCODE = 5 And TYP = 1\r\n\r\n--AND CLCARD.DEFINITION_ LIKE \u0027YEL%\u0027",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "C/H KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "C/H UNVANI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "C/H BORÇ",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "C/H ALACAK",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "C/H BAKİYE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP KODU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP AÇIKLAMASI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUHASEBE BORÇ",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUHASEBE ALACAK",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUHASEBE BAKİYE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FARK",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "C/H KODU":  null,
+                            "C/H UNVANI":  null,
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "0",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.01.0001",
+                            "HESAP AÇIKLAMASI":  "YELİZ UÇKUN",
+                            "MUHASEBE BORÇ":  "0",
+                            "MUHASEBE ALACAK":  "23000",
+                            "MUHASEBE BAKİYE":  "-23000",
+                            "FARK":  "23000"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0001",
+                            "C/H UNVANI":  "YELİZ UÇKUN",
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "23000",
+                            "C/H BAKİYE":  "-23000",
+                            "HESAP KODU":  "120.01.0001",
+                            "HESAP AÇIKLAMASI":  "YELİZ UÇKUN",
+                            "MUHASEBE BORÇ":  "0",
+                            "MUHASEBE ALACAK":  "23000",
+                            "MUHASEBE BAKİYE":  "-23000",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0002",
+                            "C/H UNVANI":  "BARIŞ SEDEF",
+                            "C/H BORÇ":  "302870",
+                            "C/H ALACAK":  "281370",
+                            "C/H BAKİYE":  "21500",
+                            "HESAP KODU":  "120.01.0002",
+                            "HESAP AÇIKLAMASI":  "BARIŞ SEDEF",
+                            "MUHASEBE BORÇ":  "349370",
+                            "MUHASEBE ALACAK":  "281370",
+                            "MUHASEBE BAKİYE":  "68000",
+                            "FARK":  "-46500"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0003",
+                            "C/H UNVANI":  "NEHİR YAMAN",
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "0",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.01.0003",
+                            "HESAP AÇIKLAMASI":  "NEHİR YAMAN",
+                            "MUHASEBE BORÇ":  "0",
+                            "MUHASEBE ALACAK":  "0",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0004",
+                            "C/H UNVANI":  "MUSTAFA KÖKSAL",
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "0",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.01.0004",
+                            "HESAP AÇIKLAMASI":  "MUSTAFA KÖKSAL",
+                            "MUHASEBE BORÇ":  "0",
+                            "MUHASEBE ALACAK":  "0",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0005",
+                            "C/H UNVANI":  "ERKUT BATUHAN ŞENER",
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "0",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.01.0005",
+                            "HESAP AÇIKLAMASI":  "ERKUT BATUHAN ŞENER",
+                            "MUHASEBE BORÇ":  "0",
+                            "MUHASEBE ALACAK":  "0",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0006",
+                            "C/H UNVANI":  "MUHARREM GÜLER",
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "2500",
+                            "C/H BAKİYE":  "-2500",
+                            "HESAP KODU":  "120.01.0006",
+                            "HESAP AÇIKLAMASI":  "MUHARREM GÜLER",
+                            "MUHASEBE BORÇ":  "2500",
+                            "MUHASEBE ALACAK":  "2500",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "-2500"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0007",
+                            "C/H UNVANI":  "RUHAN ER",
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "0",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.01.0007",
+                            "HESAP AÇIKLAMASI":  "RUHAN ER",
+                            "MUHASEBE BORÇ":  "0",
+                            "MUHASEBE ALACAK":  "0",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0008",
+                            "C/H UNVANI":  "UMUT BAYUR",
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "0",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.01.0008",
+                            "HESAP AÇIKLAMASI":  "UMUT BAYUR",
+                            "MUHASEBE BORÇ":  "0",
+                            "MUHASEBE ALACAK":  "0",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.01.0009",
+                            "C/H UNVANI":  "EMRAH PELVANOĞLU",
+                            "C/H BORÇ":  "0",
+                            "C/H ALACAK":  "0",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.01.0009",
+                            "HESAP AÇIKLAMASI":  "EMRAH PELVANOĞLU",
+                            "MUHASEBE BORÇ":  "0",
+                            "MUHASEBE ALACAK":  "0",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        }
+                    ]
+}

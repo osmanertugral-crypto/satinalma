@@ -1,0 +1,136 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "TESLIMTIPI",
+    "full_name":  "dbo.TESLIMTIPI",
+    "description":  "",
+    "total_rows":  "18",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "TESLIMTIPI_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ADI1",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ADI2",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__TESLIMTI__BF69F8F7BEDC98EE",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "KODU"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "TESLIMTIPI_REF":  "17",
+                            "KODU":  "CAG",
+                            "ADI1":  "Mal Mukabili Ödeme",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "1",
+                            "KODU":  "CFR",
+                            "ADI1":  "Cost and Freight",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "2",
+                            "KODU":  "CIF",
+                            "ADI1":  "Cost Insurance and Freight",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "3",
+                            "KODU":  "CIP",
+                            "ADI1":  "Navlun ve Sigorta Ödenmiş",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "4",
+                            "KODU":  "CPT",
+                            "ADI1":  "Navlun Ödenmiş",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "5",
+                            "KODU":  "DAF",
+                            "ADI1":  "Delivered at Frontier",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "16",
+                            "KODU":  "DAP",
+                            "ADI1":  "Belirtilen Noktada Teslim",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "15",
+                            "KODU":  "DAT",
+                            "ADI1":  "Terminalde Teslim",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "6",
+                            "KODU":  "DDP",
+                            "ADI1":  "Gümrük Vergileri Ödenmiş",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TESLIMTIPI_REF":  "7",
+                            "KODU":  "DDU",
+                            "ADI1":  "Delivered Duty Unpaid",
+                            "ADI2":  ""
+                        }
+                    ]
+}

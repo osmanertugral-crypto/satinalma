@@ -1,0 +1,120 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_002_PRCLSTDIV",
+    "full_name":  "dbo.LG_002_PRCLSTDIV",
+    "description":  "",
+    "total_rows":  "1527",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PARENTPRCREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DIVCODES",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "256",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I002_PRCLSTDIV_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I002_PRCLSTDIV_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "PARENTPRCREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "PARENTPRCREF":  "1",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "PARENTPRCREF":  "2",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "PARENTPRCREF":  "3",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "PARENTPRCREF":  "4",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "PARENTPRCREF":  "5",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "PARENTPRCREF":  "6",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "PARENTPRCREF":  "7",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "PARENTPRCREF":  "8",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "PARENTPRCREF":  "10",
+                            "DIVCODES":  "-1"
+                        },
+                        {
+                            "LOGICALREF":  "12",
+                            "PARENTPRCREF":  "11",
+                            "DIVCODES":  "-1"
+                        }
+                    ]
+}

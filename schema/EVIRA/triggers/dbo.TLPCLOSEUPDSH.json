@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "TLPCLOSEUPDSH",
+    "on_table":  "dbo.TALEPHAREKETLERI",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "UPDATE"
+               ],
+    "definition":  "CREATE TRIGGER [dbo].[TLPCLOSEUPDSH] ON [dbo].[TALEPHAREKETLERI]\r\nFOR UPDATE\r\nAS\r\nSET NOCOUNT ON\r\n\r\nDECLARE @TD_REF AS INT\r\nDECLARE Dcur CURSOR LOCAL FOR  \r\nSELECT D.TD_REF FROM DELETED D,INSERTED I WHERE I.TD_REF=D.TD_REF AND I.STATUS=1 AND D.STATUS=0  GROUP BY D.TD_REF\r\nOPEN Dcur;  \r\nFETCH NEXT FROM Dcur \r\nINTO @TD_REF;\r\nWHILE @@FETCH_STATUS = 0  \r\nBEGIN  \r\n\tUPDATE TALEPHAREKETLERI SET STATUS=1 WHERE STATUS=0 AND TD_REF=@TD_REF\r\nFETCH NEXT FROM Dcur\r\nINTO @TD_REF;\r\nEND  \r\nCLOSE Dcur;  \r\nDEALLOCATE Dcur;"
+}

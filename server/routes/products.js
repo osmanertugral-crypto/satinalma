@@ -4,9 +4,70 @@ const { getDb } = require('../db/schema');
 const { authenticate, authorize } = require('../middleware/auth');
 const { normTr } = require('../utils/searchUtils');
 const { getExcelProducts, getExcelProductById, getExcelProductStats } = require('../utils/excelPurchaseFallback');
+const tiger3 = require('../utils/tiger3');
 
 const router = express.Router();
 router.use(authenticate);
+
+// ── Tiger3 ürün sync ─────────────────────────────────────────────────────────
+async function syncProductsFromTIGER3() {
+  const db = getDb();
+
+  const rows = await tiger3.query(`
+    SELECT
+      I.CODE,
+      ISNULL(I.NAME, '') AS NAME,
+      ISNULL(I.STGRPCODE, '') AS STGRPCODE,
+      I.ACTIVE
+    FROM LG_123_ITEMS I
+    WHERE I.CODE IS NOT NULL AND I.CODE != ''
+    ORDER BY I.CODE
+  `);
+
+  // Ensure categories exist for all STGRPCODE values
+  const groups = [...new Set(rows.map(r => r.STGRPCODE).filter(g => g && g.trim()))];
+  const catMap = {};
+  for (const grp of groups) {
+    let cat = db.prepare('SELECT id FROM categories WHERE name = ?').get(grp);
+    if (!cat) {
+      const catId = uuidv4();
+      db.prepare('INSERT INTO categories (id, name) VALUES (?, ?)').run(catId, grp);
+      catMap[grp] = catId;
+    } else {
+      catMap[grp] = cat.id;
+    }
+  }
+
+  // Pre-load existing codes to avoid N+1 queries in transaction
+  const existingCodes = new Set(db.prepare('SELECT code FROM products').all().map(r => r.code));
+
+  const updateStmt = db.prepare(`
+    UPDATE products SET name = ?, category_id = ?, active = ?, updated_at = datetime('now')
+    WHERE code = ?
+  `);
+  const insertStmt = db.prepare(`
+    INSERT INTO products (id, code, name, category_id, unit, active)
+    VALUES (?, ?, ?, ?, 'adet', ?)
+  `);
+
+  let inserted = 0, updated = 0;
+  db.transaction((items) => {
+    for (const r of items) {
+      const catId = catMap[r.STGRPCODE] || null;
+      const active = r.ACTIVE === 1 ? 1 : 0;
+      if (existingCodes.has(r.CODE)) {
+        updateStmt.run(r.NAME, catId, active, r.CODE);
+        updated++;
+      } else {
+        insertStmt.run(uuidv4(), r.CODE, r.NAME, catId, active);
+        inserted++;
+      }
+    }
+  })(rows);
+
+  console.log(`[Products] Tiger3 sync: ${inserted} yeni, ${updated} güncellendi, toplam ${rows.length}`);
+  return { inserted, updated, total: rows.length };
+}
 
 // --- KATEGORİLER ---
 router.get('/categories', (req, res) => {
@@ -207,6 +268,15 @@ router.get('/:id', (req, res) => {
   res.json({ ...product, suppliers, prices });
 });
 
+router.post('/sync-tiger3', authorize('admin'), async (req, res) => {
+  try {
+    const result = await syncProductsFromTIGER3();
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 router.post('/', authorize('admin', 'user'), (req, res) => {
   const { code, name, category_id, unit, min_stock_level, description } = req.body;
   if (!code || !name) return res.status(400).json({ error: 'Kod ve ad gerekli' });
@@ -238,4 +308,4 @@ router.delete('/:id', authorize('admin'), (req, res) => {
   res.json({ message: 'Ürün silindi' });
 });
 
-module.exports = router;
+module.exports = Object.assign(router, { syncProductsFromTIGER3 });

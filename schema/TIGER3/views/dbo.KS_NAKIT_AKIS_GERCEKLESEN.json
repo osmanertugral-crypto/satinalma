@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KS_NAKIT_AKIS_GERCEKLESEN",
+    "full_name":  "dbo.KS_NAKIT_AKIS_GERCEKLESEN",
+    "definition":  "\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[KS_NAKIT_AKIS_GERCEKLESEN] AS \r\n  \r\nSELECT  \r\nCLCARD.CODE , \r\nCLCARD.DEFINITION_,\r\nBNFICHE.FICHENO FICHENO,\r\nBNFICHE.DATE_ DATE_,\r\nBNFLINE.LINEEXP,\r\nEMFICHE.FICHENO MUH_FICHENO,\r\nEMFICHE.DATE_ MUH_DATE_,\r\n\r\nCASE WHEN CLCARD.CODE LIKE \u0027120.07%\u0027 THEN \u0027Mağaza Para\u0027 \r\n WHEN CLCARD.CODE LIKE \u0027335.01%\u0027 THEN \u0027Personel\u0027  \r\n WHEN CLCARD.CODE LIKE \u0027336.%\u0027 THEN \u0027Personel\u0027  \r\n WHEN CLCARD.CODE LIKE \u0027195.%\u0027 THEN \u0027Personel\u0027  \r\n WHEN CLCARD.CODE LIKE \u0027196.%\u0027 THEN \u0027Personel\u0027  \r\n WHEN CLCARD.CODE LIKE \u0027108.01%\u0027 THEN \u0027KKartı\u0027    \r\n WHEN CLCARD.CODE LIKE \u0027329.%\u0027 THEN \u0027Şirket KKartı\u0027    \r\n WHEN CLCARD.CODE LIKE \u0027108.02%\u0027 THEN \u0027HGS\u0027 ELSE  \r\n \r\n(\r\nCASE BNFLINE.TRCODE WHEN 1 THEN \u0027Banka İşlem\u0027 \r\n\t\t\t\t\tWHEN 3 THEN \u0027Cari\u0027 \r\n\t\t\t\t\tWHEN 4 THEN \u0027Cari\u0027 \r\n\t\t\t\t\tWHEN 6 THEN \u0027Kur Farkı\u0027 \r\n \r\n\r\nELSE\r\n(CASE BNFLINE.MODULENR WHEN 7 THEN \u0027Virman\u0027  \r\n\r\nWHEN 6 THEN \u0027Çek/Senet\u0027 \r\nWHEN 61 THEN \u0027Çek/Senet\u0027 \r\nWHEN 62 THEN \u0027Çek/Senet\u0027 \r\nWHEN 63 THEN \u0027Çek/Senet\u0027 \r\nWHEN 64 THEN \u0027Çek/Senet\u0027 \r\nWHEN 65 THEN \u0027Çek/Senet\u0027 \r\n\r\nEND) \r\nEND\r\n)\r\n\r\nEND TYPE,\r\n\r\nCASE BNFLINE.SIGN WHEN 1 THEN \u0027Ödemeler\u0027 WHEN 0 THEN \u0027Tahsilat\u0027 END AS SIGN,\r\nBNFLINE.TRCODE ,\r\n(CASE BNFLINE.SIGN WHEN 1 THEN BNFLINE.AMOUNT * (-1) WHEN 0 THEN BNFLINE.AMOUNT END) AS TOTAL ,\r\nDATEPART( wk, BNFLINE.DATE_) HAFTA  , (BNFLINE.DATE_) BAS_TAR , (BNFLINE.DATE_) BIT_TAR\r\n\r\n\r\nFROM dbo.LG_123_01_BNFLINE AS BNFLINE WITH (NOLOCK) LEFT OUTER JOIN--ON TKVM.HAFTA = DATEPART( wk, BNFLINE.DATE_) AND YEAR(BNFLINE.DATE_) = 2023 LEFT OUTER JOIN\r\n  dbo.LG_123_01_BNFICHE AS BNFICHE WITH (NOLOCK) ON BNFLINE.SOURCEFREF = BNFICHE.LOGICALREF AND BNFLINE.MODULENR = BNFICHE.MODULENR LEFT OUTER JOIN \r\n  dbo.LG_123_CLCARD AS CLCARD WITH (NOLOCK) ON BNFLINE.CLIENTREF = CLCARD.LOGICALREF LEFT OUTER JOIN\r\n  dbo.LG_123_01_EMFICHE AS EMFICHE WITH (NOLOCK) ON BNFLINE.ACCFICHEREF = EMFICHE.LOGICALREF LEFT OUTER JOIN\r\n  dbo.L_CURRENCYLIST AS L_CURRENCYLIST WITH (NOLOCK) ON L_CURRENCYLIST.CURTYPE = BNFLINE.TRCURR AND L_CURRENCYLIST.FIRMNR = \u0027123\u0027\r\n\r\nWHERE BNFLINE.TRCODE NOT IN (2) --OR (BNFLINE.MODULENR LIKE \u00276%\u0027)) AND BNFLINE.CANCELLED = 0\r\n--Bozarsan bunu geri koy (YEAR(BNFLINE.DATE_) = 2024 ) AND\r\n--GROUP BY CLCARD.CODE , CLCARD.DEFINITION_ , DATEPART( wk, BNFLINE.DATE_) , BNFLINE.MODULENR , BNFLINE.SIGN , BNFLINE.TRCODE , BNFICHE.FICHENO , BNFICHE.DATE_ , EMFICHE.FICHENO , EMFICHE.DATE_ \r\n\r\nUNION ALL\r\n \r\n\r\nSELECT \r\nBANKACC.CODE , \r\nBANKACC.DEFINITION_,\r\n      \r\n\u0027\u0027 FICHENO,\r\nCONVERT(DATE,GETDATE()) DATE_,\r\nBNFLINE.LINEEXP,\r\n\t \r\n\u0027\u0027 MUH_FICHENO,\r\nCONVERT(DATE,GETDATE()) MUH_DATE_,\r\n\r\n\u0027Banka\u0027 TYPE,\r\n\u0027Açılış Bakiye\u0027 AS SIGN,\r\n7 TRCODE ,\r\n\r\n (SUM((CASE BNFLINE.SIGN WHEN 1 THEN ROUND((CASE BNFLINE.TRCURR WHEN 0 THEN BNFLINE.AMOUNT ELSE BNFLINE.TRNET END),2)\r\n                      * - 1 ELSE ROUND((CASE BNFLINE.TRCURR WHEN 0 THEN BNFLINE.AMOUNT ELSE BNFLINE.TRNET END),2) END)))\r\n* MAX(ISNULL(EXCHANGE.RATES1,1))   \t\t\t\t\t  \r\n\t\t\t\t\t  AS TOTAL ,\r\nDATEPART( wk, GETDATE()) HAFTA , MIN(GETDATE()) BAS_TAR , MAX(GETDATE()) BIT_TAR\r\n\r\n\r\nFROM         dbo.LG_123_01_BNFLINE AS BNFLINE WITH (NOLOCK) LEFT OUTER JOIN\r\n                      dbo.LG_123_BNCARD AS BNCARD WITH (NOLOCK) ON BNFLINE.BANKREF = BNCARD.LOGICALREF LEFT OUTER JOIN\r\n                      dbo.LG_123_BANKACC AS BANKACC WITH (NOLOCK) ON BNFLINE.BNACCREF = BANKACC.LOGICALREF LEFT OUTER JOIN\r\n                      dbo.LG_123_01_BNFICHE AS BNFICHE WITH (NOLOCK) ON BNFLINE.SOURCEFREF = BNFICHE.LOGICALREF LEFT OUTER JOIN\r\n                      dbo.LG_123_BANKACC AS BANKACC1 WITH (NOLOCK) ON BNFICHE.BNACCOUNTREF = BANKACC1.LOGICALREF LEFT OUTER JOIN\r\n                      dbo.L_CURRENCYLIST AS L_CURRENCYLIST WITH (NOLOCK) ON L_CURRENCYLIST.CURTYPE = BNFLINE.TRCURR AND L_CURRENCYLIST.FIRMNR = \u0027123\u0027 LEFT OUTER JOIN\r\n\t\t\t\t\t  dbo.LG_EXCHANGE_123 AS EXCHANGE WITH(NOLOCK) ON EXCHANGE.CRTYPE = L_CURRENCYLIST.CURTYPE AND EXCHANGE.EDATE = CONVERT(DATE,GETDATE())\r\nWHERE BNFLINE.CANCELLED = 0 \r\nAND BANKACC.CARDTYPE IN (1,3)\r\nGROUP BY  BANKACC.CODE , BNFLINE.LINEEXP, BANKACC.DEFINITION_ ,  BANKACC.LOGICALREF  , BNCARD.LOGICALREF , BNFLINE.TRCURR , L_CURRENCYLIST.CURCODE \r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FICHENO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUH_FICHENO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "33",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUH_DATE_",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYPE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIGN",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HAFTA",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAS_TAR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIT_TAR",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001832",
+                            "DATE_":  "30.04.2025 00:00:00",
+                            "LINEEXP":  "KREDİ NO: 14580156495 - FAİZ 1458/53424 *MUH.HESABINA AKTARMA ",
+                            "MUH_FICHENO":  "028308",
+                            "MUH_DATE_":  "30.04.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-295156,75",
+                            "HAFTA":  "18",
+                            "BAS_TAR":  "30.04.2025 00:00:00",
+                            "BIT_TAR":  "30.04.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001833",
+                            "DATE_":  "21.04.2025 00:00:00",
+                            "LINEEXP":  "6500898072  kredi hesap numaralı 2. El Araç Kredisi  Tam  Taksit  Tahsilatı",
+                            "MUH_FICHENO":  "028310",
+                            "MUH_DATE_":  "21.04.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-35275,6",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "21.04.2025 00:00:00",
+                            "BIT_TAR":  "21.04.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001833",
+                            "DATE_":  "21.04.2025 00:00:00",
+                            "LINEEXP":  "6500898072  kredi hesap numaralı 2. El Araç Kredisi  Tam  Taksit  Tahsilatı",
+                            "MUH_FICHENO":  "028310",
+                            "MUH_DATE_":  "21.04.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-1763,78",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "21.04.2025 00:00:00",
+                            "BIT_TAR":  "21.04.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001834",
+                            "DATE_":  "3.04.2025 00:00:00",
+                            "LINEEXP":  "VAKIFBANK KREDİ FAİZ - 7187 HS",
+                            "MUH_FICHENO":  "028314",
+                            "MUH_DATE_":  "3.04.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-42411,23",
+                            "HAFTA":  "14",
+                            "BAS_TAR":  "3.04.2025 00:00:00",
+                            "BIT_TAR":  "3.04.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001834",
+                            "DATE_":  "3.04.2025 00:00:00",
+                            "LINEEXP":  "VAKIFBANK KREDİ FAİZ - 7187 HS",
+                            "MUH_FICHENO":  "028314",
+                            "MUH_DATE_":  "3.04.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-2120,56",
+                            "HAFTA":  "14",
+                            "BAS_TAR":  "3.04.2025 00:00:00",
+                            "BIT_TAR":  "3.04.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001835",
+                            "DATE_":  "13.01.2025 00:00:00",
+                            "LINEEXP":  "6500911624  kredi hesap numaralı Taksitli İhracat Kredisi   Tam  Taksit  Tahsilatı  2  Taksit ",
+                            "MUH_FICHENO":  "028317",
+                            "MUH_DATE_":  "13.01.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-181829,48",
+                            "HAFTA":  "3",
+                            "BAS_TAR":  "13.01.2025 00:00:00",
+                            "BIT_TAR":  "13.01.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001836",
+                            "DATE_":  "13.02.2025 00:00:00",
+                            "LINEEXP":  "6500911624  kredi hesap numaralı Taksitli İhracat Kredisi   Tam  Taksit  Tahsilatı  2  Taksit ",
+                            "MUH_FICHENO":  "028318",
+                            "MUH_DATE_":  "13.02.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-180677,3",
+                            "HAFTA":  "7",
+                            "BAS_TAR":  "13.02.2025 00:00:00",
+                            "BIT_TAR":  "13.02.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001837",
+                            "DATE_":  "13.03.2025 00:00:00",
+                            "LINEEXP":  "6500911624  kredi hesap numaralı Taksitli İhracat Kredisi   Tam  Taksit  Tahsilatı  2  Taksit ",
+                            "MUH_FICHENO":  "028319",
+                            "MUH_DATE_":  "13.03.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-179480,96",
+                            "HAFTA":  "11",
+                            "BAS_TAR":  "13.03.2025 00:00:00",
+                            "BIT_TAR":  "13.03.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001838",
+                            "DATE_":  "14.04.2025 00:00:00",
+                            "LINEEXP":  "6500911624  kredi hesap numaralı Taksitli İhracat Kredisi   Tam  Taksit  Tahsilatı  2  Taksit ",
+                            "MUH_FICHENO":  "028320",
+                            "MUH_DATE_":  "14.04.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-184407,79",
+                            "HAFTA":  "16",
+                            "BAS_TAR":  "14.04.2025 00:00:00",
+                            "BIT_TAR":  "14.04.2025 00:00:00"
+                        },
+                        {
+                            "CODE":  null,
+                            "DEFINITION_":  null,
+                            "FICHENO":  "001839",
+                            "DATE_":  "14.04.2025 00:00:00",
+                            "LINEEXP":  "VAKIFBANK KREDİ FAİZ - 944350 HS",
+                            "MUH_FICHENO":  "028321",
+                            "MUH_DATE_":  "14.04.2025 00:00:00",
+                            "TYPE":  "Banka İşlem",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "1",
+                            "TOTAL":  "-184361",
+                            "HAFTA":  "16",
+                            "BAS_TAR":  "14.04.2025 00:00:00",
+                            "BIT_TAR":  "14.04.2025 00:00:00"
+                        }
+                    ]
+}

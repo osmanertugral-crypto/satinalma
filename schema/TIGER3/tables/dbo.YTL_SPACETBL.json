@@ -1,0 +1,176 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "YTL_SPACETBL",
+    "full_name":  "dbo.YTL_SPACETBL",
+    "description":  "",
+    "total_rows":  "267",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Name",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "Rows",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "char",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "reserved",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "18",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "Data",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "18",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "index_size",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "18",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "Unused",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "18",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+
+                ],
+    "sample_data":  [
+                        {
+                            "Name":  "LG_123_ITEMS_BCKP_02042024",
+                            "Rows":  "4889       ",
+                            "reserved":  "4488 KB",
+                            "Data":  "4360 KB",
+                            "index_size":  "8 KB",
+                            "Unused":  "120 KB"
+                        },
+                        {
+                            "Name":  "LG_123_EMUHACCSUBACCASGN",
+                            "Rows":  "11685      ",
+                            "reserved":  "1240 KB",
+                            "Data":  "248 KB",
+                            "index_size":  "584 KB",
+                            "Unused":  "408 KB"
+                        },
+                        {
+                            "Name":  "LG_123_WFTASKPER",
+                            "Rows":  "0          ",
+                            "reserved":  "0 KB",
+                            "Data":  "0 KB",
+                            "index_size":  "0 KB",
+                            "Unused":  "0 KB"
+                        },
+                        {
+                            "Name":  "LG_123_STOPASGN",
+                            "Rows":  "0          ",
+                            "reserved":  "0 KB",
+                            "Data":  "0 KB",
+                            "index_size":  "0 KB",
+                            "Unused":  "0 KB"
+                        },
+                        {
+                            "Name":  "LG_123_LOGREP",
+                            "Rows":  "468306     ",
+                            "reserved":  "77072 KB",
+                            "Data":  "49616 KB",
+                            "index_size":  "27448 KB",
+                            "Unused":  "8 KB"
+                        },
+                        {
+                            "Name":  "LG_123_MNTDEMANDFICHE",
+                            "Rows":  "0          ",
+                            "reserved":  "0 KB",
+                            "Data":  "0 KB",
+                            "index_size":  "0 KB",
+                            "Unused":  "0 KB"
+                        },
+                        {
+                            "Name":  "LG_123_ITEMCATEGORYLINE",
+                            "Rows":  "0          ",
+                            "reserved":  "0 KB",
+                            "Data":  "0 KB",
+                            "index_size":  "0 KB",
+                            "Unused":  "0 KB"
+                        },
+                        {
+                            "Name":  "LG_123_PRVOPASG",
+                            "Rows":  "0          ",
+                            "reserved":  "0 KB",
+                            "Data":  "0 KB",
+                            "index_size":  "0 KB",
+                            "Unused":  "0 KB"
+                        },
+                        {
+                            "Name":  "LG_123_EMGRPASS",
+                            "Rows":  "0          ",
+                            "reserved":  "0 KB",
+                            "Data":  "0 KB",
+                            "index_size":  "0 KB",
+                            "Unused":  "0 KB"
+                        },
+                        {
+                            "Name":  "LG_123_SHFTTIME",
+                            "Rows":  "1          ",
+                            "reserved":  "216 KB",
+                            "Data":  "8 KB",
+                            "index_size":  "40 KB",
+                            "Unused":  "168 KB"
+                        }
+                    ]
+}

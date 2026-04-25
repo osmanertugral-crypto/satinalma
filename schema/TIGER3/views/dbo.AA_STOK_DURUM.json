@@ -1,0 +1,201 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_STOK_DURUM",
+    "full_name":  "dbo.AA_STOK_DURUM",
+    "definition":  "/****** Script for SelectTopNRows command from SSMS  ******/\r\n\r\nCREATE VIEW AA_STOK_DURUM AS\r\n\r\nSELECT \r\n[MLZ_ID] REF\r\n,S.[CODE] STOK_KODU\r\n,S.[NAME] STOK_ADI\r\n,[MIKTAR] MIKTAR\r\n,(SELECT CODE FROM LG_001_UNITSETF WHERE LOGICALREF = S.UNITSETREF ) BIRIM\r\n,ISNULL((SELECT TOP 1 LINENET/AMOUNT FROM LG_001_01_STLINE WHERE STOCKREF=S.LOGICALREF AND LINETYPE=0 AND CANCELLED=0 AND TRCODE IN (1,50) AND TOTAL\u003c\u003e0 ORDER BY DATE_ DESC),0) ORT_FIYAT\r\n,[MIKTAR]*ISNULL((SELECT TOP 1 LINENET/AMOUNT FROM LG_001_01_STLINE WHERE STOCKREF=S.LOGICALREF AND LINETYPE=0 AND CANCELLED=0 AND TRCODE IN (1,50) AND TOTAL\u003c\u003e0 ORDER BY DATE_ DESC),0) TUTAR\r\n,[DEPO] DEPO_NO\r\n,[DEPO_ADI] DEPO_ADI\r\n,ISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_STLINE AS LL\r\nWHERE TRCODE=12 \r\nAND CANCELLED=0 \r\nAND LINETYPE=0 \r\nAND STOCKREF=L.MLZ_ID \r\nAND (SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=LL.PROJECTREF) IN (SELECT PROJE_KODU FROM AA_SATIS_SIPARIS_OZET  WHERE GERCEKLESEN_URETIM_TARIHI IS NULL)),0) PROJEYE_CIKILAN\r\n   \r\nFROM [TIGER3].[dbo].[AA_DEPO_STOK_RAPORU] AS L\r\nINNER JOIN LG_001_ITEMS AS S ON S.LOGICALREF=MLZ_ID\r\n   \r\n\r\n\r\n\r\n\r\n\r\n  --SELECT PROJECTREF FROM LG_001_01_INVOICE WHERE TRCODE IN (7,8,9)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORT_FIYAT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO_NO",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO_ADI",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJEYE_CIKILAN",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "REF":  "7091",
+                            "STOK_KODU":  "255.03.033",
+                            "STOK_ADI":  "ÇALIŞMA MASASI 170*70*190 CM",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "0",
+                            "TUTAR":  "0",
+                            "DEPO_NO":  "0",
+                            "DEPO_ADI":  "DEPO",
+                            "PROJEYE_CIKILAN":  "0"
+                        },
+                        {
+                            "REF":  "5502",
+                            "STOK_KODU":  "2021X1112",
+                            "STOK_ADI":  "KEMER TOKASI",
+                            "MIKTAR":  "0",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "33,9",
+                            "TUTAR":  "0",
+                            "DEPO_NO":  "0",
+                            "DEPO_ADI":  "DEPO",
+                            "PROJEYE_CIKILAN":  "0"
+                        },
+                        {
+                            "REF":  "5170",
+                            "STOK_KODU":  "2021X1025",
+                            "STOK_ADI":  "METAL ÇEKTİRME BAĞLANTI",
+                            "MIKTAR":  "398",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "4,11",
+                            "TUTAR":  "1635,78",
+                            "DEPO_NO":  "0",
+                            "DEPO_ADI":  "DEPO",
+                            "PROJEYE_CIKILAN":  "0"
+                        },
+                        {
+                            "REF":  "8725",
+                            "STOK_KODU":  "ELTS0099H076",
+                            "STOK_ADI":  "KAÇAK AKIM ROLESİ 30 AMPER",
+                            "MIKTAR":  "0",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "341,19",
+                            "TUTAR":  "0",
+                            "DEPO_NO":  "7",
+                            "DEPO_ADI":  "Elektrik",
+                            "PROJEYE_CIKILAN":  "0"
+                        },
+                        {
+                            "REF":  "6555",
+                            "STOK_KODU":  "HRXX0099H079",
+                            "STOK_ADI":  "ÇIT ÇIT PLASTİK ",
+                            "MIKTAR":  "135",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "1,1",
+                            "TUTAR":  "148,5",
+                            "DEPO_NO":  "2",
+                            "DEPO_ADI":  "GEBZE",
+                            "PROJEYE_CIKILAN":  "0"
+                        },
+                        {
+                            "REF":  "4838",
+                            "STOK_KODU":  "2021X763",
+                            "STOK_ADI":  "PUSH BUTTON BL02N-WC",
+                            "MIKTAR":  "41",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "28,06",
+                            "TUTAR":  "1150,46",
+                            "DEPO_NO":  "0",
+                            "DEPO_ADI":  "DEPO",
+                            "PROJEYE_CIKILAN":  "2"
+                        },
+                        {
+                            "REF":  "6918",
+                            "STOK_KODU":  "MKTS0099H006",
+                            "STOK_ADI":  "BATARYA GLADİATOR BANYO",
+                            "MIKTAR":  "0",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "450",
+                            "TUTAR":  "0",
+                            "DEPO_NO":  "11",
+                            "DEPO_ADI":  "Üretim Depo",
+                            "PROJEYE_CIKILAN":  "0"
+                        },
+                        {
+                            "REF":  "6529",
+                            "STOK_KODU":  "HRXX0099H053",
+                            "STOK_ADI":  "ZIMPARA ORBİTAL 220",
+                            "MIKTAR":  "0",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "4,25",
+                            "TUTAR":  "0",
+                            "DEPO_NO":  "9",
+                            "DEPO_ADI":  "Tesisat",
+                            "PROJEYE_CIKILAN":  "0"
+                        },
+                        {
+                            "REF":  "9503",
+                            "STOK_KODU":  "NMN060",
+                            "STOK_ADI":  "18mm sunta kapak",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "ADET",
+                            "ORT_FIYAT":  "402,54",
+                            "TUTAR":  "1207,62",
+                            "DEPO_NO":  "11",
+                            "DEPO_ADI":  "Üretim Depo",
+                            "PROJEYE_CIKILAN":  "0"
+                        },
+                        {
+                            "REF":  "9543",
+                            "STOK_KODU":  "DSXX0099H076",
+                            "STOK_ADI":  "DÜŞEME FİTİLİ KAHVE",
+                            "MIKTAR":  "50",
+                            "BIRIM":  "METRE",
+                            "ORT_FIYAT":  "0",
+                            "TUTAR":  "0",
+                            "DEPO_NO":  "2",
+                            "DEPO_ADI":  "GEBZE",
+                            "PROJEYE_CIKILAN":  "0"
+                        }
+                    ]
+}

@@ -1,0 +1,150 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_223_01_ACCFCASGN",
+    "full_name":  "dbo.LG_223_01_ACCFCASGN",
+    "description":  "",
+    "total_rows":  "2347",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ACCFCREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FCREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I223_01_ACCFCASGN_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I223_01_ACCFCASGN_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "ACCFCREF, FCREF"
+                    },
+                    {
+                        "index_name":  "I223_01_ACCFCASGN_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "FCREF, ACCFCREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "2",
+                            "ACCFCREF":  "2",
+                            "FCREF":  "3",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "ACCFCREF":  "3",
+                            "FCREF":  "4",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "ACCFCREF":  "4",
+                            "FCREF":  "5",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "ACCFCREF":  "5",
+                            "FCREF":  "6",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "ACCFCREF":  "6",
+                            "FCREF":  "7",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "ACCFCREF":  "8",
+                            "FCREF":  "8",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "ACCFCREF":  "9",
+                            "FCREF":  "9",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "ACCFCREF":  "11",
+                            "FCREF":  "11",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "ACCFCREF":  "12",
+                            "FCREF":  "12",
+                            "TYP":  "3"
+                        },
+                        {
+                            "LOGICALREF":  "12",
+                            "ACCFCREF":  "13",
+                            "FCREF":  "13",
+                            "TYP":  "3"
+                        }
+                    ]
+}

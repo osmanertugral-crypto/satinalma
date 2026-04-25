@@ -1,0 +1,3 @@
+﻿{
+    "hata":  "Exception calling \"Fill\" with \"1\" argument(s): \"Invalid column name \u0027servertype\u0027.\r\nInvalid column name \u0027servername\u0027.\r\nInvalid column name \u0027port\u0027.\r\nInvalid column name \u0027username\u0027.\r\nInvalid column name \u0027use_default_credentials\u0027.\r\nInvalid column name \u0027enable_ssl\u0027.\""
+}

@@ -1,0 +1,89 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_323_02_SRVTOT",
+    "full_name":  "dbo.LV_323_02_SRVTOT",
+    "definition":  "CREATE VIEW [DBO].[LV_323_02_SRVTOT]\nAS\nWITH CTE\n     AS (SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                PURAMNT,\n                PURCASH,\n                PURCURR,\n                SALAMNT,\n                SALCASH,\n                SALCURR,\n                SRV.CARDTYPE\n           FROM    LV_323_02_STINVTOT_V1 V1 WITH(NOEXPAND,NOLOCK)\n                INNER JOIN\n                   LG_323_SRVCARD SRV\n                ON (V1.STOCKREF = SRV.LOGICALREF)\n          WHERE VARIANTREF = 0 AND TYP = 1\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                PURAMNT,\n                PURCASH,\n                PURCURR,\n                SALAMNT,\n                SALCASH,\n                SALCURR,\n                SRV.CARDTYPE\n           FROM    LV_323_02_STINVTOT_V2 V2 WITH(NOEXPAND,NOLOCK)\n                INNER JOIN\n                   LG_323_SRVCARD SRV\n                ON (V2.STOCKREF = SRV.LOGICALREF)\n          WHERE VARIANTREF = 0 AND TYP = 1\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                0 PURAMNT,\n                0 PURCASH,\n                0 PURCURR,\n                0 SALAMNT,\n                0 SALCASH,\n                0 SALCURR,\n                SRV.CARDTYPE\n           FROM    LV_323_02_STINVTOT_V3 V3 WITH(NOEXPAND,NOLOCK)\n                INNER JOIN\n                   LG_323_SRVCARD SRV\n                ON (V3.STOCKREF = SRV.LOGICALREF)\n          WHERE VARIANTREF = 0 AND TYP = 1\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                0 PURAMNT,\n                0 PURCASH,\n                0 PURCURR,\n                0 SALAMNT,\n                0 SALCASH,\n                0 SALCURR,\n                SRV.CARDTYPE\n           FROM    LV_323_02_STINVTOT_V5 V5 WITH(NOEXPAND,NOLOCK)\n                INNER JOIN\n                   LG_323_SRVCARD SRV\n                ON (V5.STOCKREF = SRV.LOGICALREF)\n          WHERE VARIANTREF = 0 AND TYP = 1)\n  SELECT 1 AS LOGICALREF,\n         STOCKREF AS CARDREF,\n         INVENNO,\n         MONTH(DATE_) AS MONTH_,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(PURAMNT)\n            WHEN 2\n            THEN\n               SUM(SALAMNT)\n            ELSE\n               0\n         END\n            AS TOTALS_AMOUNT,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(PURCASH)\n            WHEN 2\n            THEN\n               SUM(SALCASH)\n            ELSE\n               0\n         END\n            AS TOTALS_CASHAMNT,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(PURCURR)\n            WHEN 2\n            THEN\n               SUM(SALCURR)\n            ELSE\n               0\n         END\n            AS TOTALS_CURRAMNT,\n         0 AS TOTALS_VATAMNT,\n         0 AS TOTALS_DISCAMNT,\n         0 AS TOTALS_RETAMNT,\n         YEAR(DATE_) AS YEAR_\n    FROM CTE\nGROUP BY STOCKREF,\n         INVENNO,\n         CARDTYPE,\n         MONTH(DATE_),\n         YEAR(DATE_)\nUNION ALL\n  SELECT 1 AS LOGICALREF,\n         STOCKREF AS CARDREF,\n         -1 AS INVENNO,\n         MONTH(DATE_) AS MONTH_,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(PURAMNT* (-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            WHEN 2\n            THEN\n               SUM(SALAMNT* (-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            ELSE\n               0\n         END\n            AS TOTALS_AMOUNT,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(PURCASH*(-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            WHEN 2\n            THEN\n               SUM(SALCASH*(-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            ELSE\n               0\n         END\n            AS TOTALS_CASHAMNT,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(PURCURR*(-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            WHEN 2\n            THEN\n               SUM(SALCURR*(-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            ELSE\n               0\n         END\n            AS TOTALS_CURRAMNT,\n         0 AS TOTALS_VATAMNT,\n         0 AS TOTALS_DISCAMNT,\n         0 AS TOTALS_RETAMNT,\n         YEAR(DATE_) AS YEAR_\n    FROM CTE CTEALS INNER JOIN \"TIGER3\"..L_CAPIWHOUSE WH ON CTEALS.INVENNO = WH.NR\n   WHERE WH.FIRMNR = 323\nGROUP BY STOCKREF,\n         CARDTYPE,\n         MONTH(DATE_),\n         YEAR(DATE_)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARDREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVENNO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTH_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTALS_AMOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTALS_CASHAMNT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTALS_CURRAMNT",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTALS_VATAMNT",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTALS_DISCAMNT",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTALS_RETAMNT",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

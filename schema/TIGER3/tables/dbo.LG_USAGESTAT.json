@@ -1,0 +1,166 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_USAGESTAT",
+    "full_name":  "dbo.LG_USAGESTAT",
+    "description":  "",
+    "total_rows":  "1001",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OBJHASHID",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USAGECOUNT",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OBJTYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OBJNAME",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "USAGESTAT_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "USAGESTAT_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "OBJHASHID"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "OBJHASHID":  "1694305663",
+                            "USAGECOUNT":  "3669",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "StFicheBrw"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "OBJHASHID":  "1962729282",
+                            "USAGECOUNT":  "8578",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "StDespBrw"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "OBJHASHID":  "690460558",
+                            "USAGECOUNT":  "26191",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "StDesp1Form"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "OBJHASHID":  "2048841713",
+                            "USAGECOUNT":  "56053",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "ClCardBrwForm"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "OBJHASHID":  "1647136480",
+                            "USAGECOUNT":  "3070",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "ProjectBrw"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "OBJHASHID":  "1672306675",
+                            "USAGECOUNT":  "9924",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "DateDlg"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "OBJHASHID":  "1387994779",
+                            "USAGECOUNT":  "28125",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "MaskValEditForm"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "OBJHASHID":  "732588572",
+                            "USAGECOUNT":  "671",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "OrdTransferBrwFrm"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "OBJHASHID":  "1842935742",
+                            "USAGECOUNT":  "193106",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "DGridSearchForm"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "OBJHASHID":  "722664649",
+                            "USAGECOUNT":  "5953",
+                            "OBJTYPE":  "1",
+                            "OBJNAME":  "StFiche1Form"
+                        }
+                    ]
+}

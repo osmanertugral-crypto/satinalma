@@ -1,0 +1,201 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AAA_ORFICHE_ORFLINE_TANIMLI",
+    "full_name":  "dbo.AAA_ORFICHE_ORFLINE_TANIMLI",
+    "definition":  "CREATE VIEW AAA_ORFICHE_ORFLINE_TANIMLI AS\n\n\nSELECT \nORFICHE.LOGICALREF AS ORFICHE_LOGICALREF,\nORFLINE.LOGICALREF AS  ORFLINE_LOGICALREF,\nORFICHE.PROJECTREF AS ORFICHE_PROJECTREF,\nORFLINE.PROJECTREF AS ORFLINE_PROJECTREF,\nORFLINE.STOCKREF AS ORFLINE_STOCKREF\n,CONVERT(NVARCHAR,(SELECT DBO.LG_INTTODATE(NUMFLDS18) FROM  LG_001_01_DEFNFLDSTRANV WHERE NUMFLDS18\u003c\u003e0 AND MODULENR=8 AND PARENTREF=ORFICHE.LOGICALREF),104) PLANLANAN_URETIM_TARIHI\n,CONVERT(NVARCHAR,(SELECT DBO.LG_INTTODATE(NUMFLDS19) FROM  LG_001_01_DEFNFLDSTRANV WHERE NUMFLDS19\u003c\u003e0 AND MODULENR=8 AND PARENTREF=ORFICHE.LOGICALREF),104) GERCEKLESEN_URETIM_TARIHI\n,CONVERT(NVARCHAR,(SELECT DBO.LG_INTTODATE(NUMFLDS20) FROM  LG_001_01_DEFNFLDSTRANV WHERE NUMFLDS20\u003c\u003e0 AND MODULENR=8 AND PARENTREF=ORFICHE.LOGICALREF),104) PLANLANAN_TESLIM_TARIHI\n,(SELECT NUMFLDS21 FROM  LG_001_01_DEFNFLDSTRANV WHERE MODULENR=8 AND PARENTREF=ORFICHE.LOGICALREF) GERCEKLESEN_TESLIM_TARIHI\n,ORFLINE.LINENO_ AS LINENO_\nFROM LG_001_01_ORFICHE AS ORFICHE \nINNER JOIN LG_001_01_ORFLINE AS ORFLINE ON ORFICHE.LOGICALREF=ORFLINE.ORDFICHEREF \n\nWHERE ORFICHE.TRCODE=1",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ORFICHE_LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFLINE_LOGICALREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFICHE_PROJECTREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFLINE_PROJECTREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFLINE_STOCKREF",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLANLANAN_URETIM_TARIHI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GERCEKLESEN_URETIM_TARIHI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLANLANAN_TESLIM_TARIHI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GERCEKLESEN_TESLIM_TARIHI",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "641",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5310",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "1"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "642",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5388",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "2"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "643",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5415",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "3"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "644",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5461",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "4"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "645",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5436",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "5"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "646",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5423",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "6"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "647",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5424",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "7"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "648",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5390",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "8"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "649",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5458",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "9"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "181",
+                            "ORFLINE_LOGICALREF":  "650",
+                            "ORFICHE_PROJECTREF":  "255",
+                            "ORFLINE_PROJECTREF":  "255",
+                            "ORFLINE_STOCKREF":  "5416",
+                            "PLANLANAN_URETIM_TARIHI":  null,
+                            "GERCEKLESEN_URETIM_TARIHI":  null,
+                            "PLANLANAN_TESLIM_TARIHI":  null,
+                            "GERCEKLESEN_TESLIM_TARIHI":  "0",
+                            "LINENO_":  "10"
+                        }
+                    ]
+}

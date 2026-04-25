@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_PROJELERDE_KULLANILAN_ARAÇLAR",
+    "full_name":  "dbo.BRK_PROJELERDE_KULLANILAN_ARAÇLAR",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[BRK_PROJELERDE_KULLANILAN_ARAÇLAR] AS\r\n\r\n\r\nSELECT PROJECT.CODE PRJ_CODE, ITEMS.CODE ARABA_TABLE_CODE, ITEMS.NAME ARABA_TABLE_NAME, ITEMS.NAME3 ARABA_TABLE_NAME3,STLINE_SATINALMA.PRICE ARABA_TABLE_PRICE, STLINE_SATINALMA.ADDTAXAMOUNT  ARABA_TABLE_ADDTAXAMOUNT\r\nFROM LG_123_01_STLINE STLINE WITH(NOLOCK) \r\nINNER JOIN LG_123_01_STFICHE STFICHE WITH(NOLOCK) ON STLINE.STFICHEREF =  STFICHE.LOGICALREF\r\nLEFT OUTER JOIN LG_123_ITEMS ITEMS WITH(NOLOCK) ON ITEMS.LOGICALREF = STLINE.STOCKREF\r\nLEFT OUTER JOIN LG_123_PROJECT PROJECT WITH(NOLOCK) ON STFICHE.PROJECTREF =  PROJECT.LOGICALREF\r\nLEFT OUTER JOIN LG_123_01_STLINE STLINE_SATINALMA WITH(NOLOCK) ON STLINE_SATINALMA.STOCKREF =  STLINE.STOCKREF AND ((STLINE_SATINALMA.TRCODE =14 and STLINE_SATINALMA.STFICHEREF \u003e 0) OR (STLINE_SATINALMA.TRCODE IN (1,50,51)))\r\nWHERE STFICHE.TRCODE = 12 \r\nAND STFICHE.CANCELLED = 0\r\nAND (ITEMS.CODE LIKE \u0027%ARABA%\u0027 OR ITEMS.STGRPCODE LIKE \u0027%ARABA%\u0027)\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PRJ_CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARABA_TABLE_CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARABA_TABLE_NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARABA_TABLE_NAME3",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARABA_TABLE_PRICE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARABA_TABLE_ADDTAXAMOUNT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "PRJ_CODE":  "RXL037",
+                            "ARABA_TABLE_CODE":  "ARABA1383",
+                            "ARABA_TABLE_NAME":  "DOBLO PRATİCO S2 STD KASASIZ ZFA26300006V98852",
+                            "ARABA_TABLE_NAME3":  "KASTAMONU GÖZDE",
+                            "ARABA_TABLE_PRICE":  "185614,41",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "RXL048",
+                            "ARABA_TABLE_CODE":  "ARABA1385",
+                            "ARABA_TABLE_NAME":  "DOBLO PRATİCO S2 STD KASASIZ ZFA26300006W03857",
+                            "ARABA_TABLE_NAME3":  "KASTAMONU GÖZDE",
+                            "ARABA_TABLE_PRICE":  "185614",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "RV025",
+                            "ARABA_TABLE_CODE":  "ARABA1421",
+                            "ARABA_TABLE_NAME":  "FIAT DUCATO VAN S8 ZFA25000002V18869",
+                            "ARABA_TABLE_NAME3":  "KASTAMONU GÖZDE ",
+                            "ARABA_TABLE_PRICE":  "433898",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "RV017",
+                            "ARABA_TABLE_CODE":  "ARABA1425",
+                            "ARABA_TABLE_NAME":  "TRANSİT MCA I 350 E VAN NM0EXXTTRENU61294",
+                            "ARABA_TABLE_NAME3":  "OTOKOÇ",
+                            "ARABA_TABLE_PRICE":  "526197",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "RV020",
+                            "ARABA_TABLE_CODE":  "ARABA1427",
+                            "ARABA_TABLE_NAME":  "FIAT DUCATO VAN S8 ZFA25000002W06433",
+                            "ARABA_TABLE_NAME3":  "KASTAMONU GÖZDE ",
+                            "ARABA_TABLE_PRICE":  "530673",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "RV021",
+                            "ARABA_TABLE_CODE":  "ARABA1430",
+                            "ARABA_TABLE_NAME":  "FIAT DUCATO VAN S8 ZFA25000002W07151",
+                            "ARABA_TABLE_NAME3":  "",
+                            "ARABA_TABLE_PRICE":  "530673",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "RXL036",
+                            "ARABA_TABLE_CODE":  "ARABA1380",
+                            "ARABA_TABLE_NAME":  "DOBLO PRATİCO S2 STD KASASIZ ZFA26300006W05377",
+                            "ARABA_TABLE_NAME3":  "KASTAMONU GÖZDE",
+                            "ARABA_TABLE_PRICE":  "185614,41",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "F021",
+                            "ARABA_TABLE_CODE":  "ARABA1396",
+                            "ARABA_TABLE_NAME":  "34 FEP 603 PLAKALI WOLKSWAGEN  ARAÇ",
+                            "ARABA_TABLE_NAME3":  "İDRİS FİDAN",
+                            "ARABA_TABLE_PRICE":  "290000",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "RXL049",
+                            "ARABA_TABLE_CODE":  "ARABA1401",
+                            "ARABA_TABLE_NAME":  "DOBLO PRATICO S2 KASASIZ ŞASE NO ZFA26300006W02724",
+                            "ARABA_TABLE_NAME3":  "KASTAMONU GÖZDE",
+                            "ARABA_TABLE_PRICE":  "188559",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        },
+                        {
+                            "PRJ_CODE":  "RV018",
+                            "ARABA_TABLE_CODE":  "ARABA1428",
+                            "ARABA_TABLE_NAME":  "FORD TRANSİT 350E VAN NM0EXXTTRENA02773",
+                            "ARABA_TABLE_NAME3":  "",
+                            "ARABA_TABLE_PRICE":  "523814",
+                            "ARABA_TABLE_ADDTAXAMOUNT":  "0"
+                        }
+                    ]
+}

@@ -1,0 +1,182 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "PNET_BNK_PK_123",
+    "full_name":  "dbo.PNET_BNK_PK_123",
+    "description":  "",
+    "total_rows":  "73277",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "IL",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "500",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ILCE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "500",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SEMT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "500",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MAHALLE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "500",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PK",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "500",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK_PNET_BNK_PK_123",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "ID"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "ID":  "2135",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "ÇAYIRPINAR KÖYÜ",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2136",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "ÇAYIRYAZI KÖYÜ",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2137",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "DEVEDERESİ KÖYÜ",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2138",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "EVREN MAH (İNLİ KÖYÜ)",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2139",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "GÖCEN KÖYÜ",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2140",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "GÖÇMEZLER MAH (KOÇBEYLİ KÖYÜ)",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2141",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "GÜLBAHARLI MAH (KOÇBEYLİ KÖYÜ)",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2142",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "GÜNDOĞDU MAH (DERESİNEK KÖYÜ)",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2143",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "HÜRRİYET MAH (AKKONAK KÖYÜ)",
+                            "PK":  "03702"
+                        },
+                        {
+                            "ID":  "2144",
+                            "IL":  "AFYONKARAHİSAR",
+                            "ILCE":  "ÇAY",
+                            "SEMT":  "MERKEZKÖYLER",
+                            "MAHALLE":  "KADIKÖY KÖYÜ",
+                            "PK":  "03702"
+                        }
+                    ]
+}

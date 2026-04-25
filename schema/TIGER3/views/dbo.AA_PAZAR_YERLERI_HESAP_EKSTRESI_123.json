@@ -1,0 +1,303 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_PAZAR_YERLERI_HESAP_EKSTRESI_123",
+    "full_name":  "dbo.AA_PAZAR_YERLERI_HESAP_EKSTRESI_123",
+    "definition":  "\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[AA_PAZAR_YERLERI_HESAP_EKSTRESI_123] as \r\n\r\nSELECT \u0027123\u0027 AS COMPANY_CODE, *\r\nFROM (\r\n    SELECT \r\n        L.LOGICALREF,\r\n        C.CODE,\r\n        C.DEFINITION_,\r\n        CASE WHEN L.TRADINGGRP = \u0027\u0027 THEN \u0027BOS\u0027 ELSE L.TRADINGGRP END AS TRADINGGRP,\r\n        SIGN,\r\n        --CASE WHEN SIGN = 0 THEN AMOUNT ELSE 0 END AS BORC,\r\n        --CASE WHEN SIGN = 1 THEN AMOUNT*-1 ELSE 0 END AS ALACAK,\r\n        CASE WHEN SIGN = 0 THEN (CASE WHEN MODULENR=4 THEN AMOUNT-(SELECT INV.TOTALVAT FROM LG_123_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE AMOUNT END) ELSE 0 END AS BORC,\r\n        CASE WHEN SIGN = 1 THEN (CASE WHEN MODULENR=4 THEN AMOUNT-(SELECT INV.TOTALVAT FROM LG_123_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE AMOUNT END)*-1 ELSE 0 END AS ALACAK,\r\n        CASE WHEN SIGN = 0 THEN (CASE WHEN MODULENR=4 THEN (SELECT INV.TOTALVAT FROM LG_123_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE 0 END) ELSE  (CASE WHEN MODULENR=4 THEN (SELECT INV.TOTALVAT FROM LG_123_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE 0 END)*-1 END AS KDV,\r\n        CONVERT(NVARCHAR, L.DATE_, 104) AS INDATE,\r\n        CASE MODULENR \r\n            WHEN 4 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=4 AND FICHEREF=L.SOURCEFREF)\r\n            WHEN 10 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=10 AND FICHEREF=L.SOURCEFREF)\r\n            WHEN 5 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=5 AND FICHEREF=L.LOGICALREF)\r\n            WHEN 7 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=7 AND FICHEREF=L.SOURCEFREF)\r\n            WHEN 6 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=6 AND FICHEREF=L.SOURCEFREF)\r\n            WHEN 61 THEN L.DATE_\r\n            ELSE NULL \r\n        END AS DUEDATE,\r\n        CONVERT(NVARCHAR, GETDATE(), 104) AS NOWDATE,\r\n        CASE L.TRCODE\r\n            WHEN 1 THEN \u0027Nakit Tahsilat\u0027\r\n            WHEN 2 THEN \u0027Nakit Ödeme\u0027\r\n            WHEN 3 THEN \u0027Borç Dekontu\u0027\r\n            WHEN 4 THEN \u0027Alacak Dekontu\u0027\r\n            WHEN 5 THEN \u0027Virman Işlemi\u0027\r\n            WHEN 6 THEN \u0027Kur Farkı İşlemi\u0027\r\n            WHEN 12 THEN \u0027Özel İşlem\u0027\r\n            WHEN 20 THEN \u0027Gelen Havaleler\u0027\r\n            WHEN 21 THEN \u0027Gönderilen Havaleler\u0027\r\n            WHEN 31 THEN \u0027Satınalma Faturası\u0027\r\n            WHEN 32 THEN \u0027Perakende Satış İade Faturası\u0027\r\n            WHEN 24 THEN \u0027Döviz Alış Belgesi\u0027\r\n            WHEN 25 THEN \u0027Döviz Satış Belgesi\u0027    \r\n            WHEN 33 THEN \u0027Toptan Satış İade Faturası\u0027\r\n            WHEN 34 THEN \u0027Alınan Hizmet Faturası\u0027\r\n            WHEN 35 THEN \u0027Alınan Proforma Faturası\u0027\r\n            WHEN 36 THEN \u0027Satınalma İade Faturası\u0027\r\n            WHEN 37 THEN \u0027Perakende Satış Faturası\u0027\r\n            WHEN 38 THEN \u0027Toptan Satış Faturası\u0027\r\n            WHEN 39 THEN \u0027Verilen Hizmet Faturası\u0027\r\n            WHEN 40 THEN \u0027Verilen Proforma Faturası\u0027\r\n            WHEN 41 THEN \u0027Verilen Vade Farkı Faturası\u0027\r\n            WHEN 42 THEN \u0027Alınan Vade Farkı Faturası\u0027\r\n            WHEN 43 THEN \u0027Alınan Fiyat Farkı Faturası\u0027\r\n            WHEN 44 THEN \u0027Verilen Fiyat Farkı Faturası\u0027\r\n            WHEN 46 THEN \u0027Alınan Ser. Mes. Makbuzu\u0027\r\n            WHEN 28 THEN \u0027Banka Alınan Hizmet Faturası\u0027\r\n            WHEN 56 THEN \u0027Müstahsil Makbuzu\u0027\r\n            WHEN 61 THEN \u0027Çek Girişi\u0027\r\n            WHEN 62 THEN \u0027Senet Girişi\u0027\r\n            WHEN 63 THEN \u0027Çek Çıkış Cari Hesaba\u0027\r\n            WHEN 64 THEN \u0027Senet Çıkış Cari Hesaba\u0027\r\n            WHEN 70 THEN \u0027Kredi Kartı Fişi\u0027\r\n            WHEN 71 THEN \u0027Kredi Kartı İade Fişi\u0027\r\n            WHEN 72 THEN \u0027Firma Kredi Kartı Fişi\u0027\r\n            WHEN 73 THEN \u0027Firma Kredi Kartı İade Fişi\u0027\r\n            WHEN 14 THEN \u0027Açılış Fişi\u0027\r\n            WHEN 81 THEN \u0027Ödemeli Satış Siparişi\u0027\r\n            WHEN 82 THEN \u0027Ödemeli Satınalma Siparişi\u0027\r\n        END AS TYP,\r\n        L.MODULENR,\r\n        L.TRCODE,\r\n        L.SOURCEFREF\r\n    FROM LG_123_01_CLFLINE AS L\r\n    INNER JOIN LG_123_CLCARD AS C ON C.LOGICALREF = L.CLIENTREF\r\n    WHERE C.CODE IN (\u0027120.AMAZO\u0027, \u0027320.DOĞUŞP\u0027, \u0027320.DSMG\u0027, \u0027320.KOÇTA\u0027, \u0027320.BEYMEN\u0027)\r\n      AND L.CANCELLED=0\r\n) AS RAPOR_123\r\n\r\nUNION ALL\r\n\r\n-- RETECH\r\nSELECT \u0027223\u0027 AS COMPANY_CODE, *\r\nFROM (\r\n    SELECT \r\n        L.LOGICALREF,\r\n        C.CODE,\r\n        C.DEFINITION_,\r\n        CASE WHEN L.TRADINGGRP = \u0027\u0027 THEN \u0027BOS\u0027 ELSE L.TRADINGGRP END AS TRADINGGRP,\r\n        SIGN,\r\n        CASE WHEN SIGN = 0 THEN (CASE WHEN MODULENR=4 THEN AMOUNT-(SELECT INV.TOTALVAT FROM LG_223_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE AMOUNT END) ELSE 0 END AS BORC,\r\n        CASE WHEN SIGN = 1 THEN (CASE WHEN MODULENR=4 THEN AMOUNT-(SELECT INV.TOTALVAT FROM LG_223_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE AMOUNT END)*-1 ELSE 0 END AS ALACAK,\r\n        CASE WHEN SIGN = 0 THEN (CASE WHEN MODULENR=4 THEN (SELECT INV.TOTALVAT FROM LG_223_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE 0 END) ELSE  (CASE WHEN MODULENR=4 THEN (SELECT INV.TOTALVAT FROM LG_223_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE 0 END)*-1 END AS KDV,\r\n        CONVERT(NVARCHAR, L.DATE_, 104) AS INDATE,\r\n        CASE MODULENR \r\n            WHEN 4 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=4 AND FICHEREF=L.SOURCEFREF)\r\n            WHEN 10 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=10 AND FICHEREF=L.SOURCEFREF)\r\n            WHEN 5 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=5 AND FICHEREF=L.LOGICALREF)\r\n            WHEN 7 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=7 AND FICHEREF=L.SOURCEFREF)\r\n            WHEN 6 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=6 AND FICHEREF=L.SOURCEFREF)\r\n            WHEN 61 THEN L.DATE_\r\n            ELSE NULL \r\n        END AS DUEDATE,\r\n        CONVERT(NVARCHAR, GETDATE(), 104) AS NOWDATE,\r\n        CASE L.TRCODE\r\n            WHEN 1 THEN \u0027Nakit Tahsilat\u0027\r\n            WHEN 2 THEN \u0027Nakit Ödeme\u0027\r\n            WHEN 3 THEN \u0027Borç Dekontu\u0027\r\n            WHEN 4 THEN \u0027Alacak Dekontu\u0027\r\n            WHEN 5 THEN \u0027Virman Işlemi\u0027\r\n            WHEN 6 THEN \u0027Kur Farkı İşlemi\u0027\r\n            WHEN 12 THEN \u0027Özel İşlem\u0027\r\n            WHEN 20 THEN \u0027Gelen Havaleler\u0027\r\n            WHEN 21 THEN \u0027Gönderilen Havaleler\u0027\r\n            WHEN 31 THEN \u0027Satınalma Faturası\u0027\r\n            WHEN 32 THEN \u0027Perakende Satış İade Faturası\u0027\r\n            WHEN 24 THEN \u0027Döviz Alış Belgesi\u0027\r\n            WHEN 25 THEN \u0027Döviz Satış Belgesi\u0027    \r\n            WHEN 33 THEN \u0027Toptan Satış İade Faturası\u0027\r\n            WHEN 34 THEN \u0027Alınan Hizmet Faturası\u0027\r\n            WHEN 35 THEN \u0027Alınan Proforma Faturası\u0027\r\n            WHEN 36 THEN \u0027Satınalma İade Faturası\u0027\r\n            WHEN 37 THEN \u0027Perakende Satış Faturası\u0027\r\n            WHEN 38 THEN \u0027Toptan Satış Faturası\u0027\r\n            WHEN 39 THEN \u0027Verilen Hizmet Faturası\u0027\r\n            WHEN 40 THEN \u0027Verilen Proforma Faturası\u0027\r\n            WHEN 41 THEN \u0027Verilen Vade Farkı Faturası\u0027\r\n            WHEN 42 THEN \u0027Alınan Vade Farkı Faturası\u0027\r\n            WHEN 43 THEN \u0027Alınan Fiyat Farkı Faturası\u0027\r\n            WHEN 44 THEN \u0027Verilen Fiyat Farkı Faturası\u0027\r\n            WHEN 46 THEN \u0027Alınan Ser. Mes. Makbuzu\u0027\r\n            WHEN 28 THEN \u0027Banka Alınan Hizmet Faturası\u0027\r\n            WHEN 56 THEN \u0027Müstahsil Makbuzu\u0027\r\n            WHEN 61 THEN \u0027Çek Girişi\u0027\r\n            WHEN 62 THEN \u0027Senet Girişi\u0027\r\n            WHEN 63 THEN \u0027Çek Çıkış Cari Hesaba\u0027\r\n            WHEN 64 THEN \u0027Senet Çıkış Cari Hesaba\u0027\r\n            WHEN 70 THEN \u0027Kredi Kartı Fişi\u0027\r\n            WHEN 71 THEN \u0027Kredi Kartı İade Fişi\u0027\r\n            WHEN 72 THEN \u0027Firma Kredi Kartı Fişi\u0027\r\n            WHEN 73 THEN \u0027Firma Kredi Kartı İade Fişi\u0027\r\n            WHEN 14 THEN \u0027Açılış Fişi\u0027\r\n            WHEN 81 THEN \u0027Ödemeli Satış Siparişi\u0027\r\n            WHEN 82 THEN \u0027Ödemeli Satınalma Siparişi\u0027\r\n        END AS TYP,\r\n        L.MODULENR,\r\n        L.TRCODE,\r\n        L.SOURCEFREF\r\n    FROM LG_223_01_CLFLINE AS L\r\n    INNER JOIN LG_223_CLCARD AS C ON C.LOGICALREF = L.CLIENTREF\r\n    WHERE C.CODE IN (\u0027320.D-MARKET\u0027)\r\n      AND L.CANCELLED=0\r\n) AS RAPOR\r\n\r\n\r\n\r\n--SELECT \u0027123\u0027 AS COMPANY_CODE, *\r\n--FROM (\r\n--    SELECT \r\n--        L.LOGICALREF,\r\n--        C.CODE,\r\n--        C.DEFINITION_,\r\n--        CASE WHEN L.TRADINGGRP = \u0027\u0027 THEN \u0027BOS\u0027 ELSE L.TRADINGGRP END AS TRADINGGRP,\r\n--        SIGN,\r\n--        --CASE WHEN SIGN = 0 THEN AMOUNT ELSE 0 END AS BORC,\r\n--        --CASE WHEN SIGN = 1 THEN AMOUNT*-1 ELSE 0 END AS ALACAK,\r\n--        CASE WHEN SIGN = 0 THEN (CASE WHEN MODULENR=4 THEN AMOUNT-(SELECT INV.TOTALVAT FROM LG_123_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE AMOUNT END) ELSE 0 END AS BORC,\r\n--        CASE WHEN SIGN = 1 THEN (CASE WHEN MODULENR=4 THEN AMOUNT-(SELECT INV.TOTALVAT FROM LG_123_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE AMOUNT END)*-1 ELSE 0 END AS ALACAK,\r\n--        CASE WHEN SIGN = 0 THEN (CASE WHEN MODULENR=4 THEN (SELECT INV.TOTALVAT FROM LG_123_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE 0 END) ELSE  (CASE WHEN MODULENR=4 THEN (SELECT INV.TOTALVAT FROM LG_123_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE 0 END)*-1 END AS KDV,\r\n--        CONVERT(NVARCHAR, L.DATE_, 104) AS INDATE,\r\n--        CASE MODULENR \r\n--            WHEN 4 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=4 AND FICHEREF=L.SOURCEFREF)\r\n--            WHEN 10 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=10 AND FICHEREF=L.SOURCEFREF)\r\n--            WHEN 5 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=5 AND FICHEREF=L.LOGICALREF)\r\n--            WHEN 7 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=7 AND FICHEREF=L.SOURCEFREF)\r\n--            WHEN 6 THEN (SELECT MAX(DATE_) FROM LG_123_01_PAYTRANS WHERE MODULENR=6 AND FICHEREF=L.SOURCEFREF)\r\n--            WHEN 61 THEN L.DATE_\r\n--            ELSE NULL \r\n--        END AS DUEDATE,\r\n--        CONVERT(NVARCHAR, GETDATE(), 104) AS NOWDATE,\r\n--        CASE L.TRCODE\r\n--            WHEN 1 THEN \u0027Nakit Tahsilat\u0027\r\n--            WHEN 2 THEN \u0027Nakit Ödeme\u0027\r\n--            WHEN 3 THEN \u0027Borç Dekontu\u0027\r\n--            WHEN 4 THEN \u0027Alacak Dekontu\u0027\r\n--            WHEN 5 THEN \u0027Virman Işlemi\u0027\r\n--            WHEN 6 THEN \u0027Kur Farkı İşlemi\u0027\r\n--            WHEN 12 THEN \u0027Özel İşlem\u0027\r\n--            WHEN 20 THEN \u0027Gelen Havaleler\u0027\r\n--            WHEN 21 THEN \u0027Gönderilen Havaleler\u0027\r\n--            WHEN 31 THEN \u0027Satınalma Faturası\u0027\r\n--            WHEN 32 THEN \u0027Perakende Satış İade Faturası\u0027\r\n--            WHEN 24 THEN \u0027Döviz Alış Belgesi\u0027\r\n--            WHEN 25 THEN \u0027Döviz Satış Belgesi\u0027    \r\n--            WHEN 33 THEN \u0027Toptan Satış İade Faturası\u0027\r\n--            WHEN 34 THEN \u0027Alınan Hizmet Faturası\u0027\r\n--            WHEN 35 THEN \u0027Alınan Proforma Faturası\u0027\r\n--            WHEN 36 THEN \u0027Satınalma İade Faturası\u0027\r\n--            WHEN 37 THEN \u0027Perakende Satış Faturası\u0027\r\n--            WHEN 38 THEN \u0027Toptan Satış Faturası\u0027\r\n--            WHEN 39 THEN \u0027Verilen Hizmet Faturası\u0027\r\n--            WHEN 40 THEN \u0027Verilen Proforma Faturası\u0027\r\n--            WHEN 41 THEN \u0027Verilen Vade Farkı Faturası\u0027\r\n--            WHEN 42 THEN \u0027Alınan Vade Farkı Faturası\u0027\r\n--            WHEN 43 THEN \u0027Alınan Fiyat Farkı Faturası\u0027\r\n--            WHEN 44 THEN \u0027Verilen Fiyat Farkı Faturası\u0027\r\n--            WHEN 46 THEN \u0027Alınan Ser. Mes. Makbuzu\u0027\r\n--            WHEN 28 THEN \u0027Banka Alınan Hizmet Faturası\u0027\r\n--            WHEN 56 THEN \u0027Müsthsil Makbuzu\u0027\r\n--            WHEN 61 THEN \u0027Çek Girişi\u0027\r\n--            WHEN 62 THEN \u0027Senet Girişi\u0027\r\n--            WHEN 63 THEN \u0027Çek Çıkış Cari Hesaba\u0027\r\n--            WHEN 64 THEN \u0027Senet Çıkış Cari Hesaba\u0027\r\n--            WHEN 70 THEN \u0027Kredi Kartı Fişi\u0027\r\n--            WHEN 71 THEN \u0027Kredi Kartı İade Fişi\u0027\r\n--            WHEN 72 THEN \u0027Firma Kredi Kartı Fişi\u0027\r\n--            WHEN 73 THEN \u0027Firma Kredi Kartı İade Fişi\u0027\r\n--            WHEN 14 THEN \u0027Açılış Fişi\u0027\r\n--            WHEN 81 THEN \u0027Ödemeli Satış Siparişi\u0027\r\n--            WHEN 82 THEN \u0027Ödemeli Satınalma Siparişi\u0027\r\n--        END AS TYP,\r\n--        L.MODULENR,\r\n--        L.TRCODE,\r\n--        L.SOURCEFREF\r\n--    FROM LG_123_01_CLFLINE AS L\r\n--    INNER JOIN LG_123_CLCARD AS C ON C.LOGICALREF = L.CLIENTREF\r\n--    WHERE C.CODE IN (\u0027120.AMAZO\u0027, \u0027320.DOĞUŞP\u0027, \u0027320.DSMG\u0027, \u0027320.KOÇTA\u0027, \u0027320.BEYMEN\u0027)\r\n--) AS RAPOR_123\r\n\r\n--UNION ALL\r\n\r\n---- RETECH\r\n--SELECT \u0027223\u0027 AS COMPANY_CODE, *\r\n--FROM (\r\n--    SELECT \r\n--        L.LOGICALREF,\r\n--        C.CODE,\r\n--        C.DEFINITION_,\r\n--        CASE WHEN L.TRADINGGRP = \u0027\u0027 THEN \u0027BOS\u0027 ELSE L.TRADINGGRP END AS TRADINGGRP,\r\n--        SIGN,\r\n--        CASE WHEN SIGN = 0 THEN (CASE WHEN MODULENR=4 THEN AMOUNT-(SELECT INV.TOTALVAT FROM LG_223_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE AMOUNT END) ELSE 0 END AS BORC,\r\n--        CASE WHEN SIGN = 1 THEN (CASE WHEN MODULENR=4 THEN AMOUNT-(SELECT INV.TOTALVAT FROM LG_223_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE AMOUNT END)*-1 ELSE 0 END AS ALACAK,\r\n--        CASE WHEN SIGN = 0 THEN (CASE WHEN MODULENR=4 THEN (SELECT INV.TOTALVAT FROM LG_223_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE 0 END) ELSE  (CASE WHEN MODULENR=4 THEN (SELECT INV.TOTALVAT FROM LG_223_01_INVOICE INV WHERE INV.LOGICALREF=L.SOURCEFREF) ELSE 0 END)*-1 END AS KDV,\r\n--        CONVERT(NVARCHAR, L.DATE_, 104) AS INDATE,\r\n--        CASE MODULENR \r\n--            WHEN 4 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=4 AND FICHEREF=L.SOURCEFREF)\r\n--            WHEN 10 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=10 AND FICHEREF=L.SOURCEFREF)\r\n--            WHEN 5 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=5 AND FICHEREF=L.LOGICALREF)\r\n--            WHEN 7 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=7 AND FICHEREF=L.SOURCEFREF)\r\n--            WHEN 6 THEN (SELECT MAX(DATE_) FROM LG_223_01_PAYTRANS WHERE MODULENR=6 AND FICHEREF=L.SOURCEFREF)\r\n--            WHEN 61 THEN L.DATE_\r\n--            ELSE NULL \r\n--        END AS DUEDATE,\r\n--        CONVERT(NVARCHAR, GETDATE(), 104) AS NOWDATE,\r\n--        CASE L.TRCODE\r\n--            WHEN 1 THEN \u0027Nakit Tahsilat\u0027\r\n--            WHEN 2 THEN \u0027Nakit Ödeme\u0027\r\n--            WHEN 3 THEN \u0027Borç Dekontu\u0027\r\n--            WHEN 4 THEN \u0027Alacak Dekontu\u0027\r\n--            WHEN 5 THEN \u0027Virman Işlemi\u0027\r\n--            WHEN 6 THEN \u0027Kur Farkı İşlemi\u0027\r\n--            WHEN 12 THEN \u0027Özel İşlem\u0027\r\n--            WHEN 20 THEN \u0027Gelen Havaleler\u0027\r\n--            WHEN 21 THEN \u0027Gönderilen Havaleler\u0027\r\n--            WHEN 31 THEN \u0027Satınalma Faturası\u0027\r\n--            WHEN 32 THEN \u0027Perakende Satış İade Faturası\u0027\r\n--            WHEN 24 THEN \u0027Döviz Alış Belgesi\u0027\r\n--            WHEN 25 THEN \u0027Döviz Satış Belgesi\u0027    \r\n--            WHEN 33 THEN \u0027Toptan Satış İade Faturası\u0027\r\n--            WHEN 34 THEN \u0027Alınan Hizmet Faturası\u0027\r\n--            WHEN 35 THEN \u0027Alınan Proforma Faturası\u0027\r\n--            WHEN 36 THEN \u0027Satınalma İade Faturası\u0027\r\n--            WHEN 37 THEN \u0027Perakende Satış Faturası\u0027\r\n--            WHEN 38 THEN \u0027Toptan Satış Faturası\u0027\r\n--            WHEN 39 THEN \u0027Verilen Hizmet Faturası\u0027\r\n--            WHEN 40 THEN \u0027Verilen Proforma Faturası\u0027\r\n--            WHEN 41 THEN \u0027Verilen Vade Farkı Faturası\u0027\r\n--            WHEN 42 THEN \u0027Alınan Vade Farkı Faturası\u0027\r\n--            WHEN 43 THEN \u0027Alınan Fiyat Farkı Faturası\u0027\r\n--            WHEN 44 THEN \u0027Verilen Fiyat Farkı Faturası\u0027\r\n--            WHEN 46 THEN \u0027Alınan Ser. Mes. Makbuzu\u0027\r\n--            WHEN 28 THEN \u0027Banka Alınan Hizmet Faturası\u0027\r\n--            WHEN 56 THEN \u0027Müsthsil Makbuzu\u0027\r\n--            WHEN 61 THEN \u0027Çek Girişi\u0027\r\n--            WHEN 62 THEN \u0027Senet Girişi\u0027\r\n--            WHEN 63 THEN \u0027Çek Çıkış Cari Hesaba\u0027\r\n--            WHEN 64 THEN \u0027Senet Çıkış Cari Hesaba\u0027\r\n--            WHEN 70 THEN \u0027Kredi Kartı Fişi\u0027\r\n--            WHEN 71 THEN \u0027Kredi Kartı İade Fişi\u0027\r\n--            WHEN 72 THEN \u0027Firma Kredi Kartı Fişi\u0027\r\n--            WHEN 73 THEN \u0027Firma Kredi Kartı İade Fişi\u0027\r\n--            WHEN 14 THEN \u0027Açılış Fişi\u0027\r\n--            WHEN 81 THEN \u0027Ödemeli Satış Siparişi\u0027\r\n--            WHEN 82 THEN \u0027Ödemeli Satınalma Siparişi\u0027\r\n--        END AS TYP,\r\n--        L.MODULENR,\r\n--        L.TRCODE,\r\n--        L.SOURCEFREF\r\n--    FROM LG_223_01_CLFLINE AS L\r\n--    INNER JOIN LG_223_CLCARD AS C ON C.LOGICALREF = L.CLIENTREF\r\n--    WHERE C.CODE IN (\u0027320.D-MARKET\u0027)\r\n--) AS RAPOR\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "COMPANY_CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "3",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRADINGGRP",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIGN",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BORC",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALACAK",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KDV",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INDATE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DUEDATE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "NOWDATE",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "29",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MODULENR",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SOURCEFREF",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "2850",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "44119,39",
+                            "ALACAK":  "0",
+                            "KDV":  "0",
+                            "INDATE":  "01.01.2023",
+                            "DUEDATE":  "1.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Açılış Fişi",
+                            "MODULENR":  "5",
+                            "TRCODE":  "14",
+                            "SOURCEFREF":  "39"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "3196",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "1",
+                            "BORC":  "0",
+                            "ALACAK":  "-2781,47",
+                            "KDV":  "-500,66",
+                            "INDATE":  "03.01.2023",
+                            "DUEDATE":  "3.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Alınan Hizmet Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "34",
+                            "SOURCEFREF":  "834"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "3198",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "1",
+                            "BORC":  "0",
+                            "ALACAK":  "-534,71",
+                            "KDV":  "-42,78",
+                            "INDATE":  "03.01.2023",
+                            "DUEDATE":  "3.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Alınan Hizmet Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "34",
+                            "SOURCEFREF":  "836"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "3200",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "1",
+                            "BORC":  "0",
+                            "ALACAK":  "-1319,6",
+                            "KDV":  "-237,53",
+                            "INDATE":  "03.01.2023",
+                            "DUEDATE":  "3.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Alınan Hizmet Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "34",
+                            "SOURCEFREF":  "838"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "1433",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "1205,35",
+                            "ALACAK":  "0",
+                            "KDV":  "216,96",
+                            "INDATE":  "05.01.2023",
+                            "DUEDATE":  "5.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Toptan Satış Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "38",
+                            "SOURCEFREF":  "10"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "1434",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "852,16",
+                            "ALACAK":  "0",
+                            "KDV":  "153,39",
+                            "INDATE":  "05.01.2023",
+                            "DUEDATE":  "5.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Toptan Satış Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "38",
+                            "SOURCEFREF":  "11"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "2006",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "4692,49",
+                            "ALACAK":  "0",
+                            "KDV":  "844,65",
+                            "INDATE":  "16.01.2023",
+                            "DUEDATE":  "16.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Toptan Satış Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "38",
+                            "SOURCEFREF":  "29"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "2009",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "1143,7",
+                            "ALACAK":  "0",
+                            "KDV":  "205,87",
+                            "INDATE":  "16.01.2023",
+                            "DUEDATE":  "16.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Toptan Satış Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "38",
+                            "SOURCEFREF":  "30"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "2012",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "1541,74",
+                            "ALACAK":  "0",
+                            "KDV":  "277,51",
+                            "INDATE":  "16.01.2023",
+                            "DUEDATE":  "16.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Toptan Satış Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "38",
+                            "SOURCEFREF":  "32"
+                        },
+                        {
+                            "COMPANY_CODE":  "123",
+                            "LOGICALREF":  "2016",
+                            "CODE":  "120.AMAZO",
+                            "DEFINITION_":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "2596,85",
+                            "ALACAK":  "0",
+                            "KDV":  "467,43",
+                            "INDATE":  "16.01.2023",
+                            "DUEDATE":  "16.01.2023 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Toptan Satış Faturası",
+                            "MODULENR":  "4",
+                            "TRCODE":  "38",
+                            "SOURCEFREF":  "33"
+                        }
+                    ]
+}

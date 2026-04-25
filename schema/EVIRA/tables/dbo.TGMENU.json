@@ -1,0 +1,159 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "TGMENU",
+    "full_name":  "dbo.TGMENU",
+    "description":  "",
+    "total_rows":  "14",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "TGMENUREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TGRUPREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TMENUREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TNAME",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ROWN",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__TGMENU__DCE8D170334CF13B",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "TGMENUREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "TGMENUREF":  "1",
+                            "TGRUPREF":  "2",
+                            "TMENUREF":  "2",
+                            "TNAME":  "KABUL",
+                            "ROWN":  "1"
+                        },
+                        {
+                            "TGMENUREF":  "2",
+                            "TGRUPREF":  "2",
+                            "TMENUREF":  "3",
+                            "TNAME":  "HAREKET",
+                            "ROWN":  "2"
+                        },
+                        {
+                            "TGMENUREF":  "3",
+                            "TGRUPREF":  "2",
+                            "TMENUREF":  "4",
+                            "TNAME":  "IADE",
+                            "ROWN":  "3"
+                        },
+                        {
+                            "TGMENUREF":  "1003",
+                            "TGRUPREF":  "2",
+                            "TMENUREF":  "1005",
+                            "TNAME":  "SEVKIYAT",
+                            "ROWN":  "5"
+                        },
+                        {
+                            "TGMENUREF":  "1004",
+                            "TGRUPREF":  "1",
+                            "TMENUREF":  "2",
+                            "TNAME":  "DEPO KABUL",
+                            "ROWN":  "1"
+                        },
+                        {
+                            "TGMENUREF":  "1005",
+                            "TGRUPREF":  "1",
+                            "TMENUREF":  "3",
+                            "TNAME":  "DEPO HAREKET",
+                            "ROWN":  "2"
+                        },
+                        {
+                            "TGMENUREF":  "1006",
+                            "TGRUPREF":  "1",
+                            "TMENUREF":  "4",
+                            "TNAME":  "IADE",
+                            "ROWN":  "3"
+                        },
+                        {
+                            "TGMENUREF":  "1009",
+                            "TGRUPREF":  "1",
+                            "TMENUREF":  "1005",
+                            "TNAME":  "SEVKIYAT",
+                            "ROWN":  "4"
+                        },
+                        {
+                            "TGMENUREF":  "1010",
+                            "TGRUPREF":  "1",
+                            "TMENUREF":  "1006",
+                            "TNAME":  "KONSINYE",
+                            "ROWN":  "7"
+                        },
+                        {
+                            "TGMENUREF":  "1011",
+                            "TGRUPREF":  "2",
+                            "TMENUREF":  "1006",
+                            "TNAME":  "KONSINYE",
+                            "ROWN":  "7"
+                        }
+                    ]
+}

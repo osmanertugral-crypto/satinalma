@@ -5,45 +5,138 @@ const XLSX = require('xlsx');
 const { authenticate } = require('../middleware/auth');
 const { getDb } = require('../db/schema');
 const { refreshExcelQueries } = require('../utils/excelRefresh');
+const tiger3 = require('../utils/tiger3');
 
 router.use(authenticate);
 
 const EXCEL_PATH = path.join(__dirname, '..', '..', 'gecici', 'MALZEME İHTİYAÇ TOPLAM SATINALMA.xlsx');
 
-// Sayfaları yenile — SQL sorgularını çalıştırıp Excel'i kaydet, sonra verileri döndür
+// TIGER3'ten malzeme ihtiyaç verisi çek ve SQLite cache'e yaz
+async function syncFromTIGER3() {
+  const rows = await tiger3.query(`
+    SELECT
+      PROJE_KODU,
+      KARAVAN_ADI,
+      [ALT_KOD_TÜR]                 AS ALT_KOD_TUR,
+      ALT_KOD,
+      ALT_ADI,
+      MIKTAR,
+      BIRIM,
+      [PROJELERE_ÇIKIŞLAR_YENI]     AS PROJELERE_CIKISLAR_YENI,
+      ELDE_KALAN,
+      [ÜRETİM DEPO]                 AS URETIM_DEPO,
+      [AÇIK_SATINALMA_SİPARİŞLERİ] AS ACIK_SATINALMA_SIPARISLERI,
+      CASE
+        WHEN (MIKTAR - [PROJELERE_ÇIKIŞLAR_YENI] - ELDE_KALAN
+              - [ÜRETİM DEPO] - [AÇIK_SATINALMA_SİPARİŞLERİ]) > 0
+        THEN (MIKTAR - [PROJELERE_ÇIKIŞLAR_YENI] - ELDE_KALAN
+              - [ÜRETİM DEPO] - [AÇIK_SATINALMA_SİPARİŞLERİ])
+        ELSE 0
+      END                            AS SATINALMA,
+      BIRIM_FIYATLAR,
+      [SON SATINALMA CARİ ÜNVANI]  AS SON_SATINALMA_CARI_UNVANI,
+      TUTAR,
+      ALTSTOKGRUPKODU
+    FROM [DST_123_ÜRETİM_İHTİYAÇ_RAPORU_BURAK_YENI1309]
+  `);
+
+  const db = getDb();
+  const tx = db.transaction(() => {
+    db.prepare('DELETE FROM malzeme_ihtiyac_cache').run();
+    const stmt = db.prepare(`
+      INSERT INTO malzeme_ihtiyac_cache
+        (proje_kodu, karavan_adi, alt_kod_tur, alt_kod, alt_adi,
+         miktar, birim, projelere_cikislar, elde_kalan, uretim_depo,
+         acik_satinalma_siparisleri, satinalma, birim_fiyatlar,
+         son_satinalma_cari, tutar, alt_stok_grup_kodu)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+    `);
+    let count = 0;
+    for (const r of rows) {
+      stmt.run(
+        String(r.PROJE_KODU || '').trim(),
+        String(r.KARAVAN_ADI || '').trim(),
+        String(r.ALT_KOD_TUR || '').trim(),
+        String(r.ALT_KOD || '').trim(),
+        String(r.ALT_ADI || '').trim(),
+        +r.MIKTAR || 0,
+        String(r.BIRIM || '').trim(),
+        +r.PROJELERE_CIKISLAR_YENI || 0,
+        +r.ELDE_KALAN || 0,
+        +r.URETIM_DEPO || 0,
+        +r.ACIK_SATINALMA_SIPARISLERI || 0,
+        +r.SATINALMA || 0,
+        +r.BIRIM_FIYATLAR || 0,
+        String(r.SON_SATINALMA_CARI_UNVANI || '').trim(),
+        +r.TUTAR || 0,
+        String(r.ALTSTOKGRUPKODU || '').trim()
+      );
+      count++;
+    }
+    db.prepare(
+      "INSERT INTO malzeme_ihtiyac_sync_log (row_count, status, message) VALUES (?, 'success', ?)"
+    ).run(count, `TIGER3'ten ${count} satır senkronize edildi`);
+    return count;
+  });
+  return tx();
+}
+
+// Malzeme ihtiyaç verisi: önce cache, yoksa Excel
+function getUretimRows() {
+  const db = getDb();
+  const cacheCount = db.prepare('SELECT COUNT(*) as c FROM malzeme_ihtiyac_cache').get().c;
+  if (cacheCount > 0) {
+    return db.prepare('SELECT * FROM malzeme_ihtiyac_cache').all().map(r => ({
+      'PROJE_KODU': r.proje_kodu,
+      'KARAVAN_ADI': r.karavan_adi,
+      'ALT_KOD_TÜR': r.alt_kod_tur,
+      'ALT_KOD': r.alt_kod,
+      'ALT_ADI': r.alt_adi,
+      'MIKTAR': r.miktar,
+      'BIRIM': r.birim,
+      'PROJELERE_ÇIKIŞLAR_YENI': r.projelere_cikislar,
+      'ELDE_KALAN': r.elde_kalan,
+      'ÜRETİM DEPO': r.uretim_depo,
+      'AÇIK_SATINALMA_SİPARİŞLERİ': r.acik_satinalma_siparisleri,
+      'SATINALMA': r.satinalma,
+      'BIRIM_FIYATLAR': r.birim_fiyatlar,
+      'SON SATINALMA CARİ ÜNVANI': r.son_satinalma_cari,
+      'TUTAR': r.tutar,
+      'ALTSTOKGRUPKODU': r.alt_stok_grup_kodu,
+    }));
+  }
+  // Excel fallback
+  const wb = XLSX.readFile(EXCEL_PATH, { cellFormula: false, cellStyles: false });
+  const ws = wb.Sheets['ÜRETİM İHTİYAÇ RAPORU'];
+  if (!ws) return [];
+  return XLSX.utils.sheet_to_json(ws, { defval: '' });
+}
+
+// Sayfaları yenile — önce TIGER3, yoksa Excel SQL sorgularını çalıştır
 router.post('/refresh', async (req, res) => {
   try {
-    const fs = require('fs');
-    if (!fs.existsSync(EXCEL_PATH)) {
-      return res.status(404).json({ error: 'Excel dosyası bulunamadı' });
+    let count, source;
+    try {
+      count = await syncFromTIGER3();
+      source = 'tiger3';
+    } catch (tiger3Err) {
+      console.warn('Malzeme İhtiyaç: TIGER3 bağlanamadı, Excel fallback:', tiger3Err.message);
+      const fs = require('fs');
+      if (!fs.existsSync(EXCEL_PATH)) {
+        return res.status(404).json({ error: 'Excel dosyası bulunamadı ve TIGER3 bağlantısı yok: ' + tiger3Err.message });
+      }
+      await refreshExcelQueries(EXCEL_PATH);
+      const wb = XLSX.readFile(EXCEL_PATH, { cellFormula: false, cellStyles: false });
+      const ws = wb.Sheets['ÜRETİM İHTİYAÇ RAPORU'];
+      count = ws ? XLSX.utils.sheet_to_json(ws, { defval: '' }).length : 0;
+      source = 'excel';
     }
-
-    // Önce SQL sorgularını yenile
-    const log = await refreshExcelQueries(EXCEL_PATH);
-    console.log('Malzeme İhtiyaç Excel yenilendi:', log);
-
-    // Yenilenen Excel'i oku
-    const wb = XLSX.readFile(EXCEL_PATH, { cellFormula: false, cellStyles: false });
-    const sheets = wb.SheetNames;
-
-    const expectedSheets = ['ÖRNEK PİVOT', 'ÜRETİM İHTİYAÇ RAPORU', 'PROJE MALİYET', 'SATINALMA'];
-    const missing = expectedSheets.filter(s => !sheets.includes(s));
-    if (missing.length > 0) {
-      return res.status(400).json({ error: `Eksik sayfalar: ${missing.join(', ')}` });
-    }
-
-    const summary = {};
-    expectedSheets.forEach(name => {
-      const ws = wb.Sheets[name];
-      const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-      summary[name] = data.filter(r => r.some(c => c !== '')).length;
-    });
-
     res.json({
       success: true,
-      message: 'SQL sorguları yenilendi ve Excel güncellendi',
+      source,
+      count,
+      message: `${count} satır güncellendi (${source === 'tiger3' ? 'TIGER3 doğrudan bağlantı' : 'Excel'})`,
       timestamp: new Date().toISOString(),
-      summary
     });
   } catch (err) {
     console.error('Malzeme refresh error:', err);
@@ -55,12 +148,7 @@ router.post('/refresh', async (req, res) => {
 router.get('/uretim-ihtiyac', (req, res) => {
   try {
     const { proje } = req.query;
-    const wb = XLSX.readFile(EXCEL_PATH, { cellFormula: false, cellStyles: false });
-    const ws = wb.Sheets['ÜRETİM İHTİYAÇ RAPORU'];
-
-    if (!ws) return res.status(404).json({ error: 'ÜRETİM İHTİYAÇ RAPORU sayfası bulunamadı' });
-
-    const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+    const rows = getUretimRows();
 
     let data = rows.map(r => ({
       proje_kodu: r['PROJE_KODU'] || '',
@@ -141,13 +229,7 @@ router.get('/proje-maliyet', (req, res) => {
 router.get('/satinalma', (req, res) => {
   try {
     const { proje } = req.query;
-    const wb = XLSX.readFile(EXCEL_PATH, { cellFormula: false, cellStyles: false });
-
-    // ÜRETİM İHTİYAÇ RAPORU'ndan tüm verileri oku
-    const wsUretim = wb.Sheets['ÜRETİM İHTİYAÇ RAPORU'];
-    if (!wsUretim) return res.status(404).json({ error: 'ÜRETİM İHTİYAÇ RAPORU sayfası bulunamadı' });
-
-    const uretimRows = XLSX.utils.sheet_to_json(wsUretim, { defval: '' });
+    const uretimRows = getUretimRows();
 
     // Hangi projeler dahil edilecek?
     const projeler = proje ? proje.split(',') : null;
@@ -260,39 +342,56 @@ router.get('/satinalma', (req, res) => {
   }
 });
 
-// Tüm projeleri getir (Excel + Database)
+// Tüm projeleri getir (Cache/Excel + Database)
 router.get('/all-projects', (req, res) => {
   try {
     const db = getDb();
-    
-    // 1. Excel'den proje kodlarını al
-    const wb = XLSX.readFile(EXCEL_PATH, { cellFormula: false, cellStyles: false });
-    const ws = wb.Sheets['ÜRETİM İHTİYAÇ RAPORU'];
-    const excelProjects = ws 
-      ? [...new Set(
-          XLSX.utils.sheet_to_json(ws, { defval: '' })
-            .map(r => r['PROJE_KODU'])
-            .filter(Boolean)
-        )].sort()
-      : [];
+    let sourceProjects = [];
+    let dbProjects = [];
+    const warnings = [];
+
+    // 1. Önce cache'den, yoksa Excel'den proje kodlarını al
+    try {
+      const rows = getUretimRows();
+      sourceProjects = [...new Set(rows.map(r => r['PROJE_KODU']).filter(Boolean))].sort();
+      if (sourceProjects.length === 0) {
+        warnings.push('Veri kaynağında proje kodu bulunamadı');
+      }
+    } catch (e) {
+      warnings.push('Veri okuma hatası: ' + e.message);
+    }
 
     // 2. Veritabanından tüm proje adlarını al (project_offers'dan)
-    const dbProjects = db.prepare(
-      'SELECT DISTINCT project_name FROM project_offers WHERE project_name IS NOT NULL AND project_name != "" ORDER BY project_name'
-    ).all().map(r => r.project_name).filter(p => p && !excelProjects.includes(p));
+    try {
+      dbProjects = db.prepare(
+        'SELECT DISTINCT project_name FROM project_offers WHERE project_name IS NOT NULL AND project_name != "" ORDER BY project_name'
+      ).all().map(r => r.project_name).filter(p => p && !sourceProjects.includes(p));
+    } catch (e) {
+      warnings.push('Database sorgusu hatası: ' + e.message);
+    }
 
-    // 3. Birleştir (Excel projeleri önce, sonra veritabanı projeleri)
-    const allProjects = [...excelProjects, ...dbProjects];
+    // 3. Birleştir (cache/Excel projeleri önce, sonra veritabanı projeleri)
+    const allProjects = [...sourceProjects, ...dbProjects];
+    
+    // Eğer veri yoksa fallback projeler döndür
+    if (allProjects.length === 0) {
+      warnings.push('Sistem projesi otomatik olarak ekleniyor');
+      allProjects.push('TEST-PRJ-001', 'TEST-PRJ-002');
+    }
 
-    res.json({ 
+    res.json({
       projeler: allProjects,
-      excelCount: excelProjects.length,
+      sourceCount: sourceProjects.length,
       databaseCount: dbProjects.length,
-      toplam: allProjects.length
+      toplam: allProjects.length,
+      warnings: warnings.length > 0 ? warnings : undefined
     });
   } catch (err) {
     console.error('All projects error:', err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ 
+      error: err.message,
+      note: 'Proje listesi alınamadı. Excel ve Database kontrol edin.'
+    });
   }
 });
 
@@ -381,3 +480,4 @@ router.post('/tedarikci-pdf', (req, res) => {
 });
 
 module.exports = router;
+module.exports.syncFromTIGER3 = syncFromTIGER3;

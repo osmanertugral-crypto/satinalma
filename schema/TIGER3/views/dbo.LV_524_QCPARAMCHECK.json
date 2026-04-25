@@ -1,0 +1,99 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_524_QCPARAMCHECK",
+    "full_name":  "dbo.LV_524_QCPARAMCHECK",
+    "definition":  "CREATE VIEW [dbo].[LV_524_QCPARAMCHECK] AS\nselect 1 AS GRPCODE,\n    0 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPPURCHINPUTS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 1 AS GRPCODE,\n    0 AS TRCODE,\n    1 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPPURCHINVO\u0027 AND FIRMNR = 524\nUNION ALL\nselect 2 AS GRPCODE,\n    0 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPSALEOUTPUTS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 2 AS GRPCODE,\n    0 AS TRCODE,\n    1 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPSALESINVO\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    11 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPUSAGESLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    12 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPUSAGESLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    13 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPPRODINPUTS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    14 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_OPENINGSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    15 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFINPSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    16 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFINPSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    17 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFINPSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    18 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFINPSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    19 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFINPSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    20 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFOUTSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    21 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFOUTSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    22 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFOUTSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    23 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFOUTSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    24 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPDEFOUTSLIPS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    25 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPWHTRANSFERS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    50 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPCOUNTEXCESS\u0027 AND FIRMNR = 524\nUNION ALL\nselect 0 AS GRPCODE,\n    51 AS TRCODE,\n    0 AS INVOICE,\n    VALUE AS PARAMOK\nfrom \"TIGER3\"..L_FIRMPARAMS\nwhere CODE = \u0027QCONT_INSPCOUNTDEFICIT\u0027 AND FIRMNR = 524",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "GRPCODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "PARAMOK",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "GRPCODE":  "1",
+                            "TRCODE":  "0",
+                            "INVOICE":  "0",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "1",
+                            "TRCODE":  "0",
+                            "INVOICE":  "1",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "2",
+                            "TRCODE":  "0",
+                            "INVOICE":  "0",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "2",
+                            "TRCODE":  "0",
+                            "INVOICE":  "1",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "0",
+                            "TRCODE":  "11",
+                            "INVOICE":  "0",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "0",
+                            "TRCODE":  "12",
+                            "INVOICE":  "0",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "0",
+                            "TRCODE":  "13",
+                            "INVOICE":  "0",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "0",
+                            "TRCODE":  "14",
+                            "INVOICE":  "0",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "0",
+                            "TRCODE":  "15",
+                            "INVOICE":  "0",
+                            "PARAMOK":  "0"
+                        },
+                        {
+                            "GRPCODE":  "0",
+                            "TRCODE":  "16",
+                            "INVOICE":  "0",
+                            "PARAMOK":  "0"
+                        }
+                    ]
+}

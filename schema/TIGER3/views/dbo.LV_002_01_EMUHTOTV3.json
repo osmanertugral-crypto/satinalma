@@ -1,0 +1,305 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_002_01_EMUHTOTV3",
+    "full_name":  "dbo.LV_002_01_EMUHTOTV3",
+    "definition":  "CREATE VIEW [DBO].[LV_002_01_EMUHTOTV3] WITH SCHEMABINDING AS\n  SELECT CENTERREF AS ACCOUNTREF,\n         (CASE TRCODE WHEN 1 THEN -1 WHEN 7 THEN -2 ELSE MONTH_ END) AS MONTH_,\n         YEAR_,\n         SUM(ISNULL((CREDEBNET * (1 - TSIGN)), 0)) AS DEBIT,\n         SUM(ISNULL((CREDEBNET * TSIGN), 0)) AS CREDIT,\n         SUM(ISNULL((REPORTNET * (1 - TSIGN)), 0)) AS DEBIT_RC,\n         SUM(ISNULL((REPORTNET * TSIGN), 0)) AS CREDIT_RC,\n         SUM(0) AS DEBIT_LC,\n         SUM(0) AS CREDIT_LC,\n         SUM(0) AS DEBIT_AMNT,\n         SUM(0) AS CREDIT_AMNT,\n         SUM(0) AS DEBIT_EMU,\n         SUM(0) AS CREDIT_EMU,\n         BRANCH AS BRANCH,\n         DEPARTMENT AS DEPARTMENT,\n         TRCURR AS TRCURR,\n         SUM(0) AS DEBITRESRV,\n         SUM(0) AS CREDITRESRV,\n         SUM(0) AS DEBITRESRV_RC,\n         COUNT_BIG(*) AS CNT\n    FROM [dbo].LG_002_01_ACCDISTDETLN\n   WHERE STATUS = 0 AND CANCELLED = 0 AND TRCODE NOT IN (5, 10)\nGROUP BY CENTERREF,\n         (CASE TRCODE WHEN 1 THEN -1 WHEN 7 THEN -2 ELSE MONTH_ END),\n         YEAR_,\n         BRANCH,\n         DEPARTMENT,\n         TRCURR\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ACCOUNTREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTH_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT_RC",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT_RC",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT_LC",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT_LC",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT_AMNT",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT_AMNT",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT_EMU",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT_EMU",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRANCH",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPARTMENT",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCURR",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBITRESRV",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDITRESRV",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBITRESRV_RC",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CNT",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "ACCOUNTREF":  "0",
+                            "MONTH_":  "11",
+                            "YEAR_":  "2022",
+                            "DEBIT":  "485417,15",
+                            "CREDIT":  "485417,15",
+                            "DEBIT_RC":  "26089",
+                            "CREDIT_RC":  "26089",
+                            "DEBIT_LC":  "0",
+                            "CREDIT_LC":  "0",
+                            "DEBIT_AMNT":  "0",
+                            "CREDIT_AMNT":  "0",
+                            "DEBIT_EMU":  "0",
+                            "CREDIT_EMU":  "0",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "TRCURR":  "20",
+                            "DEBITRESRV":  "0",
+                            "CREDITRESRV":  "0",
+                            "DEBITRESRV_RC":  "0",
+                            "CNT":  "2"
+                        },
+                        {
+                            "ACCOUNTREF":  "0",
+                            "MONTH_":  "12",
+                            "YEAR_":  "2022",
+                            "DEBIT":  "3481543,78",
+                            "CREDIT":  "3481543,78",
+                            "DEBIT_RC":  "176480,54",
+                            "CREDIT_RC":  "176480,54",
+                            "DEBIT_LC":  "0",
+                            "CREDIT_LC":  "0",
+                            "DEBIT_AMNT":  "0",
+                            "CREDIT_AMNT":  "0",
+                            "DEBIT_EMU":  "0",
+                            "CREDIT_EMU":  "0",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "TRCURR":  "20",
+                            "DEBITRESRV":  "0",
+                            "CREDITRESRV":  "0",
+                            "DEBITRESRV_RC":  "0",
+                            "CNT":  "14"
+                        },
+                        {
+                            "ACCOUNTREF":  "1",
+                            "MONTH_":  "9",
+                            "YEAR_":  "2022",
+                            "DEBIT":  "1000",
+                            "CREDIT":  "0",
+                            "DEBIT_RC":  "53,92",
+                            "CREDIT_RC":  "0",
+                            "DEBIT_LC":  "0",
+                            "CREDIT_LC":  "0",
+                            "DEBIT_AMNT":  "0",
+                            "CREDIT_AMNT":  "0",
+                            "DEBIT_EMU":  "0",
+                            "CREDIT_EMU":  "0",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "TRCURR":  "0",
+                            "DEBITRESRV":  "0",
+                            "CREDITRESRV":  "0",
+                            "DEBITRESRV_RC":  "0",
+                            "CNT":  "1"
+                        },
+                        {
+                            "ACCOUNTREF":  "1",
+                            "MONTH_":  "10",
+                            "YEAR_":  "2022",
+                            "DEBIT":  "1000",
+                            "CREDIT":  "0",
+                            "DEBIT_RC":  "55,13",
+                            "CREDIT_RC":  "0",
+                            "DEBIT_LC":  "0",
+                            "CREDIT_LC":  "0",
+                            "DEBIT_AMNT":  "0",
+                            "CREDIT_AMNT":  "0",
+                            "DEBIT_EMU":  "0",
+                            "CREDIT_EMU":  "0",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "TRCURR":  "0",
+                            "DEBITRESRV":  "0",
+                            "CREDITRESRV":  "0",
+                            "DEBITRESRV_RC":  "0",
+                            "CNT":  "1"
+                        },
+                        {
+                            "ACCOUNTREF":  "1",
+                            "MONTH_":  "11",
+                            "YEAR_":  "2022",
+                            "DEBIT":  "1000",
+                            "CREDIT":  "0",
+                            "DEBIT_RC":  "55,13",
+                            "CREDIT_RC":  "0",
+                            "DEBIT_LC":  "0",
+                            "CREDIT_LC":  "0",
+                            "DEBIT_AMNT":  "0",
+                            "CREDIT_AMNT":  "0",
+                            "DEBIT_EMU":  "0",
+                            "CREDIT_EMU":  "0",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "TRCURR":  "0",
+                            "DEBITRESRV":  "0",
+                            "CREDITRESRV":  "0",
+                            "DEBITRESRV_RC":  "0",
+                            "CNT":  "1"
+                        },
+                        {
+                            "ACCOUNTREF":  "1",
+                            "MONTH_":  "12",
+                            "YEAR_":  "2022",
+                            "DEBIT":  "1000",
+                            "CREDIT":  "0",
+                            "DEBIT_RC":  "55,13",
+                            "CREDIT_RC":  "0",
+                            "DEBIT_LC":  "0",
+                            "CREDIT_LC":  "0",
+                            "DEBIT_AMNT":  "0",
+                            "CREDIT_AMNT":  "0",
+                            "DEBIT_EMU":  "0",
+                            "CREDIT_EMU":  "0",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "TRCURR":  "0",
+                            "DEBITRESRV":  "0",
+                            "CREDITRESRV":  "0",
+                            "DEBITRESRV_RC":  "0",
+                            "CNT":  "1"
+                        },
+                        {
+                            "ACCOUNTREF":  "4",
+                            "MONTH_":  "12",
+                            "YEAR_":  "2022",
+                            "DEBIT":  "5000",
+                            "CREDIT":  "4347,7",
+                            "DEBIT_RC":  "250,82",
+                            "CREDIT_RC":  "218,09",
+                            "DEBIT_LC":  "0",
+                            "CREDIT_LC":  "0",
+                            "DEBIT_AMNT":  "0",
+                            "CREDIT_AMNT":  "0",
+                            "DEBIT_EMU":  "0",
+                            "CREDIT_EMU":  "0",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "TRCURR":  "0",
+                            "DEBITRESRV":  "0",
+                            "CREDITRESRV":  "0",
+                            "DEBITRESRV_RC":  "0",
+                            "CNT":  "5"
+                        }
+                    ]
+}

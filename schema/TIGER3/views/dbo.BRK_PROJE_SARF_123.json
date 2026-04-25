@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_PROJE_SARF_123",
+    "full_name":  "dbo.BRK_PROJE_SARF_123",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[BRK_PROJE_SARF_123] AS\r\n\r\nSELECT \r\n    STFICHE.FICHENO AS FIS_NO, \r\n    STFICHE.DATE_ AS FIS_TARIHI, \r\n    ITEMS.CODE AS URUN_KODU, \r\n    ITEMS.NAME AS URUN_ADI, \r\n    ITEM_URUN.STGRPCODE AS URUN_TUR, \r\n    PROJECT.CODE AS PROJE_KODU, \r\n    PROJECT.NAME AS PROJE_ADI, \r\n    ITEM_PROJECT.SPECODE2 AS PROJE_TUR, \r\n    STLINE.AMOUNT AS ADET,  \r\n    STLINE.OUTCOST AS BIRIM_FIYAT, \r\n    STLINE.AMOUNT * STLINE.OUTCOST AS TOPLAM\r\n\r\nFROM LG_123_01_STLINE STLINE WITH(NOLOCK)\r\n\r\nINNER JOIN LG_123_01_STFICHE STFICHE WITH(NOLOCK) ON STLINE.STFICHEREF = STFICHE.LOGICALREF\r\nINNER JOIN LG_123_ITEMS ITEMS WITH(NOLOCK) ON STLINE.STOCKREF = ITEMS.LOGICALREF\r\nINNER JOIN LG_123_PROJECT PROJECT WITH(NOLOCK) ON STFICHE.PROJECTREF = PROJECT.LOGICALREF\r\nLEFT JOIN LG_123_ITEMS ITEM_PROJECT WITH(NOLOCK) ON PROJECT.CODE = ITEM_PROJECT.CODE\r\nLEFT JOIN LG_123_ITEMS ITEM_URUN WITH(NOLOCK) ON ITEMS.CODE = ITEM_URUN.CODE\r\n\r\nWHERE STLINE.TRCODE = 12\r\nAND STLINE.CANCELLED = 0\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_TARIHI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URUN_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URUN_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URUN_TUR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_TUR",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADET",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYAT",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FIS_NO":  "002329",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "KRXX0099H047",
+                            "URUN_ADI":  "MASA KATLANIR AYAK",
+                            "URUN_TUR":  "KARAVAN EKİPMAN",
+                            "PROJE_KODU":  "G0358",
+                            "PROJE_ADI":  "CELCAMP BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "291,6667",
+                            "TOPLAM":  "291,6667"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "3DBK0099H004",
+                            "URUN_ADI":  "MERDİVEN AYAK",
+                            "URUN_TUR":  "3D-BASKI",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "2",
+                            "BIRIM_FIYAT":  "75",
+                            "TOPLAM":  "150"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "3DBK0099H005",
+                            "URUN_ADI":  "MERDİVEN DESTEK",
+                            "URUN_TUR":  "3D-BASKI",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "2",
+                            "BIRIM_FIYAT":  "65",
+                            "TOPLAM":  "130"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "DSXX0099H047",
+                            "URUN_ADI":  "KUMAŞ PELUŞ KREM",
+                            "URUN_TUR":  "DÖŞEME",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "12",
+                            "BIRIM_FIYAT":  "180",
+                            "TOPLAM":  "2160"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "ECTURB100001",
+                            "URUN_ADI":  "URBAN BADGER TELESKOPIK MERDIVEN 3.2M",
+                            "URUN_TUR":  "",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "1112,74247",
+                            "TOPLAM":  "1112,74247"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "ELSF0099H006",
+                            "URUN_ADI":  "BARA VİDALI 6LI 150 A",
+                            "URUN_TUR":  "ELEKTRİK",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "2",
+                            "BIRIM_FIYAT":  "200",
+                            "TOPLAM":  "400"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "ELSF0099H026",
+                            "URUN_ADI":  "KABLO KORUMA KAPAK GÜNEŞ PANELİ SİYAH",
+                            "URUN_TUR":  "ELEKTRİK",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "103,5",
+                            "TOPLAM":  "103,5"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "ELSF0099H054",
+                            "URUN_ADI":  "FİŞ ERKEK 1X16 TOPRAKLI DÜZ",
+                            "URUN_TUR":  "ELEKTRİK",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "3",
+                            "BIRIM_FIYAT":  "20,61826087",
+                            "TOPLAM":  "61,85478261"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "ELSF0099H078",
+                            "URUN_ADI":  "TEKLİ ÇERÇEVE SİYAH",
+                            "URUN_TUR":  "ELEKTRİK",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "2",
+                            "BIRIM_FIYAT":  "20",
+                            "TOPLAM":  "40"
+                        },
+                        {
+                            "FIS_NO":  "002335",
+                            "FIS_TARIHI":  "28.04.2024 00:00:00",
+                            "URUN_KODU":  "ELSF0099H081",
+                            "URUN_ADI":  "TOPRAKLI PRİZ Ç.K. KAPAKLI SIYAH",
+                            "URUN_TUR":  "ELEKTRİK",
+                            "PROJE_KODU":  "G0361",
+                            "PROJE_ADI":  "CHİLE BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "ADET":  "2",
+                            "BIRIM_FIYAT":  "21,75",
+                            "TOPLAM":  "43,5"
+                        }
+                    ]
+}

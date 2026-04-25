@@ -1,0 +1,116 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_NDR_EKSILER",
+    "full_name":  "dbo.AA_NDR_EKSILER",
+    "definition":  "----185.185.62.157\r\n\r\nCREATE VIEW [dbo].[AA_NDR_EKSILER] AS\r\n\r\n------KENDI CEKLERIMIZ\r\n\r\nSELECT \u00271  Ödenecek Çek ve Senetler\u0027 as Açıklama,PORTFOYNO AS Kodu,BANKNAME as Adı,TRNET as Tutar,\r\n(CASE TRCURR WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 ELSE \u00271-TL\u0027 END) AS DövizTürü\r\n \r\n FROM LG_001_01_CSCARD where CURRSTAT=9 UNION ALL\r\n----- kredıler 2016\r\n SELECT \u00272  2016 \u0027+KREDI.SPECODE AS Açıklama,KREDI.CODE AS Kodu,KREDI.NAME_ AS Adı,\r\n LINE.TOTAL as Tutar ,\r\n(CASE KREDI.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü \r\n \r\n FROM LG_001_BNCREPAYTR AS LINE INNER JOIN \r\n LG_001_BNCREDITCARD AS KREDI ON LINE.CREDITREF=KREDI.LOGICALREF WHERE YEAR(LINE.DUEDATE)=2016 UNION ALL\r\n  \r\n  ------120 HESAPLAR\r\n SELECT \u002705 Cari Hesap Bakiyeleri\u0027 as Açıklama, CLCARD.CODE AS Kodu ,CLCARD.DEFINITION_ as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü\r\n\r\nFROM LG_001_01_CLFLINE AS LINE  \r\nINNER JOIN LG_001_CLCARD AS CLCARD ON CLCARD.LOGICALREF=LINE.CLIENTREF \r\n\r\nWHERE \r\nLINE.CANCELLED=0\r\n\r\nAND (select SUM(CASE WHEN SIGN=0 THEN AMOUNT ELSE AMOUNT*-1 END ) FROM LG_001_01_CLFLINE WHERE CLIENTREF=CLCARD.LOGICALREF AND CANCELLED=0)\u003c0\r\nUNION ALL\r\n\r\n-----personele alacakları\r\nSELECT \u00275  Personele Alacakları\u0027 as Açıklama, LINE.ACCOUNTCODE AS Kodu ,\r\n(SELECT DEFINITION_ FROM LG_001_EMUHACC WHERE CODE=LINE.ACCOUNTCODE) as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END)*-1 AS Tutar,\r\n(CASE LINE.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü\r\nFROM LG_001_01_EMFLINE AS LINE WHERE LINE.KEBIRCODE IN (335) AND\r\n((SELECT SUM((CASE SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END))\r\nFROM dbo.LG_001_01_EMFLINE WHERE KEBIRCODE IN (335)))\u003c0 UNION ALL\r\n\r\n ----- kredıler 2017+\r\n SELECT \u00276 Krediler \u0027+KREDI.SPECODE AS Açıklama,KREDI.CODE AS Kodu,KREDI.NAME_ AS Adı,\r\n LINE.TOTAL as Tutar ,\r\n(CASE KREDI.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü \r\n \r\n FROM LG_001_BNCREPAYTR AS LINE INNER JOIN \r\n LG_001_BNCREDITCARD AS KREDI ON LINE.CREDITREF=KREDI.LOGICALREF WHERE YEAR(LINE.DUEDATE)\u003c\u003e2016 \r\n \r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Açıklama",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "27",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Kodu",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Adı",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Tutar",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DövizTürü",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "5",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Açıklama":  "1  Ödenecek Çek ve Senetler",
+                            "Kodu":  "000009",
+                            "Adı":  "VAKIFBANK USD - VAKIFBANK USD",
+                            "Tutar":  "460000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "1  Ödenecek Çek ve Senetler",
+                            "Kodu":  "000010",
+                            "Adı":  "VAKIFBANK USD - VAKIFBANK USD",
+                            "Tutar":  "735000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "1  Ödenecek Çek ve Senetler",
+                            "Kodu":  "000011",
+                            "Adı":  "VAKIFBANK TL - VAKIFBANK TL HESABI",
+                            "Tutar":  "227740",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "1  Ödenecek Çek ve Senetler",
+                            "Kodu":  "000012",
+                            "Adı":  "VAKIFBANK TL - VAKIFBANK TL HESABI",
+                            "Tutar":  "200000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "1  Ödenecek Çek ve Senetler",
+                            "Kodu":  "000013",
+                            "Adı":  "VAKIFBANK TL - VAKIFBANK TL HESABI",
+                            "Tutar":  "204032,37",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "05 Cari Hesap Bakiyeleri",
+                            "Kodu":  "320.01.00302",
+                            "Adı":  "SÜHA SİVASLIGİL ( FORKLİFT )",
+                            "Tutar":  "800",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "05 Cari Hesap Bakiyeleri",
+                            "Kodu":  "320.01.00302",
+                            "Adı":  "SÜHA SİVASLIGİL ( FORKLİFT )",
+                            "Tutar":  "550",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "05 Cari Hesap Bakiyeleri",
+                            "Kodu":  "320.01.00302",
+                            "Adı":  "SÜHA SİVASLIGİL ( FORKLİFT )",
+                            "Tutar":  "150",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "05 Cari Hesap Bakiyeleri",
+                            "Kodu":  "320.01.00302",
+                            "Adı":  "SÜHA SİVASLIGİL ( FORKLİFT )",
+                            "Tutar":  "-4000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "05 Cari Hesap Bakiyeleri",
+                            "Kodu":  "320.01.00302",
+                            "Adı":  "SÜHA SİVASLIGİL ( FORKLİFT )",
+                            "Tutar":  "2750",
+                            "DövizTürü":  "1-TL"
+                        }
+                    ]
+}

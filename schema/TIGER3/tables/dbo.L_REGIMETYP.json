@@ -1,0 +1,189 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_REGIMETYP",
+    "full_name":  "dbo.L_REGIMETYP",
+    "description":  "",
+    "total_rows":  "70",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "251",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SITEID",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RECSTATUS",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORGLOGICREF",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "REGIMETYP_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "REGIMETYP_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CODE":  "1000",
+                            "DEF":  "Daha önce bir rejime tabi tutulmamış eşyanın kesin ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CODE":  "1040",
+                            "DEF":  "Muafiyete tabi olmadan serbest dolaşım ile eş zamanlı yurtiçi kullanıma giren eşyanın kesin ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CODE":  "1042",
+                            "DEF":  "Muafiyete tabi olarak serbest dolaşım ile eş zamanlı yurtiçi kullanıma giren eşyanın kesin ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CODE":  "1072",
+                            "DEF":  "Antrepoya alınan serbest dolaşımda bulunan Türk menşeli eşyanın kesin ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CODE":  "1073",
+                            "DEF":  "Antrepoya alınan serbest dolaşımda bulunan eşyanın kesin ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CODE":  "1091",
+                            "DEF":  "Gümrük kontrolü altında işleme rejimine tabi tutulan eşyanın kesin ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CODE":  "2100",
+                            "DEF":  "Serbest dolaşımda bulunan eşyanın hariçte işleme rejimi kapsamında geçici ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CODE":  "2123",
+                            "DEF":  "İhraç edildiği şekli ile geri gelmek üzere geçici ihraç edilen eşyanın hariçte işleme rejimi kapsamında geçici ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CODE":  "2141",
+                            "DEF":  "Dahilde işleme rejimi geri ödeme sistemi çerçevesinde serbest dolaşım ile eş zamanlı yurtiçi kullanıma giren eşyanın hariçte işleme rejimi kapsamında geçici ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CODE":  "2151",
+                            "DEF":  "Dahilde işleme rejimi şartlı muafiyet sistemine tabi tutulan eşyanın hariçte işleme rejimi kapsamında geçici ihracatı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        }
+                    ]
+}

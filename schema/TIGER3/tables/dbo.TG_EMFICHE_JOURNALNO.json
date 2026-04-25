@@ -1,0 +1,222 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "TG_EMFICHE_JOURNALNO",
+    "full_name":  "dbo.TG_EMFICHE_JOURNALNO",
+    "description":  "",
+    "total_rows":  "1171",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "SIRANO",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "19",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "JOURNALNO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NEW_JOURNALNO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "19",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "YIL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+
+                ],
+    "sample_data":  [
+                        {
+                            "SIRANO":  "1",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "39590",
+                            "JOURNALNO":  "5651",
+                            "NEW_JOURNALNO":  "5651",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "2",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40211",
+                            "JOURNALNO":  "5652",
+                            "NEW_JOURNALNO":  "5652",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "3",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40213",
+                            "JOURNALNO":  "5653",
+                            "NEW_JOURNALNO":  "5653",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "4",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40216",
+                            "JOURNALNO":  "5654",
+                            "NEW_JOURNALNO":  "5654",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "5",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40250",
+                            "JOURNALNO":  "5655",
+                            "NEW_JOURNALNO":  "5655",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "6",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40339",
+                            "JOURNALNO":  "5656",
+                            "NEW_JOURNALNO":  "5656",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "7",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40341",
+                            "JOURNALNO":  "5657",
+                            "NEW_JOURNALNO":  "5657",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "8",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40510",
+                            "JOURNALNO":  "5658",
+                            "NEW_JOURNALNO":  "5658",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "9",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40511",
+                            "JOURNALNO":  "5659",
+                            "NEW_JOURNALNO":  "5659",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        },
+                        {
+                            "SIRANO":  "10",
+                            "DATE_":  "1.06.2025 00:00:00",
+                            "TRCODE":  "4",
+                            "LOGICALREF":  "40512",
+                            "JOURNALNO":  "5660",
+                            "NEW_JOURNALNO":  "5660",
+                            "YIL":  "2025",
+                            "AY":  "6"
+                        }
+                    ]
+}

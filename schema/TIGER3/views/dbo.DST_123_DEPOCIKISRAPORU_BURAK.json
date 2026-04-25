@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_DEPOCIKISRAPORU_BURAK",
+    "full_name":  "dbo.DST_123_DEPOCIKISRAPORU_BURAK",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[DST_123_DEPOCIKISRAPORU_BURAK] AS\r\n\r\n\r\n\r\nSELECT\r\n\r\nITM.CODE [MALZ. KODU]\r\n,ITM.NAME [MALZ. ADI]\r\n,STL.AMOUNT [MIKTAR]\r\n,UNL.NAME [BIRIM],\r\nGNT.ONHAND [ELDE KALAN 2 NOLU AMBAR],\r\nGNT1.ONHAND [ELDE KALAN 5 NOLU AMBAR],\r\nGNT2.ONHAND [ELDE KALAN 11 NOLU AMBAR],\r\n\r\nCASE WHEN STL.IOCODE IN (1,2) THEN \u0027GIRIS\u0027 WHEN STL.IOCODE IN (3,4) THEN \u0027CIKIS\u0027 ELSE \u0027DIGER\u0027 END [HAREKET TURU]\r\n,CASE STL.TRCODE \r\nWHEN 1 THEN \u0027SATIN ALMA IRS\u0027\r\nWHEN 2 THEN\u0027PAR. SATIS IADE IRS\u0027\r\nWHEN 3 THEN\u0027TOPTAN SATIS IADE IRS\u0027\r\nWHEN 4 THEN\u0027KONS. CIKIS IADE \u0027\r\nWHEN 5 THEN\u0027KONS. GIRIS\u0027\r\nWHEN 6 THEN\u0027SATIN ALMA IADE IRS\u0027\r\nWHEN 7 THEN\u0027PAR. SATIS IRS\u0027\r\nWHEN 8 THEN\u0027TOPTAN SATIS IRS\u0027\r\nWHEN 9 THEN\u0027KONS CIKIS IRS\u0027\r\nWHEN 10 THEN\u0027KONS. GIRIS IADE\u0027\r\nWHEN 11 THEN\u0027FIRE FISI\u0027\r\nWHEN 12 THEN\u0027SARF FISI\u0027\r\nWHEN 13 THEN\u0027URT. GIRIS FISI\u0027\r\nWHEN 14 THEN\u0027DEVIR FISI\u0027\r\nWHEN 25 THEN\u0027AMBAR FISI\u0027\r\nWHEN 50 THEN\u0027SAYIM FAZ. FISI\u0027\r\nWHEN 51 THEN\u0027SAYIM EKS. FISI\u0027\r\nEND [FIS TURU] \r\n\r\n--EMC.CODE MM_KODU,\r\n--EMC.SPECODE MARKA,\r\n--EMC.CYPHCODE MODEL,\r\n--EMC.DEFINITION_ MM_ADI\r\n,STF.FICHENO [FIS NO]\r\n,month(STF.DATE_) [AY]\r\n--,(select max(S1.DATE_) from LG_123_01_STLINE S1 where s1.LOGICALREF=STL.LOGICALREF ) XX\r\n,STF.DATE_ [TARIH]\r\n\r\n\r\n--,ROUND(STL.PRICE,3) [BIRIM FIYAT]\r\n--,ROUND(STL.TOTAL,3) [TUTAR]\r\n---,CASE STL.AMOUNT WHEN 0 THEN 0 ELSE STL.AMOUNT * (STL.UINFO2/STL.UINFO1) END [MIKTAR ANA BIRIM]\r\n---,[KALAN ANA BIRIM] = (SELECT ROUND(SUM(CASE STL1.AMOUNT WHEN 0 THEN 0 ELSE CASE WHEN STL1.IOCODE IN (1,2) THEN STL1.AMOUNT * (STL1.UINFO2/STL1.UINFO1) WHEN  STL1.IOCODE IN (3,4) THEN (STL1.AMOUNT * (STL1.UINFO2/STL1.UINFO1)) * -1 END END),3) FROM LG_123_01_STLINE STL1 WHERE STL1.LINETYPE = 0 AND STL1.CANCELLED = 0 AND ((STL1.DATE_ \u003c STL.DATE_) OR (STL1.DATE_ = STL.DATE_ AND STL1.FTIME \u003c STL.FTIME) OR (STL1.DATE_ = STL.DATE_ AND STL1.FTIME = STL.FTIME AND STL1.LOGICALREF \u003c= STL.LOGICALREF)) AND STL1.STOCKREF = STL.STOCKREF)\r\nFROM LG_123_01_STLINE STL \r\n\r\nLEFT JOIN LG_123_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF\r\nLEFT JOIN LG_123_01_STFICHE STF ON STF.LOGICALREF = STL.STFICHEREF\r\n--LEFT JOIN LV_123_01_STINVTOT INVTOT ON INVTOT.STOCKREF=ITM.LOGICALREF AND INVTOT.INVENNO=2\r\nLEFT JOIN LV_123_01_GNTOTST GNT ON GNT.STOCKREF=ITM.LOGICALREF AND GNT.INVENNO=2\r\nLEFT JOIN LV_123_01_GNTOTST GNT1 ON GNT1.STOCKREF=ITM.LOGICALREF AND GNT1.INVENNO=5\r\nLEFT JOIN LV_123_01_GNTOTST GNT2 ON GNT2.STOCKREF=ITM.LOGICALREF AND GNT2.INVENNO=11\r\n\r\nLEFT JOIN LG_123_UNITSETL UNL ON UNL.LOGICALREF = STL.UOMREF\r\n--LEFT JOIN LG_123_EMUHACC EMU ON EMU.LOGICALREF=STL.ACCOUNTREF\r\n--LEFT JOIN LG_123_EMCENTER EMC ON EMC.LOGICALREF=STL.CENTERREF\r\nWHERE STL.LINETYPE = 0 AND STL.CANCELLED = 0 \r\nAND  STL.DESTINDEX IN (5,11) AND STL.SOURCEINDEX IN(2) AND STL.IOCODE IN (3,4)\r\n---AND ITM.CODE=\u0027HRXX0099H421\u0027\r\n--SELECT * FROM LG_123_ITEMS WHERE CODE=\u0027ELSF0099H083\u0027--AND ITM.CODE=\u0027ELSF0099H083\u0027 \r\n\r\n--AND STL.TRCODE\u003c\u003e25---AND ITM.CODE=\u00272021X326\u0027\r\n--ORDER BY STF.DATE_ ASC\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MALZ. KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZ. ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ELDE KALAN 2 NOLU AMBAR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ELDE KALAN 5 NOLU AMBAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ELDE KALAN 11 NOLU AMBAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HAREKET TURU",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "5",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS TURU",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS NO",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MALZ. KODU":  "HRXX0099H320",
+                            "MALZ. ADI":  "KELEPÇE PASLANMAZ 10X16",
+                            "MIKTAR":  "100",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "1000",
+                            "ELDE KALAN 5 NOLU AMBAR":  "548",
+                            "ELDE KALAN 11 NOLU AMBAR":  "396",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "013073",
+                            "AY":  "2",
+                            "TARIH":  "9.02.2024 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "KMIZ0099H012",
+                            "MALZ. ADI":  "SİKA MASTİK SOSİS BEYAZ SOTAŞ",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "61",
+                            "ELDE KALAN 5 NOLU AMBAR":  "16,8",
+                            "ELDE KALAN 11 NOLU AMBAR":  "76,9",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "013073",
+                            "AY":  "2",
+                            "TARIH":  "9.02.2024 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "KMIZ0099H029",
+                            "MALZ. ADI":  "YAPIŞTIRICI HIZLI XXX GR",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "47",
+                            "ELDE KALAN 5 NOLU AMBAR":  "58",
+                            "ELDE KALAN 11 NOLU AMBAR":  "1",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "013073",
+                            "AY":  "2",
+                            "TARIH":  "9.02.2024 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "NMN376",
+                            "MALZ. ADI":  "KALIP AYIRICI POLİVAKS SV 6",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "0",
+                            "ELDE KALAN 5 NOLU AMBAR":  null,
+                            "ELDE KALAN 11 NOLU AMBAR":  "-1,11022302462516E-16",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "013073",
+                            "AY":  "2",
+                            "TARIH":  "9.02.2024 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "MKTS0099H002",
+                            "MALZ. ADI":  "BENZİN BİDONU 10LT",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "0",
+                            "ELDE KALAN 5 NOLU AMBAR":  "0",
+                            "ELDE KALAN 11 NOLU AMBAR":  "0",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "012964",
+                            "AY":  "2",
+                            "TARIH":  "1.02.2024 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "HRXX0099H233",
+                            "MALZ. ADI":  "YEDEK UÇ MAKET BIÇAĞI 18MM",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "150",
+                            "ELDE KALAN 5 NOLU AMBAR":  null,
+                            "ELDE KALAN 11 NOLU AMBAR":  "300",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "007011",
+                            "AY":  "8",
+                            "TARIH":  "2.08.2023 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "ELTS0099H015",
+                            "MALZ. ADI":  "CBE PC 180",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "0",
+                            "ELDE KALAN 5 NOLU AMBAR":  "0",
+                            "ELDE KALAN 11 NOLU AMBAR":  "0",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "007012",
+                            "AY":  "8",
+                            "TARIH":  "2.08.2023 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "ELSF0099H007",
+                            "MALZ. ADI":  "BICAK SİGORTA 10 A",
+                            "MIKTAR":  "60",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "238",
+                            "ELDE KALAN 5 NOLU AMBAR":  "46",
+                            "ELDE KALAN 11 NOLU AMBAR":  "90",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "007014",
+                            "AY":  "8",
+                            "TARIH":  "3.08.2023 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "ELSF0099H008",
+                            "MALZ. ADI":  "BICAK SİGORTA 15 A",
+                            "MIKTAR":  "60",
+                            "BIRIM":  "Adet",
+                            "ELDE KALAN 2 NOLU AMBAR":  "239",
+                            "ELDE KALAN 5 NOLU AMBAR":  "46",
+                            "ELDE KALAN 11 NOLU AMBAR":  "90",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "007014",
+                            "AY":  "8",
+                            "TARIH":  "3.08.2023 00:00:00"
+                        },
+                        {
+                            "MALZ. KODU":  "DSXX0099H104",
+                            "MALZ. ADI":  "KUMAŞ SUNİ DERİ KAHVERENGİ",
+                            "MIKTAR":  "25",
+                            "BIRIM":  "Metre",
+                            "ELDE KALAN 2 NOLU AMBAR":  "60",
+                            "ELDE KALAN 5 NOLU AMBAR":  null,
+                            "ELDE KALAN 11 NOLU AMBAR":  "50",
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "AMBAR FISI",
+                            "FIS NO":  "007017",
+                            "AY":  "8",
+                            "TARIH":  "3.08.2023 00:00:00"
+                        }
+                    ]
+}

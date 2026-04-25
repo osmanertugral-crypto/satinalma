@@ -1,0 +1,235 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_01_APPROVERS",
+    "full_name":  "dbo.LG_123_01_APPROVERS",
+    "description":  "",
+    "total_rows":  "14543",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "APPROVALREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERNAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EXPLAIN",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "251",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TIME_",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERID",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_01_APPROVERS_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_01_APPROVERS_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "APPROVALREF, USERID"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "APPROVALREF":  "26",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "CSY MARİNE DENİZCİLİK TUR.ELEK.AKS.TİC.LTD.ŞTİ.",
+                            "STATUS":  "1",
+                            "DATE_":  "3.01.2023 00:00:00",
+                            "TIME_":  "302518804",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "APPROVALREF":  "152",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "OTO SÜNER OTOM. İNŞ. TUR. ve PAZ. LTD. ŞTİ.",
+                            "STATUS":  "1",
+                            "DATE_":  "12.01.2023 00:00:00",
+                            "TIME_":  "235932709",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "APPROVALREF":  "216",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "MURATHAN PUL CİVATA SANAYİ VE TİCARET LİMİTED ŞİRK",
+                            "STATUS":  "1",
+                            "DATE_":  "16.01.2023 00:00:00",
+                            "TIME_":  "186647616",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "APPROVALREF":  "227",
+                            "USERNAME":  "ERDEM KORKMAZ",
+                            "EXPLAIN":  "KARADENİZ YAPIŞTIRICILAR VE ENDÜSTRİYEL ÜRÜNLER SA",
+                            "STATUS":  "1",
+                            "DATE_":  "17.01.2023 00:00:00",
+                            "TIME_":  "167973134",
+                            "USERID":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "APPROVALREF":  "250",
+                            "USERNAME":  "İSMET GÜMÜŞ",
+                            "EXPLAIN":  "TON BOYA SANAYİ TİCARET LİMİTED ŞİRKETİ",
+                            "STATUS":  "1",
+                            "DATE_":  "18.01.2023 00:00:00",
+                            "TIME_":  "220866851",
+                            "USERID":  "115"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "APPROVALREF":  "271",
+                            "USERNAME":  "İSMET GÜMÜŞ",
+                            "EXPLAIN":  "KZY OFİS KIRTASİYE TEM.HIR.REK. GIDA ÜR.SAN.ve TİC",
+                            "STATUS":  "1",
+                            "DATE_":  "18.01.2023 00:00:00",
+                            "TIME_":  "251791669",
+                            "USERID":  "115"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "APPROVALREF":  "272",
+                            "USERNAME":  "İSMET GÜMÜŞ",
+                            "EXPLAIN":  "KZY OFİS KIRTASİYE TEM.HIR.REK. GIDA ÜR.SAN.ve TİC",
+                            "STATUS":  "1",
+                            "DATE_":  "18.01.2023 00:00:00",
+                            "TIME_":  "252979025",
+                            "USERID":  "115"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "APPROVALREF":  "273",
+                            "USERNAME":  "İSMET GÜMÜŞ",
+                            "EXPLAIN":  "KZY OFİS KIRTASİYE TEM.HIR.REK. GIDA ÜR.SAN.ve TİC",
+                            "STATUS":  "1",
+                            "DATE_":  "18.01.2023 00:00:00",
+                            "TIME_":  "253364801",
+                            "USERID":  "115"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "APPROVALREF":  "274",
+                            "USERNAME":  "İSMET GÜMÜŞ",
+                            "EXPLAIN":  "KORONA ENDUSTRİYEL ELEKTRİK MUH. SAN.TİC. A.Ş.",
+                            "STATUS":  "1",
+                            "DATE_":  "18.01.2023 00:00:00",
+                            "TIME_":  "254489664",
+                            "USERID":  "115"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "APPROVALREF":  "275",
+                            "USERNAME":  "İSMET GÜMÜŞ",
+                            "EXPLAIN":  "ENSAN ENDÜSTRİ MALZEMELERİ NAKLİYAT   TIC.VE SAN.L",
+                            "STATUS":  "1",
+                            "DATE_":  "18.01.2023 00:00:00",
+                            "TIME_":  "255014444",
+                            "USERID":  "115"
+                        }
+                    ]
+}

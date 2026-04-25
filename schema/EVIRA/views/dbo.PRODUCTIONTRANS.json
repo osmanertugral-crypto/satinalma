@@ -1,0 +1,187 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "PRODUCTIONTRANS",
+    "full_name":  "dbo.PRODUCTIONTRANS",
+    "definition":  "CREATE VIEW [dbo].[PRODUCTIONTRANS] AS\r\nSELECT        UH.UH_REF, UB.FIS_NO, UH.TARIH, UH.SAAT, UH.AKOD, UA.ADI AS AADI, UB.RECETE_KODU, UH.DURUM1, UD1.ACIKLAMASI AS ADURUM1, UH.DURUM2, UD2.ACIKLAMASI AS ADURUM2, K.KULLANICI_ADI, K.ADI_SOYADI, \r\n                         SK.STOK_KODU, SK.STOK_ADI, SK.STOK_ADI2, SK.STOK_ADI3, SK.STOK_ADI4, SP.SIPARIS_NO, FK.FIRMA_KODU, FK.FIRMA_UNVANI, UH.ALAN1, UH.ALAN2, UH.ALAN3, UH.ALAN4\r\nFROM            dbo.URETIMHAREKET AS UH WITH(NOLOCK) LEFT OUTER JOIN\r\n                         dbo.URETIMBASLIK AS UB WITH(NOLOCK) ON UB.UB_REF = UH.UB_REF LEFT OUTER JOIN\r\n                         dbo.KULLANICI AS K WITH(NOLOCK) ON K.KULLANICI_REF = UH.KULLANICI_REF LEFT OUTER JOIN\r\n                         dbo.URETIMAKOD AS UA WITH(NOLOCK) ON UA.KODU = UH.AKOD LEFT OUTER JOIN\r\n                         dbo.URETIMDURUM AS UD1 WITH(NOLOCK) ON UD1.DURUM_KODU = UH.DURUM1 LEFT OUTER JOIN\r\n                         dbo.URETIMDURUM AS UD2 WITH(NOLOCK) ON UD2.DURUM_KODU = UH.DURUM2 LEFT OUTER JOIN\r\n                         dbo.STOKKARTI AS SK WITH(NOLOCK) ON SK.STOK_REF = UB.STOK_REF LEFT OUTER JOIN\r\n                         dbo.SIPARISFISLERI AS SP WITH(NOLOCK) ON SP.SIPARIS_TURU = 1 AND SP.SB_REF = UB.SB_REF LEFT OUTER JOIN\r\n                         dbo.FIRMAKARTI AS FK WITH(NOLOCK) ON FK.FIRMA_REF = SP.FIRMA_REF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "UH_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SAAT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AKOD",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RECETE_KODU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DURUM1",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADURUM1",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "250",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DURUM2",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADURUM2",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "250",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KULLANICI_ADI",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "15",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADI_SOYADI",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI2",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI3",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI4",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIPARIS_NO",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA_KODU",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA_UNVANI",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "250",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALAN1",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALAN2",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALAN3",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALAN4",
+                        "ORDINAL_POSITION":  25,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

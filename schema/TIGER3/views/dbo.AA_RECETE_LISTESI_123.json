@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_RECETE_LISTESI_123",
+    "full_name":  "dbo.AA_RECETE_LISTESI_123",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[AA_RECETE_LISTESI_123] AS\r\n\r\n\r\nselect \r\nSM.CODE MAMUL_KODU\r\n,SM.NAME MAMUL_ADI\r\n,S.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,R.AMNT MIKTAR\r\n,U.CODE BIRIM\r\n\r\n\r\n\r\n\r\nfrom LG_123_STCOMPLN AS R\r\nINNER JOIN LG_123_ITEMS AS S ON S.LOGICALREF=R.STCREF\r\nINNER JOIN LG_123_ITEMS AS SM ON SM.LOGICALREF=R.MAINCREF\r\nINNER JOIN LG_123_UNITSETL AS U ON U.LOGICALREF=R.UOMREF\r\n\r\n\r\n\r\n\r\n\r\n--WHERE MAINCREF=4869\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MAMUL_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MAMUL_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H003",
+                            "STOK_ADI":  "ANAHTAR DÜĞME SİYAH",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H006",
+                            "STOK_ADI":  "BARA VİDALI 6LI 150 A",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H007",
+                            "STOK_ADI":  "BICAK SİGORTA 10 A",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H008",
+                            "STOK_ADI":  "BICAK SİGORTA 15 A",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H009",
+                            "STOK_ADI":  "BICAK SİGORTA 20 A",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H026",
+                            "STOK_ADI":  "KABLO KORUMA KAPAK GÜNEŞ PANELİ SİYAH",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H054",
+                            "STOK_ADI":  "FİŞ ERKEK 1X16 TOPRAKLI DÜZ",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H078",
+                            "STOK_ADI":  "TEKLİ ÇERÇEVE SİYAH",
+                            "MIKTAR":  "8",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H081",
+                            "STOK_ADI":  "TOPRAKLI PRİZ Ç.K. KAPAKLI SIYAH",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H082",
+                            "STOK_ADI":  "SİGORTA 12V 80 AMPER",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        }
+                    ]
+}

@@ -1,0 +1,199 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "EFK_INSERT",
+    "full_name":  "dbo.EFK_INSERT",
+    "description":  "",
+    "total_rows":  "334",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "SıraNo",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KOD",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "-1",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "YUZDE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "YIL",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS1",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS2",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+
+                ],
+    "sample_data":  [
+                        {
+                            "SıraNo":  "1",
+                            "KOD":  "253.02.0001  -  DÜZ BROTHER DİKİŞ MAKİNASI ",
+                            "LOGICALREF":  "14130",
+                            "YUZDE":  "10",
+                            "YIL":  "10",
+                            "STATUS1":  "253.02.0001",
+                            "STATUS2":  ""
+                        },
+                        {
+                            "SıraNo":  "2",
+                            "KOD":  "253.02.0002  -  OV BROTHER DİKİŞ MAKİNASI ",
+                            "LOGICALREF":  "14131",
+                            "YUZDE":  "10",
+                            "YIL":  "10",
+                            "STATUS1":  "253.02.0002",
+                            "STATUS2":  ""
+                        },
+                        {
+                            "SıraNo":  "3",
+                            "KOD":  "253.02.0003  -  SÜNGER KESME MAKİNASI",
+                            "LOGICALREF":  "14132",
+                            "YUZDE":  "10",
+                            "YIL":  "10",
+                            "STATUS1":  "253.02.0003",
+                            "STATUS2":  ""
+                        },
+                        {
+                            "SıraNo":  "4",
+                            "KOD":  "253.02.0004  -  ZIMBA TABANCASI",
+                            "LOGICALREF":  "14133",
+                            "YUZDE":  "14.2857142857143",
+                            "YIL":  "7",
+                            "STATUS1":  "253.02.0004",
+                            "STATUS2":  ""
+                        },
+                        {
+                            "SıraNo":  "5",
+                            "KOD":  "253.02.0005  -  İPLİK KESME MAKİNASI",
+                            "LOGICALREF":  "14134",
+                            "YUZDE":  "10",
+                            "YIL":  "10",
+                            "STATUS1":  "253.02.0005",
+                            "STATUS2":  ""
+                        },
+                        {
+                            "SıraNo":  "6",
+                            "KOD":  "253.02.0006  -  ÜRETİM YERİ ISITMA SİSTEMİ",
+                            "LOGICALREF":  "14135",
+                            "YUZDE":  "4",
+                            "YIL":  "25",
+                            "STATUS1":  "253.02.0006",
+                            "STATUS2":  ""
+                        },
+                        {
+                            "SıraNo":  "7",
+                            "KOD":  "253.02.0007  -  PRES ELEKTRİKLİ MAKİNE",
+                            "LOGICALREF":  "14136",
+                            "YUZDE":  "5",
+                            "YIL":  "20",
+                            "STATUS1":  "253.02.0007",
+                            "STATUS2":  ""
+                        },
+                        {
+                            "SıraNo":  "8",
+                            "KOD":  "253.02.0008  -  KENAR BANTLAMA MAKİNESİ",
+                            "LOGICALREF":  "14137",
+                            "YUZDE":  "10",
+                            "YIL":  "10",
+                            "STATUS1":  "253.02.0008",
+                            "STATUS2":  ""
+                        },
+                        {
+                            "SıraNo":  "10",
+                            "KOD":  "253.02.0009  -  TALAŞ EMME MAKİNESİ",
+                            "LOGICALREF":  "14169",
+                            "YUZDE":  "10",
+                            "YIL":  "10",
+                            "STATUS1":  "253.02.0045",
+                            "STATUS2":  "GUNCELLENDİ"
+                        },
+                        {
+                            "SıraNo":  "11",
+                            "KOD":  "253.02.0010  -  ARABALI DDFREZE MA. FR2200",
+                            "LOGICALREF":  "14138",
+                            "YUZDE":  "10",
+                            "YIL":  "10",
+                            "STATUS1":  "253.02.0010",
+                            "STATUS2":  ""
+                        }
+                    ]
+}

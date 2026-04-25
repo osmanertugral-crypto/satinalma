@@ -1,0 +1,303 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "ONR_STOK_HAREKETLERI_123",
+    "full_name":  "dbo.ONR_STOK_HAREKETLERI_123",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n--4706\r\nCREATE     VIEW [dbo].[ONR_STOK_HAREKETLERI_123] AS \r\nSELECT \r\nISNULL((SELECT P.PROJE_KODU FROM EVIRA..PROJE P WHERE P.PROJE_REF=SF.PROJE_REF),\u0027PROJESIZ\u0027) PROJE_KODU,\r\nISNULL((SELECT P.PROJE_ADI FROM EVIRA..PROJE P WHERE P.PROJE_REF=SF.PROJE_REF),\u0027PROJESIZ\u0027) PROJE_ADI,\r\n\tSF.TARIH,\r\n\tSF.FIS_NO ,\r\n\tSF.BELGE_NO,\r\n\tAMBAR_KODU=(SELECT AMBAR_KODU+\u0027,\u0027+AMBAR_ADI FROM EVIRA..AMBAR WHERE AMBAR_KODU=SH.AMBAR_KODU),\r\n\tHEDEF_AMBAR=(SELECT AMBAR_KODU+\u0027,\u0027+AMBAR_ADI FROM EVIRA..AMBAR WHERE AMBAR_KODU=SH.HEDEF_AMBAR),\r\n\tFIS_TURU =(SELECT FIS_ADI FROM EVIRA..FISTURLERI WHERE FIS_TURU=SF.FIS_TURU),\r\n\tISLEMTIPI= CASE SF.FIS_GCD WHEN \u00270\u0027 THEN \u0027GIRIS\u0027 WHEN \u00271\u0027 THEN \u0027TUKETIM\u0027 WHEN \u00272\u0027 THEN \u0027TRANSFER\u0027 ELSE \u0027YOK\u0027 END,\r\n\t FIRMA=\r\n\t\r\n\tCASE WHEN (SELECT FIRMA_UNVANI FROM EVIRA..FIRMAKARTI WHERE FIRMA_REF=SH.FIRMA_REF) IS NULL\r\n\tTHEN\r\n\t(SELECT FIRMA_UNVANI FROM EVIRA..SIPARISFISLERI SF , EVIRA..FIRMAKARTI FK WHERE SF.FIRMA_REF=FK.FIRMA_REF AND SF.SB_REF=SH.SB_REF)\r\n\tELSE\r\n\t(SELECT FIRMA_UNVANI FROM EVIRA..FIRMAKARTI WHERE FIRMA_REF=SH.FIRMA_REF)\r\n\tEND,\r\n\tSK.STOK_KODU,\r\n\tSK.STOK_ADI,\r\n\tSK.STOK_TIPI,\r\nSUM(MIKTAR) MIKTAR,\r\n\tBIRIM=(SELECT BIRIM FROM EVIRA..STOKBIRIM WHERE BIRIM_REF=ANABIRIM_REF)\t,\r\n\tKULLANICI=(SELECT KULLANICI_ADI +\u0027 - \u0027 + ADI_SOYADI FROM EVIRA..KULLANICI WHERE KULLANICI_REF=SF.KULLANICI_REF)\r\n\t\r\n\r\n\t----------------------------------\r\n\r\n\r\n\r\n\r\nFROM \r\n\tEVIRA..STOKKARTI SK ,\r\n\tEVIRA..STOKFISLERI SF,\r\n\tEVIRA..STOKHAREKETLERI SH\r\nWHERE \r\n\tSK.STOK_REF=SH.STOK_REF\r\n\tAND SH.FB_REF=SF.FB_REF\r\n\tAND SH.FIS_TURU IN (300,303)\r\n\t--AND SH.FIS_TURU NOT IN (100,51,50)\r\n\t--AND SF.TARIH\u003e=@P_TARIH1 AND SF.TARIH\u003c=@P_TARIH2\r\n\t--AND SF.FIS_GCD=2 AND SK.STOK_ADI=\u0027POLYESTER\u0027\r\n\t\r\nGROUP BY \r\n\tSK.STOK_KODU,STOK_ADI,TARIH,FIS_NO,SH.AMBAR_KODU,SH.HEDEF_AMBAR,SH.FIS_TURU,SF.FIS_GCD,SH.FIRMA_REF,SH.ANABIRIM_REF,SF.KULLANICI_REF,SH.TAKIP_NO\r\n\t,SH.STOK_REF,SH.PAKET,SH.HEDEF_PAKET,SF.SAAT,SF.SB_REF,SF.FIS_TURU,SH.SB_REF\r\n\t,SF.PROJE_REF,SF.BELGE_NO,SK.STOK_REF,SK.STOK_TIPI\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "300",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BELGE_NO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "151",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HEDEF_AMBAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "151",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_TURU",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEMTIPI",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "8",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "250",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_TIPI",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "15",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KULLANICI",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "48",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "PROJE_KODU":  "GSM0509",
+                            "PROJE_ADI":  "Deniz Ulas Tansel Ongel",
+                            "TARIH":  "5.11.2025 00:00:00",
+                            "FIS_NO":  "0013880",
+                            "BELGE_NO":  "HEDİYE",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "5,Montaj Hattı",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X09",
+                            "STOK_ADI":  "ÜÇ AYAK IZGARA ALÜMINYUM TELESKOBIK",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "GSM0509",
+                            "PROJE_ADI":  "Deniz Ulas Tansel Ongel",
+                            "TARIH":  "5.11.2025 00:00:00",
+                            "FIS_NO":  "0013880",
+                            "BELGE_NO":  "HEDİYE",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "5,Montaj Hattı",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X43",
+                            "STOK_ADI":  "ATES ÜSTÜ IZGARA ORTA + ÇANTA",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "PROJESIZ",
+                            "PROJE_ADI":  "PROJESIZ",
+                            "TARIH":  "19.09.2023 00:00:00",
+                            "FIS_NO":  "0004486",
+                            "BELGE_NO":  "",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X45",
+                            "STOK_ADI":  "UYKU TULUMU",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "PROJESIZ",
+                            "PROJE_ADI":  "PROJESIZ",
+                            "TARIH":  "19.09.2023 00:00:00",
+                            "FIS_NO":  "0004486",
+                            "BELGE_NO":  "",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X74",
+                            "STOK_ADI":  "CAMPOUT ALÜMINYUM KAMP MASASI BÜYÜK",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "22",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "PROJESIZ",
+                            "PROJE_ADI":  "PROJESIZ",
+                            "TARIH":  "19.09.2023 00:00:00",
+                            "FIS_NO":  "0004486",
+                            "BELGE_NO":  "",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X75",
+                            "STOK_ADI":  "AYAKLI KATLANIR MANGAL",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "GSM0509",
+                            "PROJE_ADI":  "Deniz Ulas Tansel Ongel",
+                            "TARIH":  "5.11.2025 00:00:00",
+                            "FIS_NO":  "0013880",
+                            "BELGE_NO":  "HEDİYE",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "5,Montaj Hattı",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X76",
+                            "STOK_ADI":  "CAMPOUT BÜYÜK KAMP TENCERE",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "PROJESIZ",
+                            "PROJE_ADI":  "PROJESIZ",
+                            "TARIH":  "19.09.2023 00:00:00",
+                            "FIS_NO":  "0004486",
+                            "BELGE_NO":  "",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X84",
+                            "STOK_ADI":  "CAMPOUT KATLANIR LÜX SANDALYE",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "22",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "PROJESIZ",
+                            "PROJE_ADI":  "PROJESIZ",
+                            "TARIH":  "19.09.2023 00:00:00",
+                            "FIS_NO":  "0004486",
+                            "BELGE_NO":  "",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X85",
+                            "STOK_ADI":  "CAMPOUT PRATIK KAMP SANDALYESI",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "66",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "PROJESIZ",
+                            "PROJE_ADI":  "PROJESIZ",
+                            "TARIH":  "19.09.2023 00:00:00",
+                            "FIS_NO":  "0004486",
+                            "BELGE_NO":  "",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X105",
+                            "STOK_ADI":  "CAMPOUT MOGAN SALDALYE",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "8",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        },
+                        {
+                            "PROJE_KODU":  "PROJESIZ",
+                            "PROJE_ADI":  "PROJESIZ",
+                            "TARIH":  "19.09.2023 00:00:00",
+                            "FIS_NO":  "0004486",
+                            "BELGE_NO":  "",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X134",
+                            "STOK_ADI":  "CAMPOUT KAMP ÇAYDANLIGI",
+                            "STOK_TIPI":  "1",
+                            "MIKTAR":  "2",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN"
+                        }
+                    ]
+}

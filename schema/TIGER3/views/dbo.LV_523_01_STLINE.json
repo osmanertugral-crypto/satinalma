@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_523_01_STLINE",
+    "full_name":  "dbo.LV_523_01_STLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_523_01_STLINE] AS\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.INVOICEREF, LGMAIN.STOCKREF, LGMAIN.LINETYPE, LGMAIN.TRCODE, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.INVOICELNNO,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.CODE\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.CODE\n   ELSE \u0027\u0027 END AS CODE,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.DEFINITION_\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.NAME\n   ELSE \u0027\u0027 END AS LINEEXP\nFROM\n     LG_523_01_STLINE LGMAIN WITH(NOLOCK)\n  LEFT OUTER JOIN LG_523_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF\n  LEFT OUTER JOIN LG_523_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF\n  LEFT OUTER JOIN LG_523_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICELNNO",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "2",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "3",
+                            "PRICE":  "10",
+                            "TOTAL":  "30",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "3",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "3",
+                            "PRICE":  "10",
+                            "TOTAL":  "30",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "002",
+                            "LINEEXP":  "MANGAL"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "3",
+                            "PRICE":  "10",
+                            "TOTAL":  "30",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "003",
+                            "LINEEXP":  "HAMAK"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "2",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "7",
+                            "PRICE":  "10",
+                            "TOTAL":  "70",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "2",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "003",
+                            "LINEEXP":  "HAMAK"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "2",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "7",
+                            "PRICE":  "10",
+                            "TOTAL":  "70",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "2",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "10",
+                            "PRICE":  "20",
+                            "TOTAL":  "200",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "3",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "20",
+                            "TOTAL":  "20",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "002",
+                            "LINEEXP":  "MANGAL"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "3",
+                            "PRICE":  "20",
+                            "TOTAL":  "60",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "003",
+                            "LINEEXP":  "HAMAK"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "2",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "10",
+                            "PRICE":  "20",
+                            "TOTAL":  "200",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "001",
+                            "LINEEXP":  "OCAK"
+                        }
+                    ]
+}

@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "LG_EMUHACC_INS_099",
+    "on_table":  "dbo.LG_099_EMUHACC",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "INSERT"
+               ],
+    "definition":  "CREATE TRIGGER LG_EMUHACC_INS_099 ON LG_099_EMUHACC\nFOR INSERT\nAS\nDECLARE @new_Code       VARCHAR(110),\n        @sBuffer        VARCHAR(110),\n        @upperRef       INT,\n        @new_accountRef INT,\n        @new_level      INT\nSELECT @new_accountRef = I.LOGICALREF,\n       @new_Code= I.CODE,\n       @new_level = I.LEVEL_\nFROM INSERTED I\nSET @upperRef = @new_accountRef\nWHILE (@upperRef \u003c\u003e 0)\n BEGIN\n    INSERT INTO LG_099_EMUHACCSUBACCASGN VALUES(@upperRef,@new_accountRef)\n    EXEC LG_GETEMUHACCUPPERCODE_099 @new_Code, @new_level, @sBuffer OUTPUT, @upperRef OUTPUT\n    SET @new_level = @new_level -1\n END\n"
+}

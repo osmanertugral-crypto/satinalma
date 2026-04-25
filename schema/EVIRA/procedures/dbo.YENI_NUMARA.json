@@ -1,0 +1,27 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "YENI_NUMARA",
+    "full_name":  "dbo.YENI_NUMARA",
+    "created":  "Oct 30 2024 12:56PM",
+    "last_altered":  "Oct 30 2024 12:56PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@num",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "nvarchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "100",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DNN",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "nvarchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "100",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE [dbo].[YENI_NUMARA] @num NVARCHAR(100),\r\n@DNN NVARCHAR(100) OUTPUT \r\n\r\nas\r\nSET NOCOUNT ON\r\n        DECLARE @uzunluk AS NUMERIC(38) SET @uzunluk=0\r\n        DECLARE @SSS AS NVARCHAR(100)\r\n        SET @SSS = \u0027\u0027\r\n        SET @uzunluk = Len(@num)\r\n        If @uzunluk = 0 BEGIN SET @num = 1  goto sn END\r\n        DECLARE @X NUMERIC(38) DECLARE @Y NUMERIC(38) DECLARE @L NVARCHAR(100) SET @X=0 SET @Y=0\r\n        SET @L = @num\r\n        DECLARE @XX NUMERIC(38) DECLARE @HANE NVARCHAR(100) DECLARE @KRK1 NVARCHAR(100) DECLARE @KRK2 NVARCHAR(100) DECLARE @XXX NUMERIC(38)\r\n        SET @XX = 0  SET @KRK1 = \u0027\u0027 SET @KRK2 = \u0027\u0027 SET @XXX=0\r\nBS1:\r\n        SET @XX = @XX + 1\r\n        SET @XX = Convert(NUMERIC(38),@XX)\r\n        SET @HANE =  SUBSTRING(@L, @XX, 1)\r\n        SET @XXX = IsNumeric(@HANE)\r\n        If @HANE \u003c\u003e \u0027-\u0027 BEGIN \r\n            If @XXX = 0 BEGIN \r\n                SET @KRK1 = @KRK1 + @HANE\r\n            END Else BEGIN\r\n                SET @KRK2 = @KRK2 + @HANE\r\n            End \r\n            If Len(@L) = @XX GoTo gg\r\n            GoTo BS1\r\n        END Else BEGIN\r\n            SET @KRK1 = @KRK1 + \u0027-\u0027\r\n            If Len(@L) \u003e @XX  GoTo BS1  \r\n\t\tEND\r\ngg:\r\n        If @KRK2 = \u0027\u0027  BEGIN SET @num = @KRK1  goto sn END\r\n        SET @Y = Convert(NUMERIC(38),@KRK2)\r\n        SET @X = Len(@KRK2)\r\n        SET @Y = @Y + 1\r\n\t\t\r\n        DECLARE @Z NUMERIC(38) SET @Z=0\r\n        SET @Z = Len( RTRIM(LTrim(CONVERT(NVARCHAR(200),@Y))) )\r\n        SET @X = @X - @Z\r\n\r\n        If @X \u003c 0  GoTo CC\r\nBS:\r\n        If Len(@SSS) = @X BEGIN\r\n            GoTo CC\r\n        END Else BEGIN\r\n            SET @SSS = @SSS + \u00270\u0027\r\n\t\t\t\r\n            GoTo BS\r\n        End \r\nCC:\r\n        SET @SSS = @KRK1 + @SSS + LTrim(CONVERT(NVARCHAR(200),@Y))\r\n\t\t\r\n        SET @num = @SSS\r\n\t\t\r\nsn:\r\n        If @num = \u00271\u0027 SET @num = \u00270000001\u0027\r\n\r\nSET @DNN= @num"
+}

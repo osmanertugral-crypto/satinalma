@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KREKPOT_CARI_KART_HESAP_PLANLARI",
+    "full_name":  "dbo.KREKPOT_CARI_KART_HESAP_PLANLARI",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\nCREATE     view [dbo].[KREKPOT_CARI_KART_HESAP_PLANLARI] as\r\n\r\nSELECT     CLCARD.CODE, CLCARD.DEFINITION_, EMUH.MUHCODE, EMUH.MUHDEFINITION_,PYP.CODE AS ODEME_PLANI,PYP.DEFINITION_ AS ODEME_PLANI_ACIKLAMA\r\nFROM            LG_123_CLCARD AS CLCARD LEFT OUTER JOIN\r\n                             (SELECT        CRDACREF.CARDREF, EMUHACC.CODE AS MUHCODE, EMUHACC.DEFINITION_ AS MUHDEFINITION_\r\n                               FROM            lg_123_CRDACREF AS CRDACREF FULL OUTER JOIN\r\n                                                         lg_123_EMUHACC AS EMUHACC ON CRDACREF.ACCOUNTREF = EMUHACC.LOGICALREF\r\n                               WHERE        (CRDACREF.TRCODE = 5)) AS EMUH ON CLCARD.LOGICALREF = EMUH.CARDREF\r\n\t\t\t\t\t\t\t   LEFT OUTER JOIN LG_123_PAYPLANS AS PYP ON CLCARD.PAYMENTREF = PYP.LOGICALREF\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUHCODE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUHDEFINITION_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ODEME_PLANI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ODEME_PLANI_ACIKLAMA",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CODE":  "127.BYMN260",
+                            "DEFINITION_":  "HARUN ÖZMEN",
+                            "MUHCODE":  "127.00.100027",
+                            "MUHDEFINITION_":  "HARUN ÖZMEN",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.BYMN261",
+                            "DEFINITION_":  "NECATİ ATİLLA SOYKAN",
+                            "MUHCODE":  "127.00.170024",
+                            "MUHDEFINITION_":  "NECATİ ATİLLA SOYKAN",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.BYMN262",
+                            "DEFINITION_":  "TUFAN YASEMİN",
+                            "MUHCODE":  "127.00.240021",
+                            "MUHDEFINITION_":  "TUFAN YASEMİN",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.HB-154",
+                            "DEFINITION_":  "EMRULLAH BOZAT",
+                            "MUHCODE":  null,
+                            "MUHDEFINITION_":  null,
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.BYMN263",
+                            "DEFINITION_":  "EROL PAMUKCU",
+                            "MUHCODE":  "127.00.060059",
+                            "MUHDEFINITION_":  "EROL PAMUKCU",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.BYMN264",
+                            "DEFINITION_":  "CEYLAN DOGAN",
+                            "MUHCODE":  "127.00.030021",
+                            "MUHDEFINITION_":  "CEYLAN DOĞAN",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.BYMN265",
+                            "DEFINITION_":  "HASAN İBRAHİM ONUR",
+                            "MUHCODE":  "127.00.100028",
+                            "MUHDEFINITION_":  "HASAN İBRAHİM ONUR",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.TRNDY-262",
+                            "DEFINITION_":  "YİĞİT DOĞAN",
+                            "MUHCODE":  "127.00.280030",
+                            "MUHDEFINITION_":  "YİĞİT DOĞAN",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.BYMN266",
+                            "DEFINITION_":  "YENER AK",
+                            "MUHCODE":  "127.00.280031",
+                            "MUHDEFINITION_":  "YENER AK",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        },
+                        {
+                            "CODE":  "127.BYMN267",
+                            "DEFINITION_":  "BENGÜ CAMKIRAN",
+                            "MUHCODE":  "127.00.020045",
+                            "MUHDEFINITION_":  "BENGÜ CAMKIRAN",
+                            "ODEME_PLANI":  null,
+                            "ODEME_PLANI_ACIKLAMA":  null
+                        }
+                    ]
+}

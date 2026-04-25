@@ -1,0 +1,35 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_CONVFACT",
+    "full_name":  "dbo.LG_CONVFACT",
+    "created":  "Sep  2 2025 12:49PM",
+    "last_altered":  "Sep  2 2025 12:49PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@UINF1",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@UINF2",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@RETFACT",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       }
+                   ],
+    "definition":  "\n   CREATE PROCEDURE LG_CONVFACT\n          @UINF1   FLOAT,\n          @UINF2   FLOAT,\n          @RETFACT FLOAT OUTPUT AS\n   IF (@UINF1 = 0) OR (@UINF2 = 0) OR ((@UINF2/@UINF1) = 0)\n    SELECT @RETFACT = 1\n   ELSE SELECT @RETFACT = @UINF2 / @UINF1\n   "
+}

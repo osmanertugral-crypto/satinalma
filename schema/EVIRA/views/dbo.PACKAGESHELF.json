@@ -1,0 +1,33 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "PACKAGESHELF",
+    "full_name":  "dbo.PACKAGESHELF",
+    "definition":  "CREATE VIEW [dbo].[PACKAGESHELF] AS\r\nSELECT MAX(ADRES) AS ADRES,PAKET,AMBAR_KODU FROM (\r\n\tselect ADRES,PAKET,AMBAR_KODU from AMBARTAKIP WITH(NOLOCK) WHERE PAKET\u003c\u003e\u0027\u0027 GROUP BY ADRES,PAKET,AMBAR_KODU  HAVING CONVERT(FLOAT, CONVERT(NUMERIC(24, 8), SUM(MIKTAR)))\u003c\u003e0 \r\n) TSHF\r\nGROUP BY PAKET,AMBAR_KODU",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ADRES",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PAKET",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

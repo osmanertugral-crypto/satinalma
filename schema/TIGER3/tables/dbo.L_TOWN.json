@@ -1,0 +1,288 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_TOWN",
+    "full_name":  "dbo.L_TOWN",
+    "description":  "",
+    "total_rows":  "996",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CTYREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CNTRNR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SITEID",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RECSTATUS",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORGLOGICREF",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME2",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NETFLAG",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "37",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "TOWN_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "TOWN_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CTYREF, CODE"
+                    },
+                    {
+                        "index_name":  "TOWN_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "NAME"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "01",
+                            "NAME":  "Aladağ",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "02",
+                            "NAME":  "Ceyhan",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "03",
+                            "NAME":  "Çukurova",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "04",
+                            "NAME":  "Feke",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "05",
+                            "NAME":  "İmamoğlu",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "06",
+                            "NAME":  "Karaisalı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "07",
+                            "NAME":  "Karataş",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "08",
+                            "NAME":  "Kozan",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "09",
+                            "NAME":  "Pozantı",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CTYREF":  "1",
+                            "CNTRNR":  "179",
+                            "CODE":  "10",
+                            "NAME":  "Saimbeyli",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  ""
+                        }
+                    ]
+}

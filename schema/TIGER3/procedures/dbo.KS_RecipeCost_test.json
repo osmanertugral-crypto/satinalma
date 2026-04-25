@@ -1,0 +1,27 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "KS_RecipeCost_test",
+    "full_name":  "dbo.KS_RecipeCost_test",
+    "created":  "Jan 30 2024  9:14PM",
+    "last_altered":  "Jan 30 2024  9:15PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@MainItemCode",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "nvarchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "255",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ALLTOTAL",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "decimal",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "18",
+                           "NUMERIC_SCALE":  "2"
+                       }
+                   ],
+    "definition":  "\r\n\r\n\r\nCREATE PROCEDURE [dbo].[KS_RecipeCost_test]\r\n    @MainItemCode NVARCHAR(255),\r\n\t@ALLTOTAL DECIMAL(18, 2) OUTPUT\r\nAS\r\nBEGIN\r\nset @ALLTOTAL = 25\r\nend"
+}

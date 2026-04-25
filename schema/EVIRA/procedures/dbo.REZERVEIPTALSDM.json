@@ -1,0 +1,43 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "REZERVEIPTALSDM",
+    "full_name":  "dbo.REZERVEIPTALSDM",
+    "created":  "Oct 30 2024 12:56PM",
+    "last_altered":  "Oct 30 2024 12:56PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@SD_REF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@MIKTAR",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ABMIKTAR",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@KULLANICI_REF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE [dbo].[REZERVEIPTALSDM] @SD_REF AS INT,\r\n@MIKTAR AS FLOAT,\r\n@ABMIKTAR AS FLOAT,\r\n@KULLANICI_REF AS INT\r\nAS\r\nSET NOCOUNT ON\r\nINSERT INTO REZERVEDETAY (STOK_REF,VARYANT_REF,BIRIM_REF,ANABIRIM_REF,SB_REF,SD_REF,ADRES,DURUM_KODU,TAKIP_NO,PALET,PAKET,AMBAR_KODU,MIKTAR,ABMIKTAR,GCI,KAYIT_TARIH,KULLANICI_REF)\r\nSELECT STOK_REF,VARYANT_REF,BIRIM_REF,ANABIRIM_REF,SB_REF,SD_REF,ADRES,DURUM_KODU,TAKIP_NO,PALET,PAKET,AMBAR_KODU,@MIKTAR*-1 AS MIKTAR,@ABMIKTAR*-1 AS ABMIKTAR,2 AS GCI,GETDATE() AS KAYIT_TARIHI,@KULLANICI_REF\r\nFROM REZERVEDETAY WITH(NOLOCK)\r\nWHERE SD_REF=@SD_REF\r\nGROUP BY STOK_REF,VARYANT_REF,BIRIM_REF,ANABIRIM_REF,SB_REF,SD_REF,ADRES,DURUM_KODU,TAKIP_NO,PALET,PAKET,AMBAR_KODU\r\nHAVING SUM(ABMIKTAR)\u003c\u003e0"
+}

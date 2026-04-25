@@ -1,0 +1,182 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "TFICHE",
+    "full_name":  "dbo.TFICHE",
+    "description":  "",
+    "total_rows":  "23",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "TFICHEREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TMENUREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FTYPE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "5",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FRWN",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FNAME",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TTYPE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__TFICHE__F1AE4CF5AA92926E",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "TFICHEREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "TFICHEREF":  "5",
+                            "TMENUREF":  "2",
+                            "FTYPE":  "01",
+                            "FRWN":  "1",
+                            "FNAME":  "PLANLAMA  KABUL",
+                            "TTYPE":  "0"
+                        },
+                        {
+                            "TFICHEREF":  "6",
+                            "TMENUREF":  "2",
+                            "FTYPE":  "301",
+                            "FRWN":  "2",
+                            "FNAME":  "RAFA YERLESTIR",
+                            "TTYPE":  "0"
+                        },
+                        {
+                            "TFICHEREF":  "7",
+                            "TMENUREF":  "2",
+                            "FTYPE":  "03",
+                            "FRWN":  "3",
+                            "FNAME":  "TOPTAN IADE KABUL",
+                            "TTYPE":  "0"
+                        },
+                        {
+                            "TFICHEREF":  "9",
+                            "TMENUREF":  "4",
+                            "FTYPE":  "06",
+                            "FRWN":  "1",
+                            "FNAME":  "IADE SEVK",
+                            "TTYPE":  "0"
+                        },
+                        {
+                            "TFICHEREF":  "25",
+                            "TMENUREF":  "3",
+                            "FTYPE":  "100",
+                            "FRWN":  "1",
+                            "FNAME":  "SAYIM",
+                            "TTYPE":  "0"
+                        },
+                        {
+                            "TFICHEREF":  "1013",
+                            "TMENUREF":  "1005",
+                            "FTYPE":  "08",
+                            "FRWN":  "1",
+                            "FNAME":  "SEVK",
+                            "TTYPE":  "1"
+                        },
+                        {
+                            "TFICHEREF":  "1014",
+                            "TMENUREF":  "3",
+                            "FTYPE":  "150",
+                            "FRWN":  "2",
+                            "FNAME":  "STOK GIRIS (ENTEGRE OLUR)",
+                            "TTYPE":  "0"
+                        },
+                        {
+                            "TFICHEREF":  "1015",
+                            "TMENUREF":  "3",
+                            "FTYPE":  "151",
+                            "FRWN":  "3",
+                            "FNAME":  "STOK CIKIS (ENTEGRE OLUR)",
+                            "TTYPE":  "0"
+                        },
+                        {
+                            "TFICHEREF":  "1016",
+                            "TMENUREF":  "3",
+                            "FTYPE":  "25",
+                            "FRWN":  "4",
+                            "FNAME":  "AMBAR TRANSFER",
+                            "TTYPE":  "0"
+                        },
+                        {
+                            "TFICHEREF":  "1019",
+                            "TMENUREF":  "3",
+                            "FTYPE":  "25",
+                            "FRWN":  "5",
+                            "FNAME":  "YER DEGISTIRME",
+                            "TTYPE":  "0"
+                        }
+                    ]
+}

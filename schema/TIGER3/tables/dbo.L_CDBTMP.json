@@ -1,0 +1,189 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_CDBTMP",
+    "full_name":  "dbo.L_CDBTMP",
+    "description":  "",
+    "total_rows":  "1295",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MODULE_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INFOTYPE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OBJID",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INSTID",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LDATA",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "CDBTMP_I1",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "MODULE_, INFOTYPE, OBJID, INSTID"
+                    },
+                    {
+                        "index_name":  "CDBTMP_I2",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LREF":  "7798",
+                            "MODULE_":  "10525",
+                            "INFOTYPE":  "1001",
+                            "OBJID":  "152601739",
+                            "INSTID":  "13",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7799",
+                            "MODULE_":  "31806",
+                            "INFOTYPE":  "1001",
+                            "OBJID":  "1774612631",
+                            "INSTID":  "130",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7800",
+                            "MODULE_":  "0",
+                            "INFOTYPE":  "500",
+                            "OBJID":  "1000",
+                            "INSTID":  "130",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7801",
+                            "MODULE_":  "416",
+                            "INFOTYPE":  "1001",
+                            "OBJID":  "1256901202",
+                            "INSTID":  "105",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7802",
+                            "MODULE_":  "4001",
+                            "INFOTYPE":  "1001",
+                            "OBJID":  "2039826740",
+                            "INSTID":  "105",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7803",
+                            "MODULE_":  "0",
+                            "INFOTYPE":  "500",
+                            "OBJID":  "1000",
+                            "INSTID":  "134",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7804",
+                            "MODULE_":  "31806",
+                            "INFOTYPE":  "1001",
+                            "OBJID":  "1774612631",
+                            "INSTID":  "134",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7805",
+                            "MODULE_":  "0",
+                            "INFOTYPE":  "-31972",
+                            "OBJID":  "1000",
+                            "INSTID":  "13",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7806",
+                            "MODULE_":  "10187",
+                            "INFOTYPE":  "1001",
+                            "OBJID":  "520349104",
+                            "INSTID":  "112",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7807",
+                            "MODULE_":  "0",
+                            "INFOTYPE":  "-31972",
+                            "OBJID":  "1000",
+                            "INSTID":  "134",
+                            "LDATA":  "\u003cbinary\u003e"
+                        }
+                    ]
+}

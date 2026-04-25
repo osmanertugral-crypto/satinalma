@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_01_GELİR_TABLOSU",
+    "full_name":  "dbo.DST_123_01_GELİR_TABLOSU",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[DST_123_01_GELİR_TABLOSU] AS\r\nSELECT     \r\n--EMF.FICHENO AS [Fiş No], \r\n--CASE \r\n--WHEN EMF.TRCODE=1 THEN \u0027Açılış\u0027\r\n--WHEN EMF.TRCODE=2 THEN \u0027Tahsil\u0027\r\n--WHEN EMF.TRCODE=3 THEN \u0027Tediye\u0027\r\n--WHEN EMF.TRCODE=4 THEN \u0027Mahsup\u0027\r\n--WHEN EMF.TRCODE=5 THEN \u0027Özel Fiş\u0027\r\n--WHEN EMF.TRCODE=6 THEN \u0027Kur Farkı Fişi\u0027\r\n--WHEN EMF.TRCODE=7 THEN \u0027Kapanış\u0027\r\n--WHEN EMF.TRCODE=8 THEN \u0027Enflasyon Muhasebesi Fişi\u0027\r\n--WHEN EMF.TRCODE=9 THEN \u0027Konsolidasyon Düzeltme Fişi\u0027\r\n--WHEN EMF.TRCODE=9 THEN \u0027TFRS Düzeltme Fişi\u0027\r\n--ELSE \u0027\u0027 end [Fiş Türü],\r\nEML.KEBIRCODE [Kebir],\r\n--CASE EMF.MODULENR \r\n--WHEN 1 THEN \u0027Malzeme Fişi\u0027 WHEN 2 THEN \u0027Satınalma Ft\u0027 WHEN 3 THEN \u0027Satış Ft\u0027 WHEN 4 THEN \u0027Cari Hesap Fişi\u0027 \r\n--WHEN 5 THEN \u0027Çek-Senet Bordro\u0027 WHEN 6 THEN \u0027Banka Fişi\u0027 WHEN 7 THEN \u0027Kasa İşlemi\u0027 WHEN 20 THEN \u0027Dağıtım Fişi\u0027 \r\n--WHEN 25 THEN \u0027Sabit Kıymet\u0027 WHEN 0 THEN \u0027Kaynak Fiş Yok\u0027 ELSE \u0027\u0027 END AS [Kaynak Fiş Türü], \r\nYEAR(EMF.DATE_) YIL, \r\nMONTH(EMF.DATE_) AY ,\r\n--EMF.DATE_ AS [Fiş Tarihi], \r\n--EMF.JOURNALNO AS [Yevmiye No], \r\nEMU.CODE AS [Hesap Kodu],\r\nEMU.DEFINITION_ AS [Hesap Adı],\r\n \r\nSUM(EML.DEBIT)AS Borç,\r\nSUM(EML.CREDIT) AS Alacak,\r\n\r\nSUM(CASE WHEN  EML.DEBIT \u003eEML.CREDIT THEN EML.DEBIT -EML.CREDIT ELSE 0 END )AS Borç_Bakiye,\r\n--(EML.DEBIT -EML.CREDIT) AS \r\nSUM(CASE WHEN  EML.DEBIT \u003cEML.CREDIT THEN EML.CREDIT -EML.DEBIT ELSE 0 END) AS Alacak_Bakiye,\r\n\r\nSUM(CASE WHEN  EML.DEBIT \u003eEML.CREDIT THEN EML.DEBIT -EML.CREDIT ELSE 0 END )-SUM(CASE WHEN  EML.DEBIT \u003cEML.CREDIT THEN EML.CREDIT -EML.DEBIT ELSE 0 END) AS BAKIYE,\r\n--EML.CREDIT-EML.DEBIT as Alacak_Bakiye,\r\n--CASE WHEN EML.TRCURR = 0 THEN \u0027TL\u0027 WHEN EML.TRCURR = 1 THEN \u0027USD\u0027 WHEN EML.TRCURR = 20 THEN \u0027EUR\u0027 ELSE \u0027\u0027 END AS Döviz,\r\nSUM(CASE WHEN EML.SIGN = 0 THEN EML.TRNET ELSE 0 END) AS [Borç İD], SUM(CASE WHEN EML.SIGN = 1 THEN EML.TRNET ELSE 0 END) AS [Alacak İD]\r\n--EML.LINEEXP AS Açıklama\r\n--,EML.CROSSCODE [Karşı Hesap]\r\n--,EMF.CAPIBLOCK_CREADEDDATE [Eklenme Tarihi]\r\n--,CPU.NAME [Ekleyen]\r\n\r\n\r\n\r\nFROM dbo.LG_123_01_EMFLINE AS EML WITH (NOLOCK) \r\n       LEFT OUTER JOIN dbo.LG_123_EMUHACC AS EMU WITH (NOLOCK)  ON EML.ACCOUNTREF = EMU.LOGICALREF \r\n       LEFT OUTER JOIN dbo.LG_123_01_EMFICHE AS EMF WITH (NOLOCK)  ON EMF.LOGICALREF = EML.ACCFICHEREF\r\n       --LEFT OUTER JOIN L_CAPIUSER AS CPU  WITH (NOLOCK) ON CPU.NR=EMF.CAPIBLOCK_CREATEDBY\r\n\r\nWHERE EML.CANCELLED=0 AND EMF.DATE_ BETWEEN \u002720220101\u0027 AND \u002721001231\u0027\r\nand \r\n\r\nEML.KEBIRCODE IN (\u0027600\u0027, \u0027601\u0027, \u0027602\u0027, \u0027642\u0027, \u0027646\u0027, \u0027679\u0027) --and EMU.CODE=\u0027601.01.001.0006\u0027\r\nGROUP BY EML.KEBIRCODE,EMF.DATE_,EMU.CODE,EMU.DEFINITION_\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Kebir",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YIL",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Hesap Kodu",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Hesap Adı",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç_Bakiye",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak_Bakiye",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç İD",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak İD",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.50.000010",
+                            "Hesap Adı":  "İHRAÇ KAYITLI SATIŞLAR - KALIP",
+                            "Borç":  "0",
+                            "Alacak":  "5744117,74",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "5744117,74",
+                            "BAKIYE":  "-5744117,74",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "307200"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.50.000000",
+                            "Hesap Adı":  "İHRAÇ KAYITLI SATIŞLAR - KARAVAN",
+                            "Borç":  "0",
+                            "Alacak":  "1682578,59",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "1682578,59",
+                            "BAKIYE":  "-1682578,59",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "82922"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.50.000010",
+                            "Hesap Adı":  "İHRAÇ KAYITLI SATIŞLAR - KALIP",
+                            "Borç":  "0",
+                            "Alacak":  "262829",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "262829",
+                            "BAKIYE":  "-262829",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "14000"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.00.000018",
+                            "Hesap Adı":  "YURTİÇİ SATIŞLAR - KARAVAN  % 18",
+                            "Borç":  "0",
+                            "Alacak":  "173728,81",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "173728,81",
+                            "BAKIYE":  "-173728,81",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "173728,81"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "2",
+                            "Hesap Kodu":  "600.20.000030",
+                            "Hesap Adı":  "YURTİÇİ SATIŞLAR - TİC.ÜRÜN   % 18",
+                            "Borç":  "0",
+                            "Alacak":  "8474,58",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "8474,58",
+                            "BAKIYE":  "-8474,58",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "8474,58"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "2",
+                            "Hesap Kodu":  "600.50.000000",
+                            "Hesap Adı":  "İHRAÇ KAYITLI SATIŞLAR - KARAVAN",
+                            "Borç":  "0",
+                            "Alacak":  "532965,62",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "532965,62",
+                            "BAKIYE":  "-532965,62",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "26436"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.50.000010",
+                            "Hesap Adı":  "İHRAÇ KAYITLI SATIŞLAR - KALIP",
+                            "Borç":  "0",
+                            "Alacak":  "1798189,34",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "1798189,34",
+                            "BAKIYE":  "-1798189,34",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "95884"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "2",
+                            "Hesap Kodu":  "600.50.000000",
+                            "Hesap Adı":  "İHRAÇ KAYITLI SATIŞLAR - KARAVAN",
+                            "Borç":  "0",
+                            "Alacak":  "3238139,32",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "3238139,32",
+                            "BAKIYE":  "-3238139,32",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "161164"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "2",
+                            "Hesap Kodu":  "600.00.000018",
+                            "Hesap Adı":  "YURTİÇİ SATIŞLAR - KARAVAN  % 18",
+                            "Borç":  "0",
+                            "Alacak":  "67957,81",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "67957,81",
+                            "BAKIYE":  "-67957,81",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "67957,81"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "YIL":  "2023",
+                            "AY":  "2",
+                            "Hesap Kodu":  "600.20.000030",
+                            "Hesap Adı":  "YURTİÇİ SATIŞLAR - TİC.ÜRÜN   % 18",
+                            "Borç":  "0",
+                            "Alacak":  "10472,02",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "10472,02",
+                            "BAKIYE":  "-10472,02",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "10472,02"
+                        }
+                    ]
+}

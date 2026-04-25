@@ -389,6 +389,197 @@ function initDb() {
   // stok_kodu tekil index (varsa atla)
   try { database.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_warehouse_stok_kodu ON warehouse_stock(stok_kodu)'); } catch(e) {}
 
+  // Malzeme ihtiyaç cache tablosu
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS malzeme_ihtiyac_cache (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      proje_kodu TEXT,
+      karavan_adi TEXT,
+      alt_kod_tur TEXT,
+      alt_kod TEXT,
+      alt_adi TEXT,
+      miktar REAL DEFAULT 0,
+      birim TEXT,
+      projelere_cikislar REAL DEFAULT 0,
+      elde_kalan REAL DEFAULT 0,
+      uretim_depo REAL DEFAULT 0,
+      acik_satinalma_siparisleri REAL DEFAULT 0,
+      satinalma REAL DEFAULT 0,
+      birim_fiyatlar REAL DEFAULT 0,
+      son_satinalma_cari TEXT,
+      tutar REAL DEFAULT 0,
+      alt_stok_grup_kodu TEXT,
+      synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS malzeme_ihtiyac_sync_log (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      row_count INTEGER NOT NULL DEFAULT 0,
+      status TEXT NOT NULL DEFAULT 'success',
+      message TEXT,
+      synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+
+  // Ciro cache tabloları
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS ciro_cache (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      firma TEXT NOT NULL,
+      yil INTEGER,
+      ay INTEGER,
+      tarih TEXT,
+      fatura_no TEXT,
+      stok_kodu TEXT,
+      cari_adi TEXT,
+      stok_adi TEXT,
+      miktar REAL DEFAULT 0,
+      fiyat REAL DEFAULT 0,
+      kdv REAL DEFAULT 0,
+      tutar REAL DEFAULT 0,
+      tutar_usd REAL DEFAULT 0,
+      tutar_eur REAL DEFAULT 0,
+      tur TEXT,
+      fis_turu TEXT,
+      is_emri_no TEXT,
+      is_emri_adi TEXT,
+      islem_dovizi TEXT,
+      synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS finance_ekstre_cache (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      code TEXT,
+      definition_ TEXT,
+      sign INTEGER DEFAULT 0,
+      borc REAL DEFAULT 0,
+      alacak REAL DEFAULT 0,
+      indate TEXT,
+      duedate TEXT,
+      vadesuresi INTEGER DEFAULT 0,
+      islem_dovizi TEXT,
+      islem_doviz_tutari REAL DEFAULT 0,
+      typ TEXT,
+      fis_no TEXT,
+      belge_no TEXT,
+      satir_aciklamasi TEXT,
+      cari_tur TEXT,
+      logicalref INTEGER,
+      synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+
+  // Tiger3 satınalma geçmişi ve fiyat analizi cache tabloları
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS tiger_purchase_history (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      tarih TEXT,
+      fis_no TEXT,
+      malzeme_kodu TEXT,
+      malzeme_adi TEXT,
+      tedarikci TEXT,
+      miktar REAL DEFAULT 0,
+      bekleyen REAL DEFAULT 0,
+      iade INTEGER DEFAULT 0,
+      birim_fiyat REAL DEFAULT 0,
+      net_tutar REAL DEFAULT 0,
+      fatura_tutar REAL DEFAULT 0,
+      para_birimi TEXT DEFAULT 'TRY',
+      firma TEXT DEFAULT 'LG_123',
+      synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS tiger_price_analysis (
+      malzeme_kodu TEXT PRIMARY KEY,
+      malzeme_adi TEXT,
+      stok_grup TEXT,
+      toplam_miktar REAL DEFAULT 0,
+      adet INTEGER DEFAULT 0,
+      ilk_tarih TEXT,
+      ilk_fiyat REAL,
+      son_tarih TEXT,
+      son_fiyat REAL,
+      ort_fiyat REAL,
+      q4_ort REAL,
+      recent_ort REAL,
+      synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS tiger_reports_sync_log (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL,
+      row_count INTEGER NOT NULL DEFAULT 0,
+      status TEXT NOT NULL DEFAULT 'success',
+      message TEXT,
+      synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+  try { database.exec('CREATE INDEX IF NOT EXISTS idx_tph_tarih ON tiger_purchase_history(tarih)'); } catch(e) {}
+  try { database.exec('CREATE INDEX IF NOT EXISTS idx_tph_kod ON tiger_purchase_history(malzeme_kodu)'); } catch(e) {}
+
+  // EVIRA depo stok cache tabloları
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS evira_stock_cache (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      ambar_kodu TEXT,
+      ambar_adi  TEXT,
+      stok_kodu  TEXT,
+      stok_adi   TEXT,
+      birim      TEXT,
+      miktar     REAL DEFAULT 0,
+      synced_at  TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS evira_sync_log (
+      id        INTEGER PRIMARY KEY AUTOINCREMENT,
+      row_count INTEGER NOT NULL DEFAULT 0,
+      status    TEXT NOT NULL DEFAULT 'success',
+      message   TEXT,
+      synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+  try { database.exec('CREATE INDEX IF NOT EXISTS idx_esc_stok ON evira_stock_cache(stok_kodu)'); } catch(e) {}
+  try { database.exec('CREATE INDEX IF NOT EXISTS idx_esc_ambar ON evira_stock_cache(ambar_kodu)'); } catch(e) {}
+
+  // TIGER3 bağlantı ve zamanlayıcı ayarları
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS db_settings (
+      key TEXT PRIMARY KEY,
+      value TEXT,
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+
+  // Varsayılan TIGER3 bağlantı ayarlarını ekle (zaten varsa atla)
+  const defaultSettings = [
+    ['tiger3_server',   '10.10.10.241'],
+    ['tiger3_database', 'TIGER3'],
+    ['tiger3_user',     'webservices'],
+    ['tiger3_password', 'Aa123456'],
+    ['tiger3_port',     '1433'],
+    ['evira_server',   '10.10.10.241'],
+    ['evira_database', 'EVIRA'],
+    ['evira_user',     'webservices'],
+    ['evira_password', 'Aa123456'],
+    ['evira_port',     '1433'],
+    ['auto_refresh_enabled',  '0'],
+    ['auto_refresh_interval', '60'],
+    ['last_refresh_at',     ''],
+    ['last_refresh_status', ''],
+  ];
+  const upsertSetting = database.prepare(
+    'INSERT OR IGNORE INTO db_settings (key, value) VALUES (?, ?)'
+  );
+  for (const [key, value] of defaultSettings) {
+    upsertSetting.run(key, value);
+  }
+
+  // allowed_pages sütununu users tablosuna ekle (varsa atla)
+  try { database.exec('ALTER TABLE users ADD COLUMN allowed_pages TEXT'); } catch(e) {}
+  // external_code sütununu suppliers tablosuna ekle (varsa atla)
+  try { database.exec('ALTER TABLE suppliers ADD COLUMN external_code TEXT'); } catch(e) {}
+  // rating sütununu suppliers tablosuna ekle (varsa atla)
+  try { database.exec('ALTER TABLE suppliers ADD COLUMN rating INTEGER DEFAULT 0'); } catch(e) {}
+
   console.log('Veritabanı başlatıldı.');
 }
 

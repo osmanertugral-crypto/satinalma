@@ -1,0 +1,35 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "KS_RecipeCostSub",
+    "full_name":  "dbo.KS_RecipeCostSub",
+    "created":  "Jan 30 2024  7:09PM",
+    "last_altered":  "Jan 30 2024  7:49PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@SubItemRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ProductionMultiplier",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TOTALSUB",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "decimal",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "18",
+                           "NUMERIC_SCALE":  "2"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE dbo.KS_RecipeCostSub \r\n    @SubItemRef int,\r\n    @ProductionMultiplier int,\r\n    @TOTALSUB DECIMAL(18,2) OUTPUT\r\nAS\r\n\r\n\r\nBEGIN\r\n    --DECLARE @ALLTOTAL DECIMAL(18,2) = 0;\r\n\r\nDECLARE @CARD_TYPE nvarchar(50)\r\nDECLARE @SUB_ITEMS_REF int\r\nDECLARE @SUB_AMNT decimal(18,2)\r\nDECLARE @MAIN_AMNT decimal(18,2)\r\nDECLARE @UNIT_PRICE decimal(18,2)\r\nDECLARE @TOTAL decimal(18,2)\r\nDECLARE @TOTAL_TEMP decimal(18,2)\r\n\r\nDECLARE MY_CURSOR CURSOR \r\n  LOCAL STATIC READ_ONLY FORWARD_ONLY\r\nFOR \r\nSELECT \n\tcase ITM.CARDTYPE WHEN 1 THEN \u0027TM\u0027 \n\t\t  WHEN 10 THEN \u0027HM\u0027 \n\t\t  WHEN 11 THEN \u0027YM\u0027 \n\t\t  WHEN 12 THEN \u0027MM\u0027 \n\t\t  WHEN 13 THEN \u0027TK\u0027 \n\t\t  WHEN 4 THEN \u0027SK\u0027 \n\tELSE \u0027\u0027 END AS CARD_TYPE,\n\tISNULL(case when ITM.CARDTYPE IN (11,12) THEN ITM.LOGICALREF END ,0) SUB_ITEMS_REF , \n\t(CASE WHEN UNTA.CONVFACT1 = 0 THEN (STL.AMNT * (UNTA.CONVFACT2)) ELSE (STL.AMNT * (UNTA.CONVFACT2 / UNTA.CONVFACT1 )) END) * @ProductionMultiplier AS MAIN_AMNT,\n\t(CASE WHEN UNTA.CONVFACT1 = 0 THEN (STL.AMNT * (UNTA.CONVFACT2)) ELSE (STL.AMNT * (UNTA.CONVFACT2 / UNTA.CONVFACT1 )) END) AS SUB_AMNT,\n\tCAST(CAST(\r\n\t\tISNULL\r\n\t\t(CASE \r\n\t\t\tWHEN (SELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=ITM.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1) ORDER BY DATE_ DESC) IS NULL \r\n\t\t\t\tTHEN (SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK) WHERE CARDREF=ITM.LOGICALREF ORDER BY BEGDATE DESC    )\t\r\n\t\r\n\t\t\tELSE (SELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=ITM.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1) ORDER BY DATE_ DESC) \r\n\t\r\n\t\tEND ,0) AS  DECIMAL(18,2)) AS float) UNIT_PRICE,\r\n\t\t((CASE WHEN UNTA.CONVFACT1 = 0 THEN (STL.AMNT * (UNTA.CONVFACT2)) ELSE (STL.AMNT * (UNTA.CONVFACT2 / UNTA.CONVFACT1 )) END) *\r\n\t\tCAST(CAST(\r\n\t\tISNULL\r\n\t\t(CASE \r\n\t\t\tWHEN (SELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=ITM.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1) ORDER BY DATE_ DESC) IS NULL \r\n\t\t\t\tTHEN (SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK) WHERE CARDREF=ITM.LOGICALREF ORDER BY BEGDATE DESC    )\t\r\n\t\r\n\t\t\tELSE (SELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=ITM.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1) ORDER BY DATE_ DESC) \r\n\t\r\n\t\tEND ,0) AS  DECIMAL(18,2)) AS float)) TOTAL\n\tFROM LG_123_STCOMPLN  STL  \n\tleft outer JOIN LG_123_ITMCLSAS ITC ON ITC.LOGICALREF=STL.STCREF\n\tLEFT OUTER JOIN LG_123_ITEMS ITMM ON ITMM.LOGICALREF=STL.MAINCREF \n\tLEFT OUTER JOIN LG_123_ITEMS ITM ON ITM.LOGICALREF=STL.STCREF\n\tLEFT OUTER JOIN LG_123_UNITSETL UNL ON UNL.LOGICALREF=STL.UOMREF\n\tLEFT OUTER JOIN LG_123_ITMUNITA UNTA ON UNTA.ITEMREF = ITM.LOGICALREF AND STL.UOMREF = UNTA.UNITLINEREF\n\tWHERE STL.COMPTYPE=0 AND ITMM.ACTIVE=0 AND ITM.ACTIVE=0\n\tAND ITMM.LOGICALREF = @SubItemRef \r\n\r\n\r\n\r\nOPEN MY_CURSOR\r\n\r\nSET @TOTALSUB = 0\r\nFETCH NEXT FROM MY_CURSOR INTO @CARD_TYPE , @SUB_ITEMS_REF , @MAIN_AMNT ,@SUB_AMNT , @UNIT_PRICE , @TOTAL \r\nWHILE @@FETCH_STATUS = 0\r\nBEGIN \r\n\t\t\r\n\t\tSET @TOTALSUB = @TOTALSUB + @TOTAL\r\n\t\t\r\n\t\t--IF @SUB_ITEMS_REF = 0 BEGIN SET @TOTALSUB = @TOTALSUB + @TOTAL END\r\n\t\t--ELSE IF @SUB_ITEMS_REF \u003c\u003e 0 \r\n\t\t--BEGIN \r\n\t\t--\tEXEC dbo.KS_RecipeCostSub @SubItemRef, @ProductionMultiplier, @TOTAL_TEMP OUTPUT \r\n\t\t--\tSET @TOTALSUB = @TOTALSUB + @TOTAL_TEMP\r\n\t\t--END;\r\n\r\n\r\n    FETCH NEXT FROM MY_CURSOR INTO @CARD_TYPE , @SUB_ITEMS_REF , @MAIN_AMNT , @SUB_AMNT , @UNIT_PRICE , @TOTAL \r\nEND\r\nCLOSE MY_CURSOR\r\nDEALLOCATE MY_CURSOR;\r\n\r\nEND\r\n"
+}

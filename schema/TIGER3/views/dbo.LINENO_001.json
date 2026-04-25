@@ -1,0 +1,150 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LINENO_001",
+    "full_name":  "dbo.LINENO_001",
+    "definition":  "CREATE VIEW LINENO_001 AS\r\nSELECT \r\nORFICHE.LOGICALREF AS ORFICHE_LOGICALREF,\r\nORFLINE.LOGICALREF AS  ORFLINE_LOGICALREF,\r\nORFICHE.PROJECTREF AS ORFICHE_PROJECTREF,\r\nORFLINE.PROJECTREF AS ORFLINE_PROJECTREF,\r\nORFLINE.STOCKREF AS ORFLINE_STOCKREF,\r\nCASE WHEN LINENO_=1 THEN LINENET ELSE 0 END AS B_SATIR_TUTAR\r\n,LINENO_\r\nFROM LG_001_01_ORFICHE AS ORFICHE \r\nINNER JOIN LG_001_01_ORFLINE AS ORFLINE ON ORFICHE.LOGICALREF=ORFLINE.ORDFICHEREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ORFICHE_LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFLINE_LOGICALREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFICHE_PROJECTREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFLINE_PROJECTREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFLINE_STOCKREF",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "B_SATIR_TUTAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "ORFICHE_LOGICALREF":  "51",
+                            "ORFLINE_LOGICALREF":  "216",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4282",
+                            "B_SATIR_TUTAR":  "2000",
+                            "LINENO_":  "1"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "53",
+                            "ORFLINE_LOGICALREF":  "218",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4350",
+                            "B_SATIR_TUTAR":  "277,75",
+                            "LINENO_":  "1"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "55",
+                            "ORFLINE_LOGICALREF":  "220",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "5187",
+                            "B_SATIR_TUTAR":  "4570,03",
+                            "LINENO_":  "1"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "57",
+                            "ORFLINE_LOGICALREF":  "222",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4319",
+                            "B_SATIR_TUTAR":  "285",
+                            "LINENO_":  "1"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "58",
+                            "ORFLINE_LOGICALREF":  "223",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4603",
+                            "B_SATIR_TUTAR":  "915",
+                            "LINENO_":  "1"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "58",
+                            "ORFLINE_LOGICALREF":  "224",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4332",
+                            "B_SATIR_TUTAR":  "0",
+                            "LINENO_":  "2"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "58",
+                            "ORFLINE_LOGICALREF":  "225",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4167",
+                            "B_SATIR_TUTAR":  "0",
+                            "LINENO_":  "3"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "58",
+                            "ORFLINE_LOGICALREF":  "226",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4334",
+                            "B_SATIR_TUTAR":  "0",
+                            "LINENO_":  "4"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "59",
+                            "ORFLINE_LOGICALREF":  "227",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4302",
+                            "B_SATIR_TUTAR":  "1589,26",
+                            "LINENO_":  "1"
+                        },
+                        {
+                            "ORFICHE_LOGICALREF":  "59",
+                            "ORFLINE_LOGICALREF":  "228",
+                            "ORFICHE_PROJECTREF":  "0",
+                            "ORFLINE_PROJECTREF":  "0",
+                            "ORFLINE_STOCKREF":  "4648",
+                            "B_SATIR_TUTAR":  "0",
+                            "LINENO_":  "2"
+                        }
+                    ]
+}

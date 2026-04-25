@@ -1,0 +1,90 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "RAPORMENU",
+    "full_name":  "dbo.RAPORMENU",
+    "description":  "",
+    "total_rows":  "17",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "RAPORMENU_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MENU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "200",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__RAPORMEN__5FEF7605132A710F",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "RAPORMENU_REF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "RAPORMENU_REF":  "1",
+                            "MENU":  "1 - Stock Reports"
+                        },
+                        {
+                            "RAPORMENU_REF":  "2",
+                            "MENU":  "1 - Stok Raporlari"
+                        },
+                        {
+                            "RAPORMENU_REF":  "3",
+                            "MENU":  "2 - Sales Order Reports"
+                        },
+                        {
+                            "RAPORMENU_REF":  "4",
+                            "MENU":  "2 - Satis Siparis Raporlari"
+                        },
+                        {
+                            "RAPORMENU_REF":  "5",
+                            "MENU":  "3 - Purchase Order Reports"
+                        },
+                        {
+                            "RAPORMENU_REF":  "6",
+                            "MENU":  "3 - Satinalma Siparis Raporlari"
+                        },
+                        {
+                            "RAPORMENU_REF":  "7",
+                            "MENU":  "4 - Sales Planning Reports"
+                        },
+                        {
+                            "RAPORMENU_REF":  "8",
+                            "MENU":  "4 - Sevk Planlama Raporlari"
+                        },
+                        {
+                            "RAPORMENU_REF":  "9",
+                            "MENU":  "5 - Mal Kabul Planlama Raporlari"
+                        },
+                        {
+                            "RAPORMENU_REF":  "10",
+                            "MENU":  "5 - Purchase Planning Reports"
+                        }
+                    ]
+}

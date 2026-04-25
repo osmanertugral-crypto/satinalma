@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AARP_TEDARIKCI_ODEME_RAPORU_ICMAL",
+    "full_name":  "dbo.AARP_TEDARIKCI_ODEME_RAPORU_ICMAL",
+    "definition":  "CREATE VIEW AARP_TEDARIKCI_ODEME_RAPORU_ICMAL AS \r\nSELECT DISTINCT \u0027EUR\u0027 DOVIZ,\r\nCONVERT(VARCHAR ,GETDATE() ,104) TARIH,CARI, SUM(TUTAR_ALACAK) AS BAKIYE,\r\n(SELECT SUM(TUTAR_ALACAK) from AARP_TEDARIKCI_ODEME_RAPORU_DATA ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003c=0 AND ARATBL.DOVIZ=\u0027EUR\u0027) AS VADESI_GELEN\r\n,(SELECT SUM(TUTAR_ALACAK) from AARP_TEDARIKCI_ODEME_RAPORU_DATA ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003e0 AND ARATBL.DOVIZ=\u0027EUR\u0027) AS VADESI_GELMEYEN\r\n\r\n\r\nFROM AARP_TEDARIKCI_ODEME_RAPORU_DATA EURTBL WHERE DOVIZ=\u0027EUR\u0027  \r\nGROUP BY CARI\r\n\r\nUNION ALL\r\n\r\nSELECT DISTINCT \u0027USD\u0027 DOVIZ,\r\nCONVERT(VARCHAR ,GETDATE() ,104) TARIH,CARI, SUM(TUTAR_ALACAK) AS BAKIYE,\r\n(SELECT SUM(TUTAR_ALACAK) from AARP_TEDARIKCI_ODEME_RAPORU_DATA ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003c=0 AND ARATBL.DOVIZ=\u0027USD\u0027) AS VADESI_GELEN\r\n,(SELECT SUM(TUTAR_ALACAK) from AARP_TEDARIKCI_ODEME_RAPORU_DATA ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003e0 AND ARATBL.DOVIZ=\u0027USD\u0027) AS VADESI_GELMEYEN\r\n\r\n\r\nFROM AARP_TEDARIKCI_ODEME_RAPORU_DATA EURTBL WHERE DOVIZ=\u0027USD\u0027  \r\nGROUP BY CARI\r\n\r\n\r\nUNION ALL\r\n\r\nSELECT DISTINCT \u0027TL\u0027 DOVIZ,\r\nCONVERT(VARCHAR ,GETDATE() ,104) TARIH,CARI, SUM(TUTAR_ALACAK) AS BAKIYE,\r\n(SELECT SUM(TUTAR_ALACAK) from AARP_TEDARIKCI_ODEME_RAPORU_DATA ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003c=0 AND ARATBL.DOVIZ=\u0027TL\u0027) AS VADESI_GELEN\r\n,(SELECT SUM(TUTAR_ALACAK) from AARP_TEDARIKCI_ODEME_RAPORU_DATA ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003e0 AND ARATBL.DOVIZ=\u0027TL\u0027) AS VADESI_GELMEYEN\r\n\r\n\r\nFROM AARP_TEDARIKCI_ODEME_RAPORU_DATA EURTBL WHERE DOVIZ=\u0027TL\u0027  \r\nGROUP BY CARI",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "DOVIZ",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "3",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "221",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADESI_GELEN",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADESI_GELMEYEN",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.01.00001 / TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "BAKIYE":  "-91377,52",
+                            "VADESI_GELEN":  "-91377,52",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.01.00117 / KARAVANİST MOBİL ÇÖZÜMLER SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "BAKIYE":  "-2724,85",
+                            "VADESI_GELEN":  "-2724,85",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.01.00121 / FERMİL MOBİL SİSTEMLERİ ANONİM ŞİRKETİ",
+                            "BAKIYE":  "-39389,61",
+                            "VADESI_GELEN":  "-39389,61",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.01.0615 EU / GREENLINE LOJİSTİK İÇ VE DIŞ TİC. A.Ş. - EURO",
+                            "BAKIYE":  "-477,72",
+                            "VADESI_GELEN":  null,
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.01.0670-€ / NEXON POLIMER KIMYA SAN. TİC A.Ş. (€)",
+                            "BAKIYE":  "-2507,5",
+                            "VADESI_GELEN":  "-2507,5",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.01.0816 / AVENCO ROBOTİK VE OTOMASYON SAN. VE TİC. LTD .ŞTİ.",
+                            "BAKIYE":  "-10018,32",
+                            "VADESI_GELEN":  null,
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.01.0971-€ / KURUOĞLU KERESTECİLİK VE DIŞ TİC. A.Ş.(€)",
+                            "BAKIYE":  "-32478,62",
+                            "VADESI_GELEN":  "-32478,62",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.01.1126 / KUNER DENİZCİLİK İÇ VE DIŞ TİCARET LİMİTED ŞİRKETİ",
+                            "BAKIYE":  "-1067,19",
+                            "VADESI_GELEN":  "-1067,19",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.02.00007 / RENAULT SAS FRANCE",
+                            "BAKIYE":  "-20000",
+                            "VADESI_GELEN":  null,
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.02.00018 / DIMENSION3 GMBH",
+                            "BAKIYE":  "-8",
+                            "VADESI_GELEN":  "-8",
+                            "VADESI_GELMEYEN":  null
+                        }
+                    ]
+}

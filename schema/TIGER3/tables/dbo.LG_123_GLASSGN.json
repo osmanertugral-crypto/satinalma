@@ -1,0 +1,265 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_GLASSGN",
+    "full_name":  "dbo.LG_123_GLASSGN",
+    "description":  "",
+    "total_rows":  "108640",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MODULENR",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TRANTYPE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TRANREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ACCREF",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CCENTERREF",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJECTREF",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ACCDISTTEMPREF",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EXPLAIN",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_GLASSGN_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_GLASSGN_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "MODULENR, TRANTYPE, TRANREF"
+                    },
+                    {
+                        "index_name":  "I123_GLASSGN_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "MODULENR, TRANREF, TRANTYPE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "1",
+                            "TRANREF":  "3650",
+                            "ACCREF":  "728",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "2",
+                            "TRANREF":  "3650",
+                            "ACCREF":  "4639",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "1",
+                            "TRANREF":  "3654",
+                            "ACCREF":  "728",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "2",
+                            "TRANREF":  "3654",
+                            "ACCREF":  "4639",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "1",
+                            "TRANREF":  "3011",
+                            "ACCREF":  "728",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "2",
+                            "TRANREF":  "3011",
+                            "ACCREF":  "4639",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "1",
+                            "TRANREF":  "3015",
+                            "ACCREF":  "728",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "2",
+                            "TRANREF":  "3015",
+                            "ACCREF":  "4639",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "1",
+                            "TRANREF":  "3043",
+                            "ACCREF":  "728",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "MODULENR":  "25",
+                            "TRANTYPE":  "2",
+                            "TRANREF":  "3043",
+                            "ACCREF":  "4639",
+                            "CCENTERREF":  "0",
+                            "PROJECTREF":  "0",
+                            "ACCDISTTEMPREF":  "0",
+                            "EXPLAIN":  ""
+                        }
+                    ]
+}

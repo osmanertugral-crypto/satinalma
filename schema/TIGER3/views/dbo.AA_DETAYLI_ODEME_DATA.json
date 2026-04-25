@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_DETAYLI_ODEME_DATA",
+    "full_name":  "dbo.AA_DETAYLI_ODEME_DATA",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[AA_DETAYLI_ODEME_DATA] AS \r\nselect *,\r\nCASE WHEN GUN\u003e=0 THEN ID_TUTAR ELSE 0 END AS VADESI_GELMEYEN,\r\nCASE WHEN GUN\u003c0 THEN ID_TUTAR ELSE 0 END AS VADESI_GELEN\r\nfrom (\r\n\r\nselect FAT.LOGICALREF FAT_ID, CAR.LOGICALREF AS CAR_ID,\r\nCAR.CODE + \u0027 / \u0027 +CAR.DEFINITION_ AS UNVAN,\r\nisnull(DATEADD(DAY, (\r\nSELECT CASE WHEN CODE=\u0027\u0027 THEN 0\r\nWHEN LEFT(CODE,4)=\u0027PESI\u0027  THEN 0\r\nWHEN CODE IS NULL THEN 0\r\nWHEN CODE=\u00270\u0027 THEN 0\r\nWHEN LEFT(CODE,4)=\u00271030\u0027  THEN 0\r\n  WHEN LEFT(CODE,4)=\u00277419\u0027  THEN 0\r\n   ELSE cast(CODE as int) END AS VADE\r\nFROM LG_001_PAYPLANS  WITH (NOLOCK) WHERE LOGICALREF=FAT.PAYDEFREF),FAT.DATE_),FAT.DATE_) \u0027Ödeme_Vade\u0027,\r\nFAT.DATE_ AS ISLEM_TARIHI,\r\nFAT.FICHENO AS BELGE_NO,\r\n\r\nCASE WHEN FAT.TRCODE=1 THEN \u0027Satınalma Faturası\u0027\r\nelse \u0027Alınan Hizmet Faturası\u0027 end as ISLEM_TURU,\r\nDATEDIFF(DAY,(isnull(DATEADD(DAY, (\r\nSELECT CASE WHEN CODE=\u0027\u0027 THEN 0\r\nWHEN LEFT(CODE,4)=\u0027PESI\u0027  THEN 0\r\nWHEN CODE IS NULL THEN 0\r\nWHEN CODE=\u00270\u0027 THEN 0\r\nWHEN LEFT(CODE,4)=\u00271030\u0027  THEN 0\r\n  WHEN LEFT(CODE,4)=\u00277419\u0027  THEN 0\r\n   ELSE cast(CODE as int) END AS VADE\r\nFROM LG_001_PAYPLANS  WITH (NOLOCK) WHERE LOGICALREF=FAT.PAYDEFREF),FAT.DATE_),FAT.DATE_)),GETDATE()) AS GUN\r\n\r\n\r\n\r\n, FAT.NETTOTAL AS TL_TUTAR\r\n,ISNULL((select TOP 1 CURCODE from L_CURRENCYLIST where CURTYPE=FAT.TRCURR),\u0027TL\u0027) as ISLEM_DOVIZ\r\n,FAT.TRRATE AS ID_KUR\r\n,FAT.TRNET AS ID_TUTAR\r\n\r\n--CASE WHEN ODM.TRCURR=0 THEN TOTAL ELSE ISNULL((NULLIF(ODM.TOTAL,0)/NULLIF(ODM.TRRATE,0)),0) END AS KAPATMA\r\n\r\n--, REPORTRATE AS RD_KUR_USD\r\n--, REPORTNET AS RD_TUTAR_USD\r\n from LG_001_01_INVOICE FAT WITH (NOLOCK)\r\nINNER JOIN LG_001_CLCARD CAR WITH (NOLOCK) ON FAT.CLIENTREF=CAR.LOGICALREF \r\n\r\nWHERE FAT.TRCODE IN (1,4)  AND STATUS\u003c\u003e1 AND YEAR(FAT.DATE_)\u003e2021 AND CAR.CODE LIKE \u0027320.01.%\u0027\r\n\r\n) AS RAPOR\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FAT_ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CAR_ID",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "UNVAN",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "221",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Ödeme_Vade",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_TARIHI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BELGE_NO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_TURU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "22",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "GUN",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TL_TUTAR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_DOVIZ",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "6",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ID_KUR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ID_TUTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADESI_GELMEYEN",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADESI_GELEN",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FAT_ID":  "2197",
+                            "CAR_ID":  "233",
+                            "UNVAN":  "320.01.00058 / TIMEDECOR İNŞAAT SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "Ödeme_Vade":  "4.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "4.01.2022 00:00:00",
+                            "BELGE_NO":  "M020220000000001",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1571",
+                            "TL_TUTAR":  "483,8",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "483,8",
+                            "VADESI_GELMEYEN":  "483,8",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2198",
+                            "CAR_ID":  "300",
+                            "UNVAN":  "320.01.00111 / DENİZ STATİK TOZ BOYAMA SAN.TİC.LTD.ŞTİ",
+                            "Ödeme_Vade":  "3.02.2022 00:00:00",
+                            "ISLEM_TARIHI":  "4.01.2022 00:00:00",
+                            "BELGE_NO":  "GIB2022000000002",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1541",
+                            "TL_TUTAR":  "1003",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "1003",
+                            "VADESI_GELMEYEN":  "1003",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2199",
+                            "CAR_ID":  "1562",
+                            "UNVAN":  "320.01.00289 / BALSAN DİNLENCE VE METAL ÜRÜNLER SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "Ödeme_Vade":  "4.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "4.01.2022 00:00:00",
+                            "BELGE_NO":  "BLE2022000000001",
+                            "ISLEM_TURU":  "Satınalma Faturası",
+                            "GUN":  "1571",
+                            "TL_TUTAR":  "2160",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "2160",
+                            "VADESI_GELMEYEN":  "2160",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2207",
+                            "CAR_ID":  "265",
+                            "UNVAN":  "320.01.00089 / Er-Fa Lastik Conta Sızdırmaz Mamülleri Tic.Ltd.Şti",
+                            "Ödeme_Vade":  "4.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "4.01.2022 00:00:00",
+                            "BELGE_NO":  "ERF2022000000028",
+                            "ISLEM_TURU":  "Satınalma Faturası",
+                            "GUN":  "1571",
+                            "TL_TUTAR":  "1770",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "1770",
+                            "VADESI_GELMEYEN":  "1770",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2208",
+                            "CAR_ID":  "237",
+                            "UNVAN":  "320.01.00062 / HEMY MARİN DENİZCİLİK TURİZM VE TİCARET LİMİTED ŞİRKETİ",
+                            "Ödeme_Vade":  "5.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "5.01.2022 00:00:00",
+                            "BELGE_NO":  "HMY2022000000001",
+                            "ISLEM_TURU":  "Satınalma Faturası",
+                            "GUN":  "1570",
+                            "TL_TUTAR":  "12607,12",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "12607,12",
+                            "VADESI_GELMEYEN":  "12607,12",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2209",
+                            "CAR_ID":  "187",
+                            "UNVAN":  "320.01.00012 / CANER ÇINAR",
+                            "Ödeme_Vade":  "4.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "4.01.2022 00:00:00",
+                            "BELGE_NO":  "AEF2022000000003",
+                            "ISLEM_TURU":  "Satınalma Faturası",
+                            "GUN":  "1571",
+                            "TL_TUTAR":  "3028,49",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "3028,49",
+                            "VADESI_GELMEYEN":  "3028,49",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2243",
+                            "CAR_ID":  "1301",
+                            "UNVAN":  "320.01.00114 / FATİH BİLEME MAKİNA VE TEÇHİZAT SAN. TİC. LTD. ŞTİ.",
+                            "Ödeme_Vade":  "5.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "5.01.2022 00:00:00",
+                            "BELGE_NO":  "FTH2022000000005",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1570",
+                            "TL_TUTAR":  "324,5",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "324,5",
+                            "VADESI_GELMEYEN":  "324,5",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2251",
+                            "CAR_ID":  "1510",
+                            "UNVAN":  "320.01.00252 / SKALA PVC EDGE BANDS MOBİLYA İNŞ.SAN.TİC.LTD.ŞTİ.",
+                            "Ödeme_Vade":  "3.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "3.01.2022 00:00:00",
+                            "BELGE_NO":  "000253",
+                            "ISLEM_TURU":  "Satınalma Faturası",
+                            "GUN":  "1572",
+                            "TL_TUTAR":  "600",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "600",
+                            "VADESI_GELMEYEN":  "600",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2252",
+                            "CAR_ID":  "1514",
+                            "UNVAN":  "320.01.00256 / İSMAİL  AKTEN",
+                            "Ödeme_Vade":  "4.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "4.01.2022 00:00:00",
+                            "BELGE_NO":  "00000017",
+                            "ISLEM_TURU":  "Satınalma Faturası",
+                            "GUN":  "1571",
+                            "TL_TUTAR":  "50",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "50",
+                            "VADESI_GELMEYEN":  "50",
+                            "VADESI_GELEN":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2253",
+                            "CAR_ID":  "233",
+                            "UNVAN":  "320.01.00058 / TIMEDECOR İNŞAAT SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "Ödeme_Vade":  "6.02.2022 00:00:00",
+                            "ISLEM_TARIHI":  "7.01.2022 00:00:00",
+                            "BELGE_NO":  "M012022000000002",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1538",
+                            "TL_TUTAR":  "1557,6",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "1557,6",
+                            "VADESI_GELMEYEN":  "1557,6",
+                            "VADESI_GELEN":  "0"
+                        }
+                    ]
+}

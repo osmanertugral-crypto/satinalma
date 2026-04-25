@@ -1,0 +1,116 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AARP_MALZEME_SON_ALIM_RAPORU",
+    "full_name":  "dbo.AARP_MALZEME_SON_ALIM_RAPORU",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[AARP_MALZEME_SON_ALIM_RAPORU] AS \r\nselect \r\n  CODE AS KOD\r\n, NAME AS TANIM\r\n, ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=LOGICALREF),0) AS TOPLAM_STOK\r\n\r\n, ISNULL(CAST(ISNULL((SELECT TOP 1 (NULLIF(LINENET,0)/NULLIF(AMOUNT,0))  \r\nFROM LG_001_01_STLINE WHERE TRCODE=1 AND STOCKREF= MLZ.LOGICALREF ORDER BY DATE_ DESC),\r\n(SELECT TOP 1 PRICE  \r\nFROM LG_001_01_ORFLINE WHERE TRCODE=2 AND STOCKREF= MLZ.LOGICALREF ORDER BY DATE_ DESC)\r\n\r\n)AS DECIMAL(18,2)),0) SON_ALIM_TL\r\n\r\n, (SELECT TOP 1 DATE_  FROM LG_001_01_STLINE WHERE TRCODE=1 AND STOCKREF= MLZ.LOGICALREF ORDER BY DATE_ DESC) SON_ALIM_TARIHI\r\n\r\nfrom LG_001_ITEMS MLZ WHERE ACTIVE=0\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KOD",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TANIM",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM_STOK",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SON_ALIM_TL",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SON_ALIM_TARIHI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "KOD":  "G0.TÜRKİYE.01 BANYOLU",
+                            "TANIM":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "TOPLAM_STOK":  "-19",
+                            "SON_ALIM_TL":  "188050,85",
+                            "SON_ALIM_TARIHI":  "23.05.2022 00:00:00"
+                        },
+                        {
+                            "KOD":  "G0.YURTDIŞI.01",
+                            "TANIM":  "GLADIATOR MOBİL YAŞAM KABİNİ ",
+                            "TOPLAM_STOK":  "-10",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        },
+                        {
+                            "KOD":  "R0NIN.01",
+                            "TANIM":  "Ronin",
+                            "TOPLAM_STOK":  "0",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        },
+                        {
+                            "KOD":  "TROY.3KİŞİ.YURTDIŞI.01",
+                            "TANIM":  "Troy 3 Kişilik",
+                            "TOPLAM_STOK":  "0",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        },
+                        {
+                            "KOD":  "TROY.2KİŞİ.YURTDIŞI.01",
+                            "TANIM":  "Troy 2 Kişilik",
+                            "TOPLAM_STOK":  "0",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        },
+                        {
+                            "KOD":  "TROY.3KİŞİ.TÜRKİYE.01",
+                            "TANIM":  "Troy 3 Kişilik",
+                            "TOPLAM_STOK":  "1",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        },
+                        {
+                            "KOD":  "TROY.2KİŞİ.TÜRKİYE.02",
+                            "TANIM":  "Troy 2 Kişilik",
+                            "TOPLAM_STOK":  "0",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        },
+                        {
+                            "KOD":  "FREEDOM.01 TÜRKİYE",
+                            "TANIM":  "FREEDOM MOTOKARAVAN",
+                            "TOPLAM_STOK":  "0",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        },
+                        {
+                            "KOD":  "RV01",
+                            "TANIM":  "REVİVA",
+                            "TOPLAM_STOK":  "0",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        },
+                        {
+                            "KOD":  "MOHİCAN.TÜRKİYE.01",
+                            "TANIM":  "MOHİCAN ÇEKME KARAVAN",
+                            "TOPLAM_STOK":  "0",
+                            "SON_ALIM_TL":  "0,00",
+                            "SON_ALIM_TARIHI":  null
+                        }
+                    ]
+}

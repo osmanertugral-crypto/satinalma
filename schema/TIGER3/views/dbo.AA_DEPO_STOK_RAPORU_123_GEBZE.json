@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_DEPO_STOK_RAPORU_123_GEBZE",
+    "full_name":  "dbo.AA_DEPO_STOK_RAPORU_123_GEBZE",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[AA_DEPO_STOK_RAPORU_123_GEBZE] AS\r\nSELECT       ITM.LOGICALREF AS MLZ_ID, ITM.CODE, ITM.NAME, SUM(ISNULL(STN.ONHAND, 0)) - SUM(ISNULL(STN.ONVEHICLE, 0)) AS MIKTAR, STN.INVENNO AS DEPO,\r\n                             (SELECT        NAME\r\n                               FROM            dbo.L_CAPIWHOUSE\r\n                               WHERE        (STN.INVENNO = NR) AND (FIRMNR = 123)) AS DEPO_ADI\r\nFROM            dbo.LV_123_01_STINVTOT AS STN WITH (nolock) LEFT OUTER JOIN\r\n                         dbo.LG_123_ITEMS AS ITM WITH (nolock) ON STN.STOCKREF = ITM.LOGICALREF\r\nWHERE        (STN.INVENNO \u003c\u003e - 1) AND (STN.DATE_ \u003c= GETDATE()) AND STN.INVENNO=2\r\nGROUP BY STN.INVENNO, STN.STOCKREF, ITM.CODE, ITM.NAME, ITM.LOGICALREF\r\nHAVING        (SUM(STN.ONHAND) \u003e= - 99999999) AND (SUM(STN.ONHAND) \u003c= 99999999)\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MLZ_ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MLZ_ID":  "4963",
+                            "CODE":  "2021X870",
+                            "NAME":  "28X45 BANYO LAVABO",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5284",
+                            "CODE":  "A2021X60",
+                            "NAME":  "ORMAN ŞÖMİNESİ",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5285",
+                            "CODE":  "A2021X61",
+                            "NAME":  "SİLİKON MATARA",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5303",
+                            "CODE":  "A2021X79",
+                            "NAME":  "CAMPOUT KAMP DUŞU 20 LT",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5329",
+                            "CODE":  "A2021X105",
+                            "NAME":  "CAMPOUT MOGAN SALDALYE",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5231",
+                            "CODE":  "A2021X07",
+                            "NAME":  "KUKSA BARDAK LEON",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5361",
+                            "CODE":  "A2021X139",
+                            "NAME":  "KABLO VE ELEKTROİK EŞYA ÇANTASI",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5299",
+                            "CODE":  "A2021X75",
+                            "NAME":  "AYAKLI KATLANIR MANGAL",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5385",
+                            "CODE":  "A2021X163",
+                            "NAME":  "CAMPOUT PLANET ARAÇ ÜSTÜ ÇADIR",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5388",
+                            "CODE":  "A2021X166",
+                            "NAME":  "CAMPOUT ULTRALIGHT MASA",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        }
+                    ]
+}

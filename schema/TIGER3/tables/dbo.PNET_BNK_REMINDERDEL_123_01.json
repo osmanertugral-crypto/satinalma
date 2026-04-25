@@ -1,0 +1,182 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "PNET_BNK_REMINDERDEL_123_01",
+    "full_name":  "dbo.PNET_BNK_REMINDERDEL_123_01",
+    "description":  "",
+    "total_rows":  "15399",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PAYTRANSREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DELDATE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ISSUCCESS",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "bit",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SENTDATE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ERRINFO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "-1",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK_PNET_BNK_REMINDERDEL_123_01_ID",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "ID"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "ID":  "409",
+                            "PAYTRANSREF":  "51150",
+                            "DELDATE":  "28.03.2024 11:39:09",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:39:25",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "410",
+                            "PAYTRANSREF":  "51151",
+                            "DELDATE":  "28.03.2024 11:39:09",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:39:25",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "411",
+                            "PAYTRANSREF":  "51152",
+                            "DELDATE":  "28.03.2024 11:39:09",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:39:25",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "412",
+                            "PAYTRANSREF":  "51153",
+                            "DELDATE":  "28.03.2024 11:41:30",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:42:22",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "413",
+                            "PAYTRANSREF":  "51154",
+                            "DELDATE":  "28.03.2024 11:41:30",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:42:23",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "414",
+                            "PAYTRANSREF":  "51155",
+                            "DELDATE":  "28.03.2024 11:41:30",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:42:23",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "415",
+                            "PAYTRANSREF":  "51156",
+                            "DELDATE":  "28.03.2024 11:41:30",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:42:23",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "416",
+                            "PAYTRANSREF":  "51157",
+                            "DELDATE":  "28.03.2024 11:41:30",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:42:23",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "417",
+                            "PAYTRANSREF":  "51158",
+                            "DELDATE":  "28.03.2024 11:41:30",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:42:23",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        },
+                        {
+                            "ID":  "418",
+                            "PAYTRANSREF":  "51159",
+                            "DELDATE":  "28.03.2024 11:41:30",
+                            "ISSUCCESS":  "False",
+                            "SENTDATE":  "28.03.2024 11:42:23",
+                            "ERRINFO":  "{\"Header\":{\"Status\":-1,\"ResponseCode\":\"7009\",\"ResponseMessage\":\"Tahsilat/Ödeme tanımı bulunamadı!\"}}"
+                        }
+                    ]
+}

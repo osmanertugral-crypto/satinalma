@@ -1,0 +1,143 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_PAYTYPES",
+    "full_name":  "dbo.L_PAYTYPES",
+    "description":  "",
+    "total_rows":  "75",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME2",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PAYTYPES_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "PAYTYPES_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CODE":  "01",
+                            "NAME":  "PEŞİN",
+                            "NAME2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CODE":  "02",
+                            "NAME":  "BEDELSİZ",
+                            "NAME2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CODE":  "03",
+                            "NAME":  "NAKİT-BEDELSİZ",
+                            "NAME2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CODE":  "BEDELSİZ",
+                            "NAME":  "BEDELSİZ",
+                            "NAME2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CODE":  "1",
+                            "NAME":  "Tanımsız",
+                            "NAME2":  "(İfade kendini açıklıyor.)"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CODE":  "2",
+                            "NAME":  "EFT Alacak",
+                            "NAME2":  "EFT Merkezi üzerinden yapılan alacak hareketi."
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CODE":  "3",
+                            "NAME":  "EFT Borç",
+                            "NAME2":  "EFT Merkezi üzerinden yapılan borç hareketi."
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CODE":  "4",
+                            "NAME":  "Vadesiz Hesaba EFT Borç İadesi",
+                            "NAME2":  "EFT borç hareketinin vadesiz mevduat hesabına iade"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CODE":  "5",
+                            "NAME":  "Vadesiz Hesaba EFT Alacak İadesi",
+                            "NAME2":  "EFT alacak hareketinin vadesiz mevduat hesabına ia"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CODE":  "6",
+                            "NAME":  "Vadesiz Hesaba EFT Alacak",
+                            "NAME2":  "EFT Merkezi üzerinden vadesiz mevduat hesabında ya"
+                        }
+                    ]
+}

@@ -1,0 +1,258 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_523_LOGREP",
+    "full_name":  "dbo.LG_523_LOGREP",
+    "description":  "",
+    "total_rows":  "925",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LOGTYPE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MSGNUM1",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MSGNUM2",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SESSIONCODE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "61",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXPLAIN2",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I523_LOGREP_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I523_LOGREP_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "LOGTYPE, SESSIONCODE, LINENR"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "1",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "-------------------------------Muhasebe Hesapları-------------------------------",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-9244-221212105920",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "2",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "Başlangıç : Pazartesi.12.Aralık.2022   10:59.20   Excel Dosyasından Aktarım",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-9244-221212105920",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "3",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-9244-221212105920",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "1",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "-------------------------------Muhasebe Hesapları-------------------------------",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-5528-221212110048",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "2",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "Başlangıç : Pazartesi.12.Aralık.2022   11:00.48   Excel Dosyasından Aktarım",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-5528-221212110048",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "3",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-5528-221212110048",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "1",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "-------------------------------Muhasebe Hesapları-------------------------------",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-1173-221212110423",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "2",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "Başlangıç : Pazartesi.12.Aralık.2022   11:04.23   Excel Dosyasından Aktarım",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-1173-221212110423",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "3",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0009-1173-221212110423",
+                            "LINEEXPLAIN2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "LOGTYPE":  "22",
+                            "LINENR":  "1",
+                            "LINETYPE":  "1",
+                            "LINEEXP":  "-------------------------------Muhasebe Hesapları-------------------------------",
+                            "MSGNUM1":  "0",
+                            "MSGNUM2":  "0",
+                            "SESSIONCODE":  "0115-0004-0001-9688-221212134619",
+                            "LINEEXPLAIN2":  ""
+                        }
+                    ]
+}

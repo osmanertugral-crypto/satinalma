@@ -1,0 +1,103 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "URUNADRESW",
+    "full_name":  "dbo.URUNADRESW",
+    "definition":  "CREATE VIEW [dbo].[URUNADRESW] AS\r\nSELECT        UA.URUNADRES_REF, UA.STOK_REF, UA.ADRES, UA.MINMIKTAR, UA.MAXMIKTAR, UA.KRTMIKTAR, SK.STOK_KODU, SK.STOK_ADI,SK.STOK_ADI2,SK.STOK_ADI3,SK.STOK_ADI4, SA.ADRES_ACIKLAMASI, UA.AMBAR_KODU\r\nFROM            dbo.URUNADRES AS UA WITH(NOLOCK) LEFT OUTER JOIN\r\n                         dbo.STOKKARTI AS SK WITH(NOLOCK) ON SK.STOK_REF = UA.STOK_REF LEFT OUTER JOIN\r\n                         dbo.STOKADRES AS SA WITH(NOLOCK) ON SA.ADRES = UA.ADRES AND SA.AMBAR_KODU = UA.AMBAR_KODU",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "URUNADRES_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADRES",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MINMIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MAXMIKTAR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KRTMIKTAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI2",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI3",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI4",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADRES_ACIKLAMASI",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "250",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

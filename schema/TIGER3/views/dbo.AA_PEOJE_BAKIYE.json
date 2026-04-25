@@ -1,0 +1,184 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_PEOJE_BAKIYE",
+    "full_name":  "dbo.AA_PEOJE_BAKIYE",
+    "definition":  "CREATE VIEW AA_PEOJE_BAKIYE AS\r\n\r\nselect \r\np.code PROJE_KODU\r\n,P.NAME PROJE_ADI\r\n,P.SPECODE OZELKOD\r\n,(SELECT SUM(NETTOTAL) FROM LG_001_01_ORFICHE WHERE PROJECTREF=P.LOGICALREF) SIPARIS_TUTARI_TL\r\n,(SELECT SUM(TRNET) FROM LG_001_01_ORFICHE WHERE PROJECTREF=P.LOGICALREF) SIPARIS_TUTARI_DOVIZ\r\n,(SELECT MAX(CASE TRCURR WHEN 1 THEN \u0027USD\u0027  WHEN 20 THEN \u0027EUR\u0027 ELSE \u0027TL\u0027  END) FROM LG_001_01_ORFICHE WHERE PROJECTREF=P.LOGICALREF) PARA_BRIMI\r\n,ISNULL((SELECT SUM(TRNET) FROM LG_001_01_CLFLINE WHERE CLPRJREF=P.LOGICALREF AND SIGN=1),0) GELEN_ODEME\r\n,ISNULL((SELECT SUM(TRNET) FROM LG_001_01_CLFLINE WHERE CLPRJREF=P.LOGICALREF AND SIGN=0),0) KESILEN_FAT\r\n,ISNULL((SELECT SUM(TRNET) FROM LG_001_01_CLFLINE WHERE CLPRJREF=P.LOGICALREF AND SIGN=0),0) \r\n-ISNULL((SELECT SUM(TRNET) FROM LG_001_01_CLFLINE WHERE CLPRJREF=P.LOGICALREF AND SIGN=1),0) KALAN\r\n--,P.LOGICALREF\r\nfrom LG_001_PROJECT as p\r\nwhere P.ACTIVE=0\r\n--WHERE P.CODE=\u0027G0135\u0027",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OZELKOD",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIPARIS_TUTARI_TL",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIPARIS_TUTARI_DOVIZ",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PARA_BRIMI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "3",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GELEN_ODEME",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KESILEN_FAT",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KALAN",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "PROJE_KODU":  "G0109",
+                            "PROJE_ADI":  "MÜLLER MOTORS 2021020",
+                            "OZELKOD":  "",
+                            "SIPARIS_TUTARI_TL":  null,
+                            "SIPARIS_TUTARI_DOVIZ":  null,
+                            "PARA_BRIMI":  null,
+                            "GELEN_ODEME":  "0",
+                            "KESILEN_FAT":  "0",
+                            "KALAN":  "0"
+                        },
+                        {
+                            "PROJE_KODU":  "DİĞER GELİRLER",
+                            "PROJE_ADI":  "DİĞER GELİRLER",
+                            "OZELKOD":  "",
+                            "SIPARIS_TUTARI_TL":  "9925,56",
+                            "SIPARIS_TUTARI_DOVIZ":  "9925,56",
+                            "PARA_BRIMI":  "TL",
+                            "GELEN_ODEME":  "22111217,01",
+                            "KESILEN_FAT":  "15530,78",
+                            "KALAN":  "-22095686,23"
+                        },
+                        {
+                            "PROJE_KODU":  "RV02",
+                            "PROJE_ADI":  "REVİVA GÖKHAN GÖKBÖRÜ",
+                            "OZELKOD":  "",
+                            "SIPARIS_TUTARI_TL":  null,
+                            "SIPARIS_TUTARI_DOVIZ":  null,
+                            "PARA_BRIMI":  null,
+                            "GELEN_ODEME":  "0",
+                            "KESILEN_FAT":  "106388",
+                            "KALAN":  "106388"
+                        },
+                        {
+                            "PROJE_KODU":  "RXL008",
+                            "PROJE_ADI":  "HAYRİ TOPÇUOĞLU RONIN XL 63 M 1167 ARAÇ BERABER",
+                            "OZELKOD":  "",
+                            "SIPARIS_TUTARI_TL":  null,
+                            "SIPARIS_TUTARI_DOVIZ":  null,
+                            "PARA_BRIMI":  null,
+                            "GELEN_ODEME":  "0",
+                            "KESILEN_FAT":  "299000",
+                            "KALAN":  "299000"
+                        },
+                        {
+                            "PROJE_KODU":  "GXXXX",
+                            "PROJE_ADI":  "EHRENFRIED SCHOLZ GLADYATÖR",
+                            "OZELKOD":  "",
+                            "SIPARIS_TUTARI_TL":  null,
+                            "SIPARIS_TUTARI_DOVIZ":  null,
+                            "PARA_BRIMI":  null,
+                            "GELEN_ODEME":  "0",
+                            "KESILEN_FAT":  "0",
+                            "KALAN":  "0"
+                        },
+                        {
+                            "PROJE_KODU":  "RV01",
+                            "PROJE_ADI":  "RESTAR RENT",
+                            "OZELKOD":  "",
+                            "SIPARIS_TUTARI_TL":  null,
+                            "SIPARIS_TUTARI_DOVIZ":  null,
+                            "PARA_BRIMI":  null,
+                            "GELEN_ODEME":  "370000",
+                            "KESILEN_FAT":  "740000",
+                            "KALAN":  "370000"
+                        },
+                        {
+                            "PROJE_KODU":  "DİĞER GİDERLER",
+                            "PROJE_ADI":  "DİĞER GİDERLER",
+                            "OZELKOD":  "",
+                            "SIPARIS_TUTARI_TL":  "733452,32",
+                            "SIPARIS_TUTARI_DOVIZ":  "400716,67",
+                            "PARA_BRIMI":  "USD",
+                            "GELEN_ODEME":  "5544739,46",
+                            "KESILEN_FAT":  "287347,54",
+                            "KALAN":  "-5257391,92"
+                        },
+                        {
+                            "PROJE_KODU":  "GXXXV",
+                            "PROJE_ADI":  "AÇILIŞ İŞLEMLERİ BAKİYE KAPAMA CARİ HESABI 320 KARŞILIĞI",
+                            "OZELKOD":  "45",
+                            "SIPARIS_TUTARI_TL":  null,
+                            "SIPARIS_TUTARI_DOVIZ":  null,
+                            "PARA_BRIMI":  null,
+                            "GELEN_ODEME":  "0",
+                            "KESILEN_FAT":  "0",
+                            "KALAN":  "0"
+                        },
+                        {
+                            "PROJE_KODU":  "İ01",
+                            "PROJE_ADI":  "HATALI ,KUSURLU ÜRÜN  İADE",
+                            "OZELKOD":  "",
+                            "SIPARIS_TUTARI_TL":  null,
+                            "SIPARIS_TUTARI_DOVIZ":  null,
+                            "PARA_BRIMI":  null,
+                            "GELEN_ODEME":  "0",
+                            "KESILEN_FAT":  "0",
+                            "KALAN":  "0"
+                        },
+                        {
+                            "PROJE_KODU":  "GZZZCCC",
+                            "PROJE_ADI":  "NFD YAZILIM BİL.DAN.İNŞ.SAN.TİC.LTD.ŞTİ.",
+                            "OZELKOD":  "50",
+                            "SIPARIS_TUTARI_TL":  null,
+                            "SIPARIS_TUTARI_DOVIZ":  null,
+                            "PARA_BRIMI":  null,
+                            "GELEN_ODEME":  "0",
+                            "KESILEN_FAT":  "0",
+                            "KALAN":  "0"
+                        }
+                    ]
+}

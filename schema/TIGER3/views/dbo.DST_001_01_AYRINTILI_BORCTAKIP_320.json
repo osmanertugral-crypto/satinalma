@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_001_01_AYRINTILI_BORCTAKIP_320",
+    "full_name":  "dbo.DST_001_01_AYRINTILI_BORCTAKIP_320",
+    "definition":  "CREATE VIEW [dbo].[DST_001_01_AYRINTILI_BORCTAKIP_320] AS \r\n\r\nSELECT \r\n\r\n\r\n\r\nCARI,VADE,ISLEM_TARIHI,ISLEMNO,ISLEM,GUN,TUTAR_BORC,TUTAR_ALACAK,BAKIYE,DOVIZ,KUR\r\n\r\n\r\nFROM\r\n\r\n(\r\n\r\n\r\nSELECT \r\n*,\r\n\r\nSUM(T.TUTAR_BORC + T.TUTAR_ALACAK) OVER (ORDER BY RowId ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE\r\n,DATEDIFF(DAY, GETDATE(), cast(VADE as date)) GUN\r\n--SUM(T.TUTAR_BORC + T.TUTAR_ALACAK) OVER (ORDER BY RowId ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE\r\n\r\nFROM\r\n\r\n(\r\n\r\n\r\n\r\nSELECT    \r\nROW_NUMBER() OVER (ORDER BY DATEDIFF(DAY, GETDATE(), PYT.DATE_) ASC) AS RowId,\r\n--CLC.CARDTYPE AS Grup,\r\n\r\nCLC.CODE AS [Cari_Kodu], \r\n--CLC.DEFINITION_ AS [Cari Adı],\r\nCLC.CODE  + \u0027 / \u0027 + CLC.DEFINITION_ CARI,\r\n\r\n\r\nCASE WHEN PYT.MODULENR = 5 THEN PYT.DATE_ ELSE\r\n\r\n(SELECT TOP 1 DATEADD(day,CAST(SUBSTRING(DAY_,1,50)AS INT),INVOICE.DATE_)   \r\nFROM LG_001_PAYLINES WHERE PAYPLANREF=INVOICE.PAYDEFREF) END AS VADE,\r\n\r\n\r\n--PYT.DATE_ AS [VADE],\r\nPYT.PROCDATE AS [ISLEM_TARIHI],\r\n     CASE WHEN MODULENR = 4 THEN\r\n                          (SELECT     FICHENO\r\n                            FROM          LG_001_01_INVOICE INV\r\n                            WHERE      INV.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 5 THEN\r\n                          (SELECT     CLF.TRANNO\r\n                            FROM          LG_001_01_CLFLINE CLF\r\n                            WHERE      CLF.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 10 THEN\r\n                          (SELECT     KSL.FICHENO\r\n                            FROM          LG_001_01_KSLINES KSL\r\n                            WHERE      KSL.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 7 THEN\r\n                          (SELECT     BNF.TRANNO\r\n                            FROM          LG_001_01_BNFLINE BNF\r\n                            WHERE      BNF.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 6 THEN\r\n                          (SELECT     CSR.ROLLNO\r\n                           FROM          LG_001_01_CSROLL CSR\r\n                            WHERE      CSR.LOGICALREF = PYT.FICHEREF) ELSE \u0027Tanımsız\u0027 END AS [ISLEMNO],\r\n\r\n CASE WHEN PYT.MODULENR = 5 AND \r\n                      PYT.TRCODE = 14 THEN \u0027Açılış\u0027 WHEN MODULENR = 5 AND PYT.TRCODE = 3 THEN \u0027Borç Dekontu\u0027 WHEN MODULENR = 5 AND \r\n                      PYT.TRCODE = 4 THEN \u0027Alacak Dekontu\u0027 WHEN MODULENR = 5 AND PYT.TRCODE = 5 THEN \u0027Virman\u0027 WHEN MODULENR = 4 AND \r\n                      PYT.TRCODE = 8 THEN \u0027Toptan Satış\u0027 WHEN MODULENR = 4 AND PYT.TRCODE = 1 THEN \u0027Mal Alım Faturası\u0027 WHEN MODULENR = 4 AND \r\n                      PYT.TRCODE = 4 THEN \u0027Alınan Hizmet Faturası\u0027 WHEN MODULENR = 4 AND PYT.TRCODE = 9 THEN \u0027Verilen Hizmet\u0027 WHEN MODULENR = 4 AND \r\n                      PYT.TRCODE = 3 THEN \u0027Satış İade\u0027 WHEN MODULENR = 4 AND PYT.TRCODE = 6 THEN \u0027Alım İade\u0027 WHEN MODULENR = 7 AND \r\n                      PYT.TRCODE = 3 THEN \u0027Gelen Havale\u0027 WHEN MODULENR = 7 AND PYT.TRCODE = 4 THEN \u0027Gönderilen Havale\u0027 WHEN MODULENR = 6 AND \r\n                      PYT.TRCODE = 1 THEN \u0027Çek Girişi\u0027 WHEN MODULENR = 6 AND PYT.TRCODE = 2 THEN \u0027Senet Girişi\u0027 WHEN MODULENR = 6 AND \r\n                      PYT.TRCODE = 3 THEN \u0027Çek Çıkışı\u0027 WHEN MODULENR = 6 AND PYT.TRCODE = 4 THEN \u0027Senet Çıkışı\u0027 WHEN MODULENR = 10 AND \r\n                      PYT.TRCODE = 1 THEN \u0027Nakit Tahsilat\u0027 WHEN MODULENR = 10 AND PYT.TRCODE = 2 THEN \u0027Nakit Ödeme\u0027 WHEN MODULENR = 3 AND \r\n                      PYT.TRCODE = 1 THEN \u0027Satış Siparişi\u0027 WHEN MODULENR = 61 AND PYT.TRCODE = 3 THEN \u0027Borç Dekontu\u0027 ELSE \u0027Tanımsız\u0027 END AS [ISLEM],\r\n\r\n\t\t\t\t\t -- DATEDIFF(DAY, GETDATE(), cast(PYT.DATE_ as date)) GUN,\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\t\t\t\t\t  CASE\r\n               WHEN PYT.SIGN = 0 THEN\r\n                   CASE WHEN PYT.TRRATE \u003e 1 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1) * PYT.TRRATE ELSE (PYT.TOTAL - PYT.PAID) \r\n                      * ((PYT.SIGN * - 2) + 1) END\r\n               ELSE\r\n                   0\r\n           END TUTAR_BORC,\r\n\r\n\t\t     CASE\r\n               WHEN PYT.SIGN = 1 THEN\r\n                   (CASE WHEN PYT.TRRATE \u003e 1 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1)  ELSE (PYT.TOTAL - PYT.PAID) \r\n                      * ((PYT.SIGN * - 2) + 1) END) * 1\r\n               ELSE\r\n                   0\r\n           END TUTAR_ALACAK,\r\n\t\t\t\t\t    \r\n\r\n\r\n\r\n                          --(SELECT     SUM(DEBIT - CREDIT) AS Expr1\r\n                          --  FROM          dbo.LV_001_01_CLTOTFIL AS CLT\r\n                          --  WHERE      (CARDREF = CLC.LOGICALREF) AND (TOTTYP = 1)) AS CariBakiyeTL, \r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t--CASE WHEN ABS(ROUND\r\n       --                   ((SELECT     SUM(CLT.DEBIT - CLT.CREDIT)\r\n       --                       FROM         LV_001_01_CLTOTFIL CLT\r\n       --                       WHERE     CLT.CARDREF = CLC.LOGICALREF AND CLT.TOTTYP = 1), 2)) \u003e 1 THEN \u0027Bakiye Verenler\u0027 ELSE \u0027Bakiye Vermeyenler\u0027 END AS [Bakiye Bilgisi], \r\n       --               CASE WHEN\r\n       --                   (SELECT     SUM(CLT.DEBIT - CLT.CREDIT)\r\n       --                     FROM          LV_001_01_CLTOTFIL CLT\r\n       --                     WHERE      CLT.CARDREF = CLC.LOGICALREF AND CLT.TOTTYP = 1) \u003e 0 THEN \u0027Borç Bakiye\u0027 ELSE \u0027Alacak Bakiye\u0027 END AS [Bakiye B-A], \r\n       --                     CASE WHEN GETDATE()\u003c PYT.DATE_ THEN \u0027Vadesi Gelmeyen\u0027 ELSE \u0027Vadesi Geçen\u0027 END AS [Vade Bilgisi], \r\n                             \r\n                        \r\n                      \r\n                      \r\n                      CASE PYT.TRCURR WHEN 0 THEN \u0027TL\u0027 WHEN 1 THEN \u0027USD\u0027 WHEN 20 THEN \u0027EUR\u0027 WHEN 17 THEN \u0027GBP\u0027 WHEN 59 THEN \u0027BAE\u0027 ELSE \u0027Tanımsız\u0027 END AS DOVIZ,\r\n\t\t\t\t\t  PYT.TRRATE KUR\r\n                      \r\n                      --(PYT.TOTAL - PYT.PAID) * (PYT.SIGN * - 2 + 1) AS Tutar, \r\n\t\t\t\t\t  --CASE PYT.SIGN WHEN 0 THEN (CASE WHEN PYT.TRCURR IN (0,160) AND PYT.TRRATE IN (0,1) THEN  PYT.TOTAL  ELSE 0 END) ELSE (CASE WHEN PYT.TRCURR IN (0,160) AND PYT.TRRATE IN (0,1) THEN  PYT.TOTAL  ELSE 0 END) * -1 END   [Tutar],\r\n                      \r\n                      --CASE \r\n                      --WHEN PYT.TRCURR=0 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1)  \r\n                      --ELSE (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1) * TRRATE END Tutar_TRY,\r\n                      --CASE \r\n                      --WHEN PYT.TRCURR=1 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1)  \r\n                      --ELSE 0 END Tutar_USD,\r\n                      --CASE \r\n                      --WHEN PYT.TRCURR=20 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1)  \r\n                      --ELSE 0 END Tutar_EUR,\r\n                      \r\n                      \r\n                      --CASE WHEN TRRATE \u003e 1 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1) * TRRATE ELSE (PYT.TOTAL - PYT.PAID) \r\n                      --* ((PYT.SIGN * - 2) + 1) END AS Tutar_TL, \r\n                      \r\n                      --CASE PYT.SIGN WHEN 0 THEN \u0027Borç\u0027 ELSE \u0027Alacak\u0027 END AS Hareket\r\n                     \r\n                 \r\n\t\t\t\t\t  \r\n\t\t\t\t\t  ---CASE WHEN MODULENR = 4 THEN\r\n                      --    (SELECT     GENEXP1 + \u0027-\u0027 + GENEXP2\r\n                      --      FROM          LG_001_01_INVOICE INV\r\n                      --      WHERE      INV.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 5 THEN\r\n                      --    (SELECT     CLF.LINEEXP\r\n                      --      FROM          LG_001_01_CLFLINE CLF\r\n                      --      WHERE      CLF.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 10 THEN\r\n                      --    (SELECT     KSL.LINEEXP\r\n                      --      FROM          LG_001_01_KSLINES KSL\r\n                      --      WHERE      KSL.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 7 THEN\r\n                      --    (SELECT     BNF.LINEEXP\r\n                      --      FROM          LG_001_01_BNFLINE BNF\r\n                      --      WHERE      BNF.LOGICALREF = PYT.FICHEREF) ELSE \u0027\u0027 END AS Açıklama,\r\n\r\n--TRGP.GDEF [TIC ISLM GRP]\r\nFROM   dbo.LG_001_01_PAYTRANS AS PYT \r\nLEFT OUTER JOIN dbo.LG_001_CLCARD AS CLC ON PYT.CARDREF = CLC.LOGICALREF\r\n\r\nLEFT JOIN dbo.LG_001_01_INVOICE INVOICE\r\n            ON INVOICE.LOGICALREF = PYT.FICHEREF\r\n\r\nWHERE   (PYT.CANCELLED = 0) AND (PYT.TOTAL - PYT.PAID \u003e 0) AND (PYT.PAIDINCASH = 0) AND (PYT.CARDREF \u003e 0) AND PYT.SIGN=1 \r\nAND ((PYT.MODULENR = 5 AND PYT.TRCODE = 4) OR  (PYT.MODULENR = 4 AND PYT.TRCODE IN( 1,4)))\r\nand CLC.CODE LIKE \u0027320%\u0027\r\n)T WHERE YEAR(T.[ISLEM_TARIHI])\u003e2021 \r\n) as TA\r\n\r\nWHERE  Cari_Kodu + \u0027-\u0027 + DOVIZ NOT IN (\u0027320.01.00001-TL\u0027,\u0027320.01.00467-TL\u0027,\u0027320.01.00074-TL\u0027,\u0027320.01.00150-TL\u0027,\u0027320.01.00453-TL\u0027) \r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CARI",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "221",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_TARIHI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEMNO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "22",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "GUN",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR_BORC",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR_ALACAK",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DOVIZ",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "8",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KUR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CARI":  "320.02.00007 / RENAULT SAS FRANCE",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "26.03.2022 00:00:00",
+                            "ISLEMNO":  "OT 820194",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-20000",
+                            "BAKIYE":  "-21384,27",
+                            "DOVIZ":  "EUR",
+                            "KUR":  "16,3136"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "31.03.2022 00:00:00",
+                            "ISLEM_TARIHI":  "14.02.2022 00:00:00",
+                            "ISLEMNO":  "DCF2022000000051",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1485",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-11599,61",
+                            "BAKIYE":  "-35393,36",
+                            "DOVIZ":  "USD",
+                            "KUR":  "13,5176"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "9.04.2022 00:00:00",
+                            "ISLEM_TARIHI":  "23.02.2022 00:00:00",
+                            "ISLEMNO":  "DCF2022000000059",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1476",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-2522,25",
+                            "BAKIYE":  "-37940,61",
+                            "DOVIZ":  "USD",
+                            "KUR":  "13,7695"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "28.04.2022 00:00:00",
+                            "ISLEM_TARIHI":  "14.03.2022 00:00:00",
+                            "ISLEMNO":  "DCF2022000000080",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1457",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-2352,29",
+                            "BAKIYE":  "-40292,9",
+                            "DOVIZ":  "USD",
+                            "KUR":  "14,9311"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "12.05.2022 00:00:00",
+                            "ISLEM_TARIHI":  "28.03.2022 00:00:00",
+                            "ISLEMNO":  "DCI2022000000098",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1443",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-2536,83",
+                            "BAKIYE":  "-42829,73",
+                            "DOVIZ":  "USD",
+                            "KUR":  "14,8501"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "21.05.2022 00:00:00",
+                            "ISLEM_TARIHI":  "6.04.2022 00:00:00",
+                            "ISLEMNO":  "DCF202200000111",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1434",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-6780,16",
+                            "BAKIYE":  "-49609,89",
+                            "DOVIZ":  "USD",
+                            "KUR":  "14,7127"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "6.06.2022 00:00:00",
+                            "ISLEM_TARIHI":  "22.04.2022 00:00:00",
+                            "ISLEMNO":  "DCF2022000000126",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1418",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-2129,31",
+                            "BAKIYE":  "-59419,41",
+                            "DOVIZ":  "USD",
+                            "KUR":  "14,6869"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "20.06.2022 00:00:00",
+                            "ISLEM_TARIHI":  "6.05.2022 00:00:00",
+                            "ISLEMNO":  "DCF2022000000140",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1404",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-16179,75",
+                            "BAKIYE":  "-75904,26",
+                            "DOVIZ":  "USD",
+                            "KUR":  "14,858"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "25.06.2022 00:00:00",
+                            "ISLEM_TARIHI":  "11.05.2022 00:00:00",
+                            "ISLEMNO":  "DCF2022000000145",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1399",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-1009,37",
+                            "BAKIYE":  "-76984,87",
+                            "DOVIZ":  "USD",
+                            "KUR":  "15,001"
+                        },
+                        {
+                            "CARI":  "320.01.00467 / DC FİBER PANEL SİSTEMLERİ SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "VADE":  "7.07.2022 00:00:00",
+                            "ISLEM_TARIHI":  "23.05.2022 00:00:00",
+                            "ISLEMNO":  "DCI2022000000156",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  "-1387",
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-4293,67",
+                            "BAKIYE":  "-83709,29",
+                            "DOVIZ":  "USD",
+                            "KUR":  "15,9536"
+                        }
+                    ]
+}

@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_223_01_STLINE",
+    "full_name":  "dbo.LV_223_01_STLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_223_01_STLINE] AS\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.INVOICEREF, LGMAIN.STOCKREF, LGMAIN.LINETYPE, LGMAIN.TRCODE, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.INVOICELNNO,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.CODE\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.CODE\n   ELSE \u0027\u0027 END AS CODE,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.DEFINITION_\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.NAME\n   ELSE \u0027\u0027 END AS LINEEXP\nFROM\n     LG_223_01_STLINE LGMAIN WITH(NOLOCK)\n  LEFT OUTER JOIN LG_223_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF\n  LEFT OUTER JOIN LG_223_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF\n  LEFT OUTER JOIN LG_223_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICELNNO",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "2124",
+                            "INVOICEREF":  "1647",
+                            "STOCKREF":  "5742",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "641603,4",
+                            "TOTAL":  "641603,4",
+                            "INVOICELNNO":  "1",
+                            "CODE":  "153.YD GLADMP XL",
+                            "LINEEXP":  "GLADİATOR MOBİLE XL"
+                        },
+                        {
+                            "LOGICALREF":  "2125",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "0",
+                            "LINETYPE":  "2",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "0",
+                            "PRICE":  "0",
+                            "TOTAL":  "405223,2",
+                            "INVOICELNNO":  "0",
+                            "CODE":  null,
+                            "LINEEXP":  null
+                        },
+                        {
+                            "LOGICALREF":  "2127",
+                            "INVOICEREF":  "1647",
+                            "STOCKREF":  "0",
+                            "LINETYPE":  "2",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "0",
+                            "PRICE":  "0",
+                            "TOTAL":  "641603,4",
+                            "INVOICELNNO":  "2",
+                            "CODE":  null,
+                            "LINEEXP":  null
+                        },
+                        {
+                            "LOGICALREF":  "2128",
+                            "INVOICEREF":  "1648",
+                            "STOCKREF":  "5742",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "782128,2664",
+                            "TOTAL":  "782128,27",
+                            "INVOICELNNO":  "1",
+                            "CODE":  "153.YD GLADMP XL",
+                            "LINEEXP":  "GLADİATOR MOBİLE XL"
+                        },
+                        {
+                            "LOGICALREF":  "2129",
+                            "INVOICEREF":  "1649",
+                            "STOCKREF":  "5742",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "739896,6442",
+                            "TOTAL":  "739896,64",
+                            "INVOICELNNO":  "1",
+                            "CODE":  "153.YD GLADMP XL",
+                            "LINEEXP":  "GLADİATOR MOBİLE XL"
+                        },
+                        {
+                            "LOGICALREF":  "2130",
+                            "INVOICEREF":  "1650",
+                            "STOCKREF":  "5737",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "539683,648",
+                            "TOTAL":  "539683,65",
+                            "INVOICELNNO":  "1",
+                            "CODE":  "153.YD GLADMO",
+                            "LINEEXP":  "GLADİATOR MOBİLE"
+                        },
+                        {
+                            "LOGICALREF":  "2131",
+                            "INVOICEREF":  "1651",
+                            "STOCKREF":  "5737",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "490256,2",
+                            "TOTAL":  "490256,2",
+                            "INVOICELNNO":  "1",
+                            "CODE":  "153.YD GLADMO",
+                            "LINEEXP":  "GLADİATOR MOBİLE"
+                        },
+                        {
+                            "LOGICALREF":  "2132",
+                            "INVOICEREF":  "1652",
+                            "STOCKREF":  "5737",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "490256,2",
+                            "TOTAL":  "490256,2",
+                            "INVOICELNNO":  "1",
+                            "CODE":  "153.YD GLADMO",
+                            "LINEEXP":  "GLADİATOR MOBİLE"
+                        },
+                        {
+                            "LOGICALREF":  "2133",
+                            "INVOICEREF":  "1653",
+                            "STOCKREF":  "5737",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "490256,2",
+                            "TOTAL":  "490256,2",
+                            "INVOICELNNO":  "1",
+                            "CODE":  "153.YD GLADMO",
+                            "LINEEXP":  "GLADİATOR MOBİLE"
+                        },
+                        {
+                            "LOGICALREF":  "2134",
+                            "INVOICEREF":  "1654",
+                            "STOCKREF":  "5737",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "490256,2",
+                            "TOTAL":  "490256,2",
+                            "INVOICELNNO":  "1",
+                            "CODE":  "153.YD GLADMO",
+                            "LINEEXP":  "GLADİATOR MOBİLE"
+                        }
+                    ]
+}

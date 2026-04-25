@@ -1,0 +1,222 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_01_CSHTOTS_BCK",
+    "full_name":  "dbo.LG_123_01_CSHTOTS_BCK",
+    "description":  "",
+    "total_rows":  "21",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CARDREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTTYPE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DAY_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CURRTYP",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "1",
+                            "DAY_":  "-2534",
+                            "DEBIT":  "100000",
+                            "CREDIT":  "499,93",
+                            "DATE_":  "23.01.2023 00:00:00",
+                            "CURRTYP":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "2",
+                            "DAY_":  "-2534",
+                            "DEBIT":  "4915,96",
+                            "CREDIT":  "24,71",
+                            "DATE_":  "23.01.2023 00:00:00",
+                            "CURRTYP":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "8",
+                            "DAY_":  "-2534",
+                            "DEBIT":  "100000",
+                            "CREDIT":  "499,93",
+                            "DATE_":  "23.01.2023 00:00:00",
+                            "CURRTYP":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "1",
+                            "DAY_":  "-2526",
+                            "DEBIT":  "350000",
+                            "CREDIT":  "0",
+                            "DATE_":  "31.01.2023 00:00:00",
+                            "CURRTYP":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "2",
+                            "DAY_":  "-2526",
+                            "DEBIT":  "17112,82",
+                            "CREDIT":  "0",
+                            "DATE_":  "31.01.2023 00:00:00",
+                            "CURRTYP":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "8",
+                            "DAY_":  "-2526",
+                            "DEBIT":  "350000",
+                            "CREDIT":  "0",
+                            "DATE_":  "31.01.2023 00:00:00",
+                            "CURRTYP":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "1",
+                            "DAY_":  "-2518",
+                            "DEBIT":  "276500",
+                            "CREDIT":  "0",
+                            "DATE_":  "8.02.2023 00:00:00",
+                            "CURRTYP":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "2",
+                            "DAY_":  "-2518",
+                            "DEBIT":  "13666,94",
+                            "CREDIT":  "0",
+                            "DATE_":  "8.02.2023 00:00:00",
+                            "CURRTYP":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "8",
+                            "DAY_":  "-2518",
+                            "DEBIT":  "276500",
+                            "CREDIT":  "0",
+                            "DATE_":  "8.02.2023 00:00:00",
+                            "CURRTYP":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CARDREF":  "1",
+                            "TOTTYPE":  "1",
+                            "DAY_":  "-2544",
+                            "DEBIT":  "0",
+                            "CREDIT":  "56,75",
+                            "DATE_":  "13.01.2023 00:00:00",
+                            "CURRTYP":  "0"
+                        }
+                    ]
+}

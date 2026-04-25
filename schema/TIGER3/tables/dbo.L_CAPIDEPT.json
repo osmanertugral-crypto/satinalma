@@ -1,0 +1,265 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_CAPIDEPT",
+    "full_name":  "dbo.L_CAPIDEPT",
+    "description":  "",
+    "total_rows":  "12",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMNR",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "61",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USEREXT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MODDATE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MODTIME",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PASSIVE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NETFLAG",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "37",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "CAPIDEPT_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "CAPIDEPT_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "FIRMNR, NR"
+                    },
+                    {
+                        "index_name":  "CAPIDEPT_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "FIRMNR, NAME"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "FIRMNR":  "1",
+                            "NR":  "0",
+                            "NAME":  "MERKEZ",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "FIRMNR":  "99",
+                            "NR":  "0",
+                            "NAME":  "İDARİ",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "FIRMNR":  "99",
+                            "NR":  "1",
+                            "NAME":  "ÜRETİM",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "FIRMNR":  "99",
+                            "NR":  "2",
+                            "NAME":  "YÖNETİM",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "FIRMNR":  "99",
+                            "NR":  "3",
+                            "NAME":  "GENEL",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "FIRMNR":  "99",
+                            "NR":  "4",
+                            "NAME":  "SHOWROOM",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "19",
+                            "FIRMNR":  "2",
+                            "NR":  "0",
+                            "NAME":  "Merkez",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "20",
+                            "FIRMNR":  "523",
+                            "NR":  "0",
+                            "NAME":  "Merkez",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "21",
+                            "FIRMNR":  "123",
+                            "NR":  "0",
+                            "NAME":  "MERKEZ",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        },
+                        {
+                            "LOGICALREF":  "22",
+                            "FIRMNR":  "223",
+                            "NR":  "0",
+                            "NAME":  "Merkez",
+                            "USEREXT":  "0",
+                            "MODDATE":  null,
+                            "MODTIME":  "0",
+                            "PASSIVE":  "0",
+                            "NETFLAG":  ""
+                        }
+                    ]
+}

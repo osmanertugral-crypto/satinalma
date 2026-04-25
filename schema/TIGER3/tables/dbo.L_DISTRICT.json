@@ -1,0 +1,288 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_DISTRICT",
+    "full_name":  "dbo.L_DISTRICT",
+    "description":  "",
+    "total_rows":  "32045",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TOWNNR",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SITEID",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RECSTATUS",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORGLOGICREF",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME2",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NETFLAG",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "37",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "POSTCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "DISTRICT_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "DISTRICT_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "TOWNNR, CODE"
+                    },
+                    {
+                        "index_name":  "DISTRICT_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "NAME"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "TOWNNR":  "1",
+                            "CODE":  "01001",
+                            "NAME":  "Akören",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01722"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "TOWNNR":  "1",
+                            "CODE":  "01002",
+                            "NAME":  "Akpınar",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01720"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "TOWNNR":  "1",
+                            "CODE":  "01003",
+                            "NAME":  "Başpınar",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01720"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "TOWNNR":  "1",
+                            "CODE":  "01004",
+                            "NAME":  "Boztahta",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01722"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "TOWNNR":  "1",
+                            "CODE":  "01005",
+                            "NAME":  "Büyüksofulu",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01722"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "TOWNNR":  "1",
+                            "CODE":  "01006",
+                            "NAME":  "Ceritler",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01722"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "TOWNNR":  "1",
+                            "CODE":  "01007",
+                            "NAME":  "Darılık",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01722"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "TOWNNR":  "1",
+                            "CODE":  "01008",
+                            "NAME":  "Dayılar",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01722"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "TOWNNR":  "1",
+                            "CODE":  "01009",
+                            "NAME":  "Dölekli",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01722"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "TOWNNR":  "1",
+                            "CODE":  "01010",
+                            "NAME":  "Ebrişim",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0",
+                            "NAME2":  "",
+                            "NETFLAG":  "",
+                            "POSTCODE":  "01722"
+                        }
+                    ]
+}

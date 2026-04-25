@@ -1,0 +1,40 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "PLNALTSTOK1",
+    "full_name":  "dbo.PLNALTSTOK1",
+    "definition":  "CREATE VIEW [dbo].[PLNALTSTOK1] AS \r\nSELECT AMBAR_KODU,STOK_REF,VARYANT_REF,MIN(STOK3) AS STOK FROM (\r\nSELECT \r\n      SH.STOK_REF,\r\n\t  SH.VARYANT_REF,\r\n      SH.MIKTAR,\r\n      SH.AMBAR_KODU,\r\n      SH.SEVKEDILEN_MIKTAR,\r\n      (SELECT CONVERT(FLOAT,CONVERT(NUMERIC(24,8),SUM(MIKTAR))) FROM AMBARTAKIP WITH(NOLOCK) WHERE STOK_REF=SH.STOK_REF AND VARYANT_REF=SH.VARYANT_REF  AND AMBAR_KODU=SH.AMBAR_KODU) AS STOK1 ,\r\n      S.ALT_BIRIM_ADEDI AS ABA,\r\n      SA.STOKSUB_REF,\r\n      ALT_MIKTAR=((SA.MIKTAR /SB.CARPAN1) * SB.CARPAN2),\r\n      (SELECT CONVERT(FLOAT,CONVERT(NUMERIC(24,8),SUM(MIKTAR))) FROM AMBARTAKIP WITH(NOLOCK) WHERE STOK_REF=SA.STOKSUB_REF AND VARYANT_REF=SA.VARYANT_REF AND AMBAR_KODU=SH.AMBAR_KODU) AS STOK2,\r\n      FLOOR( ISNULL( (SELECT CONVERT(FLOAT,CONVERT(NUMERIC(24,8),SUM(MIKTAR))) FROM AMBARTAKIP WITH(NOLOCK) WHERE STOK_REF=SA.STOKSUB_REF AND VARYANT_REF=SA.VARYANT_REF AND AMBAR_KODU=SH.AMBAR_KODU)  ,0)\r\n      - ISNULL((SELECT SUM(SA_APM) FROM PLNALTSTOKAP WITH(NOLOCK) WHERE STOK_REF=SA.STOKSUB_REF AND VARYANT_REF=SA.VARYANT_REF  AND AMBAR_KODU=SH.AMBAR_KODU),0)) / ((SA.MIKTAR /SB.CARPAN1) * SB.CARPAN2)\r\n      AS STOK3\r\nFROM \r\n      SIPARISHAREKETLERI SH WITH(NOLOCK),\r\n      STOKALT SA WITH(NOLOCK),\r\n      STOKBIRIM SB WITH(NOLOCK),\r\n      STOKKARTI S WITH(NOLOCK)\r\nWHERE \r\n      SIPARIS_TURU=1 \r\n      AND KAPALI=0 \r\n      AND CSUB=1\r\n      AND SH.MIKTAR - SH.SEVKEDILEN_MIKTAR \u003e0\r\n      AND SA.STOK_REF=SH.STOK_REF\r\n\t  AND SA.VARYANT_REF =SH.VARYANT_REF\r\n      AND SB.BIRIM_REF=SA.BIRIM_REF\r\n      AND S.STOK_REF=SH.STOK_REF\r\n      ) AS LIST \r\n      GROUP BY \r\n      AMBAR_KODU,STOK_REF,VARYANT_REF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARYANT_REF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

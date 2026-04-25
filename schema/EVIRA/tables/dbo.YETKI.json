@@ -1,0 +1,136 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "YETKI",
+    "full_name":  "dbo.YETKI",
+    "description":  "",
+    "total_rows":  "227",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "YETKI_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KULLANICIGRUP_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OBJ1",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OBJ2",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__YETKI__C99F948F8232AA9A",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "YETKI_REF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "YETKI_REF":  "1",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030101.05",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "2",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030101.03",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "3",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030101.02",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "4",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030101.04",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "5",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030101.150",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "6",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030102.05",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "7",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030102.03",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "8",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030102.02",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "9",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030102.04",
+                            "OBJ2":  null
+                        },
+                        {
+                            "YETKI_REF":  "10",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "OBJ1":  "030102.150",
+                            "OBJ2":  null
+                        }
+                    ]
+}

@@ -1,0 +1,19 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LREF_LG_XT1226001_524",
+    "full_name":  "dbo.LREF_LG_XT1226001_524",
+    "created":  "May 23 2024  4:30PM",
+    "last_altered":  "May 23 2024  4:30PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@newLRef",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LREF_LG_XT1226001_524 @newLRef INTEGER OUTPUT AS\r\n  DECLARE @fnd       SMALLINT\r\n  DECLARE @firstVal  INT\r\n  DECLARE @secondVal INT\r\n\r\nSELECT @newLRef = 0\r\nIF EXISTS(SELECT * FROM sysobjects WHERE id = OBJECT_ID(\u0027LG_XT1226001_524SEQ\u0027))\r\n\r\n BEGIN SELECT @fnd = 0\r\n\r\n       WHILE @fnd = 0\r\n         BEGIN SELECT @firstVal = LASTLREF FROM LG_XT1226001_524SEQ WHERE ID = 1\r\n\r\n               UPDATE LG_XT1226001_524SEQ  SET LASTLREF = LASTLREF + 1 WHERE ID = 1\r\n\r\n               SELECT @secondVal = LASTLREF FROM LG_XT1226001_524SEQ  WHERE ID = 1\r\n\r\n               IF (@secondVal-@firstVal) = 1\r\n                 SELECT @fnd = 1\r\n         END\r\n\r\n       SELECT @newLRef = @secondVal\r\n\r\n END"
+}

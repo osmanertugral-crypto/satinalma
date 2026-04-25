@@ -1,0 +1,136 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "SESSIONDEF",
+    "full_name":  "dbo.SESSIONDEF",
+    "description":  "",
+    "total_rows":  "42",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "SESSIONDEF_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SEID",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "VTEXT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "4000",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__SESSIOND__8CF3CB7C1B490B1B",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "SESSIONDEF_REF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "SESSIONDEF_REF":  "1",
+                            "SEID":  "LOGOSRV\\WMS",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "2",
+                            "SEID":  "DESKTOP-B42J382\\Restar",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "3",
+                            "SEID":  "DEPO-S\\Depo Sorumlusu",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "4",
+                            "SEID":  "DESKTOP-L0FVI6P\\Üretim Planlama",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "5",
+                            "SEID":  "LOGOSRV\\onur.erdogan",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "6",
+                            "SEID":  "DESKTOP-470ADQE\\restar",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "7",
+                            "SEID":  "SATiNALMA2\\Satinalma 2",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "8",
+                            "SEID":  "DESKTOP-RT0VOU4\\restar",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "9",
+                            "SEID":  "SATINALMA-F\\Satinalma02",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        },
+                        {
+                            "SESSIONDEF_REF":  "10",
+                            "SEID":  "DESKTOP-KHK3S33\\RESTAR",
+                            "TYP":  "0",
+                            "VTEXT":  "1"
+                        }
+                    ]
+}

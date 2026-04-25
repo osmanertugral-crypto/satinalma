@@ -1,0 +1,189 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_SHPTYPES",
+    "full_name":  "dbo.L_SHPTYPES",
+    "description":  "",
+    "total_rows":  "18",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SDEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SDEF2",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICELEVEL",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EDICODE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "SHPTYPES_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "SHPTYPES_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "SCODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "SCODE":  "CFR",
+                            "SDEF":  "Cost and Freight",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "CFR"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "SCODE":  "CIF",
+                            "SDEF":  "Cost Insurance and Freight",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "CIF"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "SCODE":  "CIP",
+                            "SDEF":  "Navlun ve Sigorta Ödenmiş",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "CIP"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "SCODE":  "CPT",
+                            "SDEF":  "Navlun Ödenmiş",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "CPT"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "SCODE":  "DAF",
+                            "SDEF":  "Delivered at Frontier",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "DAF"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "SCODE":  "DDP",
+                            "SDEF":  "Gümrük Vergileri Ödenmiş",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "DDP"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "SCODE":  "DDU",
+                            "SDEF":  "Delivered Duty Unpaid",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "DDU"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "SCODE":  "DEQ",
+                            "SDEF":  "Delivered ex Quay",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "DEQ"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "SCODE":  "DES",
+                            "SDEF":  "Delivered ex Ship",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "DES"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "SCODE":  "EXW",
+                            "SDEF":  "Fabrika Teslim",
+                            "SDEF2":  "",
+                            "PRICELEVEL":  "1",
+                            "EDICODE":  "EXW"
+                        }
+                    ]
+}

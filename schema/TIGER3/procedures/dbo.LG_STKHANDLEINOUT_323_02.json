@@ -1,0 +1,491 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_STKHANDLEINOUT_323_02",
+    "full_name":  "dbo.LG_STKHANDLEINOUT_323_02",
+    "created":  "Apr 19 2024  4:42PM",
+    "last_altered":  "Apr 19 2024  4:42PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@par_Coef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_ItemRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_VariantRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_InvoiceRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DiffPrice",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DiffRepPrice",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DistCost",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DistAddExp",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_Amount",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_U1Cfact",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_U2CFact",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_Price",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_VatPer",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_VatIncFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_TrCode",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_BilledFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdAmount",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_CalcSign",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdU1CFact",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdU2CFact",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_ReportRate",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_SourceType",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_InvenNo",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_WStRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdInvenNo",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_TransDate",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_TrMonth",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_LineType",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdWasteFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdProdInFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdCountAddFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdCountDecFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdOtherInFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdOtherOutFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdTransferedFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdOrderFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdOrdOnVehFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdSaleFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdPurchaseFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdAvgFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdRecvFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdResFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdStcFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdTempInFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdTempOutFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdForTotFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdTransRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DistOrdLineRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdFicheRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_PrevLineRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DetLine",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_PrevLineNo",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_LProdStat",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_FcStat",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_Year",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UpdResFlag",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UOMRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdUOMRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_offTrRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_offerRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_STKHANDLEINOUT_323_02\n       @par_Coef              SMALLINT,\n       @par_ItemRef           INT,\n       @par_VariantRef        INT,\n       @par_InvoiceRef        INT,\n       @par_DiffPrice         FLOAT,\n       @par_DiffRepPrice      FLOAT,\n       @par_DistCost          FLOAT,\n       @par_DistAddExp        FLOAT,\n       @par_Amount            FLOAT,\n       @par_U1Cfact           FLOAT,\n       @par_U2CFact           FLOAT,\n       @par_Price             FLOAT,\n       @par_VatPer            FLOAT,\n       @par_VatIncFlag        SMALLINT,\n       @par_TrCode            SMALLINT,\n       @par_BilledFlag        SMALLINT,\n       @par_OrdAmount         FLOAT,\n       @par_CalcSign          SMALLINT,\n       @par_OrdU1CFact        FLOAT,\n       @par_OrdU2CFact        FLOAT,\n       @par_ReportRate        FLOAT,\n       @par_SourceType        SMALLINT,\n       @par_InvenNo           SMALLINT,\n       @par_WStRef            INT,\n       @par_OrdInvenNo        SMALLINT,\n       @par_TransDate         DATETIME,\n       @par_TrMonth           SMALLINT,\n       @par_LineType          SMALLINT,\n       @par_UpdWasteFlag      SMALLINT,\n       @par_UpdProdInFlag     SMALLINT,\n       @par_UpdCountAddFlag   SMALLINT,\n       @par_UpdCountDecFlag   SMALLINT,\n       @par_UpdOtherInFlag    SMALLINT,\n       @par_UpdOtherOutFlag   SMALLINT,\n       @par_UpdTransferedFlag SMALLINT,\n       @par_UpdOrderFlag      SMALLINT,\n       @par_UpdOrdOnVehFlag   SMALLINT,\n       @par_UpdSaleFlag       SMALLINT,\n       @par_UpdPurchaseFlag   SMALLINT,\n       @par_UpdAvgFlag        SMALLINT,\n       @par_OrdRecvFlag       SMALLINT,\n       @par_OrdResFlag        SMALLINT,\n       @par_UpdStcFlag        SMALLINT,\n       @par_UpdTempInFlag     SMALLINT,\n       @par_UpdTempOutFlag    SMALLINT,\n       @par_UpdForTotFlag     SMALLINT,\n       @par_OrdTransRef       INT,\n       @par_DistOrdLineRef    INT,\n       @par_OrdFicheRef       INT,\n       @par_PrevLineRef       INT,\n       @par_DetLine           SMALLINT,\n       @par_PrevLineNo        SMALLINT,\n       @par_LProdStat         SMALLINT,\n       @par_FcStat            SMALLINT,\n       @par_Year              SMALLINT,\n       @par_UpdResFlag        SMALLINT,\n       @par_UOMRef            INT,\n       @par_OrdUOMRef         INT,\n       @par_offTrRef          INT,\n       @par_offerRef          INT AS\n \nDECLARE @Epsilon FLOAT\nDECLARE @c_PStatPlanned SMALLINT\nDECLARE @c_PStatRealized SMALLINT\nDECLARE @c_TrWarehouse SMALLINT\nDECLARE @c_TrWorkStation SMALLINT\nDECLARE @c_STrans SMALLINT\nDECLARE @c_Promotion SMALLINT\nDECLARE @c_LDiscount SMALLINT\nDECLARE @c_LExpense SMALLINT\nDECLARE @c_Service SMALLINT\nDECLARE @c_Deposit SMALLINT\nDECLARE @c_Composite SMALLINT\nDECLARE @c_CompLine SMALLINT\nDECLARE @c_FATrans SMALLINT\nDECLARE @c_SubContract SMALLINT\nDECLARE @c_LOption SMALLINT\nDECLARE @c_LClass SMALLINT\nDECLARE @ft_MalAlim SMALLINT\nDECLARE @ft_PerSatIade SMALLINT\nDECLARE @ft_TopSatIade SMALLINT\nDECLARE @ft_KonsCikIade SMALLINT\nDECLARE @ft_KonsGiris SMALLINT\nDECLARE @ft_AlimIade SMALLINT\nDECLARE @ft_PerSatis SMALLINT\nDECLARE @ft_TopSatis SMALLINT\nDECLARE @ft_KonsCikis SMALLINT\nDECLARE @ft_KonsGirIade SMALLINT\nDECLARE @ft_Fire SMALLINT\nDECLARE @ft_Sarf SMALLINT\nDECLARE @ft_UretGiris SMALLINT\nDECLARE @ft_Devir SMALLINT\nDECLARE @ft_AlFiyatFarki SMALLINT\nDECLARE @ft_VerFiyatFarki SMALLINT\nDECLARE @ft_MalzGirIlk SMALLINT\nDECLARE @ft_MalzGirSon SMALLINT\nDECLARE @ft_MalzCikIlk SMALLINT\nDECLARE @ft_MalzCikSon SMALLINT\nDECLARE @ft_Ambar SMALLINT\nDECLARE @ft_Mustahsil SMALLINT\nDECLARE @ft_IrsGirIlk SMALLINT\nDECLARE @ft_IrsGirSon SMALLINT\nDECLARE @ft_IrsCikIlk SMALLINT\nDECLARE @ft_IrsCikSon SMALLINT\nDECLARE @ft_SayimFazlasi SMALLINT\nDECLARE @ft_SayimEksigi SMALLINT\nDECLARE @dCost FLOAT\nDECLARE @eCost FLOAT\nDECLARE @convertedAmount FLOAT\nDECLARE @convertedPrice FLOAT\nDECLARE @ordTransDate DATETIME\nDECLARE @addAmount FLOAT\nDECLARE @addOrdAmount FLOAT\nDECLARE @addValue FLOAT\nDECLARE @addExpValue FLOAT\nDECLARE @currAddValue FLOAT\nDECLARE @currAddExpValue FLOAT\nDECLARE @stcValue FLOAT\nDECLARE @currStcValue FLOAT\nDECLARE @stcValueV FLOAT\nDECLARE @currStcValueV FLOAT\nDECLARE @inc_SaleAmount FLOAT\nDECLARE @inc_SaleInCash FLOAT\nDECLARE @inc_CurrSaleInCash FLOAT\nDECLARE @inc_PurchaseAmount FLOAT\nDECLARE @inc_PurchaseInCash FLOAT\nDECLARE @inc_CurrPurchaseInCash FLOAT\nDECLARE @inc_OnHand FLOAT\nDECLARE @inc_TempIn FLOAT\nDECLARE @inc_TempOut FLOAT\nDECLARE @inc_Transfer FLOAT\nDECLARE @inc_Shipped FLOAT\nDECLARE @inc_OnVehicled FLOAT\nDECLARE @inc_Received FLOAT\nDECLARE @inc_PlnProdIn FLOAT\nDECLARE @inc_ActProdIn FLOAT\nDECLARE @invDt_PlnProdIn FLOAT\nDECLARE @invDt_ActProdIn FLOAT\nDECLARE @invTot_PlnProdIn FLOAT\nDECLARE @invTot_ActProdIn FLOAT\nDECLARE @genDt_ActProdIn FLOAT\nDECLARE @genTot_ActProdIn FLOAT\nDECLARE @inc_PlnWaste FLOAT\nDECLARE @inc_ActWaste FLOAT\nDECLARE @inc_PlnOtherIn FLOAT\nDECLARE @inc_ActOtherIn FLOAT\nDECLARE @invDt_ActOtherInput FLOAT\nDECLARE @invTot_ActOtherInput FLOAT\nDECLARE @genDt_ActOtherInput FLOAT\nDECLARE @genTot_ActOtherInput FLOAT\nDECLARE @inc_PlnOtherOut FLOAT\nDECLARE @inc_ActOtherOut FLOAT\nDECLARE @inc_CountAdd FLOAT\nDECLARE @inc_CountDec FLOAT\nDECLARE @inc_Purchase FLOAT\nDECLARE @inc_Sale FLOAT\nDECLARE @inc_Reserved FLOAT\nDECLARE @inc_ActSaleOrder FLOAT\nDECLARE @inc_ActPurchaseOrder FLOAT\nDECLARE @invDt_AvgValue FLOAT\nDECLARE @invTot_AvgValue FLOAT\nDECLARE @invDt_CurrAvgValue FLOAT\nDECLARE @invTot_CurrAvgValue FLOAT\nDECLARE @invDt_TotalInput FLOAT\nDECLARE @invTot_TotalInput FLOAT\nDECLARE @genDt_AvgValue FLOAT\nDECLARE @genTot_AvgValue FLOAT\nDECLARE @genDt_CurrAvgValue FLOAT\nDECLARE @genTot_CurrAvgValue FLOAT\nDECLARE @genDt_TotalInput FLOAT\nDECLARE @genTot_TotalInput FLOAT\nDECLARE @invDt_Transferred FLOAT\nDECLARE @invTot_Transferred FLOAT\nDECLARE @genDt_Transferred FLOAT\nDECLARE @genTot_Transferred FLOAT\nDECLARE @invDt_purchaseAmount FLOAT\nDECLARE @invTot_purchaseAmount FLOAT\nDECLARE @genDt_PurchaseAmount FLOAT\nDECLARE @genTot_PurchaseAmount FLOAT\nDECLARE @invDtV_AvgValue FLOAT\nDECLARE @invTotV_AvgValue FLOAT\nDECLARE @invDtV_CurrAvgValue FLOAT\nDECLARE @invTotV_CurrAvgValue FLOAT\nDECLARE @invDtV_TotalInput FLOAT\nDECLARE @invTotV_TotalInput FLOAT\nDECLARE @genDtV_AvgValue FLOAT\nDECLARE @genTotV_AvgValue FLOAT\nDECLARE @genDtV_CurrAvgValue FLOAT\nDECLARE @genTotV_CurrAvgValue FLOAT\nDECLARE @genDtV_TotalInput FLOAT\nDECLARE @genTotV_TotalInput FLOAT\nDECLARE @invDtV_Transferred FLOAT\nDECLARE @invTotV_Transferred FLOAT\nDECLARE @genDtV_Transferred FLOAT\nDECLARE @genTotV_Transferred FLOAT\nDECLARE @invDtV_purchaseAmount FLOAT\nDECLARE @invTotV_purchaseAmount FLOAT\nDECLARE @genDtV_PurchaseAmount FLOAT\nDECLARE @genTotV_PurchaseAmount FLOAT\nDECLARE @invDtV_PlnProdIn FLOAT\nDECLARE @invDtV_ActProdIn FLOAT\nDECLARE @invTotV_PlnProdIn FLOAT\nDECLARE @invTotV_ActProdIn FLOAT\nDECLARE @genDtV_ActProdIn FLOAT\nDECLARE @genTotV_ActProdIn FLOAT\nDECLARE @invDtV_ActOtherInput FLOAT\nDECLARE @invTotV_ActOtherInput FLOAT\nDECLARE @genDtV_ActOtherInput FLOAT\nDECLARE @genTotV_ActOtherInput FLOAT\nDECLARE @invDtV_CountAdd FLOAT\nDECLARE @invTotV_CountAdd FLOAT\nDECLARE @genDtV_CountAdd FLOAT\nDECLARE @genTotV_CountAdd FLOAT\nDECLARE @invDtV_CountDec FLOAT\nDECLARE @invTotV_CountDec FLOAT\nDECLARE @genDtV_CountDec FLOAT\nDECLARE @genTotV_CountDec FLOAT\nDECLARE @invDtV_ActInvenInputs FLOAT\nDECLARE @invTotV_ActInvenInput FLOAT\nDECLARE @genDtV_ActInvenInputs FLOAT\nDECLARE @genTotV_ActInvenInputs FLOAT\nDECLARE @invDtV_ActInvenOutputs FLOAT\nDECLARE @invTotV_ActInvenOutput FLOAT\nDECLARE @genDtV_ActInvenOutputs FLOAT\nDECLARE @genTotV_ActInvenOutputs FLOAT\nDECLARE @adjustedAmount FLOAT\nDECLARE @convFactor FLOAT\nDECLARE @orderConvFactor FLOAT\nDECLARE @inc_PlnInvenInput FLOAT\nDECLARE @inc_ActInvenInput FLOAT\nDECLARE @invDt_ActInvenInputs FLOAT\nDECLARE @invTot_ActInvenInput FLOAT\nDECLARE @genDt_ActInvenInputs FLOAT\nDECLARE @genTot_ActInvenInputs FLOAT\nDECLARE @inc_PlnInvenOutput FLOAT\nDECLARE @inc_ActInvenOutput FLOAT\nDECLARE @invDt_ActInvenOutputs FLOAT\nDECLARE @invTot_ActInvenOutput FLOAT\nDECLARE @genDt_ActInvenOutputs FLOAT\nDECLARE @genTot_ActInvenOutputs FLOAT\nDECLARE @invDt_CountAdd FLOAT\nDECLARE @invTot_CountAdd FLOAT\nDECLARE @genDt_CountAdd FLOAT\nDECLARE @genTot_CountAdd FLOAT\nDECLARE @invDt_CountDec FLOAT\nDECLARE @invTot_CountDec FLOAT\nDECLARE @genDt_CountDec FLOAT\nDECLARE @genTot_CountDec FLOAT\nDECLARE @ordUpdAmount FLOAT\nDECLARE @incAmount FLOAT\nDECLARE @inc_OffOrdAmount FLOAT\nDECLARE @leftToShipment FLOAT\nDECLARE @extraShipment FLOAT\nDECLARE @shpAmount FLOAT\nDECLARE @OrdClosed SMALLINT\nDECLARE @OrdCancelled SMALLINT\nDECLARE @OrdCheck SMALLINT\nDECLARE @Q FLOAT\nDECLARE @W FLOAT\nDECLARE @E FLOAT\nDECLARE @R FLOAT\nDECLARE @T FLOAT\nDECLARE @FRMNR INT\nDECLARE @VIRTUALINVEN SMALLINT\nDECLARE @ShippedAmntSugg FLOAT\nSELECT @FRMNR = CAST(\u0027323\u0027 AS SMALLINT)\n ,@VIRTUALINVEN = 0\nSELECT @Epsilon = 0.0000001\nSELECT @c_PStatPlanned = 1\n ,@c_PStatRealized = 0\nSELECT @c_TrWarehouse = 0\n ,@c_TrWorkStation = 1\nSELECT @c_STrans = 0\n ,@c_Promotion = 1\n ,@c_LDiscount = 2\n ,@c_LExpense = 3\n ,@c_Service = 4\n ,@c_Deposit = 5\n ,@c_Composite = 6\n ,@c_CompLine = 7\n ,@c_FATrans = 8\n ,@c_LOption = 9\n ,@c_LClass = 10\n ,@c_SubContract = 11\nSELECT @ft_MalAlim = 1\n ,@ft_PerSatIade = 2\n ,@ft_TopSatIade = 3\n ,@ft_KonsCikIade = 4\n ,@ft_KonsGiris = 5\n ,@ft_AlimIade = 6\n ,@ft_PerSatis = 7\n ,@ft_TopSatis = 8\n ,@ft_KonsCikis = 9\n ,@ft_KonsGirIade = 10\n ,@ft_Fire = 11\n ,@ft_Sarf = 12\n ,@ft_UretGiris = 13\n ,@ft_Devir = 14\n ,@ft_AlFiyatFarki = 13\n ,@ft_VerFiyatFarki = 14\n ,@ft_MalzGirIlk = 15\n ,@ft_MalzGirSon = 19\n ,@ft_MalzCikIlk = 20\n ,@ft_MalzCikSon = 24\n ,@ft_Ambar = 25\n ,@ft_Mustahsil = 26\n ,@ft_IrsGirIlk = 30\n ,@ft_IrsGirSon = 34\n ,@ft_IrsCikIlk = 35\n ,@ft_IrsCikSon = 39\n ,@ft_SayimFazlasi = 50\n ,@ft_SayimEksigi = 51\nSELECT @inc_Reserved = 0.0\n ,@inc_ActSaleOrder = 0.0\n ,@inc_ActPurchaseOrder = 0.0\n ,@inc_SaleAmount = 0.0\n ,@inc_SaleInCash = 0.0\n ,@inc_CurrSaleInCash = 0.0\n ,@inc_PurchaseAmount = 0.0\n ,@inc_PurchaseInCash = 0.0\n ,@inc_CurrPurchaseInCash = 0.0\n ,@inc_Transfer = 0.0\n ,@inc_TempIn = 0.0\n ,@inc_TempOut = 0.0\n ,@inc_OnHand = 0.0\n ,@inc_Shipped = 0.0\n ,@inc_OnVehicled = 0.0\n ,@inc_Received = 0.0\n ,@inc_PlnWaste = 0.0\n ,@inc_ActWaste = 0.0\n ,@inc_PlnProdIn = 0.0\n ,@inc_ActProdIn = 0.0\n ,@inc_CountAdd = 0.0\n ,@inc_CountDec = 0.0\n ,@inc_PlnOtherIn = 0.0\n ,@inc_ActOtherIn = 0.0\n ,@inc_PlnOtherOut = 0.0\n ,@inc_ActOtherOut = 0.0\n ,@inc_Purchase = 0.0\n ,@inc_Sale = 0.0\n ,@inc_PlnInvenInput = 0.0\n ,@inc_ActInvenInput = 0.0\n ,@inc_PlnInvenOutput = 0.0\n ,@inc_ActInvenOutput = 0.0\nEXECUTE LG_CONVFACT @par_U1Cfact\n ,@par_U2CFact\n ,@convFactor OUTPUT\nEXECUTE LG_CONVFACT @par_OrdU1CFact\n ,@par_OrdU2CFact\n ,@orderConvFactor OUTPUT\nSET @ordTransDate = @par_TransDate\nSET @addOrdAmount = 0\nSELECT @convertedAmount = @par_Amount * @convFactor\nSELECT @convertedPrice = @par_Price\nIF (@par_VatIncFlag = 1)\n SELECT @convertedPrice = (@convertedPrice * 100.0) / (@par_VatPer + 100.0)\nIF (@convFactor \u003e @Epsilon)\n SELECT @convertedPrice = @convertedPrice / @convFactor\nIF (@par_UpdTransferedFlag = 1)\nBEGIN\n SELECT @dCost = 0.0\n SELECT @eCost = 0.0\nEND\nELSE\nBEGIN\n SELECT @dCost = @par_DistCost + @par_DistAddExp\n SELECT @eCost = @par_DistCost\nEND\nIF (\n  @par_TrCode IN (\n   @ft_AlFiyatFarki\n   ,@ft_VerFiyatFarki\n   )\n  ) AND (@par_BilledFlag = 1)\n SELECT @addAmount = 0\nELSE\n SELECT @addAmount = @par_Coef * @par_CalcSign * @convertedAmount\n/*SELECT @inc_OffOrdAmount = @par_Coef * @convertedAmount*/\nSELECT @inc_OffOrdAmount = @par_Coef * @par_Amount * @orderConvFactor\nIF (\n  @par_TrCode IN (\n   @ft_AlimIade\n   ,@ft_TopSatIade\n   ,@ft_PerSatIade\n   ,@ft_KonsGirIade\n   ,@ft_KonsCikIade\n   )\n  )\n SELECT @inc_OffOrdAmount = - 1 * @inc_OffOrdAmount\nIF @par_UpdOrderFlag = 1\nBEGIN\n SELECT @leftToShipment = (AMOUNT - SHIPPEDAMOUNT) * UINFO2 / UINFO1\n  ,@extraShipment = (SHIPPEDAMOUNT - AMOUNT) * UINFO2 / UINFO1\n  ,@ordTransDate = DATE_\n  ,@OrdClosed = CLOSED\n  ,@OrdCancelled = CANCELLED\n  ,@ShippedAmntSugg = SHIPPEDAMNTSUGG\n FROM LG_323_02_ORFLINE\n WHERE (LOGICALREF = @par_OrdTransRef)\n SELECT @OrdCheck = @OrdClosed + @OrdCancelled\n IF (@par_UOMRef = @par_OrdUOMRef) /*different from main unit but the same unit in order and dispatch*/\n  SELECT @shpAmount = @par_Amount * @orderConvFactor\n ELSE\n  SELECT @shpAmount = @convertedAmount\n IF @par_Coef = 1\n BEGIN\n  IF @leftToShipment \u003c @Epsilon\n   SET @leftToShipment = 0\n  IF @shpAmount \u003e @leftToShipment /*@convertedAmount \u003e @leftToShipment*/\n   SET @addOrdAmount = @par_Coef * @par_CalcSign * @leftToShipment\n  ELSE\n   SET @addOrdAmount = @par_Coef * @par_CalcSign * @shpAmount /*@par_Coef * @par_CalcSign* @convertedAmount*/\n END\n IF @par_Coef = - 1\n BEGIN\n  IF @extraShipment \u003c @Epsilon\n   SET @extraShipment = 0\n  SET @addOrdAmount = (@shpAmount - @extraShipment) /*(@convertedAmount - @extraShipment)*/\n  IF @addOrdAmount \u003c @Epsilon\n   SET @addOrdAmount = 0\n  SET @addOrdAmount = @par_CalcSign * @par_Coef * @addOrdAmount\n END\n IF (\n   @par_TrCode IN (\n    @ft_AlimIade\n    ,@ft_TopSatIade\n    ,@ft_PerSatIade\n    ,@ft_KonsGirIade\n    ,@ft_KonsCikIade\n    )\n   ) AND ((@par_OrdTransRef \u003e 0) OR (@par_OrdTransRef IS NOT NULL))\n BEGIN\n  SELECT @Q = @leftToShipment\n  SELECT @W = @extraShipment\n  SELECT @E = @shpAmount /*@convertedAmount*/\n  SELECT @R = (@shpAmount - @extraShipment) /*(@convertedAmount - @extraShipment)*/\n  SELECT @T = @addOrdAmount\n  SELECT @addOrdAmount = 0\n  IF (@par_coef = 1)\n  BEGIN\n   IF (@leftToShipment = 0) AND (@r \u003e @Epsilon)\n    SELECT @addOrdAmount = @r\n   IF (@leftToShipment \u003e @Epsilon) AND (@r \u003e @Epsilon)\n    SELECT @addOrdAmount = @shpAmount /*@convertedAmount*/\n  END\n  IF (@par_coef = - 1)\n  BEGIN\n   IF (@leftToShipment \u003e @Epsilon) AND (@extraShipment = 0) AND (@shpAmount \u003e @Epsilon\n     ) AND (@leftToShipment \u003e @shpAmount)\n    SELECT @addOrdAmount = - @shpAmount /*-@convertedAmount*/\n   IF (@leftToShipment \u003e @Epsilon) AND (@extraShipment = 0) AND (@shpAmount \u003e @Epsilon\n     ) AND (@leftToShipment \u003c @shpAmount)\n    SELECT @addOrdAmount = - @leftToShipment\n   IF (@leftToShipment \u003e @Epsilon) AND (@extraShipment = 0) AND (@shpAmount \u003e @Epsilon\n     ) AND (@leftToShipment = @shpAmount)\n    SELECT @addOrdAmount = - @leftToShipment\n  END\n  IF @par_TrCode IN (\n    @ft_AlimIade\n    ,@ft_KonsGirIade\n    )\n   SELECT @addOrdAmount = - @addOrdAmount\n END\nEND\nSELECT @addValue = @par_Coef * @par_CalcSign * (@convertedAmount * @convertedPrice - @dCost)\nIF (@par_TrCode = @ft_SayimFazlasi)\nBEGIN\n SELECT @addExpValue = @par_Coef * (- @par_CalcSign) * (@convertedAmount * @convertedPrice - @eCost)\nEND\nELSE\nBEGIN\n SELECT @addExpValue = @par_Coef * @par_CalcSign * (@convertedAmount * @convertedPrice - @eCost)\nEND\nIF (@par_ReportRate \u003e @Epsilon)\nBEGIN\n SELECT @currAddValue = @addValue / @par_ReportRate\n SELECT @currAddExpValue = @addExpValue / @par_ReportRate\nEND\nELSE\nBEGIN\n SELECT @currAddValue = 0.0\n SELECT @currAddExpValue = 0.0\nEND\nIF (@par_LineType \u003c\u003e @c_Deposit)\nBEGIN\n IF (@par_UpdStcFlag = 1)\n BEGIN\n  IF (@par_TrCode = @ft_SayimFazlasi)\n   SELECT @inc_OnHand = - @addAmount\n  ELSE\n   SELECT @inc_OnHand = @addAmount\n END\n IF (@par_UpdTempInFlag = 1)\n  SELECT @inc_TempIn = @addAmount\n IF (@par_UpdTempOutFlag = 1)\n  SELECT @inc_TempOut = - @addAmount\n IF (@par_UpdTransferedFlag = 1)\n  SELECT @inc_Transfer = @addAmount\n IF (@par_UpdWasteFlag = 1)\n  IF (@par_LProdStat = @c_PStatPlanned)\n   SELECT @inc_PlnWaste = - @addAmount\n  ELSE\n   SELECT @inc_ActWaste = - @addAmount\n IF (@par_UpdProdInFlag = 1)\n  IF (@par_LProdStat = @c_PStatPlanned)\n   SELECT @inc_PlnProdIn = @addAmount\n  ELSE\n   SELECT @inc_ActProdIn = @addAmount\n IF (@par_UpdCountAddFlag = 1)\n  SELECT @inc_CountAdd = - @addAmount\n IF (@par_UpdCountDecFlag = 1)\n  SELECT @inc_CountDec = - @addAmount\n IF (@par_UpdOtherInFlag = 1)\n  IF (@par_LProdStat = @c_PStatPlanned)\n   SELECT @inc_PlnOtherIn = @addAmount\n  ELSE\n   SELECT @inc_ActOtherIn = @addAmount\n IF (@par_UpdOtherOutFlag = 1)\n  IF (@par_LProdStat = @c_PStatPlanned)\n   SELECT @inc_PlnOtherOut = - @addAmount\n  ELSE\n   SELECT @inc_ActOtherOut = - @addAmount\n IF (@par_UpdPurchaseFlag = 1)\n BEGIN\n  SELECT @inc_Purchase = @addAmount\n  SELECT @inc_PurchaseInCash = @addExpValue\n  SELECT @inc_CurrPurchaseInCash = @currAddExpValue\n END\n IF (@par_UpdSaleFlag = 1)\n BEGIN\n  SELECT @inc_Sale = - @addAmount\n  SELECT @inc_SaleInCash = @addExpValue\n  SELECT @inc_CurrSaleInCash = @currAddExpValue\n END\n IF (@par_TrCode = @ft_Ambar) AND ((@par_fcStat = 0) OR (@par_fcStat IS NULL)\n   )\n BEGIN\n  IF (@par_UpdAvgFlag = 1)\n   IF (@par_LProdStat = @c_PStatPlanned)\n    SELECT @inc_PlnInvenInput = @addAmount\n   ELSE\n    SELECT @inc_ActInvenInput = @addAmount\n  ELSE\n   IF (@par_LProdStat = @c_PStatPlanned)\n    SELECT @inc_PlnInvenOutput = - @addAmount\n   ELSE\n    SELECT @inc_ActInvenOutput = - @addAmount\n END\n IF (@par_UpdAvgFlag = 1)\n BEGIN\n  SELECT @invDt_TotalInput = @invDt_Transferred + @invDt_purchaseAmount + @invDt_ActProdIn + @invDt_CountAdd +\n   @invDt_ActOtherInput + @invDt_ActInvenInputs - @invDt_ActInvenOutputs - @invDt_CountDec\n  IF (@invDt_TotalInput = 0) AND (ABS(@invDt_AvgValue) \u003e @Epsilon)\n   SELECT @stcValue = @invDt_AvgValue\n  ELSE\n   SELECT @stcValue = @invDt_TotalInput * @invDt_AvgValue\n  IF (@invDt_TotalInput = 0) AND (ABS(@invDt_CurrAvgValue) \u003e @Epsilon)\n   SELECT @currStcValue = @invDt_CurrAvgValue\n  ELSE\n   SELECT @currStcValue = @invDt_TotalInput * @invDt_CurrAvgValue\n  SELECT @stcValue = @stcValue + @addExpValue\n  SELECT @currStcValue = @currStcValue + @currAddExpValue\n  SELECT @invDt_TotalInput = @inc_Transfer + @invDt_Transferred + @inc_Purchase + @invDt_purchaseAmount + @inc_ActOtherIn +\n   @invDt_ActOtherInput + @inc_ActProdIn + @invDt_ActProdIn + @inc_CountAdd + @invDt_CountAdd - @inc_CountDec -\n   @invDt_CountDec + @inc_ActInvenInput + @invDt_ActInvenInputs - @inc_ActInvenOutput - @invDt_ActInvenOutputs\n  IF (@invDt_TotalInput \u003e @Epsilon)\n  BEGIN\n   SELECT @invDt_AvgValue = @stcValue / @invDt_TotalInput\n   SELECT @invDt_CurrAvgValue = @currStcValue / @invDt_TotalInput\n  END\n  ELSE\n   IF (@par_InvoiceRef \u003c\u003e 0) AND (\n     @par_TrCode IN (\n      @ft_AlFiyatFarki\n      ,@ft_VerFiyatFarki\n      )\n     )\n   BEGIN\n    SELECT @invDt_AvgValue = @invDt_AvgValue + @addExpValue\n    SELECT @invDt_CurrAvgValue = @invDt_CurrAvgValue + @currAddExpValue\n   END\n   ELSE\n   BEGIN\n    SELECT @invDt_AvgValue = @par_DiffPrice\n    SELECT @invDt_CurrAvgValue = @par_DiffRepPrice\n   END\n  IF (@par_VariantRef IS NOT NULL) AND (@par_VariantRef \u003e 0)\n  BEGIN\n   SELECT @invDtV_TotalInput = @invDtV_Transferred + @invDtV_purchaseAmount + @invDtV_ActProdIn + @invDtV_CountAdd +\n    @invDtV_ActOtherInput + @invDtV_ActInvenInputs - @invDtV_ActInvenOutputs - @invDtV_CountDec\n   IF (@invDtV_TotalInput = 0) AND (ABS(@invDtV_AvgValue) \u003e @Epsilon)\n    SELECT @stcValueV = @invDtV_AvgValue\n   ELSE\n    SELECT @stcValueV = @invDtV_TotalInput * @invDtV_AvgValue\n   IF (@invDtV_TotalInput = 0) AND (ABS(@invDtV_CurrAvgValue) \u003e @Epsilon)\n    SELECT @currStcValueV = @invDtV_CurrAvgValue\n   ELSE\n    SELECT @currStcValueV = @invDtV_TotalInput * @invDtV_CurrAvgValue\n   SELECT @stcValueV = @stcValueV + @addExpValue\n   SELECT @currStcValueV = @currStcValueV + @currAddExpValue\n   SELECT @invDtV_TotalInput = @inc_Transfer + @invDtV_Transferred + @inc_Purchase + @invDtV_purchaseAmount +\n    @inc_ActOtherIn + @invDtV_ActOtherInput + @inc_ActProdIn + @invDtV_ActProdIn + @inc_CountAdd + @invDtV_CountAdd -\n    @inc_CountDec - @invDtV_CountDec + @inc_ActInvenInput + @invDtV_ActInvenInputs - @inc_ActInvenOutput -\n    @invDtV_ActInvenOutputs\n   IF (@invDtV_TotalInput \u003e @Epsilon)\n   BEGIN\n    SELECT @invDtV_AvgValue = @stcValueV / @invDtV_TotalInput\n    SELECT @invDtV_CurrAvgValue = @currStcValueV / @invDtV_TotalInput\n   END\n   ELSE\n    IF (@par_InvoiceRef \u003c\u003e 0) AND (\n      @par_TrCode IN (\n       @ft_AlFiyatFarki\n       ,@ft_VerFiyatFarki\n       )\n      )\n    BEGIN\n     SELECT @invDtV_AvgValue = @invDtV_AvgValue + @addExpValue\n     SELECT @invDtV_CurrAvgValue = @invDtV_CurrAvgValue + @currAddExpValue\n    END\n    ELSE\n    BEGIN\n     SELECT @invDtV_AvgValue = @par_DiffPrice\n     SELECT @invDtV_CurrAvgValue = @par_DiffRepPrice\n    END\n  END\n END\n IF (@par_UpdAvgFlag = 1)\n BEGIN\n  SELECT @invTot_TotalInput = @invTot_Transferred + @invTot_purchaseAmount + @invTot_ActProdIn + @invTot_CountAdd -\n   @invTot_CountDec + @invTot_ActOtherInput + @invTot_ActInvenInput - @invTot_ActInvenOutput\n  IF (@invTot_TotalInput = 0) AND (ABS(@invTot_AvgValue) \u003e @Epsilon)\n   SELECT @stcValue = @invTot_AvgValue\n  ELSE\n   SELECT @stcValue = @invTot_TotalInput * @invTot_AvgValue\n  IF (@invTot_TotalInput = 0) AND (ABS(@invTot_CurrAvgValue) \u003e @Epsilon)\n   SELECT @currStcValue = @invTot_CurrAvgValue\n  ELSE\n   SELECT @currStcValue = @invTot_TotalInput * @invTot_CurrAvgValue\n  SELECT @stcValue = @stcValue + @addExpValue\n  SELECT @currStcValue = @currStcValue + @currAddExpValue\n  SELECT @invTot_TotalInput = @inc_Transfer + @invTot_Transferred + @inc_Purchase + @invTot_purchaseAmount + @inc_ActOtherIn +\n   @invTot_ActOtherInput + @inc_ActProdIn + @invTot_ActProdIn + @invTot_CountAdd + @inc_CountAdd - @inc_CountDec -\n   @invTot_CountDec + @invTot_ActInvenInput + @inc_ActInvenInput - @invTot_ActInvenOutput - @inc_ActInvenOutput\n  IF (@invTot_TotalInput \u003e @Epsilon)\n  BEGIN\n   SELECT @invTot_AvgValue = @stcValue / @invTot_TotalInput\n   SELECT @invTot_CurrAvgValue = @currStcValue / @invTot_TotalInput\n  END\n  ELSE\n   IF (@par_InvoiceRef \u003c\u003e 0) AND (\n     @par_TrCode IN (\n      @ft_AlFiyatFarki\n      ,@ft_VerFiyatFarki\n      )\n     )\n   BEGIN\n    SELECT @invTot_AvgValue = @invTot_AvgValue + @addExpValue\n    SELECT @invTot_CurrAvgValue = @invTot_CurrAvgValue + @currAddExpValue\n   END\n   ELSE\n   BEGIN\n    SELECT @invTot_AvgValue = @par_DiffPrice\n    SELECT @invTot_CurrAvgValue = @par_DiffRepPrice\n   END\n  IF (@par_VariantRef IS NOT NULL) AND (@par_VariantRef \u003e 0)\n  BEGIN\n   SELECT @invTotV_TotalInput = @invTotV_Transferred + @invTotV_purchaseAmount + @invTotV_ActProdIn + @invTotV_CountAdd -\n    @invTotV_CountDec + @invTotV_ActOtherInput + @invTotV_ActInvenInput - @invTotV_ActInvenOutput\n   IF (@invTotV_TotalInput = 0) AND (ABS(@invTotV_AvgValue) \u003e @Epsilon)\n    SELECT @stcValueV = @invTotV_AvgValue\n   ELSE\n    SELECT @stcValueV = @invTotV_TotalInput * @invTotV_AvgValue\n   IF (@invTotV_TotalInput = 0) AND (ABS(@invTotV_CurrAvgValue) \u003e @Epsilon)\n    SELECT @currStcValueV = @invTotV_CurrAvgValue\n   ELSE\n    SELECT @currStcValueV = @invTotV_TotalInput * @invTotV_CurrAvgValue\n   SELECT @stcValueV = @stcValueV + @addExpValue\n   SELECT @currStcValueV = @currStcValueV + @currAddExpValue\n   SELECT @invTotV_TotalInput = @inc_Transfer + @invTotV_Transferred + @inc_Purchase + @invTotV_purchaseAmount +\n    @inc_ActOtherIn + @invTotV_ActOtherInput + @inc_ActProdIn + @invTotV_ActProdIn + @invTotV_CountAdd + @inc_CountAdd\n    - @inc_CountDec - @invTotV_CountDec + @invTotV_ActInvenInput + @inc_ActInvenInput - @invTotV_ActInvenOutput -\n    @inc_ActInvenOutput\n   IF (@invTotV_TotalInput \u003e @Epsilon)\n   BEGIN\n    SELECT @invTotV_AvgValue = @stcValueV / @invTotV_TotalInput\n    SELECT @invTotV_CurrAvgValue = @currStcValueV / @invTotV_TotalInput\n   END\n   ELSE\n    IF (@par_InvoiceRef \u003c\u003e 0) AND (\n      @par_TrCode IN (\n       @ft_AlFiyatFarki\n       ,@ft_VerFiyatFarki\n       )\n      )\n    BEGIN\n     SELECT @invTotV_AvgValue = @invTotV_AvgValue + @addExpValue\n     SELECT @invTotV_CurrAvgValue = @invTotV_CurrAvgValue + @currAddExpValue\n    END\n    ELSE\n    BEGIN\n     SELECT @invTotV_AvgValue = @par_DiffPrice\n     SELECT @invTotV_CurrAvgValue = @par_DiffRepPrice\n    END\n  END\n END\n IF (@par_UpdAvgFlag = 1) AND (@par_UpdForTotFlag = 1)\n BEGIN\n  SELECT @genDt_TotalInput = @genDt_Transferred + @genDt_PurchaseAmount + @genDt_ActProdIn + @genDt_CountAdd +\n   @genDt_ActOtherInput\n  IF (@genDt_TotalInput = 0) AND (ABS(@genDt_AvgValue) \u003e @Epsilon)\n   SELECT @stcValue = @genDt_AvgValue\n  ELSE\n   SELECT @stcValue = @genDt_TotalInput * @genDt_AvgValue\n  IF (@genDt_TotalInput = 0) AND (ABS(@genDt_CurrAvgValue) \u003e @Epsilon)\n   SELECT @currStcValue = @genDt_CurrAvgValue\n  ELSE\n   SELECT @currStcValue = @genDt_TotalInput * @genDt_CurrAvgValue\n  IF (@par_TrCode \u003c\u003e @ft_Ambar)\n  BEGIN\n   SELECT @stcValue = @stcValue + @addExpValue\n   SELECT @currStcValue = @currStcValue + @currAddExpValue\n  END\n  ELSE\n  BEGIN\n   SELECT @stcValue = @stcValue\n   SELECT @currStcValue = @currStcValue\n  END\n  SELECT @genDt_TotalInput = @inc_Transfer + @genDt_Transferred + @inc_Purchase + @genDt_PurchaseAmount + @inc_ActOtherIn +\n   @genDt_ActOtherInput + @inc_ActProdIn + @genDt_ActProdIn + @genDt_CountAdd + @inc_CountAdd\n  IF (@genDt_TotalInput \u003e @Epsilon)\n  BEGIN\n   SELECT @genDt_AvgValue = @stcValue / @genDt_TotalInput\n   SELECT @genDt_CurrAvgValue = @currStcValue / @genDt_TotalInput\n  END\n  ELSE\n   IF (@par_InvoiceRef \u003c\u003e 0) AND (\n     @par_TrCode IN (\n      @ft_AlFiyatFarki\n      ,@ft_VerFiyatFarki\n      )\n     )\n   BEGIN\n    SELECT @genDt_AvgValue = @genDt_AvgValue + @addExpValue\n    SELECT @genDt_CurrAvgValue = @genDt_CurrAvgValue + @currAddExpValue\n   END\n   ELSE\n   BEGIN\n    SELECT @genDt_AvgValue = @par_DiffPrice\n    SELECT @genDt_CurrAvgValue = @par_DiffRepPrice\n   END\n  IF (@par_VariantRef IS NOT NULL) AND (@par_VariantRef \u003e 0)\n  BEGIN\n   SELECT @genDtV_TotalInput = @genDtV_Transferred + @genDtV_PurchaseAmount + @genDtV_ActProdIn + @genDtV_CountAdd +\n    @genDtV_ActOtherInput\n   IF (@genDtV_TotalInput = 0) AND (ABS(@genDtV_AvgValue) \u003e @Epsilon)\n    SELECT @stcValueV = @genDtV_AvgValue\n   ELSE\n    SELECT @stcValueV = @genDtV_TotalInput * @genDtV_AvgValue\n   IF (@genDtV_TotalInput = 0) AND (ABS(@genDtV_CurrAvgValue) \u003e @Epsilon)\n    SELECT @currStcValueV = @genDtV_CurrAvgValue\n   ELSE\n    SELECT @currStcValueV = @genDtV_TotalInput * @genDtV_CurrAvgValue\n   IF (@par_TrCode \u003c\u003e @ft_Ambar)\n   BEGIN\n    SELECT @stcValueV = @stcValueV + @addExpValue\n    SELECT @currStcValueV = @currStcValueV + @currAddExpValue\n   END\n   ELSE\n   BEGIN\n    SELECT @stcValueV = @stcValueV\n    SELECT @currStcValueV = @currStcValueV\n   END\n   SELECT @genDtV_TotalInput = @inc_Transfer + @genDtV_Transferred + @inc_Purchase + @genDtV_PurchaseAmount +\n    @inc_ActOtherIn + @genDtV_ActOtherInput + @inc_ActProdIn + @genDtV_ActProdIn + @invDtV_CountAdd + @inc_CountAdd\n   IF (@genDtV_TotalInput \u003e @Epsilon)\n   BEGIN\n    SELECT @genDtV_AvgValue = @stcValueV / @genDtV_TotalInput\n    SELECT @genDtV_CurrAvgValue = @currStcValueV / @genDtV_TotalInput\n   END\n   ELSE\n    IF (@par_InvoiceRef \u003c\u003e 0) AND (\n      @par_TrCode IN (\n       @ft_AlFiyatFarki\n       ,@ft_VerFiyatFarki\n       )\n      )\n    BEGIN\n     SELECT @genDtV_AvgValue = @genDtV_AvgValue + @addExpValue\n     SELECT @genDtV_CurrAvgValue = @genDtV_CurrAvgValue + @currAddExpValue\n    END\n    ELSE\n    BEGIN\n     SELECT @genDtV_AvgValue = @par_DiffPrice\n     SELECT @genDtV_CurrAvgValue = @par_DiffRepPrice\n    END\n  END\n END\n IF (@par_UpdAvgFlag = 1) AND (@par_UpdForTotFlag = 1)\n BEGIN\n  SELECT @genTot_TotalInput = @genTot_Transferred + @genTot_PurchaseAmount + @genTot_ActProdIn + @genTot_CountAdd +\n   @genTot_ActOtherInput\n  IF (@genTot_TotalInput = 0) AND (ABS(@genTot_AvgValue) \u003e @Epsilon)\n   SELECT @stcValue = @genTot_AvgValue\n  ELSE\n   SELECT @stcValue = @genTot_TotalInput * @genTot_AvgValue\n  IF (@genTot_TotalInput = 0) AND (ABS(@genTot_CurrAvgValue) \u003e @Epsilon)\n   SELECT @currStcValue = @genTot_CurrAvgValue\n  ELSE\n   SELECT @currStcValue = @genTot_TotalInput * @genTot_CurrAvgValue\n  IF (@par_TrCode \u003c\u003e @ft_Ambar)\n  BEGIN\n   SELECT @stcValue = @stcValue + @addExpValue\n   SELECT @currStcValue = @currStcValue + @currAddExpValue\n  END\n  ELSE\n  BEGIN\n   SELECT @stcValue = @stcValue\n   SELECT @currStcValue = @currStcValue\n  END\n  SELECT @genTot_TotalInput = @inc_Transfer + @genTot_Transferred + @inc_Purchase + @genTot_PurchaseAmount + @inc_ActOtherIn +\n   @genTot_ActOtherInput + @inc_ActProdIn + @genTot_ActProdIn + @genTot_CountAdd + @inc_CountAdd\n  IF (@genTot_TotalInput \u003e @Epsilon)\n  BEGIN\n   SELECT @genTot_AvgValue = @stcValue / @genTot_TotalInput\n   SELECT @genTot_CurrAvgValue = @currStcValue / @genTot_TotalInput\n  END\n  ELSE\n   IF (@par_InvoiceRef \u003c\u003e 0) AND (\n     @par_TrCode IN (\n      @ft_AlFiyatFarki\n      ,@ft_VerFiyatFarki\n      )\n     )\n   BEGIN\n    SELECT @genTot_AvgValue = @genTot_AvgValue + @addExpValue\n    SELECT @genTot_CurrAvgValue = @genTot_CurrAvgValue + @currAddExpValue\n   END\n   ELSE\n   BEGIN\n    SELECT @genTot_AvgValue = @par_DiffPrice\n    SELECT @genTot_CurrAvgValue = @par_DiffRepPrice\n   END\n  IF (@par_VariantRef IS NOT NULL) AND (@par_VariantRef \u003e 0)\n  BEGIN\n   SELECT @genTotV_TotalInput = @genTotV_Transferred + @genTotV_PurchaseAmount + @genTotV_ActProdIn + @genTotV_CountAdd +\n    @genTotV_ActOtherInput\n   IF (@genTotV_TotalInput = 0) AND (ABS(@genTotV_AvgValue) \u003e @Epsilon)\n    SELECT @stcValueV = @genTotV_AvgValue\n   ELSE\n    SELECT @stcValueV = @genTotV_TotalInput * @genTotV_AvgValue\n   IF (@genTotV_TotalInput = 0) AND (ABS(@genTotV_CurrAvgValue) \u003e @Epsilon)\n    SELECT @currStcValueV = @genTotV_CurrAvgValue\n   ELSE\n    SELECT @currStcValueV = @genTotV_TotalInput * @genTotV_CurrAvgValue\n   IF (@par_TrCode \u003c\u003e @ft_Ambar)\n   BEGIN\n    SELECT @stcValueV = @stcValueV + @addExpValue\n    SELECT @currStcValueV = @currStcValueV + @currAddExpValue\n   END\n   ELSE\n   BEGIN\n    SELECT @stcValueV = @stcValueV\n    SELECT @currStcValueV = @currStcValueV\n   END\n   SELECT @genTotV_TotalInput = @inc_Transfer + @genTotV_Transferred + @inc_Purchase + @genTotV_PurchaseAmount +\n    @inc_ActOtherIn + @genTotV_ActOtherInput + @inc_ActProdIn + @genTotV_ActProdIn + @genTotV_CountAdd + @inc_CountAdd\n   IF (@genTotV_TotalInput \u003e @Epsilon)\n   BEGIN\n    SELECT @genTotV_AvgValue = @stcValueV / @genTotV_TotalInput\n    SELECT @genTotV_CurrAvgValue = @currStcValueV / @genTotV_TotalInput\n   END\n   ELSE\n    IF (@par_InvoiceRef \u003c\u003e 0) AND (\n      @par_TrCode IN (\n       @ft_AlFiyatFarki\n       ,@ft_VerFiyatFarki\n       )\n      )\n    BEGIN\n     SELECT @genTotV_AvgValue = @genTotV_AvgValue + @addExpValue\n     SELECT @genTotV_CurrAvgValue = @genTotV_CurrAvgValue + @currAddExpValue\n    END\n    ELSE\n    BEGIN\n     SELECT @genTotV_AvgValue = @par_DiffPrice\n     SELECT @genTotV_CurrAvgValue = @par_DiffRepPrice\n    END\n  END\n END\n IF (@par_UpdOrderFlag = 1)\n  IF (@par_OrdRecvFlag = 1)\n  BEGIN\n   IF (@par_OrdResFlag = 1)\n   BEGIN\n    SELECT @inc_Reserved = @inc_Reserved + @addOrdAmount\n   END\n   SELECT @inc_ActSaleOrder = @addOrdAmount\n   SELECT @inc_Shipped = - 1 * @addAmount\n  END\n  ELSE\n   IF (\n     (\n      @par_TrCode NOT IN (\n       @ft_KonsCikIade\n       ,@ft_Ambar\n       )\n      ) OR (\n      (@par_TrCode = @ft_KonsCikIade) AND (@par_InvoiceRef = 0\n       )\n      )\n     )\n   BEGIN\n    SELECT @incAmount = @addOrdAmount\n    SELECT @inc_ActPurchaseOrder = - 1 * @incAmount\n    SELECT @inc_Received = @addAmount\n   END\n IF (@par_UpdSaleFlag = 1)\n BEGIN\n  IF (@par_TrCode \u003c\u003e 14)\n   SELECT @inc_SaleAmount = - @addAmount\n  SELECT @inc_SaleInCash = - @addValue\n  SELECT @inc_CurrSaleInCash = - @currAddValue\n END\n IF (@par_UpdPurchaseFlag = 1)\n BEGIN\n  IF (@par_TrCode \u003c\u003e 13)\n   SELECT @inc_PurchaseAmount = @addAmount\n  SELECT @inc_PurchaseInCash = @addValue\n  SELECT @inc_CurrPurchaseInCash = @currAddValue\n END\n IF (@par_UpdOrderFlag = 1)\n BEGIN\n  IF (@par_UOMRef = @par_OrdUOMRef) /*the same unit in order and dispatch*/\n   SELECT @adjustedAmount = @par_Coef * @par_Amount\n  ELSE\n   IF (@orderConvFactor \u003e @Epsilon)\n    SELECT @adjustedAmount = @par_Coef * @convertedAmount / @orderConvFactor\n   ELSE\n    SELECT @adjustedAmount = @par_Coef * @convertedAmount\n  IF (\n    @par_TrCode IN (\n     @ft_AlimIade\n     ,@ft_TopSatIade\n     ,@ft_PerSatIade\n     ,@ft_KonsGirIade\n     ,@ft_KonsCikIade\n     )\n    )\n   SELECT @ordUpdAmount = - 1 * @adjustedAmount\n  ELSE\n   SELECT @ordUpdAmount = @adjustedAmount\n  IF (@par_fcStat = 0) OR (@par_fcStat IS NULL)\n  BEGIN\n    IF (@par_LineType \u003c\u003e @c_LClass)\n     UPDATE LG_323_02_ORFLINE\n     SET SHIPPEDAMOUNT = SHIPPEDAMOUNT + (@ordUpdAmount)\n     WHERE (LOGICALREF = @par_OrdTransRef)\n    IF (@par_DetLine = 1) AND (@par_PrevLineRef \u003c\u003e 0) AND (@par_PrevLineNo \u003c\u003e 0)\n     UPDATE LG_323_02_ORFLINE\n     SET SHIPPEDAMOUNT = SHIPPEDAMOUNT + @ordUpdAmount\n     WHERE (ORDFICHEREF = @par_OrdFicheRef) AND (LINENO_ = @par_PrevLineNo) AND (STOCKREF = @par_PrevLineRef) AND (DETLINE = 0)\n  END\n  IF (@par_fcStat = 1) AND ((@par_Coef = 1) OR (@ShippedAmntSugg \u003e 0))\n  BEGIN\n    IF (@par_LineType \u003c\u003e @c_LClass)\n     UPDATE LG_323_02_ORFLINE\n     SET SHIPPEDAMNTSUGG = SHIPPEDAMNTSUGG + (@ordUpdAmount)\n     WHERE (LOGICALREF = @par_OrdTransRef)\n    IF (@par_DetLine = 1) AND (@par_PrevLineRef \u003c\u003e 0) AND (@par_PrevLineNo \u003c\u003e 0)\n     UPDATE LG_323_02_ORFLINE\n     SET SHIPPEDAMNTSUGG = SHIPPEDAMNTSUGG + @ordUpdAmount\n     WHERE (ORDFICHEREF = @par_OrdFicheRef) AND (LINENO_ = @par_PrevLineNo) AND (STOCKREF = @par_PrevLineRef) AND (DETLINE = 0)\n  END\n END\n IF (@par_UpdOrdOnVehFlag = 1)\n BEGIN\n  SELECT @inc_OnVehicled = @addAmount\n  IF (@par_UpdOrderFlag = 0)\n  BEGIN\n   SELECT @ordUpdAmount = @par_Coef * @par_Amount\n   IF (\n     @par_TrCode IN (\n      @ft_AlimIade\n      ,@ft_TopSatIade\n      ,@ft_PerSatIade\n      ,@ft_KonsGirIade\n      ,@ft_KonsCikIade\n      )\n     )\n    SELECT @ordUpdAmount = - 1 * @ordUpdAmount\n   ELSE\n    SELECT @ordUpdAmount = @ordUpdAmount\n  END\n  IF EXISTS(SELECT LOGICALREF FROM LG_323_02_ORFLINE\n              WHERE LOGICALREF = @par_OrdTransRef)\n     UPDATE LG_323_02_ORFLINE\n   SET ONVEHICLE = ONVEHICLE - @ordUpdAmount\n   WHERE (LOGICALREF = @par_OrdTransRef)\n  IF EXISTS(SELECT LOGICALREF FROM LG_323_02_DISTORDLINE\n              WHERE LOGICALREF = @par_DistOrdLineRef)\n     UPDATE LG_323_02_DISTORDLINE\n   SET REMAMOUNT = REMAMOUNT - @ordUpdAmount\n   WHERE (LOGICALREF = @par_DistOrdLineRef)\n END\n IF (@par_UpdResFlag = 1)\n BEGIN\n  SELECT @inc_Reserved = @inc_Reserved - @addAmount\n END\n IF (@par_offTrRef \u003c\u003e 0)\n BEGIN\n  IF (@par_LineType \u003c\u003e @c_LClass)\n   UPDATE LG_323_PURCHOFFERLN\n   SET ORDEREDAMOUNT = ORDEREDAMOUNT + @inc_OffOrdAmount\n   WHERE (LOGICALREF = @par_offTrRef)\n  IF (@par_DetLine = 1) AND (@par_PrevLineRef \u003c\u003e 0) AND (@par_PrevLineNo \u003c\u003e 0\n    )\n   UPDATE LG_323_PURCHOFFERLN\n   SET ORDEREDAMOUNT = ORDEREDAMOUNT + @inc_OffOrdAmount\n   WHERE (ORDFICHEREF = @par_offerRef) AND (LINENO_ = @par_PrevLineNo) AND (STOCKREF = @par_PrevLineRef\n     ) AND (DETLINE = 0)\n END\nEND\n"
+}

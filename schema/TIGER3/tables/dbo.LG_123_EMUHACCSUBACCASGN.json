@@ -1,0 +1,127 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_EMUHACCSUBACCASGN",
+    "full_name":  "dbo.LG_123_EMUHACCSUBACCASGN",
+    "description":  "",
+    "total_rows":  "20002",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ACCOUNTREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SUBACCOUNTREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_EMUHACCSUBACCASGN_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_EMUHACCSUBACCASGN_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "ACCOUNTREF"
+                    },
+                    {
+                        "index_name":  "I123_EMUHACCSUBACCASGN_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "ACCOUNTREF, SUBACCOUNTREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "11811",
+                            "ACCOUNTREF":  "4725",
+                            "SUBACCOUNTREF":  "4725"
+                        },
+                        {
+                            "LOGICALREF":  "11812",
+                            "ACCOUNTREF":  "4726",
+                            "SUBACCOUNTREF":  "4726"
+                        },
+                        {
+                            "LOGICALREF":  "11813",
+                            "ACCOUNTREF":  "4725",
+                            "SUBACCOUNTREF":  "4726"
+                        },
+                        {
+                            "LOGICALREF":  "11814",
+                            "ACCOUNTREF":  "4727",
+                            "SUBACCOUNTREF":  "4727"
+                        },
+                        {
+                            "LOGICALREF":  "11815",
+                            "ACCOUNTREF":  "4726",
+                            "SUBACCOUNTREF":  "4727"
+                        },
+                        {
+                            "LOGICALREF":  "11816",
+                            "ACCOUNTREF":  "4725",
+                            "SUBACCOUNTREF":  "4727"
+                        },
+                        {
+                            "LOGICALREF":  "11817",
+                            "ACCOUNTREF":  "4728",
+                            "SUBACCOUNTREF":  "4728"
+                        },
+                        {
+                            "LOGICALREF":  "11818",
+                            "ACCOUNTREF":  "4725",
+                            "SUBACCOUNTREF":  "4728"
+                        },
+                        {
+                            "LOGICALREF":  "11819",
+                            "ACCOUNTREF":  "4729",
+                            "SUBACCOUNTREF":  "4729"
+                        },
+                        {
+                            "LOGICALREF":  "11820",
+                            "ACCOUNTREF":  "4728",
+                            "SUBACCOUNTREF":  "4729"
+                        }
+                    ]
+}

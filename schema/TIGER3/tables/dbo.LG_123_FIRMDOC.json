@@ -1,0 +1,189 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_FIRMDOC",
+    "full_name":  "dbo.LG_123_FIRMDOC",
+    "description":  "",
+    "total_rows":  "122",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INFOTYP",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INFOREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DOCTYP",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DOCNR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LDATA",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_FIRMDOC_I1",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "INFOTYP, INFOREF, DOCTYP, DOCNR"
+                    },
+                    {
+                        "index_name":  "I123_FIRMDOC_I2",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LREF":  "1",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "6782",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "2",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "6782",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "12",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "3",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "6995",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "4",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "6950",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "5",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "6759",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "6",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "10375",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "6817",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "8",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "6588",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "9",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "6369",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "10",
+                            "INFOTYP":  "20",
+                            "INFOREF":  "9807",
+                            "DOCTYP":  "0",
+                            "DOCNR":  "11",
+                            "LDATA":  "\u003cbinary\u003e"
+                        }
+                    ]
+}

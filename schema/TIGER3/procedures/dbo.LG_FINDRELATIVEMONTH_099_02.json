@@ -1,0 +1,35 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_FINDRELATIVEMONTH_099_02",
+    "full_name":  "dbo.LG_FINDRELATIVEMONTH_099_02",
+    "created":  "Sep  1 2025 12:03PM",
+    "last_altered":  "Sep  1 2025 12:03PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@TRDATE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@RETMON",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@RETYEAR",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_FINDRELATIVEMONTH_099_02\n       @TRDATE DATETIME,\n       @RETMON  SMALLINT OUTPUT,\n       @RETYEAR SMALLINT OUTPUT\n       AS\nSELECT @RETYEAR = DATEPART(YEAR, @TRDATE)\nSELECT @RETMON  = DATEPART(MONTH, @TRDATE)"
+}

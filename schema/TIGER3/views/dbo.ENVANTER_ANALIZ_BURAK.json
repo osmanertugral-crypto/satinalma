@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "ENVANTER_ANALIZ_BURAK",
+    "full_name":  "dbo.ENVANTER_ANALIZ_BURAK",
+    "definition":  "\r\nCREATE view [dbo].[ENVANTER_ANALIZ_BURAK] AS\r\n\r\nselect ITEMS.LOGICALREF,\r\nITEMS.code [Malzeme Kodu],ITEMS.name [Malzeme Adı],ITEMS.STGRPCODE [Malzeme Grup Kodu],\r\nDATEDIFF(DAY,\u00272023-01-01 00:00:00.000\u0027 , getdate()) AS [Raporlanan Aralık Gün Sayısı],\r\nSUM(case SOURCEINDEX when 2 then CASE STLINE.TRCODE WHEN \u002701\u0027 THEN STLINE.AMOUNT/UINFO2*UINFO1 WHEN \u002706\u0027 THEN -1*STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END else 0 end) [2\u0027 Nolu AmbarToplan Satınalam - İade],\r\nSUM(case  when SOURCEINDEX\u003c\u003e2 then CASE STLINE.TRCODE WHEN \u002701\u0027 THEN STLINE.AMOUNT/UINFO2*UINFO1 WHEN \u002706\u0027 THEN -1*STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END else 0 end) [Diğerleri Toplan Satınalam - İade]\r\n,SUM(\r\ncase IOCODE\r\n--when 1 then CASE SOURCEINDEX WHEN 2 THEN STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END\r\nwhen 2 then CASE SOURCEINDEX WHEN 2 THEN STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END\r\nwhen 3 then CASE SOURCEINDEX WHEN 2 THEN -1*STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END\r\nwhen 4 then CASE SOURCEINDEX WHEN 2 THEN -1*STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END\r\nELSE 0 END) [2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR],\r\nSUM(\r\ncase IOCODE\r\n--when 1 then CASE SOURCEINDEX WHEN 2 THEN STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END\r\nwhen 2 then CASE SOURCEINDEX WHEN 2 THEN STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END\r\nwhen 3 then CASE SOURCEINDEX WHEN 2 THEN -1*STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END\r\nwhen 4 then CASE SOURCEINDEX WHEN 2 THEN -1*STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END\r\nELSE 0 END)/DATEDIFF(DAY,\u00272023-01-01 00:00:00.000\u0027 ,getdate()) [Günlük Ortalama Harcama],\r\n\r\n(select SUM(ONHAND) from LV_123_01_STINVTOT TOT WHERE TOT.STOCKREF=ITEMS.LOGICALREF AND INVENNO=2 ) [Anlık 2\u0027nolu Ambar Stok],\r\n\r\n(select SUM(ONHAND) from LV_123_01_STINVTOT TOT WHERE TOT.STOCKREF=ITEMS.LOGICALREF AND INVENNO=2 )*SUM(case IOCODE when 4 then STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END)/DATEDIFF(DAY,\u00272023-01-01 00:00:00.000\u0027 , getdate()) [Ortalama Bitiş Süresi],\r\n(select TOP 1 PRICE from LG_123_01_ORFLINE orf where orf.STOCKREF=ITEMS.LOGICALREF ORDER BY ORF.LOGICALREF DESC  ) [Birim Fiyat],\r\nISNULL((select TOP 1 PRICE from LG_123_01_ORFLINE orf where orf.STOCKREF=ITEMS.LOGICALREF ORDER BY ORF.LOGICALREF DESC  ),0)*ISNULL((select SUM(ONHAND) from LV_123_01_STINVTOT TOT WHERE TOT.STOCKREF=ITEMS.LOGICALREF AND INVENNO=2 ),0)*SUM(case IOCODE when 4 then STLINE.AMOUNT/UINFO2*UINFO1 ELSE 0 END)/DATEDIFF(DAY,\u00272023-01-01 00:00:00.000\u0027 ,getdate())  [Toplam Tutar],\r\nITEMS.CAPIBLOCK_CREADEDDATE [Malzeme Kartı Oluşturma Tarihi]\r\nfrom lg_123_Items ITEMS\r\nleft JOIN LG_123_01_STLINE STLINE ON STLINE.STOCKREF=ITEMS.LOGICALREF  AND LINETYPE=0 AND LPRODSTAT=0\r\nWHERE  STLINE.DATE_ BETWEEN \u00272023-01-01 00:00:00.000\u0027 AND getdate()\r\nGROUP BY ITEMS.LOGICALREF,ITEMS.code,ITEMS.name ,ITEMS.STGRPCODE ,ITEMS.LOGICALREF,ITEMS.CAPIBLOCK_CREADEDDATE\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Malzeme Kodu",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Malzeme Adı",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Malzeme Grup Kodu",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Raporlanan Aralık Gün Sayısı",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "2\u0027 Nolu AmbarToplan Satınalam - İade",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Diğerleri Toplan Satınalam - İade",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Günlük Ortalama Harcama",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Anlık 2\u0027nolu Ambar Stok",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Ortalama Bitiş Süresi",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Birim Fiyat",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Toplam Tutar",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Malzeme Kartı Oluşturma Tarihi",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "4697",
+                            "Malzeme Kodu":  "2021X617",
+                            "Malzeme Adı":  "MAKYAJ AYNASI",
+                            "Malzeme Grup Kodu":  "",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "0",
+                            "Diğerleri Toplan Satınalam - İade":  "0",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "-1",
+                            "Günlük Ortalama Harcama":  "-0,000827129859387924",
+                            "Anlık 2\u0027nolu Ambar Stok":  "0",
+                            "Ortalama Bitiş Süresi":  "0",
+                            "Birim Fiyat":  null,
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "18.10.2021 13:12:10"
+                        },
+                        {
+                            "LOGICALREF":  "4707",
+                            "Malzeme Kodu":  "2021X627",
+                            "Malzeme Adı":  "NURGAZ ÇİFTLİ OCAK",
+                            "Malzeme Grup Kodu":  "",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "0",
+                            "Diğerleri Toplan Satınalam - İade":  "0",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "-1",
+                            "Günlük Ortalama Harcama":  "-0,000827129859387924",
+                            "Anlık 2\u0027nolu Ambar Stok":  "0",
+                            "Ortalama Bitiş Süresi":  "0",
+                            "Birim Fiyat":  null,
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "18.10.2021 13:12:11"
+                        },
+                        {
+                            "LOGICALREF":  "4835",
+                            "Malzeme Kodu":  "2021X760",
+                            "Malzeme Adı":  "KARAVAN CAM 550X1100 Çin",
+                            "Malzeme Grup Kodu":  "",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "0",
+                            "Diğerleri Toplan Satınalam - İade":  "0",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "0",
+                            "Günlük Ortalama Harcama":  "0",
+                            "Anlık 2\u0027nolu Ambar Stok":  null,
+                            "Ortalama Bitiş Süresi":  null,
+                            "Birim Fiyat":  null,
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "18.10.2021 13:12:28"
+                        },
+                        {
+                            "LOGICALREF":  "4963",
+                            "Malzeme Kodu":  "2021X870",
+                            "Malzeme Adı":  "28X45 BANYO LAVABO",
+                            "Malzeme Grup Kodu":  "",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "0",
+                            "Diğerleri Toplan Satınalam - İade":  "0",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "-5",
+                            "Günlük Ortalama Harcama":  "-0,00413564929693962",
+                            "Anlık 2\u0027nolu Ambar Stok":  "0",
+                            "Ortalama Bitiş Süresi":  "0",
+                            "Birim Fiyat":  null,
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "23.10.2021 13:27:59"
+                        },
+                        {
+                            "LOGICALREF":  "5225",
+                            "Malzeme Kodu":  "A2021X01",
+                            "Malzeme Adı":  "190 GR KARTUŞ",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "0",
+                            "Diğerleri Toplan Satınalam - İade":  "1",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "0",
+                            "Günlük Ortalama Harcama":  "0",
+                            "Anlık 2\u0027nolu Ambar Stok":  null,
+                            "Ortalama Bitiş Süresi":  null,
+                            "Birim Fiyat":  "60",
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "2.12.2021 13:37:51"
+                        },
+                        {
+                            "LOGICALREF":  "5226",
+                            "Malzeme Kodu":  "A2021X02",
+                            "Malzeme Adı":  "EVEREST BENZİNLİ DAĞCI OCAĞI",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "0",
+                            "Diğerleri Toplan Satınalam - İade":  "0",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "0",
+                            "Günlük Ortalama Harcama":  "0",
+                            "Anlık 2\u0027nolu Ambar Stok":  null,
+                            "Ortalama Bitiş Süresi":  null,
+                            "Birim Fiyat":  null,
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "2.12.2021 13:37:51"
+                        },
+                        {
+                            "LOGICALREF":  "5229",
+                            "Malzeme Kodu":  "A2021X05",
+                            "Malzeme Adı":  "KUKSA BARDAK BEAR",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "1",
+                            "Diğerleri Toplan Satınalam - İade":  "5",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "-1",
+                            "Günlük Ortalama Harcama":  "-0,000827129859387924",
+                            "Anlık 2\u0027nolu Ambar Stok":  "0",
+                            "Ortalama Bitiş Süresi":  "0",
+                            "Birim Fiyat":  "421,69",
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "2.12.2021 13:37:52"
+                        },
+                        {
+                            "LOGICALREF":  "5230",
+                            "Malzeme Kodu":  "A2021X06",
+                            "Malzeme Adı":  "KUKSA BARDAK FOX",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "0",
+                            "Diğerleri Toplan Satınalam - İade":  "9",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "0",
+                            "Günlük Ortalama Harcama":  "0",
+                            "Anlık 2\u0027nolu Ambar Stok":  null,
+                            "Ortalama Bitiş Süresi":  null,
+                            "Birim Fiyat":  "350",
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "2.12.2021 13:37:52"
+                        },
+                        {
+                            "LOGICALREF":  "5231",
+                            "Malzeme Kodu":  "A2021X07",
+                            "Malzeme Adı":  "KUKSA BARDAK LEON",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "2",
+                            "Diğerleri Toplan Satınalam - İade":  "18",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "-2",
+                            "Günlük Ortalama Harcama":  "-0,00165425971877585",
+                            "Anlık 2\u0027nolu Ambar Stok":  "0",
+                            "Ortalama Bitiş Süresi":  "0",
+                            "Birim Fiyat":  "421,69",
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "2.12.2021 13:37:52"
+                        },
+                        {
+                            "LOGICALREF":  "5233",
+                            "Malzeme Kodu":  "A2021X09",
+                            "Malzeme Adı":  "ÜÇ AYAK IZGARA ALÜMİNYUM TELESKOBİK",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "Raporlanan Aralık Gün Sayısı":  "1209",
+                            "2\u0027 Nolu AmbarToplan Satınalam - İade":  "0",
+                            "Diğerleri Toplan Satınalam - İade":  "0",
+                            "2\u0027NOLU AMBAR TOPLAM ÇIKIŞLAR":  "0",
+                            "Günlük Ortalama Harcama":  "0",
+                            "Anlık 2\u0027nolu Ambar Stok":  "0",
+                            "Ortalama Bitiş Süresi":  "0",
+                            "Birim Fiyat":  null,
+                            "Toplam Tutar":  "0",
+                            "Malzeme Kartı Oluşturma Tarihi":  "2.12.2021 13:37:52"
+                        }
+                    ]
+}

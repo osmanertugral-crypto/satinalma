@@ -1,0 +1,196 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_223_01_APPROVE",
+    "full_name":  "dbo.LG_223_01_APPROVE",
+    "description":  "",
+    "total_rows":  "267",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "BRANCHNR",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MODNR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "APPROVEDATE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERTYPE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERNR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I223_01_APPROVE_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I223_01_APPROVE_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "BRANCHNR, MODNR"
+                    },
+                    {
+                        "index_name":  "I223_01_APPROVE_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "MODNR, APPROVEDATE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "3",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "1",
+                            "APPROVEDATE":  "30.04.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "4",
+                            "APPROVEDATE":  "30.04.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "1",
+                            "APPROVEDATE":  "31.05.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "2",
+                            "APPROVEDATE":  "31.05.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "3",
+                            "APPROVEDATE":  "31.05.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "4",
+                            "APPROVEDATE":  "31.05.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "12",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "5",
+                            "APPROVEDATE":  "31.05.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "15",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "8",
+                            "APPROVEDATE":  "31.05.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "16",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "9",
+                            "APPROVEDATE":  "31.05.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "18",
+                            "BRANCHNR":  "0",
+                            "MODNR":  "11",
+                            "APPROVEDATE":  "31.05.2023 00:00:00",
+                            "USERTYPE":  "0",
+                            "USERNR":  "0"
+                        }
+                    ]
+}

@@ -1,0 +1,167 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_TEDARIKCI_ODEME_RAPORU_ICMAL_123",
+    "full_name":  "dbo.DST_TEDARIKCI_ODEME_RAPORU_ICMAL_123",
+    "definition":  "\r\n\r\n--USE [TIGER3]\r\n--GO\r\n\r\n--/****** Object:  View [dbo].[DST_TEDARIKCI_ODEME_RAPORU_ICMAL_123]    Script Date: 15.08.2023 11:13:53 ******/\r\n--SET ANSI_NULLS ON\r\n--GO\r\n\r\n--SET QUOTED_IDENTIFIER ON\r\n--GO\r\n\r\n\r\nCREATE VIEW [dbo].[DST_TEDARIKCI_ODEME_RAPORU_ICMAL_123] AS \r\nSELECT DISTINCT \u0027EUR\u0027 DOVIZ,\r\ncari_kodu,\r\n[Cari Adı],\r\nCONVERT(VARCHAR ,GETDATE() ,104) TARIH,CARI, SUM(TUTAR_ALACAK) AS BAKIYE,\r\n(SELECT SUM(TUTAR_ALACAK) from DST_123_01_AYRINTILI_BORCTAKIP_320 ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003c=0 AND ARATBL.DOVIZ=\u0027EUR\u0027) AS VADESI_GELEN\r\n,(SELECT SUM(TUTAR_ALACAK) from DST_123_01_AYRINTILI_BORCTAKIP_320 ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003e0 AND ARATBL.DOVIZ=\u0027EUR\u0027) AS VADESI_GELMEYEN\r\n\r\n\r\nFROM DST_123_01_AYRINTILI_BORCTAKIP_320 EURTBL WHERE DOVIZ=\u0027EUR\u0027  \r\nGROUP BY CARI,Cari_Kodu,[Cari Adı]\r\n\r\nUNION ALL\r\n\r\nSELECT DISTINCT \u0027USD\u0027 DOVIZ,\r\ncari_kodu,\r\n[Cari Adı],\r\nCONVERT(VARCHAR ,GETDATE() ,104) TARIH,CARI, SUM(TUTAR_ALACAK) AS BAKIYE,\r\n(SELECT SUM(TUTAR_ALACAK) from DST_123_01_AYRINTILI_BORCTAKIP_320 ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003c=0 AND ARATBL.DOVIZ=\u0027USD\u0027) AS VADESI_GELEN\r\n,(SELECT SUM(TUTAR_ALACAK) from DST_123_01_AYRINTILI_BORCTAKIP_320 ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003e0 AND ARATBL.DOVIZ=\u0027USD\u0027) AS VADESI_GELMEYEN\r\n\r\n\r\nFROM DST_123_01_AYRINTILI_BORCTAKIP_320 EURTBL WHERE DOVIZ=\u0027USD\u0027  \r\nGROUP BY CARI,Cari_Kodu,[Cari Adı]\r\n\r\n\r\nUNION ALL\r\n\r\nSELECT DISTINCT \u0027TL\u0027 DOVIZ,\r\ncari_kodu,\r\n[Cari Adı],\r\nCONVERT(VARCHAR ,GETDATE() ,104) TARIH,CARI, SUM(TUTAR_ALACAK) AS BAKIYE,\r\n(SELECT SUM(TUTAR_ALACAK) from DST_123_01_AYRINTILI_BORCTAKIP_320 ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003c=0 AND ARATBL.DOVIZ=\u0027TL\u0027) AS VADESI_GELEN\r\n,(SELECT SUM(TUTAR_ALACAK) from DST_123_01_AYRINTILI_BORCTAKIP_320 ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003e0 AND ARATBL.DOVIZ=\u0027TL\u0027) AS VADESI_GELMEYEN\r\n\r\n\r\nFROM DST_123_01_AYRINTILI_BORCTAKIP_320 EURTBL WHERE DOVIZ=\u0027TL\u0027  \r\nGROUP BY CARI,Cari_Kodu,[Cari Adı]\r\n\r\n\r\n\r\nUNION ALL\r\n\r\nSELECT DISTINCT \u0027GBP\u0027 DOVIZ,\r\ncari_kodu,\r\n[Cari Adı],\r\nCONVERT(VARCHAR ,GETDATE() ,104) TARIH,CARI, SUM(TUTAR_ALACAK) AS BAKIYE,\r\n(SELECT SUM(TUTAR_ALACAK) from DST_123_01_AYRINTILI_BORCTAKIP_320 ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003c=0 AND ARATBL.DOVIZ=\u0027GBP\u0027) AS VADESI_GELEN\r\n,(SELECT SUM(TUTAR_ALACAK) from DST_123_01_AYRINTILI_BORCTAKIP_320 ARATBL\r\nWHERE ARATBL.CARI=EURTBL.CARI AND GUN\u003e0 AND ARATBL.DOVIZ=\u0027GBP\u0027) AS VADESI_GELMEYEN\r\n\r\n\r\nFROM DST_123_01_AYRINTILI_BORCTAKIP_320 EURTBL WHERE DOVIZ=\u0027GBP\u0027  \r\nGROUP BY CARI,Cari_Kodu,[Cari Adı]\r\n\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "DOVIZ",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "3",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "cari_kodu",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Cari Adı",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "221",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADESI_GELEN",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADESI_GELMEYEN",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.AVENC - EU",
+                            "Cari Adı":  "AVENCO ROBOTİK VE OTOMASYON SAN. VE TİC. LTD .ŞTİ.",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.AVENC - EU / AVENCO ROBOTİK VE OTOMASYON SAN. VE TİC. LTD .ŞTİ.",
+                            "BAKIYE":  "-1200",
+                            "VADESI_GELEN":  null,
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.BLUEMAC-EU",
+                            "Cari Adı":  "BLUEMAC MAKİNE KALIP İMALAT ELEKTRİK DANIŞMANLIK SAN VE TİC LTD ŞTİ",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.BLUEMAC-EU / BLUEMAC MAKİNE KALIP İMALAT ELEKTRİK DANIŞMANLIK SAN VE TİC LTD ŞTİ",
+                            "BAKIYE":  "-40799,85",
+                            "VADESI_GELEN":  "-26800,17",
+                            "VADESI_GELMEYEN":  "-13999,68"
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.ELTES - EU",
+                            "Cari Adı":  "ELTESAN MOBİL TEKNOLOJİLERİ SİSTEMLERİ SAN. VE TİC. A.Ş.",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.ELTES - EU / ELTESAN MOBİL TEKNOLOJİLERİ SİSTEMLERİ SAN. VE TİC. A.Ş.",
+                            "BAKIYE":  "-4332,6",
+                            "VADESI_GELEN":  "-4332,6",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.ERENE - EU",
+                            "Cari Adı":  "EREN ERTEĞİ €",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.ERENE - EU / EREN ERTEĞİ €",
+                            "BAKIYE":  "-25988,6",
+                            "VADESI_GELEN":  "-25988,6",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.FERMİ - EU",
+                            "Cari Adı":  "FERMİL MOBİL SİSTEMLERİ A.Ş.",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.FERMİ - EU / FERMİL MOBİL SİSTEMLERİ A.Ş.",
+                            "BAKIYE":  "-12878,4",
+                            "VADESI_GELEN":  "-12878,4",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.FİBER",
+                            "Cari Adı":  "FİBER ELYAF KOMPOZİT SAN.VE TİC.LTD.ŞTİ.",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.FİBER / FİBER ELYAF KOMPOZİT SAN.VE TİC.LTD.ŞTİ.",
+                            "BAKIYE":  "-356,58",
+                            "VADESI_GELEN":  null,
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.GENADO - EU",
+                            "Cari Adı":  "GENADOOR MAKİNA OTOMOTİV SANAYİ VE TİCARET LİMİTED ŞİRKETİ €",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.GENADO - EU / GENADOOR MAKİNA OTOMOTİV SANAYİ VE TİCARET LİMİTED ŞİRKETİ €",
+                            "BAKIYE":  "-35,84",
+                            "VADESI_GELEN":  "-35,84",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.KARAV - EU",
+                            "Cari Adı":  "KARAVANİST MOBİL ÇÖZÜMLER SANAYİ VE TİC. LTD. ŞTİ.",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.KARAV - EU / KARAVANİST MOBİL ÇÖZÜMLER SANAYİ VE TİC. LTD. ŞTİ.",
+                            "BAKIYE":  "-1367",
+                            "VADESI_GELEN":  "-1367",
+                            "VADESI_GELMEYEN":  null
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.KBS",
+                            "Cari Adı":  "KBS MAĞAZA MOBİLYALARI TASARIM VE ÜRETİM A.Ş.",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.KBS / KBS MAĞAZA MOBİLYALARI TASARIM VE ÜRETİM A.Ş.",
+                            "BAKIYE":  "-27197,57",
+                            "VADESI_GELEN":  "-26906,93",
+                            "VADESI_GELMEYEN":  "-290,64"
+                        },
+                        {
+                            "DOVIZ":  "EUR",
+                            "cari_kodu":  "320.KURUO - EU",
+                            "Cari Adı":  "KURUOĞLU KERESTECİLİK VE DIŞ TİC. A.Ş.",
+                            "TARIH":  "24.04.2026",
+                            "CARI":  "320.KURUO - EU / KURUOĞLU KERESTECİLİK VE DIŞ TİC. A.Ş.",
+                            "BAKIYE":  "-195,64",
+                            "VADESI_GELEN":  "-195,64",
+                            "VADESI_GELMEYEN":  null
+                        }
+                    ]
+}

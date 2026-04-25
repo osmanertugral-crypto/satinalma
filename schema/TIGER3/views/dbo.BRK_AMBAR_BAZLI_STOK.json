@@ -1,0 +1,303 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_AMBAR_BAZLI_STOK",
+    "full_name":  "dbo.BRK_AMBAR_BAZLI_STOK",
+    "definition":  "\r\nCREATE VIEW [dbo].[BRK_AMBAR_BAZLI_STOK] AS\r\n\r\nSELECT\r\n  X.Isyeri,\r\n  X.Ambar,\r\n  x.Stok_Kodu,\r\n  x.Stok_Adı,\r\n  x.MalzemeAciklamasi2,\r\n  x.MalzemeAciklamasi3,\r\n  x.MalzemeAciklamasi4,\r\n  x.[Bırım],\r\n  x.Malzeme_Turu,\r\n  x.GrupKodu,\r\n  x.OzelKod,\r\n  x.OzelKod2,\r\n  x.OzelKod3,\r\n  x.OzelKod4,\r\n  x.OzelKod5,\r\n  Miktar = ROUND(SUM(x.[Miktar]), 4)\r\nFROM (SELECT\r\n  Ambar = (SELECT\r\n    CAST(NR AS varchar) + \u0027-\u0027 + NAME\r\n  FROM L_CAPIWHOUSE CAPIWHOUSE\r\n  WHERE CAPIWHOUSE.NR = STLINE.SOURCEINDEX\r\n  AND CAPIWHOUSE.FIRMNR = 123),\r\n  Isyeri = (SELECT\r\n    CAST(NR AS varchar) + \u0027-\u0027 + NAME\r\n  FROM L_CAPIDIV CAPIDIV\r\n  WHERE CAPIDIV.NR = STFICHE.BRANCH\r\n  AND CAPIDIV.FIRMNR = 123),\r\n  STFICHE.LOGICALREF [STFICHE_REFERANS],\r\n  Stok_Kodu = ITEMS.CODE,\r\n  Stok_Adı = ITEMS.NAME,\r\n  MalzemeAciklamasi2 = ITEMS.NAME2,\r\n  MalzemeAciklamasi3 = ITEMS.NAME3,\r\n  MalzemeAciklamasi4 = ITEMS.NAME4,\r\n  [Bırım] = BIRIM.CODE,\r\n  Malzeme_Turu =\r\n                CASE ITEMS.CARDTYPE\r\n                  WHEN 1 THEN \u0027TICARI MAL\u0027\r\n                  WHEN 2 THEN \u0027KARMA KOLI\u0027\r\n                  WHEN 3 THEN \u0027DEPOZITOLU MAL\u0027\r\n                  WHEN 4 THEN \u0027SABIT KIYMET\u0027\r\n                  WHEN 10 THEN \u0027HAMMADDE\u0027\r\n                  WHEN 11 THEN \u0027YARI MAMUL\u0027\r\n                  WHEN 12 THEN \u0027MAMUL\u0027\r\n                  WHEN 13 THEN \u0027TUKETIM MALI\u0027\r\n                  WHEN 20 THEN \u0027GENEL MALZEME SINIFI\u0027\r\n                  WHEN 21 THEN \u0027TABLOLU MALZEME SINIFI\u0027\r\n                  ELSE CONVERT(varchar(20), CARDTYPE)\r\n                END,\r\n  GrupKodu = ITEMS.STGRPCODE,\r\n  OzelKod = ITEMS.SPECODE,\r\n  OzelKod2 = ITEMS.SPECODE2,\r\n  OzelKod3 = ITEMS.SPECODE3,\r\n  OzelKod4 = ITEMS.SPECODE4,\r\n  OzelKod5 = ITEMS.SPECODE5,\r\n  [Miktar] = CAST((CASE\r\n    WHEN STLINE.IOCODE IN (1, 2) THEN 1\r\n    ELSE -1\r\n  END) * STLINE.AMOUNT * (CASE\r\n    WHEN ISNULL(UINFO2, 0) = 0 THEN 1\r\n    ELSE UINFO2\r\n  END) / (CASE\r\n    WHEN ISNULL(UINFO1, 0) = 0 THEN 1\r\n    ELSE UINFO1\r\n  END) AS float)\r\nFROM LG_123_01_STFICHE STFICHE WITH (NOLOCK)\r\nLEFT OUTER JOIN LG_123_01_STLINE STLINE WITH (NOLOCK)\r\n  ON STFICHE.LOGICALREF = STLINE.STFICHEREF\r\nLEFT OUTER JOIN LG_123_ITEMS ITEMS WITH (NOLOCK)\r\n  ON STLINE.STOCKREF = ITEMS.LOGICALREF\r\nLEFT OUTER JOIN LG_123_UNITSETL BIRIM WITH (NOLOCK)\r\n  ON BIRIM.UNITSETREF = ITEMS.UNITSETREF\r\n  AND BIRIM.MAINUNIT = 1\r\nWHERE STFICHE.CANCELLED = 0\r\nAND STLINE.CANCELLED = 0\r\nAND STLINE.LINETYPE = 0\r\nAND STLINE.IOCODE IN (1, 2, 3, 4)\r\n \r\nAND STLINE.LPRODSTAT = 0\r\nAND STLINE.DATE_ \u003c= GETDATE()) AS X\r\nGROUP BY X.Isyeri,\r\n         X.Ambar,\r\n         x.Stok_Kodu,\r\n         x.Stok_Adı,\r\n         x.MalzemeAciklamasi2,\r\n         x.MalzemeAciklamasi3,\r\n         x.MalzemeAciklamasi4,\r\n         x.Bırım,\r\n         x.Malzeme_Turu,\r\n         x.GrupKodu,\r\n         x.OzelKod,\r\n         x.OzelKod2,\r\n         x.OzelKod3,\r\n         x.OzelKod4,\r\n         x.OzelKod5",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Isyeri",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "92",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Ambar",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "82",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Stok_Kodu",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Stok_Adı",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MalzemeAciklamasi2",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MalzemeAciklamasi3",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MalzemeAciklamasi4",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Bırım",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Malzeme_Turu",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "22",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GrupKodu",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OzelKod",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OzelKod2",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OzelKod3",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OzelKod4",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OzelKod5",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Miktar",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  ",",
+                            "Stok_Adı":  "X-LİTE FİREBİRD BÜYÜK PÜR.BAŞ.LPG ÇAKMAK GAZI",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "TICARI MAL",
+                            "GrupKodu":  "",
+                            "OzelKod":  "",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "1",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  ".",
+                            "Stok_Adı":  "MOTORİN YANSITMA",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "TICARI MAL",
+                            "GrupKodu":  "",
+                            "OzelKod":  "",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "1",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "1029"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  "1.86",
+                            "Stok_Adı":  "POLYESTER İNŞAAT KALIBI",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "MAMUL",
+                            "GrupKodu":  "",
+                            "OzelKod":  ":",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "12",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  "10 CM MAÇA POL. KALIP",
+                            "Stok_Adı":  "10 CM MAÇA POLYESTER İNŞAAT KALIBI",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "MAMUL",
+                            "GrupKodu":  "",
+                            "OzelKod":  "",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "12",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  "153-KRXX0099H027",
+                            "Stok_Adı":  "KARAVAN CAM 300X500 ",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "TICARI MAL",
+                            "GrupKodu":  "",
+                            "OzelKod":  "",
+                            "OzelKod2":  "ETC",
+                            "OzelKod3":  "1",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  "153-KRXX0099H099",
+                            "Stok_Adı":  "VANTİLATÖR BEYAZ",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "TICARI MAL",
+                            "GrupKodu":  "",
+                            "OzelKod":  "",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "1",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  "..",
+                            "Stok_Adı":  "HASAR YANSITMA",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "TICARI MAL",
+                            "GrupKodu":  "",
+                            "OzelKod":  "",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "1",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  "153-KRXX0099H200",
+                            "Stok_Adı":  "SERVİS KAPISI ÇİN 3 BEYAZ",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "TICARI MAL",
+                            "GrupKodu":  "",
+                            "OzelKod":  "",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "1",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  "1.74.A",
+                            "Stok_Adı":  "POLYESTER İNŞAAT KALIBI",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "MAMUL",
+                            "GrupKodu":  "",
+                            "OzelKod":  ":",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "12",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        },
+                        {
+                            "Isyeri":  "0-MERKEZ",
+                            "Ambar":  "0-E TICARET FIKTIF",
+                            "Stok_Kodu":  "153-MOTOR URAL 001",
+                            "Stok_Adı":  "URAL MOTORSİKLET MOTORU ",
+                            "MalzemeAciklamasi2":  "",
+                            "MalzemeAciklamasi3":  "YEDEK PARÇA",
+                            "MalzemeAciklamasi4":  "",
+                            "Bırım":  "ADET",
+                            "Malzeme_Turu":  "TICARI MAL",
+                            "GrupKodu":  "",
+                            "OzelKod":  "",
+                            "OzelKod2":  "",
+                            "OzelKod3":  "1",
+                            "OzelKod4":  "",
+                            "OzelKod5":  "",
+                            "Miktar":  "0"
+                        }
+                    ]
+}

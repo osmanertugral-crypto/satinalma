@@ -1,0 +1,235 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_223_01_APPROVERS",
+    "full_name":  "dbo.LG_223_01_APPROVERS",
+    "description":  "",
+    "total_rows":  "537",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "APPROVALREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERNAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EXPLAIN",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "251",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TIME_",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERID",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I223_01_APPROVERS_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I223_01_APPROVERS_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "APPROVALREF, USERID"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "APPROVALREF":  "60",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "OK",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285486881",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "APPROVALREF":  "61",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "OK",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285486898",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "APPROVALREF":  "62",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "OK",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285487404",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "APPROVALREF":  "66",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "OK",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285487414",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "APPROVALREF":  "67",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "OK",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285487425",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "APPROVALREF":  "68",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "OK",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285487434",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "APPROVALREF":  "117",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "RESTAR OTOMOTİV TURİZM SAN. İÇ VE DIŞ TİC. A.Ş.",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285488406",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "APPROVALREF":  "118",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "RESTAR OTOMOTİV TURİZM SAN. İÇ VE DIŞ TİC. A.Ş.",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285489966",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "APPROVALREF":  "119",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "RESTAR OTOMOTİV TURİZM SAN. İÇ VE DIŞ TİC. A.Ş.",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285541453",
+                            "USERID":  "105"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "APPROVALREF":  "120",
+                            "USERNAME":  "DİNÇER MOR",
+                            "EXPLAIN":  "RESTAR OTOMOTİV TURİZM SAN. İÇ VE DIŞ TİC. A.Ş.",
+                            "STATUS":  "1",
+                            "DATE_":  "12.07.2024 00:00:00",
+                            "TIME_":  "285542696",
+                            "USERID":  "105"
+                        }
+                    ]
+}

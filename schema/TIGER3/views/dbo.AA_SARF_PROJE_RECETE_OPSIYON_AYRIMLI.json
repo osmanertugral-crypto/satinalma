@@ -1,0 +1,122 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_SARF_PROJE_RECETE_OPSIYON_AYRIMLI",
+    "full_name":  "dbo.AA_SARF_PROJE_RECETE_OPSIYON_AYRIMLI",
+    "definition":  "\r\nCREATE VIEW [dbo].[AA_SARF_PROJE_RECETE_OPSIYON_AYRIMLI] AS \r\nselect \r\nYEAR(F.DATE_) YEAR_\r\n,MONTH(F.DATE_) MONTH_\r\n,F.DATE_ DATE_\r\n,F.FICHENO FISNO\r\n,(SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF) IS_EMRI_N0\r\n,(SELECT NAME FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF) IS_EMRI_ADI\r\n,S.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,AMOUNT MIKTAR\r\n,U.CODE BRIM\r\n,(SELECT TOP 1 PRICE FROM LG_001_01_STLINE WHERE LINETYPE=0 AND STOCKREF=L.STOCKREF AND  TRCODE IN (50,1) AND DATE_\u003c= L.DATE_ ORDER BY DATE_ DESC) BRIM_FIYAT\r\n,(SELECT TOP 1 PRICE FROM LG_001_01_STLINE WHERE LINETYPE=0 AND STOCKREF=L.STOCKREF AND   TRCODE IN (50,1)  AND DATE_\u003c= L.DATE_ ORDER BY DATE_ DESC)*L.AMOUNT  TUTAR\r\n,CASE SUBSTRING((SELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=L.PROJECTREF),1,2) \r\nWHEN \u0027G0\u0027 THEN \u0027GLADIATOR KABIN\u0027 \r\nWHEN \u0027G1\u0027 THEN \u0027GLADIATOR KABIN\u0027 \r\nWHEN \u0027R0\u0027 THEN \u0027RONIN KABIN\u0027\r\nWHEN \u0027RX\u0027 THEN \u0027RONIN XL\u0027\r\nWHEN \u0027FO\u0027 THEN \u0027RONIN KABINR\u0027\r\nWHEN \u0027F0\u0027 THEN \u0027FREDOOM\u0027\r\nWHEN \u0027T0\u0027 THEN \u0027TROY\u0027\r\nWHEN \u0027MC\u0027 THEN \u0027MOHICAN\u0027\r\nWHEN \u0027RV\u0027 THEN \u0027REVIVA\u0027\r\nWHEN \u0027GL\u0027 THEN \u0027GLADIATOR XL\u0027\r\nWHEN \u0027GL\u0027 THEN \u0027GLADIATOR XL\u0027\r\nWHEN \u0027PA\u0027 THEN \u0027PAN ANATOLIA\u0027 \r\nWHEN \u002720\u0027 THEN \u0027AKSESUAR\u0027 \r\nEND TUR\r\n,(SELECT MAX(MONTH(DATE_)) FROM LG_001_01_STLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE IN (7,8) ) SATIS_AY\r\n,(SELECT MAX(YEAR(DATE_)) FROM LG_001_01_STLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE IN (7,8) ) SATIS_YIL\r\n,ISNULL((SELECT \u0027RECETE\u0027 FROM LG_001_STCOMPLN BAG WHERE BAG.STCREF=L.STOCKREF AND BAG.MAINCREF IN (sELECT STOCKREF FROM LG_001_01_ORFLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE=1)),\u0027OPSIYONEL\u0027) AS STATU\r\n\r\nFROM LG_001_01_STLINE AS L\r\nINNER JOIN LG_001_01_STFICHE AS F ON F.LOGICALREF=L.STFICHEREF\r\nINNER JOIN LG_001_ITEMS AS S ON S.LOGICALREF=L.STOCKREF\r\nINNER JOIN LG_001_UNITSETL AS U ON U.LOGICALREF=L.UOMREF\r\n\r\nWHERE F.TRCODE=12 \r\n\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTH_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FISNO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "IS_EMRI_N0",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "IS_EMRI_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRIM",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRIM_FIYAT",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "15",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIS_AY",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIS_YIL",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STATU",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "6",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  "ATLANDI: Exception calling \"Fill\" with \"1\" argument(s): \"Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, \u003c, \u003c= , \u003e, \u003e= or when the subquery is used as an expression.\""
+}

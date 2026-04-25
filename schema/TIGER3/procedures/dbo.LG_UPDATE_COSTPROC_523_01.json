@@ -1,0 +1,83 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDATE_COSTPROC_523_01",
+    "full_name":  "dbo.LG_UPDATE_COSTPROC_523_01",
+    "created":  "Sep  1 2025 11:54AM",
+    "last_altered":  "Sep  1 2025 11:54AM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@TRANTYPE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STTRANSREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@PRDTRANSREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@RECVSTTRANSREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNTOT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNRPTOT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNTOTUFRS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@LNRPTOTUFRS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@COEF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDATE_COSTPROC_523_01\n       @TRANTYPE  SMALLINT,\n       @STTRANSREF INT,\n       @PRDTRANSREF INT,\n       @RECVSTTRANSREF INT,\n       @LNTOT  FLOAT,\n       @LNRPTOT  FLOAT,\n       @LNTOTUFRS FLOAT,\n       @LNRPTOTUFRS FLOAT,\n       @COEF  SMALLINT\n       AS\nSELECT @LNTOT = @LNTOT * @COEF\nSELECT @LNRPTOT = @LNRPTOT * @COEF\nSELECT @LNTOTUFRS = @LNTOTUFRS * @COEF\nSELECT @LNRPTOTUFRS = @LNRPTOTUFRS * @COEF\nIF (@TRANTYPE = 0) OR (@TRANTYPE IS NULL)\nBEGIN\n      IF (@STTRANSREF \u003e 0) AND EXISTS(SELECT LOGICALREF FROM LG_523_01_STLINE WHERE (LOGICALREF = @STTRANSREF))\n      UPDATE LG_523_01_STLINE\n      SET DIFFPRICE = DIFFPRICE + @LNTOT, DIFFREPPRICE = DIFFREPPRICE + @LNRPTOT,\n          COSTDISTPRICE = COSTDISTPRICE+ @LNTOT, COSTDISTREPPRICE = COSTDISTREPPRICE + @LNRPTOT,\n          DIFFPRICEUFRS = DIFFPRICEUFRS + @LNTOTUFRS, DIFFREPPRICEUFRS = DIFFREPPRICEUFRS + @LNRPTOTUFRS,\n          COSTDISTPRICEUFRS = COSTDISTPRICEUFRS+ @LNTOTUFRS, COSTDISTREPPRICEUFRS = COSTDISTREPPRICEUFRS + @LNRPTOTUFRS\n      WHERE (LOGICALREF = @STTRANSREF)\n      IF (@RECVSTTRANSREF \u003e 0) AND EXISTS(SELECT LOGICALREF FROM LG_523_01_STLINE WHERE (LOGICALREF = @RECVSTTRANSREF))\n       UPDATE LG_523_01_STLINE\n       SET DIFFPRICE = DIFFPRICE + @LNTOT, DIFFREPPRICE = DIFFREPPRICE + @LNRPTOT,\n           COSTDISTPRICE = COSTDISTPRICE+ @LNTOT, COSTDISTREPPRICE = COSTDISTREPPRICE + @LNRPTOT,\n           DIFFPRICEUFRS = DIFFPRICEUFRS + @LNTOTUFRS, DIFFREPPRICEUFRS = DIFFREPPRICEUFRS + @LNRPTOTUFRS,\n           COSTDISTPRICEUFRS = COSTDISTPRICEUFRS+ @LNTOTUFRS, COSTDISTREPPRICEUFRS = COSTDISTREPPRICEUFRS + @LNRPTOTUFRS\n       WHERE (LOGICALREF = @RECVSTTRANSREF)\nEND\nELSE\nBEGIN\n      IF (@PRDTRANSREF \u003e 0) AND EXISTS(SELECT LOGICALREF FROM LG_523_01_PRDCOST WHERE (LOGICALREF = @PRDTRANSREF))\n      UPDATE LG_523_01_PRDCOST\n      SET TOTDIFFPRICE = TOTDIFFPRICE + @LNTOT,\n          TOTDIFFREPPRICE = TOTDIFFREPPRICE + @LNRPTOT,\n          TOTDIFFPRICEUFRS = TOTDIFFPRICEUFRS + @LNTOTUFRS,\n          TOTDIFFREPPRICEUFRS = TOTDIFFREPPRICEUFRS + @LNRPTOTUFRS\n      WHERE (LOGICALREF = @PRDTRANSREF)\nEND"
+}

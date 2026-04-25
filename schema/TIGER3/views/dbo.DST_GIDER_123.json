@@ -1,0 +1,184 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_GIDER_123",
+    "full_name":  "dbo.DST_GIDER_123",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[DST_GIDER_123] AS\r\n\r\n\r\n\r\nSELECT \r\nYEAR(L.DATE_) YIL\r\n,MONTH(L.DATE_) AY\r\n,L.KEBIRCODE GRUP\r\n,F.SPECODE OZEL_KOD\r\n,H.CODE HESAP_KODU\r\n,H.DEFINITION_ HESAP_ADI\r\n,L.DEBIT TUTAR\r\n,L.LINEEXP ACIKLAMA\r\n,H.CLDEF TYP\r\nFROM LG_123_EMUHACC AS H\r\nINNER JOIN LG_123_01_EMFLINE AS L ON L.ACCOUNTREF=H.LOGICALREF\r\nINNER JOIN LG_123_01_EMFICHE AS F ON F.LOGICALREF=L.ACCFICHEREF\r\nWHERE H.CODE LIKE\u00277%\u0027\r\nAND L.CANCELLED=0\r\nAND YEAR(F.DATE_)\u003e2021\r\nAND H.CLDEF NOT IN (\u0027CAPEX\u0027,\u0027ARGE GİDERLERİ\u0027)\r\nUNION ALL\r\n\r\nSELECT \r\nYEAR(L.DATE_) YIL\r\n,MONTH(L.DATE_) AY\r\n,L.KEBIRCODE GRUP\r\n,F.SPECODE OZEL_KOD\r\n,H.CODE HESAP_KODU\r\n,H.DEFINITION_ HESAP_ADI\r\n,L.DEBIT TUTAR\r\n,L.LINEEXP ACIKLAMA\r\n,H.CLDEF TYP\r\nFROM LG_123_EMUHACC AS H\r\nINNER JOIN LG_123_01_EMFLINE AS L ON L.ACCOUNTREF=H.LOGICALREF\r\nINNER JOIN LG_123_01_EMFICHE AS F ON F.LOGICALREF=L.ACCFICHEREF\r\nWHERE H.CODE LIKE\u00277%\u0027\r\nAND L.CANCELLED=0\r\nAND YEAR(F.DATE_)\u003e2021\r\nAND H.CLDEF IN (\u0027ARGE GİDERLERİ\u0027)\r\n\r\n\r\n\r\nUNION ALL\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nSELECT \r\nYEAR(F.DATE_) YIL\r\n,MONTH(F.DATE_) AY\r\n,\u0027710\u0027 GRUP\r\n,\u0027R\u0027 OZEL_KOD\r\n,\u0027710\u0027 HESAP_KODU\r\n,\u0027Üretimden giriş\u0027 HESAP_ADI\r\n,l.TOTAL TUTAR\r\n,(SELECT CODE FROM LG_123_PROJECT WHERE LOGICALREF=L.PROJECTREF) IS_EMRI_N0\r\n,\u0027MAL MALİYETİ Üretim Giriş\u0027 TYP\r\nFROM LG_123_01_STFICHE AS F\r\nINNER JOIN LG_123_01_STLINE AS L ON L.STFICHEREF=F.LOGICALREF\r\nINNER JOIN LG_123_ITEMS AS S ON S.LOGICALREF=L.STOCKREF\r\nwhere YEAR(F.DATE_)\u003e2021\r\nAND F.TRCODE=13\r\n\r\nUNION ALL\r\n\r\n\r\nSELECT\r\nYEAR(F.DATE_) YIL\r\n,MONTH(F.DATE_) AY\r\n,\u0027TLP\u0027 GRUP\r\n,\u0027\u0027 OZEL_KOD\r\n,S.CODE \u0027HESAP_KODU\u0027\r\n,S.DEFINITION_ \u0027HESAP_ADI\u0027\r\n,L.PRICE TUTAR\r\n,L.LINEEXP ACIKLAMA\r\n,S.DEFINITION2 TYP\r\n\r\n\r\n\r\nFROM LG_123_01_DEMANDLINE AS L\r\nINNER JOIN LG_123_SRVCARD AS S ON S.LOGICALREF=L.ITEMREF\r\nINNER JOIN LG_123_01_DEMANDFICHE AS F ON F.LOGICALREF=L.DEMANDFICHEREF\r\n\r\nWHERE S.CODE LIKE\u0027X 7%\u0027\r\nAND YEAR(l.PROCUREDATE)\u003e2021\r\nAND S.DEFINITION2 NOT IN (\u0027CAPEX\u0027,\u0027ARGE GİDERLERİ\u0027)\r\n\r\n--SELECT * FROM LG_123_01_DEMANDLINE\r\n\r\n--UNION ALL\r\n\r\n--SELECT\r\n--YEAR(F.DATE_) YIL\r\n--,MONTH(F.DATE_) AY\r\n--,\u0027TLP\u0027 GRUP\r\n--,\u0027\u0027 OZEL_KOD\r\n--,S.CODE \u0027HESAP_KODU\u0027\r\n--,S.DEFINITION_ \u0027HESAP_ADI\u0027\r\n--,L.PRICE TUTAR\r\n--,L.LINEEXP ACIKLAMA\r\n--,S.DEFINITION2 TYP\r\n\r\n\r\n\r\n--FROM LG_123_01_DEMANDLINE AS L\r\n--INNER JOIN LG_123_SRVCARD AS S ON S.LOGICALREF=L.ITEMREF\r\n--INNER JOIN LG_123_01_DEMANDFICHE AS F ON F.LOGICALREF=L.DEMANDFICHEREF\r\n\r\n--WHERE S.CODE LIKE\u0027X 7%\u0027\r\n--AND YEAR(l.PROCUREDATE)\u003e2021\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "YIL",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GRUP",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OZEL_KOD",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIKLAMA",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "251",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "YIL":  "2024",
+                            "AY":  "12",
+                            "GRUP":  "760",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "760.97.450000",
+                            "HESAP_ADI":  "PROMOSYON GİDERLERİ",
+                            "TUTAR":  "31556,25",
+                            "ACIKLAMA":  "PER2024000000038,PER2024000000038,Alınan Hizmet Faturası,320.PEROTTİ,PEROTTİ ZÜCCACİYE ANONİM ŞİRKETİ,02.12.2024 ",
+                            "TYP":  "Cost of Marketing"
+                        },
+                        {
+                            "YIL":  "2024",
+                            "AY":  "12",
+                            "GRUP":  "760",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "760.97.450000",
+                            "HESAP_ADI":  "PROMOSYON GİDERLERİ",
+                            "TUTAR":  "2868,75",
+                            "ACIKLAMA":  "003116,PER2024000000065,Alınan Hizmet Faturası,320.PEROTTİ,PEROTTİ ZÜCCACİYE ANONİM ŞİRKETİ,12.12.2024 ",
+                            "TYP":  "Cost of Marketing"
+                        },
+                        {
+                            "YIL":  "2024",
+                            "AY":  "12",
+                            "GRUP":  "760",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "760.97.450000",
+                            "HESAP_ADI":  "PROMOSYON GİDERLERİ",
+                            "TUTAR":  "0",
+                            "ACIKLAMA":  "GİDER HESAPLARI KAPAMA",
+                            "TYP":  "Cost of Marketing"
+                        },
+                        {
+                            "YIL":  "2023",
+                            "AY":  "12",
+                            "GRUP":  "731",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "731.00.000000",
+                            "HESAP_ADI":  "GENEL ÜRETİM GİDERLERİ YANSITMA HESABI",
+                            "TUTAR":  "0",
+                            "ACIKLAMA":  "31.12.2023 tarihli dönem içi yansıtma kaydı",
+                            "TYP":  ""
+                        },
+                        {
+                            "YIL":  "2023",
+                            "AY":  "12",
+                            "GRUP":  "731",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "731.00.000000",
+                            "HESAP_ADI":  "GENEL ÜRETİM GİDERLERİ YANSITMA HESABI",
+                            "TUTAR":  "0",
+                            "ACIKLAMA":  "31.12.2023 tarihli dönem içi yansıtma kaydı",
+                            "TYP":  ""
+                        },
+                        {
+                            "YIL":  "2023",
+                            "AY":  "12",
+                            "GRUP":  "731",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "731.00.000000",
+                            "HESAP_ADI":  "GENEL ÜRETİM GİDERLERİ YANSITMA HESABI",
+                            "TUTAR":  "0",
+                            "ACIKLAMA":  "31.12.2023 tarihli dönem içi yansıtma kaydı",
+                            "TYP":  ""
+                        },
+                        {
+                            "YIL":  "2023",
+                            "AY":  "12",
+                            "GRUP":  "731",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "731.00.000000",
+                            "HESAP_ADI":  "GENEL ÜRETİM GİDERLERİ YANSITMA HESABI",
+                            "TUTAR":  "2310572,59",
+                            "ACIKLAMA":  "31.12.2023 tarihli dönem içi yansıtma kaydı",
+                            "TYP":  ""
+                        },
+                        {
+                            "YIL":  "2023",
+                            "AY":  "12",
+                            "GRUP":  "731",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "731.00.000000",
+                            "HESAP_ADI":  "GENEL ÜRETİM GİDERLERİ YANSITMA HESABI",
+                            "TUTAR":  "10734,15",
+                            "ACIKLAMA":  "31.12.2023 tarihli dönem içi yansıtma kaydı",
+                            "TYP":  ""
+                        },
+                        {
+                            "YIL":  "2023",
+                            "AY":  "12",
+                            "GRUP":  "731",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "731.00.000000",
+                            "HESAP_ADI":  "GENEL ÜRETİM GİDERLERİ YANSITMA HESABI",
+                            "TUTAR":  "21026,6",
+                            "ACIKLAMA":  "31.12.2023 tarihli dönem içi yansıtma kaydı",
+                            "TYP":  ""
+                        },
+                        {
+                            "YIL":  "2023",
+                            "AY":  "12",
+                            "GRUP":  "731",
+                            "OZEL_KOD":  "",
+                            "HESAP_KODU":  "731.00.000000",
+                            "HESAP_ADI":  "GENEL ÜRETİM GİDERLERİ YANSITMA HESABI",
+                            "TUTAR":  "529127,33",
+                            "ACIKLAMA":  "31.12.2023 tarihli dönem içi yansıtma kaydı",
+                            "TYP":  ""
+                        }
+                    ]
+}

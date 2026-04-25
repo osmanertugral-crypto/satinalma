@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_CARI_HESAP_EKSTRESI",
+    "full_name":  "dbo.AA_CARI_HESAP_EKSTRESI",
+    "definition":  "CREATE VIEW AA_CARI_HESAP_EKSTRESI as \nSELECT *\n--(SELECT SUM(BORC+ALACAK) WHERE AA_CARI_HESAP_EKSTRESI WHERE \n FROM (\nSELECT \nL.LOGICALREF,\nC.CODE\n,C.DEFINITION_\n,case L.TRADINGGRP when \u0027\u0027 THEN \u0027BOS\u0027 ELSE L.TRADINGGRP END TRADINGGRP\n,SIGN\n,CASE SIGN WHEN 0 THEN AMOUNT ELSE 0 END BORC\n,CASE SIGN WHEN 1 THEN AMOUNT*-1 ELSE 0 END ALACAK\n\n,CONVERT(NVARCHAR,L.DATE_,104) INDATE\n,CASE MODULENR \nWHEN 4 THEN (SELECT MAX(DATE_) FROM LG_001_01_PAYTRANS WHERE  MODULENR=4 AND FICHEREF=L.SOURCEFREF)\nWHEN 10 THEN (SELECT MAX(DATE_) FROM LG_001_01_PAYTRANS WHERE  MODULENR=10 AND FICHEREF=L.SOURCEFREF)\nWHEN 5 THEN (SELECT MAX(DATE_) FROM LG_001_01_PAYTRANS WHERE  MODULENR=5 AND FICHEREF=L.LOGICALREF)\nWHEN 7 THEN (SELECT MAX(DATE_) FROM LG_001_01_PAYTRANS WHERE  MODULENR=7 AND FICHEREF=L.SOURCEFREF)\nWHEN 6 THEN (SELECT MAX(DATE_) FROM LG_001_01_PAYTRANS WHERE  MODULENR=6 AND FICHEREF=L.SOURCEFREF)\nWHEN 61 THEN L.DATE_\nELSE NULL END DUEDATE\n,CONVERT(NVARCHAR,GETDATE(),104) NOWDATE\n\n\n\n,CASE L.TRCODE when 1 then \u0027Nakit Tahsilat\u0027\n    when 2 then \u0027Nakit Ödeme\u0027\n    when 3 then \u0027Borç Dekontu\u0027\n    when 4 then \u0027Alacak Dekontu\u0027\n    when 5 then \u0027Virman Işlemi\u0027\n    when 6 then \u0027Kur Farkı İşlemi\u0027\n    when 12 then \u0027Özel İşlem\u0027\n    when 20 then \u0027Gelen Havaleler\u0027\n    when 21 then \u0027Gönderilen Havaleler\u0027\n    when 31 then \u0027Satınalma Faturası\u0027\n    when 32 then \u0027Perakende Satış İade Faturası\u0027\n    when 24 then \u0027Döviz Alış Belgesi\u0027\n    when 25 then \u0027Döviz Satış Belgesi\u0027    \n    when 33 then \u0027Toptan Satış İade Faturası\u0027\n    when 34 then \u0027Alınan Hizmet Faturası\u0027\n    when 35 then \u0027Alınan Proforma Faturası\u0027\n    when 36 then \u0027Satınalma İade Faturası\u0027\n    when 37 then \u0027Perakende Satış Faturası\u0027\n    when 38 then \u0027Toptan Satış Faturası\u0027\n    when 39 then \u0027Verilen Hizmet Faturası\u0027\n    when 40 then \u0027Verilen Proforma Faturası\u0027\n    when 41 then \u0027Verilen Vade Farkı Faturası\u0027\n    when 42 then \u0027Alınan Vade Farkı Faturası\u0027\n    when 43 then \u0027Alınan Fiyat Farkı Faturası\u0027\n    when 44 then \u0027Verilen Fiyat Farkı Faturası\u0027\n    when 46 then \u0027Alınan Ser. Mes. Makbuzu\u0027\n    when 28 then \u0027Banka Alınan Hizmet Faturası\u0027\n    when 56 then \u0027Müsthsil Makbuzu\u0027\n    when 61 then \u0027Çek Girişi\u0027\n    when 62 then \u0027Senet Girişi\u0027\n    when 63 then \u0027Çek Çıkış Cari Hesaba\u0027\n    when 64 then \u0027Senet Çıkış Cari Hesaba\u0027\n    when 70 then \u0027Kredi Kartı Fişi\u0027\n    when 71 then \u0027Kredi Kartı İade Fişi\u0027\n    when 72 then \u0027Firma Kredi Kartı Fişi\u0027\n    when 73 then \u0027Firma Kredi Kartı İade Fişi\u0027\n    when 14 then \u0027Açılış Fişi\u0027\n    when 81 then \u0027Ödemeli Satış Siparişi\u0027\n    when 82 then \u0027Ödemeli Satınalma Siparişi\u0027 END TYP\n\t,L.MODULENR\n\t,L.TRCODE\n\t,L.SOURCEFREF\n\n\nFROM LG_001_01_CLFLINE AS L\nINNER JOIN LG_001_CLCARD AS C ON C.LOGICALREF=L.CLIENTREF\nwhere C.CODE LIKE\u0027320%\u0027 \n\n\n\n) AS RAPOR WHERE TYP not LIKE \u0027%FATURA%\u0027 \n-- AND CODE=\u0027320.01.00117\u0027\n\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRADINGGRP",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIGN",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BORC",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALACAK",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INDATE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DUEDATE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "NOWDATE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "29",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MODULENR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SOURCEFREF",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "2376",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "1",
+                            "BORC":  "0",
+                            "ALACAK":  "-226530,21",
+                            "INDATE":  "31.10.2021",
+                            "DUEDATE":  "31.10.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Alacak Dekontu",
+                            "MODULENR":  "5",
+                            "TRCODE":  "4",
+                            "SOURCEFREF":  "24"
+                        },
+                        {
+                            "LOGICALREF":  "2846",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "7562,19",
+                            "ALACAK":  "0",
+                            "INDATE":  "01.11.2021",
+                            "DUEDATE":  "1.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1633"
+                        },
+                        {
+                            "LOGICALREF":  "2847",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "5185,07",
+                            "ALACAK":  "0",
+                            "INDATE":  "01.11.2021",
+                            "DUEDATE":  "1.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1634"
+                        },
+                        {
+                            "LOGICALREF":  "2848",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "27919,63",
+                            "ALACAK":  "0",
+                            "INDATE":  "01.11.2021",
+                            "DUEDATE":  "1.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1635"
+                        },
+                        {
+                            "LOGICALREF":  "2849",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "29913,89",
+                            "ALACAK":  "0",
+                            "INDATE":  "01.11.2021",
+                            "DUEDATE":  "1.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1636"
+                        },
+                        {
+                            "LOGICALREF":  "2850",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "35816,89",
+                            "ALACAK":  "0",
+                            "INDATE":  "01.11.2021",
+                            "DUEDATE":  "1.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1637"
+                        },
+                        {
+                            "LOGICALREF":  "2851",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "5185,07",
+                            "ALACAK":  "0",
+                            "INDATE":  "01.11.2021",
+                            "DUEDATE":  "1.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1638"
+                        },
+                        {
+                            "LOGICALREF":  "2852",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "11514,77",
+                            "ALACAK":  "0",
+                            "INDATE":  "12.11.2021",
+                            "DUEDATE":  "12.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1639"
+                        },
+                        {
+                            "LOGICALREF":  "2853",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "8142,59",
+                            "ALACAK":  "0",
+                            "INDATE":  "12.11.2021",
+                            "DUEDATE":  "12.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1640"
+                        },
+                        {
+                            "LOGICALREF":  "2854",
+                            "CODE":  "320.01.00001",
+                            "DEFINITION_":  "TERMOSA MAKİNE SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TRADINGGRP":  "BOS",
+                            "SIGN":  "0",
+                            "BORC":  "106,88",
+                            "ALACAK":  "0",
+                            "INDATE":  "12.11.2021",
+                            "DUEDATE":  "12.11.2021 00:00:00",
+                            "NOWDATE":  "24.04.2026",
+                            "TYP":  "Gönderilen Havaleler",
+                            "MODULENR":  "7",
+                            "TRCODE":  "21",
+                            "SOURCEFREF":  "1641"
+                        }
+                    ]
+}

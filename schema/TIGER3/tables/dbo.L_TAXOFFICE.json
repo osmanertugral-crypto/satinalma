@@ -1,0 +1,265 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_TAXOFFICE",
+    "full_name":  "dbo.L_TAXOFFICE",
+    "description":  "",
+    "total_rows":  "1052",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDR1",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "41",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDR2",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "41",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CNTRNR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SITEID",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RECSTATUS",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORGLOGICREF",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "TAXOFFICE_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "TAXOFFICE_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CNTRNR, CODE"
+                    },
+                    {
+                        "index_name":  "TAXOFFICE_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "NAME"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CODE":  "1103",
+                            "NAME":  "FEKE MAL MÜDÜRLÜĞÜ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CODE":  "1105",
+                            "NAME":  "KARAİSALI MAL MÜDÜRLÜĞÜ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CODE":  "1109",
+                            "NAME":  "POZANTI MAL MÜDÜRLÜĞÜ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CODE":  "1110",
+                            "NAME":  "SAİMBEYLİ MAL MÜDÜRLÜĞÜ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CODE":  "1111",
+                            "NAME":  "TUFANBEYLİ MAL MÜDÜRLÜĞÜ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CODE":  "1112",
+                            "NAME":  "YUMURTALIK MAL MÜDÜRLÜĞÜ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CODE":  "1114",
+                            "NAME":  "ALADAĞ MAL MÜDÜRLÜĞÜ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CODE":  "1115",
+                            "NAME":  "İMAMOĞLU MAL MÜDÜRLÜĞÜ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CODE":  "1201",
+                            "NAME":  "CEYHAN VERGİ DAİRESİ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CODE":  "1203",
+                            "NAME":  "KOZAN VERGİ DAİRESİ",
+                            "ADDR1":  "ADANA",
+                            "ADDR2":  "",
+                            "CNTRNR":  "179",
+                            "SITEID":  "0",
+                            "RECSTATUS":  "0",
+                            "ORGLOGICREF":  "0"
+                        }
+                    ]
+}

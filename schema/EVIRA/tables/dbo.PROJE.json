@@ -1,0 +1,251 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "PROJE",
+    "full_name":  "dbo.PROJE",
+    "description":  "",
+    "total_rows":  "1083",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PROJE_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "300",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_SORUMLU",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OLUSTURMA_TARIHI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GUNCELLEME_TARIHI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "BASLAMA_TARIHI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "BITIS_TARIHI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "AKTIF",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "tinyint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "3",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__PROJE__3DA1A98C460BC5E0",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "PROJE_REF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "PROJE_REF":  "8",
+                            "PROJE_KODU":  "G0109",
+                            "PROJE_ADI":  "MÜLLER MOTORS 2021020",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "18.10.2021 15:36:03",
+                            "GUNCELLEME_TARIHI":  "27.11.2021 17:50:43",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "PROJE_REF":  "18",
+                            "PROJE_KODU":  "DIGER GELIRLER",
+                            "PROJE_ADI":  "DIGER GELIRLER",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "9.11.2021 12:16:42",
+                            "GUNCELLEME_TARIHI":  "2.01.2023 18:26:52",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "1"
+                        },
+                        {
+                            "PROJE_REF":  "19",
+                            "PROJE_KODU":  "RV02",
+                            "PROJE_ADI":  "REVIVA GÖKHAN GÖKBÖRÜ",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "17.11.2021 16:40:52",
+                            "GUNCELLEME_TARIHI":  null,
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "PROJE_REF":  "20",
+                            "PROJE_KODU":  "RXL008",
+                            "PROJE_ADI":  "HAYRI TOPÇUOGLU RONIN XL 63 M 1167 ARAÇ BERABER",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "18.11.2021 12:04:07",
+                            "GUNCELLEME_TARIHI":  "27.11.2021 17:03:05",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "PROJE_REF":  "21",
+                            "PROJE_KODU":  "GXXXX",
+                            "PROJE_ADI":  "EHRENFRIED SCHOLZ GLADYATÖR",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "19.11.2021 14:58:30",
+                            "GUNCELLEME_TARIHI":  "25.11.2021 17:08:43",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "PROJE_REF":  "22",
+                            "PROJE_KODU":  "RV01",
+                            "PROJE_ADI":  "RESTAR RENT",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "22.11.2021 16:23:27",
+                            "GUNCELLEME_TARIHI":  "28.11.2021 12:31:48",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "PROJE_REF":  "23",
+                            "PROJE_KODU":  "DIGER GIDERLER",
+                            "PROJE_ADI":  "DIGER GIDERLER",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "23.11.2021 12:33:56",
+                            "GUNCELLEME_TARIHI":  "2.01.2023 18:26:46",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "1"
+                        },
+                        {
+                            "PROJE_REF":  "24",
+                            "PROJE_KODU":  "GXXXV",
+                            "PROJE_ADI":  "AÇILIS ISLEMLERI BAKIYE KAPAMA CARI HESABI 320 KARSILIGI",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "23.11.2021 15:57:32",
+                            "GUNCELLEME_TARIHI":  "27.11.2021 18:08:31",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "PROJE_REF":  "28",
+                            "PROJE_KODU":  "GXXX",
+                            "PROJE_ADI":  "AKIF YEGINER",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "24.11.2021 15:42:34",
+                            "GUNCELLEME_TARIHI":  "28.11.2021 11:52:32",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "1"
+                        },
+                        {
+                            "PROJE_REF":  "29",
+                            "PROJE_KODU":  "I01",
+                            "PROJE_ADI":  "HATALI ,KUSURLU ÜRÜN  IADE",
+                            "PROJE_SORUMLU":  "",
+                            "OLUSTURMA_TARIHI":  "24.11.2021 16:02:04",
+                            "GUNCELLEME_TARIHI":  "24.11.2021 23:08:42",
+                            "BASLAMA_TARIHI":  null,
+                            "BITIS_TARIHI":  null,
+                            "AKTIF":  "0"
+                        }
+                    ]
+}

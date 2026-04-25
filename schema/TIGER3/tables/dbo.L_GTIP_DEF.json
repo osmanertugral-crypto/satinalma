@@ -1,0 +1,150 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_GTIP_DEF",
+    "full_name":  "dbo.L_GTIP_DEF",
+    "description":  "",
+    "total_rows":  "5164",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GTIPREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INDEX_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DESCRIPTION",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "151",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "GTIP_DEF_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "GTIP_DEF_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "GTIPREF"
+                    },
+                    {
+                        "index_name":  "GTIP_DEF_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "GTIPREF, INDEX_"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "GTIPREF":  "1",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "CANLI HAYVANLAR VE HAYVANSAL ÜRÜNLER"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "GTIPREF":  "2",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "BİTKİSEL ÜRÜNLER."
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "GTIPREF":  "3",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "HAYVANSAL VE BİTKİSEL KATI VE SIVI YAĞLAR VE BUNLARIN PARÇALANMA ÜRÜNLERİ; HAZIR YEMEKLİK KATI YAĞLAR; HAYVANSAL VE BİTKİSEL MUMLAR"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "GTIPREF":  "4",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "GIDA SANAYİİ MÜSTAHZARLARI; MEŞRUBAT, ALKOLLÜ İÇKİLER VE SİRKE; TÜTÜN VEYA TÜTÜN YERİNE GEÇEN İŞLENMİŞ MADDELER"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "GTIPREF":  "5",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "MİNERAL ÜRÜNLER"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "GTIPREF":  "6",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "KİMYA SANAYİİ VE BUNA BAĞLI SANAYİİ ÜRÜNLERİ"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "GTIPREF":  "7",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "PLASTİK VE PLASTİK ÜRÜNLERİ; KAUÇUK VE KAUÇUK ÜRÜNLERİ"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "GTIPREF":  "8",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "DERİLER, KÖSELELER, POSTLAR, KÜRKLER VE BU MADDELERDEN MAMUL EŞYA; SARACİYE EŞYASI VE EYER VE KOŞUM TAKIMLARI; SEYAHAT EŞYASI, EL ÇANTALARI VE BENZERİ"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "GTIPREF":  "8",
+                            "INDEX_":  "2",
+                            "DESCRIPTION":  "MAHFAZALAR; HAYVAN BAĞIRSAĞINDAN MAMUL EŞYA (İPEK BÖCEĞI GUDDESİ HARİÇ)"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "GTIPREF":  "9",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "AĞAÇ VE AHŞAP EŞYA; ODUN KÖMÜRÜ; MANTAR VE MANTARDAN MAMUL EŞYA; HASIRDAN, SAZDAN VEYA ÖRÜLMEYE ELVERİŞLİ DİĞER MADDELERDEN MAMULLER; SEPETÇİ VE HASIR"
+                        }
+                    ]
+}

@@ -1,0 +1,228 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "ELOGOBANKING_VOUCHERTYPE",
+    "full_name":  "dbo.ELOGOBANKING_VOUCHERTYPE",
+    "description":  "",
+    "total_rows":  "6995",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Id",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "UniqueId",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "255",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "VoucherType",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CreateDate",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "Status",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CurrencyRate",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "IsCreatePaymentCheckEnabled",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "bit",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ErpFicheNo",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__ELOGOBAN__3214EC07AF706C94",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "Id"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Id":  "1",
+                            "UniqueId":  "2025-01-23-18.27.43.133694",
+                            "VoucherType":  "3",
+                            "CreateDate":  "24.01.2025 16:20:37",
+                            "Status":  "2",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  "001505"
+                        },
+                        {
+                            "Id":  "2",
+                            "UniqueId":  "2025-01-23-18.27.05.028418",
+                            "VoucherType":  "2",
+                            "CreateDate":  "24.01.2025 16:50:13",
+                            "Status":  "2",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  "001668"
+                        },
+                        {
+                            "Id":  "3",
+                            "UniqueId":  "2025-01-21-19.38.30.771039",
+                            "VoucherType":  "2",
+                            "CreateDate":  "24.01.2025 17:04:27",
+                            "Status":  "2",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  "001669"
+                        },
+                        {
+                            "Id":  "4",
+                            "UniqueId":  "2025-01-15-12.27.17.965402",
+                            "VoucherType":  "1",
+                            "CreateDate":  "24.01.2025 17:25:40",
+                            "Status":  "2",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  "001071"
+                        },
+                        {
+                            "Id":  "5",
+                            "UniqueId":  "2025001715155591-FSTTGLNMSJ",
+                            "VoucherType":  "2",
+                            "CreateDate":  "12.02.2025 14:03:30",
+                            "Status":  "2",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  "001714"
+                        },
+                        {
+                            "Id":  "6",
+                            "UniqueId":  "2025001767187114-EFTTBATCHODE",
+                            "VoucherType":  "1",
+                            "CreateDate":  "6.02.2025 14:42:32",
+                            "Status":  "2",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  "001097"
+                        },
+                        {
+                            "Id":  "7",
+                            "UniqueId":  "2025001714054476-EFTTBATCHODE",
+                            "VoucherType":  "1",
+                            "CreateDate":  "6.02.2025 14:42:33",
+                            "Status":  "2",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  "001098"
+                        },
+                        {
+                            "Id":  "8",
+                            "UniqueId":  "2025001733038549-KRKBORCODE",
+                            "VoucherType":  "1",
+                            "CreateDate":  "6.02.2025 14:58:40",
+                            "Status":  "2",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  "003541"
+                        },
+                        {
+                            "Id":  "9",
+                            "UniqueId":  "2025001691525316-TKRTTAHTAHSILAT",
+                            "VoucherType":  "1",
+                            "CreateDate":  "11.02.2025 14:19:40",
+                            "Status":  "3",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  ""
+                        },
+                        {
+                            "Id":  "10",
+                            "UniqueId":  "2025001726555137-TKRTTAHTAHSILAT",
+                            "VoucherType":  "1",
+                            "CreateDate":  "11.02.2025 14:20:11",
+                            "Status":  "3",
+                            "CurrencyRate":  "0",
+                            "IsCreatePaymentCheckEnabled":  "False",
+                            "ErpFicheNo":  ""
+                        }
+                    ]
+}

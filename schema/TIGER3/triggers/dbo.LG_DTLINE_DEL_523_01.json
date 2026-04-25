@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "LG_DTLINE_DEL_523_01",
+    "on_table":  "dbo.LG_523_01_DISTORDLINE",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "DELETE"
+               ],
+    "definition":  "CREATE TRIGGER LG_DTLINE_DEL_523_01 ON LG_523_01_DISTORDLINE\nFOR DELETE\nAS\nDECLARE @c_CompLine         SMALLINT\nDECLARE @old_ItemRef        INT\nDECLARE @old_VariantRef     INT\nDECLARE @old_OrdLineRef     INT\nDECLARE @old_DOrdDate       DATETIME\nDECLARE @old_ShipAmount     FLOAT\nDECLARE @old_RemAmount      FLOAT\nDECLARE @old_UomRef         INT\nDECLARE @old_SourceIndex    SMALLINT\nDECLARE @old_DOrdStatus     INT\nDECLARE @old_DOrdGoDate     DATETIME\nDECLARE @old_DOrdRetDate    DATETIME\nDECLARE @old_LineType       SMALLINT\nDECLARE @old_uinfo1         FLOAT\nDECLARE @old_uinfo2         FLOAT\nSELECT @c_CompLine  = 7\nSELECT @old_ItemRef = D.ITEMREF,\n       @old_VariantRef = D.VARIANTREF,\n       @old_OrdLineRef = D.ORDLINEREF,\n       @old_DOrdDate = D.DATE_,\n       @old_ShipAmount = D.SHIPAMOUNT,\n       @old_RemAmount = D.REMAMOUNT,\n       @old_UomRef = D.UOMREF,\n       @old_SourceIndex = D.SOURCEINDEX,\n       @old_DOrdStatus = D.DORDSTATUS,\n       @old_DOrdGoDate = D.DORDGODATE,\n       @old_DOrdRetDate = D.DORDRETURNDATE,\n       @old_LineType = D.LINETYPE,\n       @old_uinfo1   = D.UINFO1,\n       @old_uinfo2   = D.UINFO2\nFROM DELETED D\nIF (@old_LineType \u003c\u003e @c_CompLine)\n EXECUTE LG_DTHANDLENUMBERS_523_01 -1, @old_ItemRef, @old_VariantRef, @old_OrdLineRef, @old_DOrdDate,\n                                   @old_ShipAmount,  @old_RemAmount,  @old_UomRef,\n                                   @old_SourceIndex, @old_DOrdStatus, @old_DOrdGoDate,\n                                   @old_DOrdRetDate, @old_uinfo1, @old_uinfo2"
+}

@@ -1,0 +1,212 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_CATEGLISTS",
+    "full_name":  "dbo.LG_CATEGLISTS",
+    "description":  "",
+    "total_rows":  "22",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CATEGID",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TAG",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CATDESC",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CUSTOM",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RECORDID",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "CATEGLISTS_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "CATEGLISTS_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "CATEGID, LINENO_"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CATEGID":  "1",
+                            "LINENO_":  "0",
+                            "TAG":  "0",
+                            "CATDESC":  "Genel",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CATEGID":  "1",
+                            "LINENO_":  "1",
+                            "TAG":  "1",
+                            "CATDESC":  "Toptancı",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CATEGID":  "1",
+                            "LINENO_":  "2",
+                            "TAG":  "2",
+                            "CATDESC":  "Perakendeci",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CATEGID":  "1",
+                            "LINENO_":  "3",
+                            "TAG":  "3",
+                            "CATDESC":  "Kamu Kurumu",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CATEGID":  "1",
+                            "LINENO_":  "4",
+                            "TAG":  "4",
+                            "CATDESC":  "Rakip",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CATEGID":  "2",
+                            "LINENO_":  "0",
+                            "TAG":  "0",
+                            "CATDESC":  "Genel",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CATEGID":  "2",
+                            "LINENO_":  "1",
+                            "TAG":  "1",
+                            "CATDESC":  "Bilgilendirici",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CATEGID":  "2",
+                            "LINENO_":  "2",
+                            "TAG":  "2",
+                            "CATDESC":  "Yönlendirici",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CATEGID":  "2",
+                            "LINENO_":  "3",
+                            "TAG":  "3",
+                            "CATDESC":  "Karar Verici",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CATEGID":  "3",
+                            "LINENO_":  "0",
+                            "TAG":  "0",
+                            "CATDESC":  "Genel",
+                            "CUSTOM":  "0",
+                            "RECORDID":  "0"
+                        }
+                    ]
+}

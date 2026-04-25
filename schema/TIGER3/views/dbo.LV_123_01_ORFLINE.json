@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_123_01_ORFLINE",
+    "full_name":  "dbo.LV_123_01_ORFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_123_01_ORFLINE] AS\nSELECT\n    LGMAIN.LOGICALREF, LGMAIN.ORDFICHEREF, LGMAIN.STOCKREF, LGMAIN.LINENO_, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.DATE_, LGMAIN.LINETYPE, LGMAIN.TRCODE,   \n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.CODE WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.CODE ELSE \u0027\u0027 END AS CODE,\n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.DEFINITION_ WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_ WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.NAME ELSE \u0027\u0027 END AS LINEEXP\nFROM\n    LG_123_01_ORFLINE LGMAIN WITH(NOLOCK)\n LEFT OUTER JOIN LG_123_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF AND LGMAIN.LINETYPE NOT IN (2,3,4)\n    LEFT OUTER JOIN lg_123_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF AND LGMAIN.LINETYPE IN (4)\n    LEFT OUTER JOIN LG_123_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF AND LGMAIN.LINETYPE IN (2,3)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDFICHEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "7989",
+                            "ORDFICHEREF":  "4062",
+                            "STOCKREF":  "6348",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "12",
+                            "PRICE":  "7357,623",
+                            "TOTAL":  "88291,48",
+                            "DATE_":  "18.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "ELTS0099H024",
+                            "LINEEXP":  "EBERSPAECHER KOMPLE ISITICI D2L 12V"
+                        },
+                        {
+                            "LOGICALREF":  "7990",
+                            "ORDFICHEREF":  "4062",
+                            "STOCKREF":  "6347",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "12",
+                            "PRICE":  "3503,63",
+                            "TOTAL":  "42043,56",
+                            "DATE_":  "18.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "ELTS0099H023",
+                            "LINEEXP":  "EBERSPAECHER KIT"
+                        },
+                        {
+                            "LOGICALREF":  "7991",
+                            "ORDFICHEREF":  "4062",
+                            "STOCKREF":  "6346",
+                            "LINENO_":  "3",
+                            "AMOUNT":  "12",
+                            "PRICE":  "1926,9965",
+                            "TOTAL":  "23123,96",
+                            "DATE_":  "18.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "ELTS0099H022",
+                            "LINEEXP":  "EBERSPAECHER DİJİTAL SAAT HYD HS3"
+                        },
+                        {
+                            "LOGICALREF":  "7992",
+                            "ORDFICHEREF":  "4059",
+                            "STOCKREF":  "6610",
+                            "LINENO_":  "12",
+                            "AMOUNT":  "10000",
+                            "PRICE":  "0,21",
+                            "TOTAL":  "2100",
+                            "DATE_":  "16.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "HRXX0099H134",
+                            "LINEEXP":  "VİDA SUNTA 3,5X35"
+                        },
+                        {
+                            "LOGICALREF":  "7998",
+                            "ORDFICHEREF":  "4059",
+                            "STOCKREF":  "11229",
+                            "LINENO_":  "13",
+                            "AMOUNT":  "100",
+                            "PRICE":  "139",
+                            "TOTAL":  "13900",
+                            "DATE_":  "16.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "KMIZ0099H054",
+                            "LINEEXP":  "SİKA MASTİK SOSİS NP1"
+                        },
+                        {
+                            "LOGICALREF":  "8000",
+                            "ORDFICHEREF":  "4067",
+                            "STOCKREF":  "7318",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "10",
+                            "PRICE":  "175",
+                            "TOTAL":  "1750",
+                            "DATE_":  "19.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "HRXX0099H290",
+                            "LINEEXP":  "WD 40 YAĞ SÖKÜCÜ 400 ML"
+                        },
+                        {
+                            "LOGICALREF":  "8001",
+                            "ORDFICHEREF":  "4068",
+                            "STOCKREF":  "7379",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "20",
+                            "PRICE":  "180",
+                            "TOTAL":  "3600",
+                            "DATE_":  "19.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "DSXX0099H047",
+                            "LINEEXP":  "KUMAŞ PELUŞ KREM"
+                        },
+                        {
+                            "LOGICALREF":  "8002",
+                            "ORDFICHEREF":  "4065",
+                            "STOCKREF":  "6995",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "3",
+                            "PRICE":  "800",
+                            "TOTAL":  "2400",
+                            "DATE_":  "18.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "MKTS0099H039",
+                            "LINEEXP":  "SİNTİNE POMPASI 750 BASINC"
+                        },
+                        {
+                            "LOGICALREF":  "8003",
+                            "ORDFICHEREF":  "4065",
+                            "STOCKREF":  "6333",
+                            "LINENO_":  "3",
+                            "AMOUNT":  "9",
+                            "PRICE":  "210",
+                            "TOTAL":  "1890",
+                            "DATE_":  "18.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "ELSF0099H006",
+                            "LINEEXP":  "BARA VİDALI 6LI 150 A"
+                        },
+                        {
+                            "LOGICALREF":  "8004",
+                            "ORDFICHEREF":  "4065",
+                            "STOCKREF":  "6648",
+                            "LINENO_":  "4",
+                            "AMOUNT":  "2",
+                            "PRICE":  "328",
+                            "TOTAL":  "656",
+                            "DATE_":  "18.03.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "HRXX0099H172",
+                            "LINEEXP":  "SİFON 90 DERECE"
+                        }
+                    ]
+}

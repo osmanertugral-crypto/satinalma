@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_AYLIK_ARAC_YAKITLARI",
+    "full_name":  "dbo.BRK_AYLIK_ARAC_YAKITLARI",
+    "definition":  "\r\nCREATE VIEW [dbo].[BRK_AYLIK_ARAC_YAKITLARI]\r\nAS\r\n\r\nSELECT\r\n    CASE\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%41 TA 434%\u0027 THEN \u0027RESTAR HAVUZ ARACI VOLKSWAGEN AMAROK\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 ESE 983%\u0027 THEN \u0027DİDEM ACAR BORUSAN KİRALIK\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%41 ANF 310%\u0027 THEN \u0027RESTAR HAVUZ ARACI FIAT PRATICO\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 CEL 666%\u0027 THEN \u0027RESTAR HAVUZ ARACI GMC\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 FKT 688%\u0027 THEN \u0027PINAR KAMÇI BORUSAN KİRALIK\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 FLN 540%\u0027 THEN \u0027ÖMER ALOĞLU BORUSAN KİRALIK\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 FLN 544%\u0027 THEN \u0027ADEM MADEN BORUSAN KİRALIK\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 FMZ 315%\u0027 THEN \u0027PINAR KAMÇI İKAME ARAÇ\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 HOT 24%\u0027 THEN \u0027RESTAR HAVUZ ARACI FORD RANGER (SATILDI)\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%41 TA 444%\u0027 THEN \u0027RESTAR HAVUZ ARACI TOYOTA HILUX\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34GLZ776-34KP111%\u0027 THEN \u0027MURAT ŞAHİN\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%41 AOH 272%\u0027 THEN \u0027RESTAR HAVUZ ARACI FORD TRANSİT (SATILDI)\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 HEJ 085%\u0027 THEN \u0027RESTAR SERVİS ARACI CITROEN JUMPY\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 FLF 151%\u0027 THEN \u0027YILDIZ SİMİRİS BORUSAN KİRALIK\u0027\r\n        WHEN STLINE.LINEEXP LIKE \u0027%34HZM385%\u0027 THEN \u0027TARIK AKSOY VESPA RETECH\u0027\r\n        WHEN SRVCARD.DEFINITION_ LIKE \u0027%34 EHL 212%\u0027 THEN \u0027TARIK AKSOY BMW MOTOR (SATILDI)\u0027\r\n        WHEN STLINE.LINEEXP LIKE \u0027%41AOH272%\u0027 THEN \u0027RESTAR HAVUZ ARACI FORD TRANSİT (SATILDI)\u0027\r\n        ELSE \u0027ARAÇ YAKIT - DİĞER\u0027\r\n    END AS [KULLANICI-ARAÇ],\r\n    DATEPART(MONTH, STLINE.DATE_) AS AY,\r\n    STLINE.DATE_ AS TARİH,\r\n    SRVCARD.DEFINITION_ AS TANIM,\r\n    STLINE.LINEEXP AS [SATIR AÇIKLAMASI],\r\n    STLINE.LINENET AS TUTAR\r\nFROM \r\n    LG_123_01_STLINE STLINE WITH (NOLOCK)\r\n    INNER JOIN LG_123_01_INVOICE INVOICE WITH (NOLOCK) ON INVOICE.LOGICALREF = STLINE.INVOICEREF\r\n    LEFT JOIN LG_123_SRVCARD SRVCARD WITH (NOLOCK) ON SRVCARD.LOGICALREF = STLINE.STOCKREF\r\nWHERE \r\n    STLINE.CANCELLED = 0\r\n    AND SRVCARD.SPECODE2 \u003c\u003e \u0027\u0027\r\n    AND YEAR(INVOICE.DATE_) = 2024\r\n    AND SRVCARD.DEFINITION_ LIKE \u0027%ARAÇ YAKIT%\u0027\r\n\r\n\r\n--SELECT \r\n--    SRVCARD.SPECODE2,\r\n--    SRVCARD.CODE,\r\n--    SRVCARD.DEFINITION_,\r\n--    STLINE.DATE_,\r\n--    STLINE.LINEEXP,\r\n--    (STLINE.LINENET) AS AMOUNT_\r\n--FROM \r\n--    LG_123_01_STLINE STLINE WITH(NOLOCK)\r\n--    INNER JOIN LG_123_01_INVOICE INVOICE WITH(NOLOCK) ON INVOICE.LOGICALREF = STLINE.INVOICEREF\r\n--    LEFT JOIN LG_123_SRVCARD SRVCARD WITH(NOLOCK) ON SRVCARD.LOGICALREF = STLINE.STOCKREF\r\n--WHERE \r\n--    STLINE.CANCELLED = 0\r\n--    AND SRVCARD.SPECODE2 \u003c\u003e \u0027\u0027\r\n--    AND YEAR(INVOICE.DATE_) = 2024\r\n--    AND SRVCARD.DEFINITION_ LIKE \u0027%ARAÇ YAKIT%\u0027\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KULLANICI-ARAÇ",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "41",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARİH",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TANIM",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIR AÇIKLAMASI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "251",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "6",
+                            "TARİH":  "30.06.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "",
+                            "TUTAR":  "2852,73"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "1",
+                            "TARİH":  "15.01.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 )[ PK ] %70",
+                            "TUTAR":  "3647,06"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "1",
+                            "TARİH":  "31.01.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 )[ PK ] %70",
+                            "TUTAR":  "2965,86"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "2",
+                            "TARİH":  "5.02.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 )[ PK ] %70 34FEZ500",
+                            "TUTAR":  "2383,22"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "2",
+                            "TARİH":  "16.02.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 )[ PK ] %70",
+                            "TUTAR":  "1500"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "2",
+                            "TARİH":  "16.02.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 )[ PK ] %70",
+                            "TUTAR":  "1500"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "2",
+                            "TARİH":  "29.02.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 )[ PK ] %70",
+                            "TUTAR":  "2634,81"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "2",
+                            "TARİH":  "29.02.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "",
+                            "TUTAR":  "1000"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "3",
+                            "TARİH":  "15.03.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 )[ PK ] %70",
+                            "TUTAR":  "5018"
+                        },
+                        {
+                            "KULLANICI-ARAÇ":  "PINAR KAMÇI BORUSAN KİRALIK",
+                            "AY":  "3",
+                            "TARİH":  "22.03.2024 00:00:00",
+                            "TANIM":  "ARAÇ YAKIT - 34 FKT 688 (34 DYB 362 ) 34 FSZ 839",
+                            "SATIR AÇIKLAMASI":  "34fez500 ikame araç",
+                            "TUTAR":  "2610,4"
+                        }
+                    ]
+}

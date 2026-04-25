@@ -1,0 +1,99 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDATE_CASHTRANS_323_01",
+    "full_name":  "dbo.LG_UPDATE_CASHTRANS_323_01",
+    "created":  "Sep  1 2025 11:56AM",
+    "last_altered":  "Sep  1 2025 11:56AM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@COEF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRCODE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRDATE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRSIGN",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CASHREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@AMOUNT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPORTNET",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRNET",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRCURR",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CANCELLED",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STATUS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDATE_CASHTRANS_323_01\n       @COEF      SMALLINT,\n       @TRCODE    SMALLINT,\n       @TRDATE    DATETIME,\n       @TRSIGN    SMALLINT,\n       @CASHREF   INT,\n       @AMOUNT    FLOAT,\n       @REPORTNET FLOAT,\n       @TRNET FLOAT,\n       @TRCURR SMALLINT,\n       @CANCELLED SMALLINT,\n       @STATUS    SMALLINT AS\nDECLARE @NOFDAYS   SMALLINT\nDECLARE @EPSILON   FLOAT\nDECLARE @DTERROR   SMALLINT\nDECLARE @YEARBEG   DATETIME\nDECLARE @ACTIVE    SMALLINT\nDECLARE @LOCALTYPE SMALLINT\nDECLARE @CURRTYPE  SMALLINT\nDECLARE @NEWLREF   INT\nDECLARE @DEBITINC  FLOAT\nDECLARE @CREDITINC FLOAT\nDECLARE @CURRTYP SMALLINT\nDECLARE @TRTOTTYPE SMALLINT\nSELECT @EPSILON = 0.0000001\nSELECT @ACTIVE = 0\nSELECT @LOCALTYPE = 1\nSELECT @CURRTYPE = 2\nSELECT @DEBITINC = 0\nSELECT @CREDITINC = 0\nSELECT @CURRTYP = 0\nSELECT @TRTOTTYPE = 8\nIF (@CANCELLED = 0) AND ((@STATUS = 0) OR (@STATUS IS NULL))\n BEGIN IF ((@TRCODE = 71) OR (@TRCODE = 72))\n        SELECT @NOFDAYS = 0\n        ELSE BEGIN SELECT @DTERROR = 0\n                   IF EXISTS(SELECT LOGICALREF FROM LG_323_01_TRANSAC)\n                    BEGIN SELECT @YEARBEG = PERIODBEGDATE FROM LG_323_01_TRANSAC\n                          IF (@YEARBEG IS NULL)\n                           SELECT @DTERROR = 1\n                    END\n                   IF (@DTERROR = 0)\n                    SELECT @NOFDAYS = DATEDIFF(DAY,@YEARBEG,@TRDATE)+1\n                    ELSE SELECT  @NOFDAYS = 1\n             END\n       IF (@AMOUNT \u003e @EPSILON)\n        BEGIN IF NOT EXISTS(SELECT LOGICALREF FROM LG_323_01_CSHTOTS\n                     WHERE (CARDREF = @CASHREF) AND\n                           (TOTTYPE = @LOCALTYPE) AND\n                           (DAY_ = @NOFDAYS)\n                     AND   (DATE_ = @TRDATE)\n                           )\n               BEGIN --EXECUTE LREF_LG_323_01_CSHTOTS @NEWLREF OUTPUT\n                     INSERT INTO LG_323_01_CSHTOTS\n                            (CARDREF, TOTTYPE, DAY_, DEBIT, CREDIT\n                            , DATE_, CURRTYP\n                            )\n                     VALUES\n                            (@CASHREF, @LOCALTYPE, @NOFDAYS, 0, 0\n                            ,@TRDATE, @CURRTYP\n                            )\n               END\n              IF NOT EXISTS(SELECT LOGICALREF FROM LG_323_01_GNTOTCSH\n                     WHERE (CARDREF = @CASHREF) AND\n                           (TOTTYPE = @LOCALTYPE)\n                           )\n               BEGIN --EXECUTE LREF_LG_323_01_GNTOTCSH @NEWLREF OUTPUT\n                     INSERT INTO LG_323_01_GNTOTCSH\n                            (CARDREF, TOTTYPE, DEBIT, CREDIT\n                            )\n                     VALUES\n                            (@CASHREF, @LOCALTYPE, 0, 0)\n               END\n              IF @TRSIGN = @ACTIVE\n               SELECT  @DEBITINC = @COEF*@AMOUNT\n               ELSE SELECT @CREDITINC = @COEF*@AMOUNT\n              UPDATE LG_323_01_CSHTOTS\n               SET DEBIT = DEBIT + @DEBITINC,\n                   CREDIT = CREDIT + @CREDITINC\n               WHERE (CARDREF = @CASHREF) AND\n                     (TOTTYPE = @LOCALTYPE) AND\n                     (DAY_ = @NOFDAYS)\n                 AND (DATE_= @TRDATE)\n              UPDATE LG_323_01_GNTOTCSH\n               SET DEBIT = DEBIT + @DEBITINC,\n                   CREDIT = CREDIT + @CREDITINC\n               WHERE (CARDREF = @CASHREF) AND\n                     (TOTTYPE = @LOCALTYPE)\n        END\n       IF (@REPORTNET \u003e @EPSILON)\n        BEGIN SELECT @CURRTYP = FIRMREPCURR FROM LG_323_TRGPAR\n              IF NOT EXISTS(SELECT LOGICALREF FROM LG_323_01_CSHTOTS\n                      WHERE (CARDREF = @CASHREF) AND\n                            (TOTTYPE = @CURRTYPE) AND\n                            (DAY_ = @NOFDAYS)\n                        AND (DATE_= @TRDATE)\n                            )\n               BEGIN --EXECUTE LREF_LG_323_01_CSHTOTS @NEWLREF OUTPUT\n                     INSERT INTO LG_323_01_CSHTOTS\n                            (CARDREF, TOTTYPE, DAY_, DEBIT, CREDIT\n                            ,DATE_, CURRTYP\n                            )\n                      VALUES\n                             (@CASHREF, @CURRTYPE, @NOFDAYS, 0, 0\n                             ,@TRDATE, @CURRTYP\n                             )\n               END\n              IF NOT EXISTS(SELECT LOGICALREF FROM LG_323_01_GNTOTCSH\n                      WHERE (CARDREF = @CASHREF) AND\n                            (TOTTYPE = @CURRTYPE)\n                            )\n               BEGIN --EXECUTE LREF_LG_323_01_GNTOTCSH @NEWLREF OUTPUT\n                     INSERT INTO LG_323_01_GNTOTCSH\n                            (CARDREF, TOTTYPE, DEBIT, CREDIT\n                            )\n                      VALUES\n                             (@CASHREF, @CURRTYPE, 0, 0)\n               END\n              IF @TRSIGN = @ACTIVE\n               SELECT  @DEBITINC = @COEF*@REPORTNET\n               ELSE SELECT @CREDITINC = @COEF*@REPORTNET\n              UPDATE LG_323_01_CSHTOTS\n               SET DEBIT = DEBIT + @DEBITINC,\n                   CREDIT = CREDIT + @CREDITINC\n               WHERE (CARDREF = @CASHREF) AND\n                     (TOTTYPE = @CURRTYPE) AND\n                     (DAY_ = @NOFDAYS)\n                 AND (DATE_= @TRDATE)\n              UPDATE LG_323_01_GNTOTCSH\n               SET DEBIT = DEBIT + @DEBITINC,\n                   CREDIT = CREDIT + @CREDITINC\n               WHERE (CARDREF = @CASHREF) AND\n                     (TOTTYPE = @CURRTYPE)\n        END\n       IF (@TRNET \u003e @EPSILON) AND (@TRCODE \u003c\u003e 79) AND (@TRCODE \u003c\u003e 80)\n        BEGIN SELECT @CURRTYP = @TRCURR\n              IF NOT EXISTS(SELECT LOGICALREF FROM LG_323_01_CSHTOTS\n                     WHERE (CARDREF = @CASHREF) AND\n                           (TOTTYPE = @TRTOTTYPE) AND\n                           (CURRTYP = @CURRTYP) AND\n                           (DAY_ = @NOFDAYS)\n                     AND   (DATE_ = @TRDATE)\n                           )\n               BEGIN --EXECUTE LREF_LG_323_01_CSHTOTS @NEWLREF OUTPUT\n                     INSERT INTO LG_323_01_CSHTOTS\n                            (CARDREF, TOTTYPE, DAY_, DEBIT, CREDIT\n                            , DATE_, CURRTYP\n                            )\n                     VALUES\n                            (@CASHREF, @TRTOTTYPE, @NOFDAYS, 0, 0\n                            ,@TRDATE, @CURRTYP\n                            )\n               END\n              IF @TRSIGN = @ACTIVE\n               SELECT  @DEBITINC = @COEF*@TRNET\n               ELSE SELECT @CREDITINC = @COEF*@TRNET\n              UPDATE LG_323_01_CSHTOTS\n               SET DEBIT = DEBIT + @DEBITINC,\n                   CREDIT = CREDIT + @CREDITINC\n               WHERE (CARDREF = @CASHREF) AND\n                     (TOTTYPE = @TRTOTTYPE) AND\n                     (CURRTYP = @CURRTYP) AND\n                     (DAY_ = @NOFDAYS)\n                 AND (DATE_= @TRDATE)\n        END\n END"
+}

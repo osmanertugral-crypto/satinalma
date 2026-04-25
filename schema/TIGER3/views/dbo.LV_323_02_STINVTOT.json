@@ -1,0 +1,327 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_323_02_STINVTOT",
+    "full_name":  "dbo.LV_323_02_STINVTOT",
+    "definition":  "CREATE VIEW [DBO].[LV_323_02_STINVTOT]\nAS\nWITH CTE\n     AS (SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                PLNPRODIN,\n                PLNPRODOUT,\n                PLNOTHERIN,\n                PLNOTHEROUT,\n                PLNWHOUSEIN,\n                PLNWHOUSEOUT,\n                TEMPIN,\n                TEMPOUT,\n                0 RESERVED,\n                0 ACTPORDER,\n                0 RECEIVED,\n                ACTPRODIN,\n                ACTOTHERIN,\n                0 ACTSORDER,\n                0 SHIPPED,\n                ACTWASTE,\n                ACTOTHEROUT,\n                TRANSFERRED,\n                AVGVALUE,\n                AVGCURRVAL,\n                PURAMNT,\n                PURCASH,\n                PURCURR,\n                SALAMNT,\n                SALCASH,\n                SALCURR,\n                ONHAND,\n                ACTWHOUSEIN,\n                ACTWHOUSEOUT,\n                COUNTADD,\n                COUNTDEC,\n                0 DISTRESERVED,\n                ONVEHICLE,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                PLNRSRVPRODIN,\n                PLNRSRVPRODOUT,\n                PLNRSRVWHOUSEIN,\n                PLNRSRVWHOUSEOUT,\n                ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V1 WITH(NOEXPAND,NOLOCK)\n          WHERE TYP = 0\n         UNION ALL\n   SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                PLNPRODIN,\n                PLNPRODOUT,\n                PLNOTHERIN,\n                PLNOTHEROUT,\n                PLNWHOUSEIN,\n                PLNWHOUSEOUT,\n                TEMPIN,\n                TEMPOUT,\n                RESERVED,\n                ACTPORDER,\n                RECEIVED,\n                ACTPRODIN,\n                ACTOTHERIN,\n                ACTSORDER,\n                SHIPPED,\n                ACTWASTE,\n                ACTOTHEROUT,\n                TRANSFERRED,\n                AVGVALUE,\n                AVGCURRVAL,\n                PURAMNT,\n                PURCASH,\n                PURCURR,\n                SALAMNT,\n                SALCASH,\n                SALCURR,\n                ONHAND,\n                ACTWHOUSEIN,\n                ACTWHOUSEOUT,\n                COUNTADD,\n                COUNTDEC,\n                DISTRESERVED,\n                ONVEHICLE,\n                VARIANTREF,\n                MEETPLANIN,\n                PLNRSRVPRODIN,\n                PLNRSRVPRODOUT,\n                PLNRSRVWHOUSEIN,\n                PLNRSRVWHOUSEOUT,\n                ONHAND_AVG\n   FROM(\n         SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                PLNPRODIN PLNPRODIN,\n                PLNPRODOUT PLNPRODOUT,\n                PLNOTHERIN PLNOTHERIN,\n                PLNOTHEROUT PLNOTHEROUT,\n                PLNWHOUSEIN PLNWHOUSEIN,\n                PLNWHOUSEOUT PLNWHOUSEOUT,\n                TEMPIN TEMPIN,\n                TEMPOUT TEMPOUT,\n                RESERVED RESERVED,\n                ACTPORDER ACTPORDER,\n                RECEIVED RECEIVED,\n                ACTPRODIN ACTPRODIN,\n                ACTOTHERIN ACTOTHERIN,\n                ACTSORDER ACTSORDER,\n                SHIPPED SHIPPED,\n                ACTWASTE ACTWASTE,\n                ACTOTHEROUT ACTOTHEROUT,\n                TRANSFERRED TRANSFERRED,\n                AVGVALUE AVGVALUE,\n                AVGCURRVAL AVGCURRVAL,\n                PURAMNT PURAMNT,\n                PURCASH PURCASH,\n                PURCURR PURCURR,\n                SALAMNT SALAMNT,\n                SALCASH SALCASH,\n                SALCURR SALCURR,\n                ONHAND ONHAND,\n                ACTWHOUSEIN ACTWHOUSEIN,\n                ACTWHOUSEOUT ACTWHOUSEOUT,\n                COUNTADD COUNTADD,\n                COUNTDEC COUNTDEC,\n                0 DISTRESERVED,\n                ONVEHICLE ONVEHICLE,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                PLNRSRVPRODIN PLNRSRVPRODIN,\n                PLNRSRVPRODOUT PLNRSRVPRODOUT,\n                PLNRSRVWHOUSEIN PLNRSRVWHOUSEIN,\n                PLNRSRVWHOUSEOUT PLNRSRVWHOUSEOUT,\n                ONHAND_AVG ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V2 WITH(NOEXPAND,NOLOCK)\n          WHERE TYP = 0 AND INVENNO = ORFINVENNO\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                PLNPRODIN PLNPRODIN,\n                PLNPRODOUT PLNPRODOUT,\n                PLNOTHERIN PLNOTHERIN,\n                PLNOTHEROUT PLNOTHEROUT,\n                PLNWHOUSEIN PLNWHOUSEIN,\n                PLNWHOUSEOUT PLNWHOUSEOUT,\n                TEMPIN TEMPIN,\n                TEMPOUT TEMPOUT,\n                0 RESERVED,\n                0 ACTPORDER,\n                RECEIVED RECEIVED,\n                ACTPRODIN ACTPRODIN,\n                ACTOTHERIN ACTOTHERIN,\n                0 ACTSORDER,\n                SHIPPED SHIPPED,\n                ACTWASTE ACTWASTE,\n                ACTOTHEROUT ACTOTHEROUT,\n                TRANSFERRED TRANSFERRED,\n                AVGVALUE AVGVALUE,\n                AVGCURRVAL AVGCURRVAL,\n                PURAMNT PURAMNT,\n                PURCASH PURCASH,\n                PURCURR PURCURR,\n                SALAMNT SALAMNT,\n                SALCASH SALCASH,\n                SALCURR SALCURR,\n                ONHAND ONHAND,\n                ACTWHOUSEIN ACTWHOUSEIN,\n                ACTWHOUSEOUT ACTWHOUSEOUT,\n                COUNTADD COUNTADD,\n                COUNTDEC COUNTDEC,\n                0 DISTRESERVED,\n                ONVEHICLE ONVEHICLE,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                PLNRSRVPRODIN PLNRSRVPRODIN,\n                PLNRSRVPRODOUT PLNRSRVPRODOUT,\n                PLNRSRVWHOUSEIN PLNRSRVWHOUSEIN,\n                PLNRSRVWHOUSEOUT PLNRSRVWHOUSEOUT,\n                ONHAND_AVG ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V2 WITH(NOEXPAND,NOLOCK)\n          WHERE TYP = 0 AND INVENNO \u003c\u003e ORFINVENNO\n         UNION ALL\n         SELECT STOCKREF,\n                ORFINVENNO,\n                DATE_,\n                PLNPRODIN PLNPRODIN,\n                PLNPRODOUT PLNPRODOUT,\n                PLNOTHERIN PLNOTHERIN,\n                PLNOTHEROUT PLNOTHEROUT,\n                PLNWHOUSEIN PLNWHOUSEIN,\n                PLNWHOUSEOUT PLNWHOUSEOUT,\n                0 TEMPIN,\n                0 TEMPOUT,\n                RESERVED RESERVED,\n                ACTPORDER ACTPORDER,\n                0 RECEIVED,\n                ACTPRODIN ACTPRODIN,\n                ACTOTHERIN ACTOTHERIN,\n                ACTSORDER ACTSORDER,\n                0 SHIPPED,\n                ACTWASTE ACTWASTE,\n                ACTOTHEROUT ACTOTHEROUT,\n                TRANSFERRED TRANSFERRED,\n                0 AVGVALUE,\n                0 AVGCURRVAL,\n                0 PURAMNT,\n                0 PURCASH,\n                0 PURCURR,\n                0 SALAMNT,\n                0 SALCASH,\n                0 SALCURR,\n                0 ONHAND,\n                ACTWHOUSEIN ACTWHOUSEIN,\n                ACTWHOUSEOUT ACTWHOUSEOUT,\n                COUNTADD COUNTADD,\n                COUNTDEC COUNTDEC,\n                0 DISTRESERVED,\n                ONVEHICLE ONVEHICLE,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                PLNRSRVPRODIN PLNRSRVPRODIN,\n                PLNRSRVPRODOUT PLNRSRVPRODOUT,\n                PLNRSRVWHOUSEIN PLNRSRVWHOUSEIN,\n                PLNRSRVWHOUSEOUT PLNRSRVWHOUSEOUT,\n                ONHAND_AVG ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V2 WITH(NOEXPAND,NOLOCK)\n          WHERE TYP = 0 AND INVENNO \u003c\u003e ORFINVENNO) INNERTAB\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                0 PLNPRODIN,\n                0 PLNPRODOUT,\n                0 PLNOTHERIN,\n                0 PLNOTHEROUT,\n                0 PLNWHOUSEIN,\n                0 PLNWHOUSEOUT,\n                0 TEMPIN,\n                0 TEMPOUT,\n                RESERVED*(CASE WHEN STATUS = 4 THEN 1\n                   WHEN ISNULL(FPARAM.VALUE,0) = 0 THEN 0\n                      WHEN ISNULL(FPARAM.VALUE,0) = 1 AND STATUS = 1 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 256 AND STATUS = 2 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 257 AND STATUS IN (1,2) THEN 1\n                      ELSE 0\n                  END) RESERVED,\n                ACTPORDER*(CASE WHEN STATUS = 4 THEN 1\n                   WHEN ISNULL(FPARAM.VALUE,0) = 0 THEN 0\n                      WHEN ISNULL(FPARAM.VALUE,0) = 1 AND STATUS = 1 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 256 AND STATUS = 2 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 257 AND STATUS IN (1,2) THEN 1\n                      ELSE 0\n                  END) ACTPORDER,\n                0 RECEIVED,\n                0 ACTPRODIN,\n                0 ACTOTHERIN,\n                ACTSORDER*(CASE WHEN STATUS = 4 THEN 1\n                   WHEN ISNULL(FPARAM.VALUE,0) = 0 THEN 0\n                      WHEN ISNULL(FPARAM.VALUE,0) = 1 AND STATUS = 1 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 256 AND STATUS = 2 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 257 AND STATUS IN (1,2) THEN 1\n                      ELSE 0\n                  END) ACTSORDER,\n                0 SHIPPED,\n                0 ACTWASTE,\n                0 ACTOTHEROUT,\n                0 TRANSFERRED,\n                0 AVGVALUE,\n                0 AVGCURRVAL,\n                0 PURAMNT,\n                0 PURCASH,\n                0 PURCURR,\n                0 SALAMNT,\n                0 SALCASH,\n                0 SALCURR,\n                0 ONHAND,\n                0 ACTWHOUSEIN,\n                0 ACTWHOUSEOUT,\n                0 COUNTADD,\n                0 COUNTDEC,\n                0 DISTRESERVED,\n                0 ONVEHICLE,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                0 PLNRSRVPRODIN,\n                0 PLNRSRVPRODOUT,\n                0 PLNRSRVWHOUSEIN,\n                0 PLNRSRVWHOUSEOUT,\n                0 ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V3 WITH(NOEXPAND,NOLOCK)\n     LEFT OUTER JOIN \"TIGER3\"..L_FIRMPARAMS FPARAM\n    ON(FPARAM.FIRMNR = \u0027323\u0027 AND FPARAM.MODULENR  = 10\n       AND FPARAM.CODE = \u0027SALES_SORDRESERVESTAT\u0027)\n          WHERE TYP = 0\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DATE_,\n                0 PLNPRODIN,\n                0 PLNPRODOUT,\n                0 PLNOTHERIN,\n                0 PLNOTHEROUT,\n                0 PLNWHOUSEIN,\n                0 PLNWHOUSEOUT,\n                0 TEMPIN,\n                0 TEMPOUT,\n                RESERVED*(CASE WHEN STATUS = 4 THEN 1\n                   WHEN ISNULL(FPARAM.VALUE,0) = 0 THEN 0\n                      WHEN ISNULL(FPARAM.VALUE,0) = 1 AND STATUS = 1 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 256 AND STATUS = 2 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 257 AND STATUS IN (1,2) THEN 1\n                      ELSE 0\n                  END) RESERVED,\n                ACTPORDER*(CASE WHEN STATUS = 4 THEN 1\n                   WHEN ISNULL(FPARAM.VALUE,0) = 0 THEN 0\n                      WHEN ISNULL(FPARAM.VALUE,0) = 1 AND STATUS = 1 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 256 AND STATUS = 2 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 257 AND STATUS IN (1,2) THEN 1\n                      ELSE 0\n                  END) ACTPORDER,\n                0 RECEIVED,\n                0 ACTPRODIN,\n                0 ACTOTHERIN,\n                ACTSORDER*(CASE WHEN STATUS = 4 THEN 1\n                   WHEN ISNULL(FPARAM.VALUE,0) = 0 THEN 0\n                      WHEN ISNULL(FPARAM.VALUE,0) = 1 AND STATUS = 1 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 256 AND STATUS = 2 THEN 1\n                      WHEN ISNULL(FPARAM.VALUE,0) = 257 AND STATUS IN (1,2) THEN 1\n                      ELSE 0\n                  END) ACTSORDER,\n                0 SHIPPED,\n                0 ACTWASTE,\n                0 ACTOTHEROUT,\n                0 TRANSFERRED,\n                0 AVGVALUE,\n                0 AVGCURRVAL,\n                0 PURAMNT,\n                0 PURCASH,\n                0 PURCURR,\n                0 SALAMNT,\n                0 SALCASH,\n                0 SALCURR,\n                0 ONHAND,\n                0 ACTWHOUSEIN,\n                0 ACTWHOUSEOUT,\n                0 COUNTADD,\n                0 COUNTDEC,\n                0 DISTRESERVED,\n                0 ONVEHICLE,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                0 PLNRSRVPRODIN,\n                0 PLNRSRVPRODOUT,\n                0 PLNRSRVWHOUSEIN,\n                0 PLNRSRVWHOUSEOUT,\n                0 ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V5 WITH(NOEXPAND,NOLOCK)\n     LEFT OUTER JOIN \"TIGER3\"..L_FIRMPARAMS FPARAM\n    ON(FPARAM.FIRMNR = \u0027323\u0027 AND FPARAM.MODULENR  = 10\n       AND FPARAM.CODE = \u0027SALES_SORDRESERVESTAT\u0027)\n          WHERE TYP = 0\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DATE_ AS DATE_,\n                0 PLNPRODIN,\n                0 PLNPRODOUT,\n                0 PLNOTHERIN,\n                0 PLNOTHEROUT,\n                0 PLNWHOUSEIN,\n                0 PLNWHOUSEOUT,\n                0 TEMPIN,\n                0 TEMPOUT,\n                0 RESERVED,\n                0 ACTPORDER,\n                0 RECEIVED,\n                0 ACTPRODIN,\n                0 ACTOTHERIN,\n                0 ACTSORDER,\n                0 SHIPPED,\n                0 ACTWASTE,\n                0 ACTOTHEROUT,\n                0 TRANSFERRED,\n                0 AVGVALUE,\n                0 AVGCURRVAL,\n                0 PURAMNT,\n                0 PURCASH,\n                0 PURCURR,\n                0 SALAMNT,\n                0 SALCASH,\n                0 SALCURR,\n                0 ONHAND,\n                0 ACTWHOUSEIN,\n                0 ACTWHOUSEOUT,\n                0 COUNTADD,\n                0 COUNTDEC,\n                DISTRESERVED1,\n                ONVEHICLE1,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                0 PLNRSRVPRODIN,\n                0 PLNRSRVPRODOUT,\n                0 PLNRSRVWHOUSEIN,\n                0 PLNRSRVWHOUSEOUT,\n                0 ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V4 WITH(NOEXPAND,NOLOCK)\n          WHERE TYP = 0\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DORDGODATE AS DATE_,\n                0 PLNPRODIN,\n                0 PLNPRODOUT,\n                0 PLNOTHERIN,\n                0 PLNOTHEROUT,\n                0 PLNWHOUSEIN,\n                0 PLNWHOUSEOUT,\n                0 TEMPIN,\n                0 TEMPOUT,\n                0 RESERVED,\n                0 ACTPORDER,\n                0 RECEIVED,\n                0 ACTPRODIN,\n                0 ACTOTHERIN,\n                0 ACTSORDER,\n                0 SHIPPED,\n                0 ACTWASTE,\n                0 ACTOTHEROUT,\n                0 TRANSFERRED,\n                0 AVGVALUE,\n                0 AVGCURRVAL,\n                0 PURAMNT,\n                0 PURCASH,\n                0 PURCURR,\n                0 SALAMNT,\n                0 SALCASH,\n                0 SALCURR,\n                0 ONHAND,\n                0 ACTWHOUSEIN,\n                0 ACTWHOUSEOUT,\n                0 COUNTADD,\n                0 COUNTDEC,\n                DISTRESERVED2,\n                ONVEHICLE2,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                0 PLNRSRVPRODIN,\n                0 PLNRSRVPRODOUT,\n                0 PLNRSRVWHOUSEIN,\n                0 PLNRSRVWHOUSEOUT,\n                0 ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V4 WITH(NOEXPAND,NOLOCK)\n          WHERE DORDGODATE IS NOT NULL AND TYP = 0\n         UNION ALL\n         SELECT STOCKREF,\n                INVENNO,\n                DORDRETURNDATE AS DATE_,\n                0 PLNPRODIN,\n                0 PLNPRODOUT,\n                0 PLNOTHERIN,\n                0 PLNOTHEROUT,\n                0 PLNWHOUSEIN,\n                0 PLNWHOUSEOUT,\n                0 TEMPIN,\n                0 TEMPOUT,\n                0 RESERVED,\n                0 ACTPORDER,\n                0 RECEIVED,\n                0 ACTPRODIN,\n                0 ACTOTHERIN,\n                0 ACTSORDER,\n                0 SHIPPED,\n                0 ACTWASTE,\n                0 ACTOTHEROUT,\n                0 TRANSFERRED,\n                0 AVGVALUE,\n                0 AVGCURRVAL,\n                0 PURAMNT,\n                0 PURCASH,\n                0 PURCURR,\n                0 SALAMNT,\n                0 SALCASH,\n                0 SALCURR,\n                0 ONHAND,\n                0 ACTWHOUSEIN,\n                0 ACTWHOUSEOUT,\n                0 COUNTADD,\n                0 COUNTDEC,\n                DISTRESERVED3,\n                ONVEHICLE3,\n                0 VARIANTREF,\n                0 MEETPLANIN,\n                0 PLNRSRVPRODIN,\n                0 PLNRSRVPRODOUT,\n                0 PLNRSRVWHOUSEIN,\n                0 PLNRSRVWHOUSEOUT,\n                0 ONHAND_AVG\n           FROM LV_323_02_STINVTOT_V4 WITH(NOEXPAND,NOLOCK)\n          WHERE DORDRETURNDATE IS NOT NULL AND TYP = 0)\n  SELECT 1 AS LOGICALREF,\n         STOCKREF,\n         INVENNO,\n         DATE_,\n         SUM(PLNPRODIN) AS PLNPRODIN,\n         SUM(PLNPRODOUT) AS PLNPRODOUT,\n         SUM(PLNOTHERIN) AS PLNOTHERIN,\n         SUM(PLNOTHEROUT) AS PLNOTHEROUT,\n         SUM(PLNWHOUSEIN) AS PLNWHOUSEIN,\n         SUM(PLNWHOUSEOUT) AS PLNWHOUSEOUT,\n         SUM(TEMPIN) AS TEMPIN,\n         SUM(TEMPOUT) AS TEMPOUT,\n         SUM(RESERVED) AS RESERVED,\n         SUM(ACTPORDER) AS ACTPORDER,\n         SUM(RECEIVED) AS RECEIVED,\n         SUM(ACTPRODIN) AS ACTPRODIN,\n         SUM(ACTOTHERIN) AS ACTOTHERIN,\n         SUM(ACTSORDER) AS ACTSORDER,\n         SUM(SHIPPED) AS SHIPPED,\n         SUM(ACTWASTE) AS ACTWASTE,\n         SUM(ACTOTHEROUT) AS ACTOTHEROUT,\n         SUM(TRANSFERRED) AS TRANSFERRED,\n         SUM(AVGVALUE / (CASE WHEN ONHAND_AVG = 0 THEN 1 ELSE ONHAND_AVG END))\n            AS AVGVALUE,\n         SUM(\n            AVGCURRVAL / (CASE WHEN ONHAND_AVG = 0 THEN 1 ELSE ONHAND_AVG END))\n            AS AVGCURRVAL,\n         SUM(PURAMNT) AS PURAMNT,\n         SUM(PURCASH) AS PURCASH,\n         SUM(PURCURR) AS PURCURR,\n         SUM(SALAMNT) AS SALAMNT,\n         SUM(SALCASH) AS SALCASH,\n         SUM(SALCURR) AS SALCURR,\n         DATE_ AS LASTTRDATE,\n         SUM(ONHAND) AS ONHAND,\n         SUM(ACTWHOUSEIN) AS ACTWHOUSEIN,\n         SUM(ACTWHOUSEOUT) AS ACTWHOUSEOUT,\n         SUM(COUNTADD) AS COUNTADD,\n         SUM(COUNTDEC) AS COUNTDEC,\n         SUM(DISTRESERVED) AS DISTRESERVED,\n         SUM(ONVEHICLE) AS ONVEHICLE,\n         SUM(0) AS VARIANTREF,\n   COALESCE(WH.COSTGRP,0) AS INVENCOSTGRP,\n         MEETPLANIN AS MEETPLANIN,\n         SUM(PLNRSRVPRODIN) AS PLNRSRVPRODIN,\n         SUM(PLNRSRVPRODOUT) AS PLNRSRVPRODOUT,\n         SUM(PLNRSRVWHOUSEIN) AS PLNRSRVWHOUSEIN,\n         SUM(PLNRSRVWHOUSEOUT) AS PLNRSRVWHOUSEOUT\n    FROM CTE CTE\n    INNER JOIN\n            \"TIGER3\"..L_CAPIWHOUSE WH\n         ON (CTE.INVENNO = WH.NR)\n    WHERE WH.FIRMNR = 323\nGROUP BY STOCKREF,\n         INVENNO,\n         DATE_,\n         COALESCE(WH.COSTGRP,0),\n         MEETPLANIN\nUNION ALL\n  SELECT 1 AS LOGICALREF,\n         STOCKREF,\n         -1 AS INVENNO,\n         DATE_,\n         SUM(PLNPRODIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNPRODIN,\n         SUM(PLNPRODOUT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNPRODOUT,\n         SUM(PLNOTHERIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNOTHERIN,\n         SUM(PLNOTHEROUT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNOTHEROUT,\n         SUM(PLNWHOUSEIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNWHOUSEIN,\n         SUM(PLNWHOUSEOUT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNWHOUSEOUT,\n         SUM(TEMPIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS TEMPIN,\n         SUM(TEMPOUT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS TEMPOUT,\n         SUM(RESERVED * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS RESERVED,\n         SUM(ACTPORDER * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ACTPORDER,\n         SUM(RECEIVED * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS RECEIVED,\n         SUM(ACTPRODIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ACTPRODIN,\n         SUM(ACTOTHERIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ACTOTHERIN,\n         SUM(ACTSORDER * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ACTSORDER,\n         SUM(SHIPPED * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS SHIPPED,\n         SUM(ACTWASTE * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ACTWASTE,\n         SUM(ACTOTHEROUT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ACTOTHEROUT,\n         SUM(TRANSFERRED * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS TRANSFERRED,\n         SUM(AVGVALUE*(-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            /\n            (CASE WHEN SUM(ONHAND_AVG) = 0 THEN 1 ELSE SUM(ONHAND_AVG) END)\n             AS AVGVALUE,\n         SUM(AVGCURRVAL*(-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n           /\n            (CASE WHEN SUM(ONHAND_AVG) = 0 THEN 1 ELSE SUM(ONHAND_AVG) END)\n           AS AVGCURRVAL,\n         SUM(PURAMNT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PURAMNT,\n         SUM(PURCASH * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PURCASH,\n         SUM(PURCURR * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PURCURR,\n         SUM(SALAMNT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS SALAMNT,\n         SUM(SALCASH * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS SALCASH,\n         SUM(SALCURR * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS SALCURR,\n         DATE_ AS LASTTRDATE,\n         SUM(ONHAND * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ONHAND,\n         SUM(ACTWHOUSEIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ACTWHOUSEIN,\n         SUM(ACTWHOUSEOUT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            AS ACTWHOUSEOUT,\n         SUM(COUNTADD * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS COUNTADD,\n         SUM(COUNTDEC * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS COUNTDEC,\n         SUM(DISTRESERVED * (-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            AS DISTRESERVED,\n         SUM(ONVEHICLE * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS ONVEHICLE,\n         SUM(0) AS VARIANTREF,\n         -1 AS INVENCOSTGRP,\n         MEETPLANIN AS MEETPLANIN,\n         SUM(PLNRSRVPRODIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNRSRVPRODIN,\n         SUM(PLNRSRVPRODOUT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNRSRVPRODOUT,\n         SUM(PLNRSRVWHOUSEIN * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNRSRVWHOUSEIN,\n         SUM(PLNRSRVWHOUSEOUT * (-COALESCE(WH.VIRTUALINVEN, 0) + 1)) AS PLNRSRVWHOUSEOUT\n    FROM CTE CTEALS\n    INNER JOIN\n            \"TIGER3\"..L_CAPIWHOUSE WH\n         ON (CTEALS.INVENNO = WH.NR)\n    WHERE WH.FIRMNR = 323\nGROUP BY STOCKREF,\n         DATE_,\n         MEETPLANIN\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVENNO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNPRODIN",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNPRODOUT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNOTHERIN",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNOTHEROUT",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNWHOUSEIN",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNWHOUSEOUT",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TEMPIN",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TEMPOUT",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RESERVED",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTPORDER",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RECEIVED",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTPRODIN",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTOTHERIN",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTSORDER",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIPPED",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWASTE",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTOTHEROUT",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRANSFERRED",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AVGVALUE",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AVGCURRVAL",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURAMNT",
+                        "ORDINAL_POSITION":  25,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURCASH",
+                        "ORDINAL_POSITION":  26,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURCURR",
+                        "ORDINAL_POSITION":  27,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALAMNT",
+                        "ORDINAL_POSITION":  28,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALCASH",
+                        "ORDINAL_POSITION":  29,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALCURR",
+                        "ORDINAL_POSITION":  30,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LASTTRDATE",
+                        "ORDINAL_POSITION":  31,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONHAND",
+                        "ORDINAL_POSITION":  32,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWHOUSEIN",
+                        "ORDINAL_POSITION":  33,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWHOUSEOUT",
+                        "ORDINAL_POSITION":  34,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "COUNTADD",
+                        "ORDINAL_POSITION":  35,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "COUNTDEC",
+                        "ORDINAL_POSITION":  36,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DISTRESERVED",
+                        "ORDINAL_POSITION":  37,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONVEHICLE",
+                        "ORDINAL_POSITION":  38,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARIANTREF",
+                        "ORDINAL_POSITION":  39,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVENCOSTGRP",
+                        "ORDINAL_POSITION":  40,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MEETPLANIN",
+                        "ORDINAL_POSITION":  41,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVPRODIN",
+                        "ORDINAL_POSITION":  42,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVPRODOUT",
+                        "ORDINAL_POSITION":  43,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVWHOUSEIN",
+                        "ORDINAL_POSITION":  44,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVWHOUSEOUT",
+                        "ORDINAL_POSITION":  45,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

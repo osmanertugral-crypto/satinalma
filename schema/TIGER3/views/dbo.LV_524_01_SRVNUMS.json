@@ -1,0 +1,61 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_524_01_SRVNUMS",
+    "full_name":  "dbo.LV_524_01_SRVNUMS",
+    "definition":  "CREATE VIEW [DBO].[LV_524_01_SRVNUMS]\nAS\nWITH CTE\n     AS (SELECT STOCKREF,\n                V1.INVENNO,\n                SRVN.DURATION,\n                DATE_,\n                0 ACTPORDER,\n                0 RECEIVED,\n                0 ACTSORDER,\n                0 SHIPPED,\n                SRV.CARDTYPE\n           FROM    LV_524_01_STINVTOT_V1 V1 WITH(NOEXPAND,NOLOCK)\n                INNER JOIN\n                   LG_524_SRVCARD SRV\n                ON (V1.STOCKREF = SRV.LOGICALREF)\n                INNER JOIN\n                   LG_524_01_SRVNUMS SRVN\n                ON (V1.STOCKREF = SRVN.CARDREF AND V1.INVENNO = SRVN.INVENNO)\n          WHERE VARIANTREF = 0 AND TYP = 1\n         UNION ALL\n         SELECT STOCKREF,\n                V2.INVENNO,\n                SRVN.DURATION,\n                DATE_,\n                ACTPORDER,\n                RECEIVED,\n                ACTSORDER,\n                V2.SHIPPED,\n                SRV.CARDTYPE\n           FROM    LV_524_01_STINVTOT_V2 V2 WITH(NOEXPAND,NOLOCK)\n                INNER JOIN\n                   LG_524_SRVCARD SRV\n                ON (V2.STOCKREF = SRV.LOGICALREF)\n                INNER JOIN\n                   LG_524_01_SRVNUMS SRVN\n                ON (V2.STOCKREF = SRVN.CARDREF AND V2.INVENNO = SRVN.INVENNO)\n          WHERE VARIANTREF = 0 AND TYP = 1\n         UNION ALL\n         SELECT STOCKREF,\n                V3.INVENNO,\n                SRVN.DURATION,\n                DATE_,\n                ACTPORDER,\n                0 RECEIVED,\n                ACTSORDER,\n                0 SHIPPED,\n                SRV.CARDTYPE\n           FROM    LV_524_01_STINVTOT_V3 V3 WITH(NOEXPAND,NOLOCK)\n                INNER JOIN\n                   LG_524_SRVCARD SRV\n                ON (V3.STOCKREF = SRV.LOGICALREF)\n                INNER JOIN\n                   LG_524_01_SRVNUMS SRVN\n                ON (V3.STOCKREF = SRVN.CARDREF AND V3.INVENNO = SRVN.INVENNO)\n          WHERE VARIANTREF = 0 AND TYP = 1\n         UNION ALL\n         SELECT STOCKREF,\n                V5.INVENNO,\n                SRVN.DURATION,\n                DATE_,\n                ACTPORDER,\n                0 RECEIVED,\n                ACTSORDER,\n                0 SHIPPED,\n                SRV.CARDTYPE\n           FROM    LV_524_01_STINVTOT_V5 V5 WITH(NOEXPAND,NOLOCK)\n                INNER JOIN\n                   LG_524_SRVCARD SRV\n                ON (V5.STOCKREF = SRV.LOGICALREF)\n                INNER JOIN\n                   LG_524_01_SRVNUMS SRVN\n                ON (V5.STOCKREF = SRVN.CARDREF AND V5.INVENNO = SRVN.INVENNO)\n          WHERE VARIANTREF = 0 AND TYP = 1)\n  SELECT 1 AS LOGICALREF,\n         STOCKREF AS CARDREF,\n         INVENNO,\n         SUM(DURATION) AS DURATION,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(ACTPORDER)\n            WHEN 2\n            THEN\n               SUM(ACTSORDER)\n            ELSE\n               0\n         END\n            AS ORDERED,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(RECEIVED)\n            WHEN 2\n            THEN\n               SUM(SHIPPED)\n            ELSE\n               0\n         END\n            AS SHIPPED,\n         MIN(DATE_) AS LASTTRDATE\n    FROM CTE\nGROUP BY STOCKREF, INVENNO, CARDTYPE\nUNION ALL\n  SELECT 1 AS LOGICALREF,\n         STOCKREF AS CARDREF,\n         -1 AS INVENNO,\n         SUM(0) AS DURATION,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(ACTPORDER * (-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            WHEN 2\n            THEN\n               SUM(ACTSORDER * (-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            ELSE\n               0\n         END\n            AS ORDERED,\n         CASE CARDTYPE\n            WHEN 1\n            THEN\n               SUM(RECEIVED * (-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            WHEN 2\n            THEN\n               SUM(SHIPPED * (-COALESCE(WH.VIRTUALINVEN, 0) + 1))\n            ELSE\n               0\n         END\n            SHIPPED,\n         MIN(DATE_) AS LASTTRDATE\n    FROM CTE CTEALS INNER JOIN \"TIGER3\"..L_CAPIWHOUSE WH ON CTEALS.INVENNO = WH.NR\n   WHERE WH.FIRMNR = 524\nGROUP BY STOCKREF, CARDTYPE",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARDREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVENNO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DURATION",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDERED",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIPPED",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LASTTRDATE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

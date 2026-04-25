@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AARP_MALZEME_SON_ALIM_RAPORU_123",
+    "full_name":  "dbo.AARP_MALZEME_SON_ALIM_RAPORU_123",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[AARP_MALZEME_SON_ALIM_RAPORU_123] AS \r\nSELECT LOGICALREF\r\n, CODE AS KOD\r\n, NAME AS TANIM\r\n,ISNULL(STGRPCODE,\u0027\u0027) AS GRUP_KOD\r\n,(SELECT NAME  FROM LG_123_UNITSETF WHERE LOGICALREF IN (SELECT UNITSETREF FROM LG_123_UNITSETL WHERE LOGICALREF IN (select UNITLINEREF from LG_123_ITMUNITA WHERE ITEMREF=MLZ.LOGICALREF AND LINENR=1))) \u0027ANA BİRİMİ\u0027\r\n\r\n, ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123_GEBZE WHERE MLZ_ID=LOGICALREF),0) AS GEBZE_STOK\r\n, ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU_123_ETICARET WHERE MLZ_ID=LOGICALREF),0) AS ETICARET_STOK\r\n\r\n,ISNULL((SELECT CASE  WHEN (SUM(AMOUNT - SHIPPEDAMOUNT)\u003c0) THEN 0 ELSE SUM(AMOUNT - SHIPPEDAMOUNT) END FROM LG_123_01_ORFLINE WHERE TRCODE = 2 AND STOCKREF IN (MLZ.LOGICALREF) GROUP BY STOCKREF),0)\u0027AÇIK SATINALMA SİPARİŞİ\u0027\r\n\r\n, ISNULL(CAST(ISNULL((SELECT TOP 1 (NULLIF((STLINE.LINENET+STLINE.DIFFPRICE),0)/NULLIF(STLINE.AMOUNT,0))  \r\nFROM LG_123_01_STLINE STLINE WHERE STLINE.TRCODE IN (1,14) AND STLINE.STOCKREF= MLZ.LOGICALREF ORDER BY STLINE.DATE_ + dbo.LG_INTTOTIME(STLINE.FTIME)  DESC),\r\n(SELECT TOP 1 ORFLINE.PRICE  \r\nFROM LG_123_01_ORFLINE ORFLINE WHERE ORFLINE.TRCODE=2 AND ORFLINE.STOCKREF= MLZ.LOGICALREF ORDER BY ORFLINE.DATE_ + dbo.LG_INTTOTIME(ORFLINE.TIME_)  DESC)\r\n\r\n)AS DECIMAL(18,2)),0) SON_ALIM_TL\r\n\r\n, (SELECT TOP 1 STLINE.DATE_  FROM LG_123_01_STLINE STLINE WITH (NOLOCK) WHERE STLINE.TRCODE IN (1,14) AND STLINE.STOCKREF= MLZ.LOGICALREF ORDER BY STLINE.DATE_ DESC) SON_ALIM_TARIHI\r\n\r\n,MLZ.CYPHCODE \u0027YETKİ KODU\u0027\r\n,CASE WHEN MLZ.CARDTYPE = 1 THEN \u0027Ticari Mal\u0027 WHEN MLZ.CARDTYPE = 10 THEN \u0027Hammadde\u0027 WHEN MLZ.CARDTYPE = 11 THEN \u0027Yarı Mamül\u0027 WHEN MLZ.CARDTYPE = 12 THEN \u0027Mamül\u0027 ELSE \u0027Malzeme\u0027 END AS TURU\r\n,MLZ.CAPIBLOCK_CREADEDDATE \u0027MALZEME_KARTI_ACILIS_TARIHI\u0027\r\n\r\n,CASE WHEN MLZ.CARDTYPE = 12 THEN dbo.KS_RecipeCostFunc ( MLZ.CODE ) \r\n\t  WHEN MLZ.CARDTYPE = 11 THEN dbo.KS_RecipeCostSubFunc ( MLZ.LOGICALREF, 1) \r\n\t  ELSE\r\n(CAST(CAST(\r\n\t\tISNULL\r\n\t\t(CASE \r\n\t\t\tWHEN (SELECT TOP 1 (LINENET+DIFFPRICE)/NULLIF(AMOUNT,0) FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN (1,14) ORDER BY DATE_ + dbo.LG_INTTOTIME(FTIME)  DESC) IS NULL \r\n\t\t\t\tTHEN (SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK) WHERE CARDREF=MLZ.LOGICALREF ORDER BY BEGDATE DESC )\t\r\n\t\t\tELSE (SELECT TOP 1 (LINENET+DIFFPRICE)/NULLIF(AMOUNT,0) FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE IN  (1,14) ORDER BY DATE_ + dbo.LG_INTTOTIME(FTIME)  DESC) \t\r\n\t\tEND ,0) AS  DECIMAL(18,2)) AS float)) END BIRIM_FIYAT\r\n\r\nFROM LG_123_ITEMS MLZ WITH (NOLOCK) WHERE ACTIVE=0 \r\n\r\n---ORDER BY CODE\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KOD",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TANIM",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GRUP_KOD",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ANA BİRİMİ",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GEBZE_STOK",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ETICARET_STOK",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "AÇIK SATINALMA SİPARİŞİ",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SON_ALIM_TL",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SON_ALIM_TARIHI",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YETKİ KODU",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TURU",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "10",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZEME_KARTI_ACILIS_TARIHI",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYAT",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "13010",
+                            "KOD":  "ECTWLD100006",
+                            "TANIM":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "0",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "2095,40",
+                            "SON_ALIM_TARIHI":  "11.03.2024 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:38",
+                            "BIRIM_FIYAT":  "2095,4"
+                        },
+                        {
+                            "LOGICALREF":  "13011",
+                            "KOD":  "ECTWLD100008",
+                            "TANIM":  "WILD LAND UNIVERSAL TARP",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "5",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "3465,43",
+                            "SON_ALIM_TARIHI":  "31.10.2024 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:39",
+                            "BIRIM_FIYAT":  "3465,43"
+                        },
+                        {
+                            "LOGICALREF":  "13012",
+                            "KOD":  "ECTURB100008",
+                            "TANIM":  "URBAN BADGER TEK KISILIK UYKU TULUMU",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "246",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "263,01",
+                            "SON_ALIM_TARIHI":  "11.03.2024 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:39",
+                            "BIRIM_FIYAT":  "263,01"
+                        },
+                        {
+                            "LOGICALREF":  "13013",
+                            "KOD":  "ECTURB100009",
+                            "TANIM":  "URBAN BADGER HAFIF CADIR",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "8",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "441,24",
+                            "SON_ALIM_TARIHI":  "11.03.2024 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:40",
+                            "BIRIM_FIYAT":  "441,24"
+                        },
+                        {
+                            "LOGICALREF":  "13014",
+                            "KOD":  "ECTURB100010",
+                            "TANIM":  "URBAN BADGER 3-4 KISILIK OTOMATIK TENTELI CADIR",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "103",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "2793,38",
+                            "SON_ALIM_TARIHI":  "3.04.2026 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:40",
+                            "BIRIM_FIYAT":  "2793,38"
+                        },
+                        {
+                            "LOGICALREF":  "13015",
+                            "KOD":  "ECTURB100011",
+                            "TANIM":  "URBAN BADGER GECMELI CATAL BICAK KASIK SETI",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "0",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "37,35",
+                            "SON_ALIM_TARIHI":  "11.08.2025 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:41",
+                            "BIRIM_FIYAT":  "37,35"
+                        },
+                        {
+                            "LOGICALREF":  "13016",
+                            "KOD":  "ECTURB100012",
+                            "TANIM":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "0",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "44,32",
+                            "SON_ALIM_TARIHI":  "11.03.2024 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:41",
+                            "BIRIM_FIYAT":  "44,32"
+                        },
+                        {
+                            "LOGICALREF":  "13017",
+                            "KOD":  "ECTURB100013",
+                            "TANIM":  "URBAN BADGER KAMP DUSU",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "0",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "60,70",
+                            "SON_ALIM_TARIHI":  "11.03.2024 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:42",
+                            "BIRIM_FIYAT":  "60,7"
+                        },
+                        {
+                            "LOGICALREF":  "13018",
+                            "KOD":  "ECTURB100014",
+                            "TANIM":  "URBAN BADGER KATLANIR KOVA",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "414",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "54,43",
+                            "SON_ALIM_TARIHI":  "11.03.2024 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:43",
+                            "BIRIM_FIYAT":  "54,43"
+                        },
+                        {
+                            "LOGICALREF":  "13019",
+                            "KOD":  "ECTURB100015",
+                            "TANIM":  "URBAN BADGER IKI KISILIK SISME YATAK",
+                            "GRUP_KOD":  "ETİCARET",
+                            "ANA BİRİMİ":  "Adet",
+                            "GEBZE_STOK":  "0",
+                            "ETICARET_STOK":  "12",
+                            "AÇIK SATINALMA SİPARİŞİ":  "0",
+                            "SON_ALIM_TL":  "659,46",
+                            "SON_ALIM_TARIHI":  "11.03.2024 00:00:00",
+                            "YETKİ KODU":  "",
+                            "TURU":  "Ticari Mal",
+                            "MALZEME_KARTI_ACILIS_TARIHI":  "1.03.2024 15:38:43",
+                            "BIRIM_FIYAT":  "659,46"
+                        }
+                    ]
+}

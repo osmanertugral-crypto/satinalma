@@ -1,0 +1,68 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "PLNSPDETAY2",
+    "full_name":  "dbo.PLNSPDETAY2",
+    "definition":  "CREATE VIEW [dbo].[PLNSPDETAY2] AS \r\nSELECT * FROM (\r\nSELECT     \r\n      SF.SB_REF, \r\n      SH.SD_REF, \r\n      SH.STOK_REF, \r\n\t  SH.VARYANT_REF, \r\n      ((SH.MIKTAR / SH.CARPAN1) * SH.CARPAN2) AS MIKTAR, \r\n      ((SH.SEVKEDILEN_MIKTAR / SH.CARPAN1) * SH.CARPAN2) SEVK_EDILEN, \r\n      ((SH.MIKTAR / SH.CARPAN1) * SH.CARPAN2) - ((SH.SEVKEDILEN_MIKTAR / SH.CARPAN1) * SH.CARPAN2) AS BEKLEYEN\r\n      ,SEVK_STOK=(SELECT CONVERT(FLOAT,ISNULL(CONVERT(NUMERIC(24,8),SUM(MIKTAR)),0)) FROM AMBARTAKIP AT WITH(NOLOCK) WHERE AT.STOK_REF = SH.STOK_REF AND AT.VARYANT_REF = SH.VARYANT_REF AND AT.AMBAR_KODU = SH.AMBAR_KODU) - ISNULL(ACKPLN.ACIK_MIKTAR, 0) - (((SH.MIKTAR / SH.CARPAN1) * SH.CARPAN2) - ((SH.SEVKEDILEN_MIKTAR / SH.CARPAN1) * SH.CARPAN2))\r\n      \r\n\r\nFROM\r\n    SIPARISHAREKETLERI SH WITH(NOLOCK) \r\n    LEFT OUTER JOIN SIPARISFISLERI SF WITH(NOLOCK) ON SF.SB_REF = SH.SB_REF \r\n    LEFT OUTER JOIN ACKPLN WITH(NOLOCK) ON ACKPLN.STOK_REF = SH.STOK_REF AND ACKPLN.VARYANT_REF = SH.VARYANT_REF AND ACKPLN.AMBAR_KODU = SH.AMBAR_KODU \r\n    LEFT OUTER JOIN PLANLAMAHAREKETLERI PH WITH(NOLOCK) ON PH.SD_REF = SH.SD_REF AND PH.STATUS = 0 \r\n    LEFT OUTER JOIN PLANLAMAFISLERI PF WITH(NOLOCK) ON PF.PB_REF = PH.PB_REF AND PF.STATUS = 0\r\n\r\nWHERE\r\n    SH.SIPARIS_TURU = 2 \r\n    AND SH.KAPALI = 0 \r\n    AND SF.KAPALI = 0 \r\n    AND SH.MIKTAR - SH.SEVKEDILEN_MIKTAR \u003e 0 \r\n    AND SH.CSUB = 0\r\n    AND PF.PB_REF IS NULL\r\n    \r\nGROUP BY \r\n      SF.SB_REF, SH.SD_REF, SH.STOK_REF, SH.VARYANT_REF, SH.MIKTAR, SH.SEVKEDILEN_MIKTAR, SH.CARPAN1, SH.CARPAN2, PH.PD_REF, PF.PB_REF,SH.AMBAR_KODU\r\n      ,     ACKPLN.ACIK_MIKTAR\r\n      \r\n      \r\n      UNION ALL\r\n      \r\n      \r\nSELECT     \r\n      SF.SB_REF, \r\n      SH.SD_REF, \r\n      SH.STOK_REF, \r\n\t  SH.VARYANT_REF, \r\n      ((SH.MIKTAR / SH.CARPAN1) * SH.CARPAN2) AS MIKTAR, \r\n      ((SH.SEVKEDILEN_MIKTAR / SH.CARPAN1) * SH.CARPAN2) SEVK_EDILEN, \r\n      ((SH.MIKTAR / SH.CARPAN1) * SH.CARPAN2) - ((SH.SEVKEDILEN_MIKTAR / SH.CARPAN1) * SH.CARPAN2) AS BEKLEYEN\r\n      ,SEVK_STOK=(SELECT ISNULL(SUM(STOK),0) FROM PLNALTSTOK2 AT WITH(NOLOCK) WHERE AT.STOK_REF = SH.STOK_REF AND AT.VARYANT_REF = SH.VARYANT_REF AND AT.AMBAR_KODU = SH.AMBAR_KODU) - ISNULL(ACKPLN.ACIK_MIKTAR, 0) - (((SH.MIKTAR / SH.CARPAN1) * SH.CARPAN2) - ((SH.SEVKEDILEN_MIKTAR / SH.CARPAN1) * SH.CARPAN2))\r\n      \r\n\r\nFROM\r\n    SIPARISHAREKETLERI SH WITH(NOLOCK) \r\n    LEFT OUTER JOIN SIPARISFISLERI SF WITH(NOLOCK) ON SF.SB_REF = SH.SB_REF \r\n    LEFT OUTER JOIN ACKPLN WITH(NOLOCK) ON ACKPLN.STOK_REF = SH.STOK_REF AND ACKPLN.VARYANT_REF = SH.VARYANT_REF AND ACKPLN.AMBAR_KODU = SH.AMBAR_KODU \r\n    LEFT OUTER JOIN PLANLAMAHAREKETLERI PH WITH(NOLOCK) ON PH.SD_REF = SH.SD_REF AND PH.STATUS = 0 \r\n    LEFT OUTER JOIN PLANLAMAFISLERI PF WITH(NOLOCK) ON PF.PB_REF = PH.PB_REF AND PF.STATUS = 0\r\n\r\nWHERE\r\n    SH.SIPARIS_TURU = 2 \r\n    AND SH.KAPALI = 0 \r\n    AND SF.KAPALI = 0 \r\n    AND SH.MIKTAR - SH.SEVKEDILEN_MIKTAR \u003e 0 \r\n    AND SH.CSUB = 1\r\n    AND PF.PB_REF IS NULL\r\n    \r\nGROUP BY \r\n      SF.SB_REF, SH.SD_REF, SH.STOK_REF, SH.VARYANT_REF, SH.MIKTAR, SH.SEVKEDILEN_MIKTAR, SH.CARPAN1, SH.CARPAN2, PH.PD_REF, PF.PB_REF,SH.AMBAR_KODU\r\n      ,     ACKPLN.ACIK_MIKTAR\r\n      \r\n      \r\n      \r\n      ) AS LIST \r\n\r\nWHERE SEVK_STOK\u003e=0",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "SB_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SD_REF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARYANT_REF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SEVK_EDILEN",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BEKLEYEN",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SEVK_STOK",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

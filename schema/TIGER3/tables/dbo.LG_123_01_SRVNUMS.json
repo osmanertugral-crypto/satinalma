@@ -1,0 +1,212 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_01_SRVNUMS",
+    "full_name":  "dbo.LG_123_01_SRVNUMS",
+    "description":  "",
+    "total_rows":  "10691",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CARDREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INVENNO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DURATION",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDERED",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIPPED",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LASTTRDATE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_01_SRVNUMS_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_01_SRVNUMS_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CARDREF, INVENNO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "0",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "1",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "2",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "3",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "4",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "5",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "6",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "7",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "8",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CARDREF":  "1435",
+                            "INVENNO":  "9",
+                            "DURATION":  "0",
+                            "ORDERED":  "0",
+                            "SHIPPED":  "0",
+                            "LASTTRDATE":  "1.01.1900 00:00:00"
+                        }
+                    ]
+}

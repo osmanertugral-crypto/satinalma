@@ -1,0 +1,180 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_524_SRVUNITA",
+    "full_name":  "dbo.LG_524_SRVUNITA",
+    "description":  "",
+    "total_rows":  "2536",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SRVREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "UNITLINEREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PRIORITY",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I524_SRVUNITA_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I524_SRVUNITA_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "SRVREF, LINENR"
+                    },
+                    {
+                        "index_name":  "I524_SRVUNITA_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "SRVREF, UNITLINEREF"
+                    },
+                    {
+                        "index_name":  "I524_SRVUNITA_I4",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "UNITLINEREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "2299",
+                            "SRVREF":  "1661",
+                            "LINENR":  "1",
+                            "UNITLINEREF":  "23",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2300",
+                            "SRVREF":  "1661",
+                            "LINENR":  "2",
+                            "UNITLINEREF":  "28",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2301",
+                            "SRVREF":  "1661",
+                            "LINENR":  "3",
+                            "UNITLINEREF":  "36",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2302",
+                            "SRVREF":  "1661",
+                            "LINENR":  "4",
+                            "UNITLINEREF":  "41",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2303",
+                            "SRVREF":  "1662",
+                            "LINENR":  "1",
+                            "UNITLINEREF":  "23",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2304",
+                            "SRVREF":  "1662",
+                            "LINENR":  "2",
+                            "UNITLINEREF":  "28",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2305",
+                            "SRVREF":  "1662",
+                            "LINENR":  "3",
+                            "UNITLINEREF":  "36",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2306",
+                            "SRVREF":  "1662",
+                            "LINENR":  "4",
+                            "UNITLINEREF":  "41",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2307",
+                            "SRVREF":  "1663",
+                            "LINENR":  "1",
+                            "UNITLINEREF":  "23",
+                            "PRIORITY":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2308",
+                            "SRVREF":  "1663",
+                            "LINENR":  "2",
+                            "UNITLINEREF":  "28",
+                            "PRIORITY":  "0"
+                        }
+                    ]
+}

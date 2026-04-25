@@ -1,0 +1,205 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "BARKODTIPI",
+    "full_name":  "dbo.BARKODTIPI",
+    "description":  "",
+    "total_rows":  "22",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "BARKODTIPI_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "UZUNLUK",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FORMUL",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "BASLANGIC_KARAKTER",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR_CARPANI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SQLQUERYKULLAN",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "bit",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SQLQUERY",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "text",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__BARKODTI__882124A8B86B9EF3",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "BARKODTIPI_REF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "BARKODTIPI_REF":  "1",
+                            "UZUNLUK":  "12",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "select UPPER(\u0027@BARKOD\u0027) BARKOD"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "2",
+                            "UZUNLUK":  "13",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "select UPPER(\u0027@BARKOD\u0027) BARKOD"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "3",
+                            "UZUNLUK":  "11",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "select UPPER(\u0027@BARKOD\u0027) BARKOD"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "4",
+                            "UZUNLUK":  "14",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "select UPPER(\u0027@BARKOD\u0027) BARKOD"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "5",
+                            "UZUNLUK":  "35",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "DECLARE @BRK NVARCHAR(100) SET @BRK=\u0027@BARKOD\u0027\r\nDECLARE @B NVARCHAR(100) SET @B=(SELECT SUBSTRING(@BRK,1,1))\r\n\r\n\r\nIF CHARINDEX(\u0027|\u0027,@BRK)\u003e0\r\nBEGIN\r\nSELECT SUBSTRING(@BRK,1,(SELECT CHARINDEX(\u0027|\u0027,@BRK))-1) BARKOD \r\n,SUBSTRING(@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK))+1,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)-1)-((SELECT CHARINDEX(\u0027|\u0027,@BRK))+1)) TAKIP_NO\r\n,SUBSTRING(@BRK,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)),100) SKTARIHI\r\nEND"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "6",
+                            "UZUNLUK":  "36",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "DECLARE @BRK NVARCHAR(100) SET @BRK=\u0027@BARKOD\u0027\r\nDECLARE @B NVARCHAR(100) SET @B=(SELECT SUBSTRING(@BRK,1,1))\r\n\r\n\r\nIF CHARINDEX(\u0027|\u0027,@BRK)\u003e0\r\nBEGIN\r\nSELECT SUBSTRING(@BRK,1,(SELECT CHARINDEX(\u0027|\u0027,@BRK))-1) BARKOD \r\n,SUBSTRING(@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK))+1,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)-1)-((SELECT CHARINDEX(\u0027|\u0027,@BRK))+1)) TAKIP_NO\r\n,SUBSTRING(@BRK,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)),100) SKTARIHI\r\nEND"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "7",
+                            "UZUNLUK":  "37",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "DECLARE @BRK NVARCHAR(100) SET @BRK=\u0027@BARKOD\u0027\r\nDECLARE @B NVARCHAR(100) SET @B=(SELECT SUBSTRING(@BRK,1,1))\r\n\r\n\r\nIF CHARINDEX(\u0027|\u0027,@BRK)\u003e0\r\nBEGIN\r\nSELECT SUBSTRING(@BRK,1,(SELECT CHARINDEX(\u0027|\u0027,@BRK))-1) BARKOD \r\n,SUBSTRING(@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK))+1,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)-1)-((SELECT CHARINDEX(\u0027|\u0027,@BRK))+1)) TAKIP_NO\r\n,SUBSTRING(@BRK,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)),100) SKTARIHI\r\nEND"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "8",
+                            "UZUNLUK":  "38",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "DECLARE @BRK NVARCHAR(100) SET @BRK=\u0027@BARKOD\u0027\r\nDECLARE @B NVARCHAR(100) SET @B=(SELECT SUBSTRING(@BRK,1,1))\r\n\r\n\r\nIF CHARINDEX(\u0027|\u0027,@BRK)\u003e0\r\nBEGIN\r\nSELECT SUBSTRING(@BRK,1,(SELECT CHARINDEX(\u0027|\u0027,@BRK))-1) BARKOD \r\n,SUBSTRING(@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK))+1,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)-1)-((SELECT CHARINDEX(\u0027|\u0027,@BRK))+1)) TAKIP_NO\r\n,SUBSTRING(@BRK,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)),100) SKTARIHI\r\nEND"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "9",
+                            "UZUNLUK":  "39",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "DECLARE @BRK NVARCHAR(100) SET @BRK=\u0027@BARKOD\u0027\r\nDECLARE @B NVARCHAR(100) SET @B=(SELECT SUBSTRING(@BRK,1,1))\r\n\r\n\r\nIF CHARINDEX(\u0027|\u0027,@BRK)\u003e0\r\nBEGIN\r\nSELECT SUBSTRING(@BRK,1,(SELECT CHARINDEX(\u0027|\u0027,@BRK))-1) BARKOD \r\n,SUBSTRING(@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK))+1,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)-1)-((SELECT CHARINDEX(\u0027|\u0027,@BRK))+1)) TAKIP_NO\r\n,SUBSTRING(@BRK,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)),100) SKTARIHI\r\nEND"
+                        },
+                        {
+                            "BARKODTIPI_REF":  "10",
+                            "UZUNLUK":  "40",
+                            "FORMUL":  "",
+                            "BASLANGIC_KARAKTER":  "",
+                            "MIKTAR_CARPANI":  "0",
+                            "SQLQUERYKULLAN":  "True",
+                            "SQLQUERY":  "DECLARE @BRK NVARCHAR(100) SET @BRK=\u0027@BARKOD\u0027\r\nDECLARE @B NVARCHAR(100) SET @B=(SELECT SUBSTRING(@BRK,1,1))\r\n\r\n\r\nIF CHARINDEX(\u0027|\u0027,@BRK)\u003e0\r\nBEGIN\r\nSELECT SUBSTRING(@BRK,1,(SELECT CHARINDEX(\u0027|\u0027,@BRK))-1) BARKOD \r\n,SUBSTRING(@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK))+1,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)-1)-((SELECT CHARINDEX(\u0027|\u0027,@BRK))+1)) TAKIP_NO\r\n,SUBSTRING(@BRK,((SELECT CHARINDEX(\u0027|\u0027,@BRK,(SELECT CHARINDEX(\u0027|\u0027,@BRK)+1))+1)),100) SKTARIHI\r\nEND"
+                        }
+                    ]
+}

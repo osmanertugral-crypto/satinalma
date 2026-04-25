@@ -1,0 +1,80 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "AKBANK_AGREEMENT",
+    "full_name":  "dbo.AKBANK_AGREEMENT",
+    "description":  "",
+    "total_rows":  "1",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AgreementToken",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "uniqueidentifier",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ContentHash",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "char",
+                        "CHARACTER_MAXIMUM_LENGTH":  "64",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "UniqueInfo",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "1000",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "AgreementBeginDate",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__AKBANK_A__36DCB1DDD479CBF4",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "AgreementToken"
+                    }
+                ],
+    "sample_data":  {
+                        "AgreementToken":  "70a96b78-74b4-458f-8631-c3e6ba40a6ee",
+                        "ContentHash":  "a3371693aea96aae4bc9695679dd6e771b49e37b8930fc2e763639e9ba7d3b4e",
+                        "UniqueInfo":  "SİNAN SEVEN_108_7340838976",
+                        "AgreementBeginDate":  "26.07.2022 14:40:01"
+                    }
+}

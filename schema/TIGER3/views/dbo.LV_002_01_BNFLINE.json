@@ -1,0 +1,252 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_002_01_BNFLINE",
+    "full_name":  "dbo.LV_002_01_BNFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_002_01_BNFLINE] AS\nSELECT\n        LGMAIN.LOGICALREF, LGMAIN.CLIENTREF, LGMAIN.MODULENR, LGMAIN.TRCODE, LGMAIN.BANKPROCTYPE, LGMAIN.LINENR, BANKACC.CODE, BANKACC.DEFINITION_ DEFINITION_, LGMAIN.LINEEXP, LGMAIN.DATE_,\n  CASE WHEN LGMAIN.SIGN=0 THEN LGMAIN.AMOUNT ELSE 0 END AS DEBIT,\n  CASE WHEN LGMAIN.SIGN=1 THEN LGMAIN.AMOUNT ELSE 0 END AS CREDIT,\n  CASE WHEN LGMAIN.MODULENR=7 AND LGMAIN.TRCODE IN (16, 17) THEN 4 ELSE 0 END AS LINETYPE\nFROM\n     LG_002_01_BNFLINE LGMAIN\n  LEFT OUTER JOIN LG_002_BNCARD BANK WITH(NOLOCK) ON LGMAIN.BANKREF = BANK.LOGICALREF\n  LEFT OUTER JOIN LG_002_BANKACC BANKACC WITH(NOLOCK) ON LGMAIN.BNACCREF = BANKACC.LOGICALREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CLIENTREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MODULENR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BANKPROCTYPE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "2",
+                            "CLIENTREF":  "1660",
+                            "MODULENR":  "7",
+                            "TRCODE":  "3",
+                            "BANKPROCTYPE":  "2",
+                            "LINENR":  "1",
+                            "CODE":  "22    102.01.001",
+                            "DEFINITION_":  "DENİZBANK TL ",
+                            "LINEEXP":  "Sermaye Taahhüdü için RESTAR dan havale.",
+                            "DATE_":  "31.08.2022 00:00:00",
+                            "DEBIT":  "25000",
+                            "CREDIT":  "0",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CLIENTREF":  "1681",
+                            "MODULENR":  "7",
+                            "TRCODE":  "3",
+                            "BANKPROCTYPE":  "2",
+                            "LINENR":  "1",
+                            "CODE":  "13    13",
+                            "DEFINITION_":  "VAKIFBANK EURO HESABI",
+                            "LINEEXP":  "YMPAR LTD adına hesabımıza yatan. [Inport Caravan Gladıator Xl ]",
+                            "DATE_":  "2.12.2022 00:00:00",
+                            "DEBIT":  "539077,01",
+                            "CREDIT":  "0",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CLIENTREF":  "1660",
+                            "MODULENR":  "7",
+                            "TRCODE":  "3",
+                            "BANKPROCTYPE":  "2",
+                            "LINENR":  "1",
+                            "CODE":  "11    11",
+                            "DEFINITION_":  "VAKIFBANK TL HESABI",
+                            "LINEEXP":  "Gelen Havale - RESTAR OTOMOTİV TRZ. İÇ VE DIŞ TİC A.Ş.",
+                            "DATE_":  "26.10.2022 00:00:00",
+                            "DEBIT":  "10000",
+                            "CREDIT":  "0",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CLIENTREF":  "1660",
+                            "MODULENR":  "7",
+                            "TRCODE":  "3",
+                            "BANKPROCTYPE":  "2",
+                            "LINENR":  "1",
+                            "CODE":  "11    11",
+                            "DEFINITION_":  "VAKIFBANK TL HESABI",
+                            "LINEEXP":  "Gelen Havale - RESTAR OTOMOTİV TRZ. İÇ VE DIŞ TİC A.Ş.",
+                            "DATE_":  "26.12.2022 00:00:00",
+                            "DEBIT":  "5000",
+                            "CREDIT":  "0",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CLIENTREF":  "0",
+                            "MODULENR":  "7",
+                            "TRCODE":  "1",
+                            "BANKPROCTYPE":  "1",
+                            "LINENR":  "1",
+                            "CODE":  "11    11",
+                            "DEFINITION_":  "VAKIFBANK TL HESABI",
+                            "LINEEXP":  "Muhtasar Ödemesi - Ücret Gelir Vergisi  Dönem- 2022.10 ",
+                            "DATE_":  "26.11.2022 00:00:00",
+                            "DEBIT":  "0",
+                            "CREDIT":  "3369,47",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CLIENTREF":  "0",
+                            "MODULENR":  "7",
+                            "TRCODE":  "1",
+                            "BANKPROCTYPE":  "1",
+                            "LINENR":  "2",
+                            "CODE":  "11    11",
+                            "DEFINITION_":  "VAKIFBANK TL HESABI",
+                            "LINEEXP":  "Muhtasar Ödemesi - Serb.Mes.Makbuzu Stopajı Dönem- 2022.10",
+                            "DATE_":  "26.11.2022 00:00:00",
+                            "DEBIT":  "0",
+                            "CREDIT":  "612,24",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CLIENTREF":  "0",
+                            "MODULENR":  "7",
+                            "TRCODE":  "1",
+                            "BANKPROCTYPE":  "1",
+                            "LINENR":  "3",
+                            "CODE":  "11    11",
+                            "DEFINITION_":  "VAKIFBANK TL HESABI",
+                            "LINEEXP":  "Muhtasar Ödemesi - Ücret Damga Vergisi  Dönem- 2022.10 ",
+                            "DATE_":  "26.11.2022 00:00:00",
+                            "DEBIT":  "0",
+                            "CREDIT":  "188,04",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "CLIENTREF":  "0",
+                            "MODULENR":  "7",
+                            "TRCODE":  "1",
+                            "BANKPROCTYPE":  "1",
+                            "LINENR":  "4",
+                            "CODE":  "11    11",
+                            "DEFINITION_":  "VAKIFBANK TL HESABI",
+                            "LINEEXP":  "Muhtasar Ödemesi - Beyanname D.V.  Dönem- 2022.10",
+                            "DATE_":  "26.11.2022 00:00:00",
+                            "DEBIT":  "0",
+                            "CREDIT":  "103,5",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "12",
+                            "CLIENTREF":  "0",
+                            "MODULENR":  "7",
+                            "TRCODE":  "1",
+                            "BANKPROCTYPE":  "1",
+                            "LINENR":  "1",
+                            "CODE":  "11    11",
+                            "DEFINITION_":  "VAKIFBANK TL HESABI",
+                            "LINEEXP":  "KDV. Ödemesi - Beyanname D.V.  Dönem- 2022.10",
+                            "DATE_":  "26.10.2022 00:00:00",
+                            "DEBIT":  "0",
+                            "CREDIT":  "87,3",
+                            "LINETYPE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "13",
+                            "CLIENTREF":  "0",
+                            "MODULENR":  "7",
+                            "TRCODE":  "1",
+                            "BANKPROCTYPE":  "1",
+                            "LINENR":  "1",
+                            "CODE":  "11    11",
+                            "DEFINITION_":  "VAKIFBANK TL HESABI",
+                            "LINEEXP":  "KDV. Ödemesi - Beyanname D.V.  Dönem- 2022.11",
+                            "DATE_":  "26.11.2022 00:00:00",
+                            "DEBIT":  "0",
+                            "CREDIT":  "87,3",
+                            "LINETYPE":  "0"
+                        }
+                    ]
+}

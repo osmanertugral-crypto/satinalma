@@ -1,0 +1,12 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "ENT",
+    "full_name":  "dbo.ENT",
+    "created":  "Aug  9 2022  2:24PM",
+    "last_altered":  "Aug  9 2022  2:24PM",
+    "parameters":  [
+
+                   ],
+    "definition":  ""
+}

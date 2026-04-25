@@ -1,0 +1,35 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "REZERVEIPTALSD",
+    "full_name":  "dbo.REZERVEIPTALSD",
+    "created":  "Oct 30 2024 12:56PM",
+    "last_altered":  "Oct 30 2024 12:56PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@SB_REF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@SD_REF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@KULLANICI_REF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE [dbo].[REZERVEIPTALSD] @SB_REF AS INT,@SD_REF AS INT,\r\n@KULLANICI_REF AS INT\r\nAS\r\nSET NOCOUNT ON\r\nIF ISNULL((SELECT MIN(SD_REF) FROM REZERVEDETAY WITH(NOLOCK) WHERE SD_REF=@SD_REF),0)\u003e0\r\nBEGIN\r\n\r\n\tINSERT INTO REZERVEDETAY (STOK_REF,VARYANT_REF,BIRIM_REF,ANABIRIM_REF,SB_REF,SD_REF,ADRES,DURUM_KODU,TAKIP_NO,PALET,PAKET,AMBAR_KODU,MIKTAR,ABMIKTAR,GCI,KAYIT_TARIH,KULLANICI_REF)\r\n\tSELECT STOK_REF,VARYANT_REF,BIRIM_REF,ANABIRIM_REF,SB_REF,SD_REF,ADRES,DURUM_KODU,TAKIP_NO,PALET,PAKET,AMBAR_KODU,SUM(MIKTAR)*-1 AS MIKTAR,SUM(ABMIKTAR)*-1 AS ABMIKTAR,2 AS GCI,GETDATE() AS KAYIT_TARIHI,@KULLANICI_REF\r\n\tFROM REZERVEDETAY WITH(NOLOCK)\r\n\tWHERE SD_REF=@SD_REF\r\n\tGROUP BY STOK_REF,VARYANT_REF,BIRIM_REF,ANABIRIM_REF,SB_REF,SD_REF,ADRES,DURUM_KODU,TAKIP_NO,PALET,PAKET,AMBAR_KODU\r\n\tHAVING SUM(ABMIKTAR)\u003c\u003e0\r\nEND\r\nELSE\r\nBEGIN\r\n\t\t\tIF(@SB_REF\u003e0) BEGIN\r\n\t\t\t\tDECLARE @SMIK AS FLOAT\r\n\t\t\t\tDECLARE @RMIK AS FLOAT\r\n\r\n\t\t\t\tSET @SMIK=ISNULL((SELECT SUM(MIKTAR-SEVKEDILEN_MIKTAR) FROM SIPARISHAREKETLERI WITH(NOLOCK) WHERE SB_REF=@SB_REF AND KAPALI=0),0)\r\n\t\t\t\tSET @RMIK=ISNULL((SELECT MIKTAR FROM REZERVESB WITH(NOLOCK) WHERE SB_REF=@SB_REF),0)\r\n\t\t\t\r\n\t\t\t\tIF(@SMIK=@RMIK AND @RMIK\u003e0)\r\n\t\t\t\tBEGIN\r\n\t\t\t\t\tUPDATE SIPARISFISLERI SET RZV=1 WHERE RZV\u003c\u003e1 AND SB_REF=@SB_REF\r\n\t\t\t\tEND\r\n\t\t\t\tELSE\r\n\t\t\t\tIF(@SMIK\u003e@RMIK AND @RMIK\u003e0)\r\n\t\t\t\tBEGIN\r\n\t\t\t\t\tUPDATE SIPARISFISLERI SET RZV=2 WHERE RZV\u003c\u003e2 AND SB_REF=@SB_REF\r\n\t\t\t\tEND\t\t\t\r\n\t\t\t\tELSE\r\n\t\t\t\tIF(@SMIK\u003e0 AND @RMIK=0)\r\n\t\t\t\tBEGIN\r\n\t\t\t\t\tUPDATE SIPARISFISLERI SET RZV=0 WHERE SB_REF=@SB_REF\r\n\t\t\t\tEND\t\r\n\t\t\tEND\r\nEND"
+}

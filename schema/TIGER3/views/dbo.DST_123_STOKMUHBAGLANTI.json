@@ -1,0 +1,167 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_STOKMUHBAGLANTI",
+    "full_name":  "dbo.DST_123_STOKMUHBAGLANTI",
+    "definition":  "CREATE VIEW DST_123_STOKMUHBAGLANTI AS\r\n\r\nSELECT \r\n\u0027Restar\u0027 as FIRMA,\r\n               \u0027Malzeme Kartları\u0027 AS MODUL,\r\n               LG_123_ITEMS.CODE AS KOD,\r\n               LG_123_ITEMS.NAME AS AD,\r\n               LG_123_CRDACREF.TYP,\r\n               HESAP_TURU=CASE LG_123_CRDACREF.TYP WHEN 1 THEN \u0027Alımlar Hesabı\u0027\r\n                                                                                         WHEN 2 THEN \u0027Diğer Girişler\u0027\r\n                                                                                         WHEN 3 THEN \u0027Satışlar Hesabı\u0027  \r\n                                                                                         WHEN 4 THEN \u0027Diğer Çıkışlar Hesabı\u0027\r\n                                                                                         when 5 then \u0027Sarflar\u0027\r\n                                                                                         when 6 then \u0027Fireler\u0027\r\n                                                                                         when 7 then \u0027Üretimden Girişler\u0027\r\n                                                                                         when 8 then \u0027Kullanıcı Tanımlı Girişler\u0027\r\n                                                                                         when 9 then \u0027Kullanıcı Tanımlı Çıkışlar\u0027\r\n                                                                                         when 10 then \u0027Alım İadeler\u0027\r\n                                                                                         when 11 then \u0027Satış İadeler\u0027\r\n                                                                                         when 12 then \u0027Alım İmdirimleri\u0027                \r\n                                                                                         when 13 then \u0027Satış İndirimleri\u0027\r\n                                                                                         when 14 then \u0027Alım MAsrafları\u0027\r\n                                                                                         when 15 then \u0027SAtış Masrafları\u0027\r\n                                                                                         when 16 then \u0027Alınan Promosyon\u0027\r\n                                                                                         when 17 then \u0027Verilen Promosyon\u0027\r\n                                                                                         when 18 then \u0027Promosyon KDV Gideri\u0027\r\n                                                                                         when 19 then \u0027Satışta Kar/Zarar\u0027\r\n                                                                                         when 20 then \u0027Amortisman Tükenme Payları\u0027\r\n                                                                                         when 21 then \u0027Satılan Malın Maliyeti\u0027\r\n                                                                                         when 136 then \u0027Alınan Fiyat Farkı\u0027\r\n                                                                                         when 137 then \u0027Verilen Fiyat Farkı\u0027\r\n                                                                                         when 95 then \u0027Sayım Fazlası\u0027\r\n                                                                                         when 96 then \u0027Sayım Eksiği Hesabı\u0027\r\n                                                                                         \r\n                                                                                         when 99 then \u0027Satılan Malın Maliyeti\u0027\r\nELSE \u0027Bulunamadı\u0027 end,\r\n\r\nLG_123_EMUHACC.CODE AS [Muhasebe Hesabı Kodu],\r\nLG_123_EMUHACC.DEFINITION_ AS [Muhasebe Hesabı Açıklaması]\r\n\r\n\r\nFROM \r\n\r\n\r\nLG_123_CRDACREF LEFT JOIN\r\nLG_123_ITEMS ON LG_123_ITEMS.LOGICALREF=LG_123_CRDACREF.CARDREF\r\nleft JOIN  LG_123_EMUHACC on LG_123_EMUHACC.LOGICALREF=LG_123_CRDACREF.ACCOUNTREF\r\nleft JOIN  lg_123_EMCENTER on LG_123_EMCENTER.LOGICALREF=LG_123_CRDACREF.CENTERREF\r\nWHERE LG_123_CRDACREF.TRCODE = \u00271\u0027 --and LG_123_ITEMS.CODE=\u0027ARABA1435\u0027\r\nUNION ALL\r\n\r\n\r\n\r\nSELECT \r\n\u0027Restar\u0027 as FIRMA,\r\n               \u0027Cari Hesap Kartları\u0027 AS MODUL,\r\n               LG_123_CLCARD.CODE AS KOD,\r\n               LG_123_CLCARD.DEFINITION_ AS AD,\r\n               LG_123_CRDACREF.TYP,\r\n               HESAP_TURU=\u0027Cari Hesap\u0027,\r\nLG_123_EMUHACC.CODE AS [Muhasebe Hesabı Kodu],\r\nLG_123_EMUHACC.DEFINITION_ AS [Muhasebe Hesabı Açıklaması]\r\n\r\n\r\nFROM LG_123_CRDACREF LEFT JOIN\r\nLG_123_CLCARD ON LG_123_CLCARD.LOGICALREF=LG_123_CRDACREF.cardref\r\nleft JOIN  LG_123_EMUHACC on LG_123_EMUHACC.LOGICALREF=LG_123_CRDACREF.ACCOUNTREF\r\n--left JOIN  lg_123_EMCENTER on LG_123_EMCENTER.LOGICALREF=LG_123_CRDACREF.CENTERREF\r\nWHERE LG_123_CRDACREF.TRCODE = \u00275\u0027\r\nUNION ALL\r\nSELECT \r\n\u002725_1_Filmat\u0027 as FIRMA,\r\n               \u0027Hizmet Kartları\u0027 AS MODUL,\r\n               LG_123_SRVCARD.CODE AS KOD,\r\n               LG_123_SRVCARD.DEFINITION_ AS AD,\r\n               LG_123_CRDACREF.TYP,\r\n               HESAP_TURU=CASE LG_123_CRDACREF.TYP WHEN 1 THEN \u0027Hizmetler\u0027\r\n                                                                              when 2 then \u0027Hizmet İndirimleri\u0027\r\n                                                                              WHEN 3 THEN \u0027Hizmet Masraflar\u0027\r\n                                                                                         when 4 then \u0027Hizmet Promosyonlar\u0027\r\n                                                                                         when 5 then \u0027Hizmet İadeleri\u0027 else \r\n\r\n\u0027Bulunamadı\u0027 end,\r\n\r\nLG_123_EMUHACC.CODE AS [Muhasebe Hesabı Kodu],\r\nLG_123_EMUHACC.DEFINITION_ AS [Muhasebe Hesabı Açıklaması]\r\n\r\n\r\n\r\nFROM LG_123_CRDACREF LEFT JOIN\r\nLG_123_SRVCARD ON LG_123_SRVCARD.LOGICALREF=LG_123_CRDACREF.cardref\r\nleft JOIN  LG_123_EMUHACC on LG_123_EMUHACC.LOGICALREF=LG_123_CRDACREF.ACCOUNTREF\r\n--left JOIN  lg_123_EMCENTER on LG_123_EMCENTER.LOGICALREF=LG_123_CRDACREF.CENTERREF\r\nWHERE LG_123_CRDACREF.TRCODE = \u00273\u0027\r\n--select * FROM L_CAPIFIRM\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FIRMA",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MODUL",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "19",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KOD",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AD",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP_TURU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "26",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Muhasebe Hesabı Kodu",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Muhasebe Hesabı Açıklaması",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H549",
+                            "AD":  "SOLAR SHOWER BRAKET",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H550",
+                            "AD":  "CİVATA PASLANMAZ M8X70 ",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H551",
+                            "AD":  "PUL 4,3X12X1 PASLANMAZ",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H552",
+                            "AD":  "PUL M4 PASLANMAZ",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H553",
+                            "AD":  "YAMUK VİDALAMA",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H554",
+                            "AD":  "ZIMPARA KUM 100",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H555",
+                            "AD":  "HAFELE FRENLİ CH300 DOLAP MENTEŞESİ ",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H556",
+                            "AD":  "RAY 35 LİK TELESKOBİK FRENLİ",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H557",
+                            "AD":  "471/8 İNOX MİL SEGMANI",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        },
+                        {
+                            "FIRMA":  "Restar",
+                            "MODUL":  "Malzeme Kartları",
+                            "KOD":  "HRXX0099H558",
+                            "AD":  "SAC VİDASI 4,2X16 YSB",
+                            "TYP":  "1",
+                            "HESAP_TURU":  "Alımlar Hesabı",
+                            "Muhasebe Hesabı Kodu":  "150.00.000000",
+                            "Muhasebe Hesabı Açıklaması":  "YURTİÇİ ÜRETİM STOKLARI"
+                        }
+                    ]
+}

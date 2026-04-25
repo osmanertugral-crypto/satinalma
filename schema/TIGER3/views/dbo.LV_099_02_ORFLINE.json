@@ -1,0 +1,165 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_099_02_ORFLINE",
+    "full_name":  "dbo.LV_099_02_ORFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_099_02_ORFLINE] AS\nSELECT\n    LGMAIN.LOGICALREF, LGMAIN.ORDFICHEREF, LGMAIN.STOCKREF, LGMAIN.LINENO_, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.DATE_, LGMAIN.LINETYPE, LGMAIN.TRCODE,   \n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.CODE WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.CODE ELSE \u0027\u0027 END AS CODE,\n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.DEFINITION_ WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_ WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.NAME ELSE \u0027\u0027 END AS LINEEXP\nFROM\n    LG_099_02_ORFLINE LGMAIN WITH(NOLOCK)\n LEFT OUTER JOIN LG_099_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF AND LGMAIN.LINETYPE NOT IN (2,3,4)\n    LEFT OUTER JOIN lg_099_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF AND LGMAIN.LINETYPE IN (4)\n    LEFT OUTER JOIN LG_099_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF AND LGMAIN.LINETYPE IN (2,3)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDFICHEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "644",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "5",
+                            "PRICE":  "5",
+                            "TOTAL":  "25",
+                            "DATE_":  "10.11.2022 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X1",
+                            "LINEEXP":  "1.5 MM KABLO"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "754",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "15",
+                            "PRICE":  "5",
+                            "TOTAL":  "75",
+                            "DATE_":  "10.11.2022 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X112",
+                            "LINEEXP":  "FRENLİ MENTEŞE"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "655",
+                            "LINENO_":  "3",
+                            "AMOUNT":  "10",
+                            "PRICE":  "10",
+                            "TOTAL":  "100",
+                            "DATE_":  "10.11.2022 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X12",
+                            "LINEEXP":  "10-16 KELEPÇE"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "ORDFICHEREF":  "2",
+                            "STOCKREF":  "748",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "1",
+                            "PRICE":  "100",
+                            "TOTAL":  "100",
+                            "DATE_":  "10.11.2022 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X106",
+                            "LINEEXP":  "FALÇATA"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "ORDFICHEREF":  "3",
+                            "STOCKREF":  "751",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "1",
+                            "PRICE":  "100",
+                            "TOTAL":  "100",
+                            "DATE_":  "10.11.2022 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "2021X109",
+                            "LINEEXP":  "FİŞ TİPİ TERMİNAL 10LUK"
+                        }
+                    ]
+}

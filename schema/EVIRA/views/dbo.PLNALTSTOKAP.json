@@ -1,0 +1,40 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "PLNALTSTOKAP",
+    "full_name":  "dbo.PLNALTSTOKAP",
+    "definition":  "CREATE VIEW [dbo].[PLNALTSTOKAP] AS \r\nSELECT     AMBAR_KODU, STOKSUB_REF AS STOK_REF,VARYANT_REF, SUM(SA_APM) AS SA_APM\r\nFROM         (SELECT     PF.AMBAR_KODU, PH.STOK_REF,PH.VARYANT_REF, (PH.MIKTAR - PH.SEVKEDILEN_MIKTAR) * (PH.CARPAN2 / PH.CARPAN1) AS X, SA.STOKSUB_REF, \r\n                                              (SA.MIKTAR * (PH.MIKTAR - PH.SEVKEDILEN_MIKTAR)) * (PH.CARPAN2 / PH.CARPAN1) AS SA_APM\r\n                       FROM          dbo.PLANLAMAFISLERI AS PF WITH(NOLOCK) INNER JOIN\r\n                                              dbo.PLANLAMAHAREKETLERI AS PH WITH(NOLOCK) ON PF.PB_REF = PH.PB_REF INNER JOIN\r\n                                              dbo.STOKALT AS SA WITH(NOLOCK) ON PH.STOK_REF = SA.STOK_REF AND SA.VARYANT_REF=PH.VARYANT_REF \r\n                       WHERE      (PH.CSUB = 1) AND (PF.STATUS = 0) AND (PH.STATUS = 0) AND (PH.MIKTAR - PH.SEVKEDILEN_MIKTAR \u003e 0)) AS LIST\r\nGROUP BY STOKSUB_REF,VARYANT_REF, AMBAR_KODU",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARYANT_REF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SA_APM",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

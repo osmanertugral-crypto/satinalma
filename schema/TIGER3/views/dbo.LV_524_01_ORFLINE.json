@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_524_01_ORFLINE",
+    "full_name":  "dbo.LV_524_01_ORFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_524_01_ORFLINE] AS\nSELECT\n    LGMAIN.LOGICALREF, LGMAIN.ORDFICHEREF, LGMAIN.STOCKREF, LGMAIN.LINENO_, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.DATE_, LGMAIN.LINETYPE, LGMAIN.TRCODE,   \n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.CODE WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.CODE ELSE \u0027\u0027 END AS CODE,\n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.DEFINITION_ WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_ WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.NAME ELSE \u0027\u0027 END AS LINEEXP\nFROM\n    LG_524_01_ORFLINE LGMAIN WITH(NOLOCK)\n LEFT OUTER JOIN LG_524_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF AND LGMAIN.LINETYPE NOT IN (2,3,4)\n    LEFT OUTER JOIN lg_524_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF AND LGMAIN.LINETYPE IN (4)\n    LEFT OUTER JOIN LG_524_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF AND LGMAIN.LINETYPE IN (2,3)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDFICHEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13059",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "3DBK0099H001",
+                            "LINEEXP":  "DUŞLUK 40X60 BOĞAZ"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13060",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "3DBK0099H002",
+                            "LINEEXP":  "DUŞLUK KARE ÇERÇEVE"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13062",
+                            "LINENO_":  "3",
+                            "AMOUNT":  "2",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "3DBK0099H004",
+                            "LINEEXP":  "MERDİVEN AYAK"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13063",
+                            "LINENO_":  "4",
+                            "AMOUNT":  "2",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "3DBK0099H005",
+                            "LINEEXP":  "MERDİVEN DESTEK"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13064",
+                            "LINENO_":  "5",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "3DBK0099H006",
+                            "LINEEXP":  "THULE KAPAK"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13065",
+                            "LINENO_":  "6",
+                            "AMOUNT":  "2",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "3DBK0099H007",
+                            "LINEEXP":  "OKUMA LAMBA TUTUCU"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13071",
+                            "LINENO_":  "7",
+                            "AMOUNT":  "2",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "3DBK0099H013",
+                            "LINEEXP":  "BARA KAPAĞI"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13073",
+                            "LINENO_":  "8",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "3DBK0099H015",
+                            "LINEEXP":  "GİDER KAPAĞI"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13089",
+                            "LINENO_":  "9",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "ABSR0099H002",
+                            "LINEEXP":  "USA 110V PASLANMAZ ÇELİK GÜÇ GİRİŞİ"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "ORDFICHEREF":  "1",
+                            "STOCKREF":  "13090",
+                            "LINENO_":  "10",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "DATE_":  "3.06.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "2",
+                            "CODE":  "ABSR0099H003",
+                            "LINEEXP":  "USA 30A 110V KARAVAN ŞARJI İÇİN ERKEK UÇ"
+                        }
+                    ]
+}

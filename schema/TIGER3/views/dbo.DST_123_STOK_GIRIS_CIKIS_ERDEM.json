@@ -1,0 +1,201 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_STOK_GIRIS_CIKIS_ERDEM",
+    "full_name":  "dbo.DST_123_STOK_GIRIS_CIKIS_ERDEM",
+    "definition":  "\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[DST_123_STOK_GIRIS_CIKIS_ERDEM] AS\r\n\r\n\r\n\r\nSELECT\r\nCASE WHEN STL.IOCODE IN (1,2) THEN \u0027GIRIS\u0027 WHEN STL.IOCODE IN (3,4) THEN \u0027CIKIS\u0027 ELSE \u0027DIGER\u0027 END [HAREKET TURU]\r\n,CASE STL.TRCODE \r\nWHEN 1 THEN \u0027SATIN ALMA IRS\u0027\r\nWHEN 2 THEN\u0027PAR. SATIS IADE IRS\u0027\r\nWHEN 3 THEN\u0027TOPTAN SATIS IADE IRS\u0027\r\nWHEN 4 THEN\u0027KONS. CIKIS IADE \u0027\r\nWHEN 5 THEN\u0027KONS. GIRIS\u0027\r\nWHEN 6 THEN\u0027SATIN ALMA IADE IRS\u0027\r\nWHEN 7 THEN\u0027PAR. SATIS IRS\u0027\r\nWHEN 8 THEN\u0027TOPTAN SATIS IRS\u0027\r\nWHEN 9 THEN\u0027KONS CIKIS IRS\u0027\r\nWHEN 10 THEN\u0027KONS. GIRIS IADE\u0027\r\nWHEN 11 THEN\u0027FIRE FISI\u0027\r\nWHEN 12 THEN\u0027SARF FISI\u0027\r\nWHEN 13 THEN\u0027URT. GIRIS FISI\u0027\r\nWHEN 14 THEN\u0027DEVIR FISI\u0027\r\nWHEN 25 THEN\u0027AMBAR FISI\u0027\r\nWHEN 50 THEN\u0027SAYIM FAZ. FISI\u0027\r\nWHEN 51 THEN\u0027SAYIM EKS. FISI\u0027\r\nEND [FIS TURU] \r\n,ITM.CODE [MALZ. KODU]\r\n,ITM.NAME [MALZ. ADI]\r\n--EMC.CODE MM_KODU,\r\n--EMC.SPECODE MARKA,\r\n--EMC.CYPHCODE MODEL,\r\n--EMC.DEFINITION_ MM_ADI\r\n,STF.FICHENO [FIS NO]\r\n\r\n--,(select max(S1.DATE_) from LG_123_01_STLINE S1 where s1.LOGICALREF=STL.LOGICALREF ) XX\r\n,STF.DATE_ [TARIH]\r\n,STL.AMOUNT [MIKTAR]\r\n,UNL.NAME [BIRIM]\r\n,ROUND(STL.PRICE,3) [BIRIM FIYAT]\r\n,ROUND(STL.TOTAL,3) [TUTAR]\r\n---,CASE STL.AMOUNT WHEN 0 THEN 0 ELSE STL.AMOUNT * (STL.UINFO2/STL.UINFO1) END [MIKTAR ANA BIRIM]\r\n---,[KALAN ANA BIRIM] = (SELECT ROUND(SUM(CASE STL1.AMOUNT WHEN 0 THEN 0 ELSE CASE WHEN STL1.IOCODE IN (1,2) THEN STL1.AMOUNT * (STL1.UINFO2/STL1.UINFO1) WHEN  STL1.IOCODE IN (3,4) THEN (STL1.AMOUNT * (STL1.UINFO2/STL1.UINFO1)) * -1 END END),3) FROM LG_123_01_STLINE STL1 WHERE STL1.LINETYPE = 0 AND STL1.CANCELLED = 0 AND ((STL1.DATE_ \u003c STL.DATE_) OR (STL1.DATE_ = STL.DATE_ AND STL1.FTIME \u003c STL.FTIME) OR (STL1.DATE_ = STL.DATE_ AND STL1.FTIME = STL.FTIME AND STL1.LOGICALREF \u003c= STL.LOGICALREF)) AND STL1.STOCKREF = STL.STOCKREF)\r\nFROM LG_123_01_STLINE STL \r\nLEFT JOIN LG_123_ITEMS ITM ON ITM.LOGICALREF = STL.STOCKREF\r\nLEFT JOIN LG_123_01_STFICHE STF ON STF.LOGICALREF = STL.STFICHEREF\r\n\r\nLEFT JOIN LG_123_UNITSETL UNL ON UNL.LOGICALREF = STL.UOMREF\r\nLEFT JOIN LG_123_EMUHACC EMU ON EMU.LOGICALREF=STL.ACCOUNTREF\r\nLEFT JOIN LG_123_EMCENTER EMC ON EMC.LOGICALREF=STL.CENTERREF\r\nWHERE STL.LINETYPE = 0 AND STL.CANCELLED = 0 AND STL.TRCODE\u003c\u003e25---AND ITM.CODE=\u00272021X326\u0027\r\n--ORDER BY STF.DATE_ ASC\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "HAREKET TURU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "5",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS TURU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZ. KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZ. ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS NO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM FIYAT",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "ELSF0099H083",
+                            "MALZ. ADI":  "SİGORTA 16 AH 220 W",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "41",
+                            "TUTAR":  "41"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "ELSF0099H084",
+                            "MALZ. ADI":  "SİGORTA KUTUSU 3/4 KAPAKLI",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "13,588",
+                            "TUTAR":  "13,59"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "ELTS0099H013",
+                            "MALZ. ADI":  "AYDINLATMA DOKUNMATİK GRİ - BEYAZ IŞIK",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "160",
+                            "TUTAR":  "160"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "ELTS0099H026",
+                            "MALZ. ADI":  "GAZ SENSÖRÜ",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "411",
+                            "TUTAR":  "411"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "ELTS0099H036",
+                            "MALZ. ADI":  "KONNEKTÖR GÜNEŞ PANEL",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "46,883",
+                            "TUTAR":  "46,88"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "ELTS0099H039",
+                            "MALZ. ADI":  "LED ŞERİT GÜN IŞIĞI",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "15",
+                            "BIRIM":  "Metre",
+                            "BIRIM FIYAT":  "10,25",
+                            "TUTAR":  "153,75"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "ELTS0099H060",
+                            "MALZ. ADI":  "USB 12V 2Lİ SİYAH",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "135",
+                            "TUTAR":  "405"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "ELTS0099H070",
+                            "MALZ. ADI":  "SOLAR PANEL 205W",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "2",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "2135,144",
+                            "TUTAR":  "4270,29"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "HRXX0099H104",
+                            "MALZ. ADI":  "MENTEŞE YAPRAK OVAL 6.5CM KROM",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "6",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "11",
+                            "TUTAR":  "66"
+                        },
+                        {
+                            "HAREKET TURU":  "CIKIS",
+                            "FIS TURU":  "SARF FISI",
+                            "MALZ. KODU":  "HRXX0099H106",
+                            "MALZ. ADI":  "MENTEŞE-PİSTON 60LIK",
+                            "FIS NO":  "000867",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "Adet",
+                            "BIRIM FIYAT":  "20",
+                            "TUTAR":  "20"
+                        }
+                    ]
+}

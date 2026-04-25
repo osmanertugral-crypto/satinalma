@@ -1,0 +1,99 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_123_01_EXIMDISTPEG",
+    "full_name":  "dbo.LV_123_01_EXIMDISTPEG",
+    "definition":  "CREATE VIEW [dbo].[LV_123_01_EXIMDISTPEG] AS\nSELECT LGMAIN.ITEMREF, LGMAIN.STTRANSREF, SUM(LGMAIN.ADDEXPENSE) AS ADDEXPENSE, SUM(LGMAIN.TOTALAMNT) AS TOTALAMNT\n FROM LG_123_01_EXIMDISTPEG LGMAIN\n WHERE (LGMAIN.ISDISTRIBUTED = 1) AND (LGMAIN.TOTALAMNT \u003e 0)\n GROUP BY LGMAIN.ITEMREF, LGMAIN.STTRANSREF\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ITEMREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STTRANSREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDEXPENSE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTALAMNT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "ITEMREF":  "15291",
+                            "STTRANSREF":  "339099",
+                            "ADDEXPENSE":  "145546,03",
+                            "TOTALAMNT":  "240"
+                        },
+                        {
+                            "ITEMREF":  "15290",
+                            "STTRANSREF":  "391981",
+                            "ADDEXPENSE":  "85302,575",
+                            "TOTALAMNT":  "640"
+                        },
+                        {
+                            "ITEMREF":  "15290",
+                            "STTRANSREF":  "399498",
+                            "ADDEXPENSE":  "69704,15",
+                            "TOTALAMNT":  "72"
+                        },
+                        {
+                            "ITEMREF":  "13015",
+                            "STTRANSREF":  "400599",
+                            "ADDEXPENSE":  "11468,8175101509",
+                            "TOTALAMNT":  "3200"
+                        },
+                        {
+                            "ITEMREF":  "13035",
+                            "STTRANSREF":  "400600",
+                            "ADDEXPENSE":  "37697,5178606448",
+                            "TOTALAMNT":  "960"
+                        },
+                        {
+                            "ITEMREF":  "13021",
+                            "STTRANSREF":  "400601",
+                            "ADDEXPENSE":  "27503,3630772985",
+                            "TOTALAMNT":  "2000"
+                        },
+                        {
+                            "ITEMREF":  "13037",
+                            "STTRANSREF":  "400602",
+                            "ADDEXPENSE":  "115934,840765139",
+                            "TOTALAMNT":  "6000"
+                        },
+                        {
+                            "ITEMREF":  "13041",
+                            "STTRANSREF":  "400603",
+                            "ADDEXPENSE":  "97749,8943134902",
+                            "TOTALAMNT":  "3600"
+                        },
+                        {
+                            "ITEMREF":  "13042",
+                            "STTRANSREF":  "400604",
+                            "ADDEXPENSE":  "97749,8943134902",
+                            "TOTALAMNT":  "3600"
+                        },
+                        {
+                            "ITEMREF":  "13043",
+                            "STTRANSREF":  "400605",
+                            "ADDEXPENSE":  "97749,8943134902",
+                            "TOTALAMNT":  "3600"
+                        }
+                    ]
+}

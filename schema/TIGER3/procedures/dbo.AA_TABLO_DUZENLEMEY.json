@@ -1,0 +1,12 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "AA_TABLO_DUZENLEMEY",
+    "full_name":  "dbo.AA_TABLO_DUZENLEMEY",
+    "created":  "Jan  3 2023  6:58PM",
+    "last_altered":  "Jan 17 2023  2:10PM",
+    "parameters":  [
+
+                   ],
+    "definition":  "CREATE PROC [dbo].[AA_TABLO_DUZENLEMEY] AS\r\n\r\nDROP TABLE AARP_WMS_HAREKETLERI_FIYATLI_TBLY\r\n\r\nSELECT * INTO AARP_WMS_HAREKETLERI_FIYATLI_TBLY FROM AARP_WMS_HAREKETLERI_FIYATLI_123\r\n\r\nalter table AARP_WMS_HAREKETLERI_FIYATLI_TBLY ALTER COLUMN PROJE_ADI NVARCHAR(250)\r\nalter table AARP_WMS_HAREKETLERI_FIYATLI_TBLY ALTER COLUMN STOK_ADI NVARCHAR(250)\r\n"
+}

@@ -1,0 +1,65 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "MASRAF_SQLINFO",
+    "full_name":  "dbo.MASRAF_SQLINFO",
+    "definition":  "\r\n\r\nCREATE VIEW MASRAF_SQLINFO AS\r\nSELECT F.LOGICALREF,DEFINITION_ FROM LG_123_EMUHACC  A\r\nINNER JOIN LG_123_01_EMFLINE F ON A.LOGICALREF=F.ACCOUNTREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "7371",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "21165",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "32721",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "45830",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "73507",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "80509",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "80157",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "138168",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "140244",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        },
+                        {
+                            "LOGICALREF":  "139909",
+                            "DEFINITION_":  "1A AUTO ANKAUF GMBH - €"
+                        }
+                    ]
+}

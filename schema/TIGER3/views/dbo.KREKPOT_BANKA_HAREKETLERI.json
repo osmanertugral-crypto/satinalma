@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KREKPOT_BANKA_HAREKETLERI",
+    "full_name":  "dbo.KREKPOT_BANKA_HAREKETLERI",
+    "definition":  "\r\n\r\n\r\n\r\n\r\nCREATE     view [dbo].[KREKPOT_BANKA_HAREKETLERI] as\r\n\r\nSELECT BNC.CODE + \u0027 – \u0027 + BNC.DEFINITION_ AS [Banka Kodu – Adı],\r\nBNL.DATE_ AS Tarih, BNL.TRANNO AS [İşlem No.],\r\nCASE bnl.TRCODE\r\nWHEN 1 THEN \u0027Banka İşlem Fişi\u0027 WHEN 2 THEN \u0027Banka Virman Fişi\u0027\r\nWHEN 3 THEN \u0027Gelen Havale-EFT\u0027 WHEN 4 THEN \u0027Gönderilen EFT/Havale\u0027\r\nWHEN 5 THEN \u0027Banka Açılış Fişi\u0027 WHEN 6 THEN \u0027Banka Kur Farkı Fişi\u0027\r\nWHEN 16 THEN \u0027Banka Alınan Hizmet Faturası\u0027 WHEN 17 THEN \u0027Banka Verilen Hizmet Faturası\u0027\r\nWHEN 18 THEN \u0027Bankadan Çek Ödemesi\u0027 WHEN 19 THEN \u0027Bankadan Senet Ödemesi\u0027\r\nEND AS [İşlem Türü],\r\n(SELECT CODE FROM LG_123_BANKACC WHERE LOGICALREF=BNL.BNACCREF) AS [Hesap Kodu],\r\nBNL.LINEEXP AS [İşlem Açıklaması],\r\nISNULL(CASE WHEN BNL.SIGN = 0 AND BNL.TRCURR = 0 THEN BNL.TRNET END, 0) AS [Borç TL],\r\nISNULL(CASE WHEN BNL.SIGN = 1 AND BNL.TRCURR = 0 THEN BNL.TRNET END, 0) AS [Alacak TL],\r\nISNULL(CASE WHEN BNL.SIGN = 0 AND BNL.TRCURR = 1 THEN BNL.TRNET END, 0) AS [Borç $],\r\nISNULL(CASE WHEN BNL.SIGN = 1 AND BNL.TRCURR = 1 THEN BNL.TRNET END, 0) AS [Alacak $],\r\nISNULL(CASE WHEN BNL.SIGN = 0 AND BNL.TRCURR = 20 THEN BNL.TRNET END, 0) AS [Borç €],\r\nISNULL(CASE WHEN BNL.SIGN = 1 AND BNL.TRCURR = 20 THEN BNL.TRNET END, 0) AS [Alacak €]\r\nFROM LG_123_BNCARD AS BNC\r\nLEFT OUTER JOIN LG_123_01_BNFLINE AS BNL ON BNC.LOGICALREF = BNL.BANKREF\r\nLEFT OUTER JOIN LG_123_01_BNFICHE AS BNF ON BNF.LOGICALREF = BNL.SOURCEFREF\r\nWHERE (BNL.TRCODE IN (1, 2, 3, 4, 5, 6, 16, 17, 18, 19)) --AND (BNL.TRANSTYPE NOT IN (3,2))\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Banka Kodu – Adı",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "61",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Tarih",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "İşlem No.",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "İşlem Türü",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "29",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Hesap Kodu",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "İşlem Açıklaması",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç TL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak TL",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç $",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak $",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç €",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak €",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Banka Kodu – Adı":  "HALK – HALK BANKASI",
+                            "Tarih":  "4.04.2025 00:00:00",
+                            "İşlem No.":  "001878",
+                            "İşlem Türü":  "Banka Virman Fişi",
+                            "Hesap Kodu":  "HALK  102 0724",
+                            "İşlem Açıklaması":  "Halkbank-K9000827 -Kredi Taksit Ödemesi",
+                            "Borç TL":  "0",
+                            "Alacak TL":  "228091,73",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "HALK – HALK BANKASI",
+                            "Tarih":  "4.04.2025 00:00:00",
+                            "İşlem No.":  "001878",
+                            "İşlem Türü":  "Banka Virman Fişi",
+                            "Hesap Kodu":  "HALK  3.2023.03",
+                            "İşlem Açıklaması":  "Halkbank-K9000827 -Kredi Taksit Ödemesi",
+                            "Borç TL":  "228091,73",
+                            "Alacak TL":  "0",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "İŞ – İŞ BANKASI",
+                            "Tarih":  "30.04.2025 00:00:00",
+                            "İşlem No.":  "001832",
+                            "İşlem Türü":  "Banka İşlem Fişi",
+                            "Hesap Kodu":  "İŞ    102 3457",
+                            "İşlem Açıklaması":  "KREDİ NO: 14580156495 - FAİZ 1458/53424 *MUH.HESABINA AKTARMA ",
+                            "Borç TL":  "0",
+                            "Alacak TL":  "295156,75",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "İŞ – İŞ BANKASI",
+                            "Tarih":  "30.04.2025 00:00:00",
+                            "İşlem No.":  "001879",
+                            "İşlem Türü":  "Banka Virman Fişi",
+                            "Hesap Kodu":  "İŞ    102 3457",
+                            "İşlem Açıklaması":  "KREDİ NO: 14580156495 - ANAPARA TAHSİLAT 1458/1405050 *MUH.HE ",
+                            "Borç TL":  "0",
+                            "Alacak TL":  "371928",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "İŞ – İŞ BANKASI",
+                            "Tarih":  "30.04.2025 00:00:00",
+                            "İşlem No.":  "001879",
+                            "İşlem Türü":  "Banka Virman Fişi",
+                            "Hesap Kodu":  "İŞ    3.2023YENİ",
+                            "İşlem Açıklaması":  "KREDİ NO: 14580156495 - ANAPARA TAHSİLAT 1458/1405050 *MUH.HE ",
+                            "Borç TL":  "371928",
+                            "Alacak TL":  "0",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "VKB – VAKIFBANK",
+                            "Tarih":  "21.04.2025 00:00:00",
+                            "İşlem No.":  "001833",
+                            "İşlem Türü":  "Banka İşlem Fişi",
+                            "Hesap Kodu":  "VKB   102 4031",
+                            "İşlem Açıklaması":  "6500898072  kredi hesap numaralı 2. El Araç Kredisi  Tam  Taksit  Tahsilatı",
+                            "Borç TL":  "0",
+                            "Alacak TL":  "35275,6",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "VKB – VAKIFBANK",
+                            "Tarih":  "21.04.2025 00:00:00",
+                            "İşlem No.":  "001833",
+                            "İşlem Türü":  "Banka İşlem Fişi",
+                            "Hesap Kodu":  "VKB   102 4031",
+                            "İşlem Açıklaması":  "6500898072  kredi hesap numaralı 2. El Araç Kredisi  Tam  Taksit  Tahsilatı",
+                            "Borç TL":  "0",
+                            "Alacak TL":  "1763,78",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "VKB – VAKIFBANK",
+                            "Tarih":  "21.04.2025 00:00:00",
+                            "İşlem No.":  "001880",
+                            "İşlem Türü":  "Banka Virman Fişi",
+                            "Hesap Kodu":  "VKB   102 4031",
+                            "İşlem Açıklaması":  "6500898072  kredi hesap numaralı 2. El Araç Kredisi  Tam  Taksit  Tahsilatı",
+                            "Borç TL":  "0",
+                            "Alacak TL":  "43596,78",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "VKB – VAKIFBANK",
+                            "Tarih":  "21.04.2025 00:00:00",
+                            "İşlem No.":  "001880",
+                            "İşlem Türü":  "Banka Virman Fişi",
+                            "Hesap Kodu":  "VKB   300 9 YENİ",
+                            "İşlem Açıklaması":  "6500898072  kredi hesap numaralı 2. El Araç Kredisi  Tam  Taksit  Tahsilatı",
+                            "Borç TL":  "43596,78",
+                            "Alacak TL":  "0",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        },
+                        {
+                            "Banka Kodu – Adı":  "VKB – VAKIFBANK",
+                            "Tarih":  "3.04.2025 00:00:00",
+                            "İşlem No.":  "001834",
+                            "İşlem Türü":  "Banka İşlem Fişi",
+                            "Hesap Kodu":  "VKB   102 4031",
+                            "İşlem Açıklaması":  "VAKIFBANK KREDİ FAİZ - 7187 HS",
+                            "Borç TL":  "0",
+                            "Alacak TL":  "42411,23",
+                            "Borç $":  "0",
+                            "Alacak $":  "0",
+                            "Borç €":  "0",
+                            "Alacak €":  "0"
+                        }
+                    ]
+}

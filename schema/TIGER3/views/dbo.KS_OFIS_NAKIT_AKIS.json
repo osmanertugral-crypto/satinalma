@@ -1,0 +1,252 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KS_OFIS_NAKIT_AKIS",
+    "full_name":  "dbo.KS_OFIS_NAKIT_AKIS",
+    "definition":  "--USE [ISKULTUR_2020]\n--GO\n\n--/** Object:  View [dbo].[KS_OFIS_NAKIT_AKIS]    Script Date: 02/22/2024 14:36:43 **/\n--SET ANSI_NULLS ON\n--GO\n\n--SET QUOTED_IDENTIFIER ON\n--GO\n\n\n\nCREATE VIEW [dbo].[KS_OFIS_NAKIT_AKIS] AS\n\nSELECT \nCLCARD.CODE , \nCLCARD.DEFINITION_,\n      \nCASE PAYTRANS.MODULENR WHEN 4 THEN INVOICE.FICHENO WHEN 5 THEN CLFICHE.FICHENO WHEN 6 THEN CSROLL.ROLLNO WHEN 7 THEN BNFICHE.FICHENO WHEN 10 THEN KSLINES.FICHENO END FICHENO,\nCONVERT(DATE,(CASE PAYTRANS.MODULENR WHEN 4 THEN INVOICE.DATE_ WHEN 5 THEN CLFICHE.DATE_ WHEN 6 THEN CSROLL.DATE_ WHEN 7 THEN BNFICHE.DATE_ WHEN 10 THEN KSLINES.DATE_ END)) DATE_,\n                \nCASE PAYTRANS.MODULENR WHEN 4 THEN INVOICE_EMFICHE.FICHENO WHEN 5 THEN CLFICHE_EMFICHE.FICHENO WHEN 6 THEN CSROLL_EMFICHE.FICHENO WHEN 7 THEN BNFICHE_EMFICHE.FICHENO WHEN 10 THEN KSLINES_EMFICHE.FICHENO END MUH_FICHENO,\nCONVERT(DATE,(CASE PAYTRANS.MODULENR WHEN 4 THEN INVOICE_EMFICHE.DATE_ WHEN 5 THEN CLFICHE_EMFICHE.DATE_ WHEN 6 THEN CSROLL.DATE_ WHEN 7 THEN BNFICHE_EMFICHE.DATE_ WHEN 10 THEN KSLINES_EMFICHE.DATE_ END)) MUH_DATE_,\n\nCASE WHEN CLCARD.CODE LIKE \u0027120.07%\u0027 THEN \u0027Mağaza Para\u0027 \n WHEN CLCARD.CODE LIKE \u0027335.01%\u0027 THEN \u0027Personel\u0027  \n WHEN CLCARD.CODE LIKE \u0027336.%\u0027 THEN \u0027Personel\u0027  \n WHEN CLCARD.CODE LIKE \u0027195.%\u0027 THEN \u0027Personel\u0027  \n WHEN CLCARD.CODE LIKE \u0027196.%\u0027 THEN \u0027Personel\u0027  \n WHEN CLCARD.CODE LIKE \u0027108.01%\u0027 THEN \u0027KKartı\u0027    \n WHEN CLCARD.CODE LIKE \u0027329.%\u0027 THEN \u0027Şirket KKartı\u0027  \n \n WHEN CLCARD.CODE LIKE \u0027159.%\u0027 THEN \u0027Verilen Avanslar\u0027 \n WHEN CLCARD.CODE LIKE \u0027340.%\u0027 THEN \u0027Alınan Avanslar\u0027 \n     \n WHEN CLCARD.CODE LIKE \u0027108.02%\u0027 THEN \u0027HGS\u0027 \n \n \n ELSE   \n(CASE PAYTRANS.MODULENR WHEN 4 THEN \u0027Fatura\u0027\n\tWHEN 5 THEN \u0027Cari Hesap\u0027 \n\tWHEN 6 THEN \u0027Çek-Senet\u0027 \n\tWHEN 7 THEN \u0027Cari Hesap\u0027 \n\tWHEN 10 THEN \u0027Kasa\u0027 \n\tWHEN 61 THEN \u0027Çek-Senet\u0027 END) \n\nEND TYPE,\n\n\nCASE PAYTRANS.SIGN WHEN 1 THEN \u0027Ödemeler\u0027 WHEN 0 THEN \u0027Tahsilat\u0027 END AS SIGN,\nPAYTRANS.TRCODE ,\nCASE PAYTRANS.SIGN WHEN 1 THEN PAYTRANS.TOTAL * (-1) WHEN 0 THEN PAYTRANS.TOTAL END AS TOTAL ,\nCASE WHEN  TKVM.HAFTA \u003c DATEPART( wk, GETDATE()) THEN DATEPART( wk, GETDATE()) ELSE TKVM.HAFTA END HAFTA   ,TKVM.BAS_TAR,TKVM.BIT_TAR\n\n\nFROM \n(SELECT DATEPART( wk, TAKVIM.Date) HAFTA , MIN(TAKVIM.Date) BAS_TAR , MAX(TAKVIM.Date) BIT_TAR\n\nFROM (SELECT  TOP (DATEDIFF(DAY, CONVERT(date,\u002720240101\u0027), \u002720241231\u0027) + 1)\n        Date = DATEADD(DAY, ROW_NUMBER() OVER(ORDER BY a.object_id) - 1,  CONVERT(date,\u002720240101\u0027))    \nFROM sys.all_objects a CROSS JOIN sys.all_objects b) TAKVIM \n--WHERE TAKVIM.Date \u003e GETDATE()\nGROUP BY DATEPART( wk, TAKVIM.Date)) TKVM\nLEFT OUTER JOIN LG_123_01_PAYTRANS PAYTRANS WITH(NOLOCK) ON TKVM.HAFTA = DATEPART( wk, PAYTRANS.DATE_) AND YEAR(PAYTRANS.DATE_) = 2024\nINNER JOIN LG_123_CLCARD CLCARD WITH(NOLOCK) ON CLCARD.LOGICALREF = PAYTRANS.CARDREF\nLEFT OUTER JOIN LG_123_01_INVOICE INVOICE WITH(NOLOCK) ON INVOICE.LOGICALREF = PAYTRANS.FICHEREF\nLEFT OUTER JOIN LG_123_01_EMFICHE INVOICE_EMFICHE WITH(NOLOCK) ON INVOICE.ACCFICHEREF = INVOICE_EMFICHE.LOGICALREF\nLEFT OUTER JOIN LG_123_01_BNFLINE BNFLINE WITH(NOLOCK) ON BNFLINE.LOGICALREF = PAYTRANS.FICHEREF\nLEFT OUTER JOIN LG_123_01_BNFICHE BNFICHE WITH(NOLOCK) ON BNFICHE.LOGICALREF = BNFLINE.SOURCEFREF\nLEFT OUTER JOIN LG_123_01_EMFICHE BNFICHE_EMFICHE WITH(NOLOCK) ON BNFICHE.ACCFICHEREF = BNFICHE_EMFICHE.LOGICALREF\n\nLEFT OUTER JOIN LG_123_01_CLFLINE CLFLINE WITH(NOLOCK) ON CLFLINE.LOGICALREF = PAYTRANS.FICHEREF\nLEFT OUTER JOIN LG_123_01_CLFICHE CLFICHE WITH(NOLOCK) ON CLFICHE.LOGICALREF = CLFLINE.SOURCEFREF AND CLFICHE.TRCODE = CLFLINE.TRCODE\nLEFT OUTER JOIN LG_123_01_EMFICHE CLFICHE_EMFICHE WITH(NOLOCK) ON CLFICHE.ACCFICHEREF = CLFICHE_EMFICHE.LOGICALREF\n\n\nLEFT OUTER JOIN LG_123_01_CSROLL CSROLL WITH(NOLOCK) ON CSROLL.LOGICALREF = PAYTRANS.FICHEREF\nLEFT OUTER JOIN LG_123_01_EMFICHE CSROLL_EMFICHE WITH(NOLOCK) ON CSROLL.ACCFICHEREF = CSROLL_EMFICHE.LOGICALREF\n\n\nLEFT OUTER JOIN LG_123_01_KSLINES KSLINES WITH(NOLOCK) ON KSLINES.LOGICALREF = PAYTRANS.FICHEREF\nLEFT OUTER JOIN LG_123_01_EMFICHE KSLINES_EMFICHE WITH(NOLOCK) ON KSLINES.ACCFICHEREF = KSLINES_EMFICHE.LOGICALREF\n\n\nWHERE PAYTRANS.CANCELLED = 0 \nAND PAYTRANS.PAID = 0 AND PAYTRANS.MODULENR NOT IN (61)\nAND CLCARD.CODE NOT IN (\u0027151 VİRMANLAR\u0027,\u0027151 DEVİR\u0027,\u0027151 İŞÇİLİK\u0027)\n--AND PAYTRANS.DATE_ \u003c GETDATE()\n\nUNION ALL\n\n\nSELECT \nBNFLINE.CODE , \nBNFLINE.DEFINITION_,\n      \n\u0027\u0027 FICHENO,\nCONVERT(DATE,TKVM.BAS_TAR) DATE_,\n                \n\u0027\u0027 MUH_FICHENO,\nCONVERT(DATE,TKVM.BAS_TAR) MUH_DATE_,\n\n\u0027Banka\u0027 TYPE,\n\u0027Açılış Bakiye\u0027 AS SIGN,\n7 TRCODE ,\n\nSUM((ROUND(DEBIT,2)) - (ROUND(CREDIT,2))) AS TOTAL ,\nCASE WHEN  TKVM.HAFTA \u003c DATEPART( wk, GETDATE()) THEN DATEPART( wk, GETDATE()) ELSE TKVM.HAFTA END HAFTA   ,TKVM.BAS_TAR,TKVM.BIT_TAR\n\n\nFROM \n(SELECT DATEPART( wk, TAKVIM.Date) HAFTA , MIN(TAKVIM.Date) BAS_TAR , MAX(TAKVIM.Date) BIT_TAR\n\nFROM (SELECT  TOP (DATEDIFF(DAY, CONVERT(date,\u002720240101\u0027), \u002720241231\u0027) + 1)\n        Date = DATEADD(DAY, ROW_NUMBER() OVER(ORDER BY a.object_id) - 1,  CONVERT(date,\u002720240101\u0027))    \nFROM sys.all_objects a CROSS JOIN sys.all_objects b) TAKVIM\nWHERE TAKVIM.Date \u003e= GETDATE()\n \nGROUP BY DATEPART( wk, TAKVIM.Date)\n\n) TKVM \nLEFT OUTER JOIN LV_123_01_BNFLINE BNFLINE WITH(NOLOCK) ON BNFLINE.DATE_ \u003c TKVM.BAS_TAR\n\nGROUP BY BNFLINE.CODE , BNFLINE.DEFINITION_ , TKVM.HAFTA , TKVM.BAS_TAR , TKVM.BIT_TAR\n\n\nUNION ALL\n\nSELECT distinct\n\nXXX.[CARI KODU] AS CODE, \nXXX.[CARI UNVANI] AS DEFINITION_,\nCSCRD.PORTFOYNO FICHENO,\nCONVERT(DATE,CSCRD.DUEDATE) AS DATE_,\n\u0027\u0027 AS MUH_FICHENO , \u0027\u0027 AS MUH_DATE_ ,\n \u0027Çek-Senet\u0027  AS TYPE\t,\u0027Tahsilat\u0027 AS SIGN , 99\tTRCODE ,\n\nCSCRD.AMOUNT AS TOTAL,\n\nCASE WHEN  TKVM.HAFTA \u003c DATEPART( wk, GETDATE()) THEN DATEPART( wk, GETDATE()) ELSE TKVM.HAFTA END HAFTA   ,TKVM.BAS_TAR,TKVM.BIT_TAR\nFROM \n(SELECT DATEPART( wk, TAKVIM.Date) HAFTA , MIN(TAKVIM.Date) BAS_TAR , MAX(TAKVIM.Date) BIT_TAR\n\nFROM (SELECT  TOP (DATEDIFF(DAY, CONVERT(date,\u002720240101\u0027), \u002720241231\u0027) + 1)\n        Date = DATEADD(DAY, ROW_NUMBER() OVER(ORDER BY a.object_id) - 1,  CONVERT(date,\u002720240101\u0027))    \nFROM sys.all_objects a CROSS JOIN sys.all_objects b) TAKVIM \n--WHERE TAKVIM.Date \u003e GETDATE()\nGROUP BY DATEPART( wk, TAKVIM.Date)) TKVM\nLEFT OUTER JOIN LG_123_01_CSCARD CSCRD   ON TKVM.HAFTA = DATEPART( wk, CSCRD.DUEDATE) AND YEAR(CSCRD.DUEDATE) = 2024   --ON CSHTR.CSREF = CSCRD.LOGICALREF \nLEFT OUTER JOIN LG_123_01_CSTRANS CSHTR   WITH(NOLOCK) ON CSHTR.CSREF = CSCRD.LOGICALREF \n         \nLEFT OUTER JOIN LG_123_CLCARD CLNTC ON CSHTR.TRCODE IN (1, 2, 3, 4, 9, 10, 11, 12) AND CSHTR.CARDREF = CLNTC.LOGICALREF \nLEFT OUTER JOIN LG_123_01_CSROLL RLFIC ON CSHTR.ROLLREF = RLFIC.LOGICALREF \n\nLEFT OUTER JOIN (SELECT\nCSCRD.LOGICALREF AS CSREF,\nCSCRD.PORTFOYNO PORTFOY_NO,\nCASE CSCRD.DOC\n  WHEN 2 THEN \u0027Müşteri Senedi\u0027 \n  WHEN 1 THEN \u0027Müşteri Çeki\u0027  \n  WHEN 3 THEN \u0027Kendi Çekimiz\u0027\n    ELSE \u0027Borç Senedemiz\u0027 \nEND as TUR, \nCSCRD.NEWSERINO SERI_NO,\nCLNTC.CODE \"CARI KODU\", \nCLNTC.DEFINITION_ \"CARI UNVANI\",\nCLNTC.LOGICALREF \"CLREF\"\nFROM LG_123_01_CSCARD   CSCRD \nLEFT OUTER JOIN LG_123_01_CSTRANS CSHTR ON CSHTR.CSREF = CSCRD.LOGICALREF AND CSHTR.TRCODE IN (1, 2)\nLEFT OUTER JOIN LG_123_CLCARD CLNTC ON CSHTR.CARDREF = CLNTC.LOGICALREF \n                                \nWHERE CSCRD.DOC IN (1,2)) XXX   ON CSCRD.LOGICALREF=XXX.CSREF\n\nWHERE CSCRD.CURRSTAT IN (1,4) \n  --WHERE CSCRD.LOGICALREF=14\n  \n  \n  \n                   \n\n\n\n\n\n\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FICHENO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "date",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUH_FICHENO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "33",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUH_DATE_",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "date",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYPE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "16",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIGN",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HAFTA",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAS_TAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "date",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIT_TAR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "date",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CODE":  "320.MUHTE",
+                            "DEFINITION_":  "MUHTELİF SATICILAR",
+                            "FICHENO":  "001917",
+                            "DATE_":  "23.02.2024 00:00:00",
+                            "MUH_FICHENO":  "014396",
+                            "MUH_DATE_":  "23.02.2024 00:00:00",
+                            "TYPE":  "Fatura",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-205",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "18.02.2024 00:00:00",
+                            "BIT_TAR":  "24.02.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "195.TOLGA",
+                            "DEFINITION_":  "TOLGA MURAT TUTKUN",
+                            "FICHENO":  "001922",
+                            "DATE_":  "23.02.2024 00:00:00",
+                            "MUH_FICHENO":  "014419",
+                            "MUH_DATE_":  "23.02.2024 00:00:00",
+                            "TYPE":  "Personel",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-642,92",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "18.02.2024 00:00:00",
+                            "BIT_TAR":  "24.02.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "320.MUHTE",
+                            "DEFINITION_":  "MUHTELİF SATICILAR",
+                            "FICHENO":  "001923",
+                            "DATE_":  "7.03.2024 00:00:00",
+                            "MUH_FICHENO":  "014412",
+                            "MUH_DATE_":  "7.03.2024 00:00:00",
+                            "TYPE":  "Fatura",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-367",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "3.03.2024 00:00:00",
+                            "BIT_TAR":  "9.03.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "320.MUHTE",
+                            "DEFINITION_":  "MUHTELİF SATICILAR",
+                            "FICHENO":  "001924",
+                            "DATE_":  "20.03.2024 00:00:00",
+                            "MUH_FICHENO":  "014415",
+                            "MUH_DATE_":  "20.03.2024 00:00:00",
+                            "TYPE":  "Fatura",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-220",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "17.03.2024 00:00:00",
+                            "BIT_TAR":  "23.03.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "320.GÜLTEKİ",
+                            "DEFINITION_":  "GÜLTEKİN AĞAÇ İŞLEME MAKİNALARI SAN.TİC.LTD.ŞTİ.",
+                            "FICHENO":  "GLT2024000000069",
+                            "DATE_":  "21.02.2024 00:00:00",
+                            "MUH_FICHENO":  "013836",
+                            "MUH_DATE_":  "21.02.2024 00:00:00",
+                            "TYPE":  "Fatura",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-3600",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "17.03.2024 00:00:00",
+                            "BIT_TAR":  "23.03.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "320.TALİS",
+                            "DEFINITION_":  "TALİS YAPI SANAYİ VE TİCARET LİMİTED ŞİRKETİ ",
+                            "FICHENO":  "RAR2024000000037",
+                            "DATE_":  "27.03.2024 00:00:00",
+                            "MUH_FICHENO":  "014641",
+                            "MUH_DATE_":  "27.03.2024 00:00:00",
+                            "TYPE":  "Fatura",
+                            "SIGN":  "Tahsilat",
+                            "TRCODE":  "6",
+                            "TOTAL":  "6750",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "25.02.2024 00:00:00",
+                            "BIT_TAR":  "2.03.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "196.BURAKK",
+                            "DEFINITION_":  "BURAK KANBEROĞLU",
+                            "FICHENO":  "RAR2024000000043",
+                            "DATE_":  "28.03.2024 00:00:00",
+                            "MUH_FICHENO":  "014716",
+                            "MUH_DATE_":  "28.03.2024 00:00:00",
+                            "TYPE":  "Personel",
+                            "SIGN":  "Tahsilat",
+                            "TRCODE":  "8",
+                            "TOTAL":  "19155,6",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "24.03.2024 00:00:00",
+                            "BIT_TAR":  "30.03.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "120.NİELS",
+                            "DEFINITION_":  "NİELS NİSSEN",
+                            "FICHENO":  "RAR2024000000047",
+                            "DATE_":  "29.03.2024 00:00:00",
+                            "MUH_FICHENO":  "015012",
+                            "MUH_DATE_":  "29.03.2024 00:00:00",
+                            "TYPE":  "Fatura",
+                            "SIGN":  "Tahsilat",
+                            "TRCODE":  "8",
+                            "TOTAL":  "13500",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "24.03.2024 00:00:00",
+                            "BIT_TAR":  "30.03.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "335.ÜCRET 23",
+                            "DEFINITION_":  "ÖDENECEK ÜCRETLER - 2023",
+                            "FICHENO":  "001359",
+                            "DATE_":  "31.01.2024 00:00:00",
+                            "MUH_FICHENO":  null,
+                            "MUH_DATE_":  null,
+                            "TYPE":  "Cari Hesap",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "5",
+                            "TOTAL":  "-209500",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "28.01.2024 00:00:00",
+                            "BIT_TAR":  "3.02.2024 00:00:00"
+                        },
+                        {
+                            "CODE":  "335.ÜCRET 23",
+                            "DEFINITION_":  "ÖDENECEK ÜCRETLER - 2023",
+                            "FICHENO":  "001359",
+                            "DATE_":  "31.01.2024 00:00:00",
+                            "MUH_FICHENO":  null,
+                            "MUH_DATE_":  null,
+                            "TYPE":  "Cari Hesap",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "5",
+                            "TOTAL":  "-576716",
+                            "HAFTA":  "17",
+                            "BAS_TAR":  "28.01.2024 00:00:00",
+                            "BIT_TAR":  "3.02.2024 00:00:00"
+                        }
+                    ]
+}

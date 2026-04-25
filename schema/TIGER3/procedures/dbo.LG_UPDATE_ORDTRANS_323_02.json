@@ -1,0 +1,179 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDATE_ORDTRANS_323_02",
+    "full_name":  "dbo.LG_UPDATE_ORDTRANS_323_02",
+    "created":  "Apr 19 2024  4:42PM",
+    "last_altered":  "Apr 19 2024  4:42PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@LINETYPE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STOCKREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@VARIANTREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@AMOUNT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@SHIPPEDAMOUNT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@UINFO1",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@UINFO2",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DORESERVE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@RESERVEDT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CLOSED",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STATUS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRCODE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@SOURCEINDEX",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@OFFTRREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@OFFREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@PREVLNREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DETLN",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@PREVLNNO",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@COEF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DEVIR",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDATE_ORDTRANS_323_02\n       @LINETYPE       SMALLINT,\n       @STOCKREF       INT,\n       @VARIANTREF     INT,\n       @AMOUNT        FLOAT,\n       @SHIPPEDAMOUNT   FLOAT,\n       @UINFO1          FLOAT,\n       @UINFO2          FLOAT,\n       @DT            DATETIME,\n       @DORESERVE       SMALLINT,\n       @RESERVEDT       DATETIME,\n       @CLOSED          SMALLINT,\n       @STATUS        SMALLINT,\n       @TRCODE        SMALLINT,\n       @SOURCEINDEX     SMALLINT,\n       @OFFTRREF        INT,\n       @OFFREF          INT,\n       @PREVLNREF       INT,\n       @DETLN           SMALLINT,\n       @PREVLNNO        SMALLINT,\n       @COEF          SMALLINT,\n       @DEVIR          SMALLINT   AS\nDECLARE @VALID       SMALLINT\nDECLARE @UPDOFFTR    SMALLINT\nDECLARE @UPDRESACCPARAM   SMALLINT\nDECLARE @STATUSVAL        VARCHAR(101)\nDECLARE @NEWLREF     INT\nDECLARE @CAMOUNT     FLOAT\nDECLARE @CSHIPPED    FLOAT\nDECLARE @ADDAMNT     FLOAT\nDECLARE @DIFF        FLOAT\nDECLARE @ORDERED     FLOAT\nDECLARE @EPSILON     FLOAT\nDECLARE @STRANS      SMALLINT\nDECLARE @PROMOTION   SMALLINT\nDECLARE @COMPOSITE   SMALLINT\nDECLARE @SERVICE     SMALLINT\nDECLARE @LCLASS      SMALLINT\nDECLARE @CFACT       FLOAT\nDECLARE @UINFO1OFF     FLOAT\nDECLARE @UINFO2OFF     FLOAT\nDECLARE @CFACT2       FLOAT\nDECLARE @LOPTION SMALLINT\nSELECT @EPSILON   = 0.0000001,\n       @STRANS    = 0,\n       @PROMOTION = 1,\n       @SERVICE   = 4,\n       @COMPOSITE = 6,\n       @LCLASS    = 10,\n       @UINFO1OFF = 1,\n       @UINFO2OFF = 1,\n       @LOPTION   = 9\nIF @OFFTRREF \u003c\u003e 0\n SELECT @UINFO1OFF=UINFO1, @UINFO2OFF=UINFO2\n FROM LG_323_PURCHOFFERLN\n WHERE (LOGICALREF = @OFFTRREF)\nDECLARE @FRMNR          INT\nSELECT  @FRMNR        = CAST(\u0027323\u0027 AS SMALLINT)\nSELECT @VALID = 0\nIF ((@STATUS \u003c\u003e 1) AND\n   ((@LINETYPE = @STRANS) OR (@LINETYPE = @PROMOTION) OR (@LINETYPE = @LOPTION) OR\n    (@LINETYPE = @COMPOSITE) OR (@LINETYPE = @SERVICE) OR (@LINETYPE = @LCLASS)) AND\n   (@STOCKREF \u003c\u003e 0) AND (ABS(@AMOUNT) \u003e @EPSILON))\n  SELECT @VALID = 1\nSELECT @UPDOFFTR = 0\nIF (((@LINETYPE = @STRANS) OR (@LINETYPE = @PROMOTION) OR (@LINETYPE = @LOPTION) OR\n     (@LINETYPE = @COMPOSITE) OR (@LINETYPE = @SERVICE) OR (@LINETYPE = @LCLASS)) AND\n    (@STOCKREF \u003c\u003e 0) AND (@AMOUNT \u003e @EPSILON) AND (@OFFTRREF \u003c\u003e 0) AND (@OFFTRREF IS NOT NULL))\n  SELECT @UPDOFFTR = 1\nSELECT @STATUSVAL = VALUE FROM \"TIGER3\"..L_FIRMPARAMS\nWHERE FIRMNR = @FRMNR AND CODE=\u0027SALES_SORDRESERVESTAT\u0027\nSELECT @UPDRESACCPARAM = 0\nIF (((@LINETYPE = @STRANS) OR (@LINETYPE = @PROMOTION) OR (@LINETYPE = @LOPTION) OR\n     (@LINETYPE = @COMPOSITE) OR (@LINETYPE = @SERVICE) OR (@LINETYPE = @LCLASS)) AND\n    (@STOCKREF \u003c\u003e 0) AND (@AMOUNT \u003e @EPSILON) AND\n    (((LTRIM(@STATUSVAL) = \u00271\u0027) AND (@STATUS = 1)) OR\n     ((LTRIM(@STATUSVAL) = \u0027256\u0027) AND (@STATUS = 2)) OR\n     ((LTRIM(@STATUSVAL) = \u0027257\u0027) )))\n  SELECT @UPDRESACCPARAM = 1\nIF ((@VALID = 1) OR (@UPDOFFTR = 1) OR (@UPDRESACCPARAM = 1)) AND (@AMOUNT \u003e @EPSILON)\n  BEGIN EXECUTE LG_CONVFACT @UINFO1, @UINFO2, @CFACT OUTPUT\n        EXECUTE LG_CONVFACT @UINFO2OFF, @UINFO1OFF, @CFACT2 OUTPUT\n        SELECT @CAMOUNT = @AMOUNT * @CFACT\n        SELECT @CSHIPPED = @SHIPPEDAMOUNT * @CFACT\n        IF (@CLOSED = 1)\n          BEGIN\n                IF (@CSHIPPED\u003c=@CAMOUNT)\n                   BEGIN\n                        SELECT @ADDAMNT = @COEF * @CSHIPPED\n                   END\n                ELSE\n                   BEGIN\n                        SELECT @ADDAMNT = @COEF * @CAMOUNT\n                   END\n          END\n        ELSE\n          BEGIN SELECT @ADDAMNT = @COEF * @CAMOUNT\n          END\n  END\nIF (@UPDOFFTR = 1) AND (@DEVIR \u003c\u003e 1)\n  BEGIN IF (@LINETYPE \u003c\u003e @LCLASS) AND EXISTS(SELECT LOGICALREF FROM LG_323_PURCHOFFERLN WHERE LOGICALREF = @OFFTRREF AND STOCKREF = @STOCKREF)\n            UPDATE LG_323_PURCHOFFERLN\n            SET ORDEREDAMOUNT = ORDEREDAMOUNT + @ADDAMNT * @CFACT2\n            WHERE (LOGICALREF = @OFFTRREF) AND (STOCKREF = @STOCKREF)\n        IF (@DETLN = 1) AND EXISTS(SELECT LOGICALREF FROM LG_323_PURCHOFFERLN WHERE LOGICALREF = @OFFTRREF AND STOCKREF = @STOCKREF)\n          BEGIN SELECT @OFFREF = ORDFICHEREF, @PREVLNREF = PREVLINEREF, @PREVLNNO = PREVLINENO\n                  FROM LG_323_PURCHOFFERLN\n                 WHERE (LOGICALREF = @OFFTRREF)\n                IF (@OFFREF \u003c\u003e 0) AND (@PREVLNREF \u003c\u003e 0) AND (@PREVLNNO \u003c\u003e 0)\n                   UPDATE LG_323_PURCHOFFERLN\n                   SET ORDEREDAMOUNT = ORDEREDAMOUNT + @ADDAMNT * @CFACT2\n                   WHERE (ORDFICHEREF = @OFFREF) AND\n                         (LINENO_     = @PREVLNNO) AND\n                         (STOCKREF    = @PREVLNREF) AND\n                         (DETLINE     = 0)\n          END\n  END\n"
+}

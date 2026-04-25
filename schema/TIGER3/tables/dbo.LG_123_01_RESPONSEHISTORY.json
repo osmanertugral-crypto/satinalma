@@ -1,0 +1,258 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_01_RESPONSEHISTORY",
+    "full_name":  "dbo.LG_123_01_RESPONSEHISTORY",
+    "description":  "",
+    "total_rows":  "35114",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DOCTYPE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DOCREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TIME_",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ESTATUS",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RESPONSECODE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RESPONSESTATUS",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RESPONSEDESC",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "256",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_01_RESPONSEHISTORY_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_01_RESPONSEHISTORY_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "DOCTYPE, DOCREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "10475",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9697",
+                            "DATE_":  "22.03.2024 00:00:00",
+                            "TIME_":  "169225056",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10476",
+                            "DOCTYPE":  "2",
+                            "DOCREF":  "14864",
+                            "DATE_":  "22.03.2024 00:00:00",
+                            "TIME_":  "169225240",
+                            "ESTATUS":  "10",
+                            "RESPONSECODE":  "1300",
+                            "RESPONSESTATUS":  "2",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10477",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9699",
+                            "DATE_":  "23.03.2024 00:00:00",
+                            "TIME_":  "204610080",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10478",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9700",
+                            "DATE_":  "23.03.2024 00:00:00",
+                            "TIME_":  "204610088",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10479",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9718",
+                            "DATE_":  "23.03.2024 00:00:00",
+                            "TIME_":  "218245892",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10480",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9719",
+                            "DATE_":  "25.03.2024 00:00:00",
+                            "TIME_":  "168695881",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10481",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9720",
+                            "DATE_":  "25.03.2024 00:00:00",
+                            "TIME_":  "168695891",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10482",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9721",
+                            "DATE_":  "25.03.2024 00:00:00",
+                            "TIME_":  "168695901",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10483",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9722",
+                            "DATE_":  "25.03.2024 00:00:00",
+                            "TIME_":  "168696137",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        },
+                        {
+                            "LOGICALREF":  "10484",
+                            "DOCTYPE":  "1",
+                            "DOCREF":  "9723",
+                            "DATE_":  "25.03.2024 00:00:00",
+                            "TIME_":  "168696328",
+                            "ESTATUS":  "0",
+                            "RESPONSECODE":  "10",
+                            "RESPONSESTATUS":  "0",
+                            "RESPONSEDESC":  "BASARIYLA TAMAMLANDI"
+                        }
+                    ]
+}

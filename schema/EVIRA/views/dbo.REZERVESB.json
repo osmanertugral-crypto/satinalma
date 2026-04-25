@@ -1,0 +1,33 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "REZERVESB",
+    "full_name":  "dbo.REZERVESB",
+    "definition":  "CREATE VIEW [dbo].[REZERVESB] AS SELECT SB_REF,SUM(MIKTAR) AS MIKTAR,SUM(ABMIKTAR) ABMIKTAR FROM REZERVEDETAY WITH(NOLOCK) GROUP BY SB_REF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "SB_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ABMIKTAR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

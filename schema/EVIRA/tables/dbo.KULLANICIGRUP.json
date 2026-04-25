@@ -1,0 +1,178 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "KULLANICIGRUP",
+    "full_name":  "dbo.KULLANICIGRUP",
+    "description":  "",
+    "total_rows":  "5",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KULLANICIGRUP_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KULLANICIGRUP_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KULLANICIGRUP_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KULSONSUR0",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KULSONSUR1",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KULSONSUR2",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FISSIL_KONTROL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FISEDT_KONTROL",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__KULLANIC__B793C6F2D73FC09F",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "KULLANICIGRUP_KODU"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "KULLANICIGRUP_REF":  "1",
+                            "KULLANICIGRUP_KODU":  "admin",
+                            "KULLANICIGRUP_ADI":  "admin",
+                            "KULSONSUR0":  "0",
+                            "KULSONSUR1":  "0",
+                            "KULSONSUR2":  "0",
+                            "FISSIL_KONTROL":  "1",
+                            "FISEDT_KONTROL":  "2"
+                        },
+                        {
+                            "KULLANICIGRUP_REF":  "5",
+                            "KULLANICIGRUP_KODU":  "admin2",
+                            "KULLANICIGRUP_ADI":  "Planlama",
+                            "KULSONSUR0":  "30",
+                            "KULSONSUR1":  "0",
+                            "KULSONSUR2":  "0",
+                            "FISSIL_KONTROL":  "2",
+                            "FISEDT_KONTROL":  "2"
+                        },
+                        {
+                            "KULLANICIGRUP_REF":  "7",
+                            "KULLANICIGRUP_KODU":  "depo mavi yaka",
+                            "KULLANICIGRUP_ADI":  "depo mavi yaka",
+                            "KULSONSUR0":  "0",
+                            "KULSONSUR1":  "0",
+                            "KULSONSUR2":  "0",
+                            "FISSIL_KONTROL":  "1",
+                            "FISEDT_KONTROL":  "2"
+                        },
+                        {
+                            "KULLANICIGRUP_REF":  "2",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "KULLANICIGRUP_ADI":  "Enka",
+                            "KULSONSUR0":  "15",
+                            "KULSONSUR1":  "0",
+                            "KULSONSUR2":  "0",
+                            "FISSIL_KONTROL":  "1",
+                            "FISEDT_KONTROL":  "2"
+                        },
+                        {
+                            "KULLANICIGRUP_REF":  "6",
+                            "KULLANICIGRUP_KODU":  "Özel",
+                            "KULLANICIGRUP_ADI":  "Özel",
+                            "KULSONSUR0":  "0",
+                            "KULSONSUR1":  "0",
+                            "KULSONSUR2":  "0",
+                            "FISSIL_KONTROL":  "1",
+                            "FISEDT_KONTROL":  "2"
+                        }
+                    ]
+}

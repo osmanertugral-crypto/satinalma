@@ -1,0 +1,116 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_NDR_ARTILAR",
+    "full_name":  "dbo.AA_NDR_ARTILAR",
+    "definition":  "CREATE VIEW [dbo].[AA_NDR_ARTILAR] AS\r\n-----kasa\r\nSELECT \u002701 Kasa Bakiyeleri\u0027 as Açıklama, KASA.CODE AS Kodu ,KASA.NAME as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 ELSE \u00271-TL\u0027 END) AS DövizTürü\r\n\r\n\r\nFROM LG_001_01_KSLINES AS LINE \r\n\r\nINNER JOIN LG_001_KSCARD AS KASA ON KASA.LOGICALREF=LINE.CARDREF UNION ALL\r\n\r\n--------banka\r\nSELECT \u002702 Banka Bakiyeleri\u0027 as Açıklama,BANKA.CODE AS Kodu,BANKA.DEFINITION_ AS Adı,\r\n(SELECT     SUM(DEBIT - CREDIT) AS TOPLAM\r\nFROM         dbo.LG_001_01_BNTOTFIL WHERE CARDREF =HESAP.LOGICALREF AND TOTTYP IN (1, 4)\r\nGROUP BY CARDREF ) AS Tutar,\r\n(CASE HESAP.CURRENCY WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 ELSE \u00271-TL\u0027 END) AS DövizTürü\r\nFROM LG_001_BANKACC AS HESAP \r\nINNER JOIN LG_001_BNCARD AS BANKA ON BANKA.LOGICALREF=HESAP.BANKREF where HESAP.ACTIVE=0  AND (SELECT     SUM(DEBIT - CREDIT) AS TOPLAM\r\nFROM         dbo.LG_001_01_BNTOTFIL WHERE CARDREF =HESAP.LOGICALREF AND TOTTYP IN (1, 4)\r\nGROUP BY CARDREF )\u003e0  UNION ALL\r\n------portfoydekı ÇEKLER\r\n\r\nSELECT \u002703 Portföydeki Çek ve Senetler\u0027 as Açıklama,PORTFOYNO AS Kodu,BANKNAME as Adı,AMOUNT as Tutar, \u00271-TL\u0027 AS DövizTürü\r\n \r\n FROM LG_001_01_CSCARD where CURRSTAT=1 UNION ALL\r\n \r\n------ TAKAS TAHSILCEKLER\r\n SELECT \u002704 Takas ve Tahsildeki Çek Senetler\u0027 as Açıklama,PORTFOYNO AS Kodu,BANKNAME as Adı,AMOUNT as Tutar, \u00271-TL\u0027 AS DövizTürü\r\n \r\n FROM LG_001_01_CSCARD where CURRSTAT=4  UNION ALL\r\n ------120 HESAPLAR\r\n SELECT \u002705 Cari Hesap Bakiyeleri\u0027 as Açıklama, CLCARD.CODE AS Kodu ,CLCARD.DEFINITION_ as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 1 THEN \u00271-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 ELSE \u00271-TL\u0027 END) AS DövizTürü\r\n\r\nFROM LG_001_01_CLFLINE AS LINE  \r\nINNER JOIN LG_001_CLCARD AS CLCARD ON CLCARD.LOGICALREF=LINE.CLIENTREF \r\n\r\nWHERE \r\nLINE.CANCELLED=0\r\n\r\nAND (select SUM(CASE WHEN SIGN=0 THEN AMOUNT ELSE AMOUNT*-1 END ) FROM LG_001_01_CLFLINE WHERE CLIENTREF=CLCARD.LOGICALREF AND CANCELLED=0)\u003e0\r\n\r\n\r\n\r\n\r\n\r\n\r\nUNION ALL\r\n-----vergi alacagımız\r\nSELECT \u002707 Vergi ve Kamu Alacakları\u0027 as Açıklama, LINE.ACCOUNTCODE AS Kodu ,\r\n(SELECT DEFINITION_ FROM LG_001_EMUHACC WHERE CODE=LINE.ACCOUNTCODE) as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü\r\nFROM LG_001_01_EMFLINE AS LINE WHERE LINE.KEBIRCODE IN (136,190) AND\r\n((SELECT SUM((CASE SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END))\r\nFROM dbo.LG_001_01_EMFLINE WHERE KEBIRCODE IN (136,190)))\u003e0 UNION ALL\r\n-----ARAZİ BINALAR\r\nSELECT \u002708 Arazi ve Binalar\u0027 as Açıklama, LINE.ACCOUNTCODE AS Kodu ,\r\n(SELECT DEFINITION_ FROM LG_001_EMUHACC WHERE CODE=LINE.ACCOUNTCODE) as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 ELSE \u00271-TL\u0027 END) AS DövizTürü\r\nFROM LG_001_01_EMFLINE AS LINE WHERE LINE.KEBIRCODE=\u0027250\u0027 AND\r\n((SELECT SUM((CASE SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END))\r\nFROM dbo.LG_001_01_EMFLINE WHERE KEBIRCODE=\u0027250\u0027))\u003e0 UNION ALL\r\n-----şüpeli alacaklar\r\n\r\n SELECT \u002709 Şüpheli Alacaklar\u0027 as Açıklama, CLCARD.CODE AS Kodu ,CLCARD.DEFINITION_ as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü\r\n\r\nFROM LG_001_01_CLFLINE AS LINE  \r\nINNER JOIN LG_001_CLCARD AS CLCARD ON CLCARD.LOGICALREF=LINE.CLIENTREF WHERE CLCARD.CODE LIKE\u0027128%\u0027\r\nAND\r\n((SELECT     SUM((CASE SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END)) AS TOPLAM\r\nFROM         dbo.LG_001_01_CLFLINE WHERE CLIENTREF =CLCARD.LOGICALREF GROUP BY CLIENTREF))\u003e0 UNION ALL\r\n\r\n-----personele borçlar\r\nSELECT \u002710 Personele Boçlar\u0027 as Açıklama, LINE.ACCOUNTCODE AS Kodu ,\r\n(SELECT DEFINITION_ FROM LG_001_EMUHACC WHERE CODE=LINE.ACCOUNTCODE) as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 ELSE \u00271-TL\u0027 END) AS DövizTürü\r\nFROM LG_001_01_EMFLINE AS LINE WHERE LINE.KEBIRCODE IN (335) AND\r\n((SELECT SUM((CASE SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END))\r\nFROM dbo.LG_001_01_EMFLINE WHERE KEBIRCODE IN (335)))\u003e0 \r\nUNION ALL\r\n-----elhova yatırım\r\nSELECT \u002711 Yapılmakta Olan Yatırımlar\u0027 as Açıklama, LINE.ACCOUNTCODE AS Kodu ,\r\n(SELECT DEFINITION_ FROM LG_001_EMUHACC WHERE CODE=LINE.ACCOUNTCODE) as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü\r\nFROM LG_001_01_EMFLINE AS LINE WHERE LINE.KEBIRCODE=\u0027258\u0027 AND\r\n((SELECT SUM((CASE SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END))\r\nFROM dbo.LG_001_01_EMFLINE WHERE KEBIRCODE=\u0027258\u0027))\u003e0  UNION ALL\r\n\r\n-----TAHSIL EDILEMEYEN ALACAKLAR\r\nSELECT \u002712 Tahsil Edilemeyen Alacaklar\u0027 as Açıklama, LINE.ACCOUNTCODE AS Kodu ,\r\n(SELECT DEFINITION_ FROM LG_001_EMUHACC WHERE CODE=LINE.ACCOUNTCODE) as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü\r\nFROM LG_001_01_EMFLINE AS LINE WHERE LINE.KEBIRCODE IN (129) AND\r\n((SELECT SUM((CASE SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END))\r\nFROM dbo.LG_001_01_EMFLINE WHERE KEBIRCODE IN (129)))\u003e0 UNION ALL\r\n\r\n-----ınşaat hesabı\r\nSELECT \u002713 İnşaat Hesabı\u0027 as Açıklama, LINE.ACCOUNTCODE AS Kodu ,\r\n(SELECT DEFINITION_ FROM LG_001_EMUHACC WHERE CODE=LINE.ACCOUNTCODE) as Adı,\r\n(CASE LINE.SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END) AS Tutar,\r\n(CASE LINE.TRCURR WHEN 0 THEN \u00271-TL\u0027 WHEN 1 THEN \u00272-USD\u0027 WHEN 20 THEN \u00273-EUR\u0027 END) AS DövizTürü\r\nFROM LG_001_01_EMFLINE AS LINE WHERE LINE.ACCOUNTCODE=\u0027252.01.004\u0027 AND\r\n((SELECT SUM((CASE SIGN WHEN 0 THEN TRNET WHEN 1 THEN TRNET*-1 END))\r\nFROM dbo.LG_001_01_EMFLINE WHERE ACCOUNTCODE=\u0027252.01.004\u0027))\u003e0  \r\n\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Açıklama",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "35",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Kodu",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Adı",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Tutar",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DövizTürü",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "5",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "70000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "60000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "71213,2",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "15000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "40000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "11000",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "5250",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "-16,5",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "-10250",
+                            "DövizTürü":  "1-TL"
+                        },
+                        {
+                            "Açıklama":  "01 Kasa Bakiyeleri",
+                            "Kodu":  "01",
+                            "Adı":  "TL KASA",
+                            "Tutar":  "-177",
+                            "DövizTürü":  "1-TL"
+                        }
+                    ]
+}

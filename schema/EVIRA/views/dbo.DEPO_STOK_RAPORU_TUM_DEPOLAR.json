@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DEPO_STOK_RAPORU_TUM_DEPOLAR",
+    "full_name":  "dbo.DEPO_STOK_RAPORU_TUM_DEPOLAR",
+    "definition":  "\r\nCREATE VIEW [dbo].[DEPO_STOK_RAPORU_TUM_DEPOLAR] AS\r\n\r\n\r\nSELECT  \r\n\t\r\n\tAT.AMBAR_KODU,\r\n\tS.STOK_KODU,\r\n\tS.STOK_ADI, \r\n\tSB.BIRIM,\r\n\tISNULL(CONVERT(FLOAT,SUM(AT.MIKTAR)),0) AS MIKTAR\r\n\t,(SELECT AMBAR_ADI FROM AMBAR WHERE AMBAR_KODU=AT.AMBAR_KODU) AS AMBAR_ADI\r\n\t--,ADRES,\r\n\t--TAKIP_NO,\r\n\t--DURUM_KODU,\r\n\t--PALET\r\n\t\r\nFROM \r\n\tAMBARTAKIPDETAY AT LEFT OUTER JOIN STOKKARTI S ON S.STOK_REF=AT.STOK_REF\r\n\tLEFT OUTER JOIN STOKBIRIM SB ON SB.BIRIM_REF=AT.BIRIM_REF\r\n\r\n\t\r\n\r\nGROUP BY \r\n\tAT.AMBAR_KODU,\r\n\tS.STOK_KODU,\r\n\tS.STOK_ADI, \r\n\tSB.BIRIM\r\n\t--,ADRES,\r\n\t--TAKIP_NO,\r\n\t--DURUM_KODU,\r\n\t--PALET\r\n\t\r\n\t\r\nHAVING \t\r\n\tISNULL(CONVERT(NUMERIC(28,2),SUM(AT.MIKTAR)),0)\u003c\u003e0\t\r\n\t\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "15",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ECTURB100006",
+                            "STOK_ADI":  "URBAN BADGER TARP TENTE 3X4M",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "3",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ECTURB100018",
+                            "STOK_ADI":  "URBAN BADGER ATES STANDI",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "3",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ECTURB100022",
+                            "STOK_ADI":  "URBAN BADGER 1LT RENKLI KAMP CAYDANLIK SIYAH",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "6",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ECTURB100025",
+                            "STOK_ADI":  "URBAN BADGER 4-6 PARCA TENCERE SETI",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "4",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ECTURB100038",
+                            "STOK_ADI":  "URBAN BADGER CANTALI KATLANIR SANDALYE MAVI",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "7",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ECTURB100041",
+                            "STOK_ADI":  "URBAN BADGER KUMAS KATLANIR MASA",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "3",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ECTWLD100024",
+                            "STOK_ADI":  "WILD LAND AIR PILLOW",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "1",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ETTOF100000-BKA",
+                            "STOK_ADI":  "Bordo Kahve Ip",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "1",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ETTOF100000-KB",
+                            "STOK_ADI":  "Kirmizi Beyaz Ip",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "1",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_KODU":  "ETTOF100000-YB",
+                            "STOK_ADI":  "Yesil Beyaz Ip",
+                            "BIRIM":  "ADET",
+                            "MIKTAR":  "1",
+                            "AMBAR_ADI":  "SHOWROOM"
+                        }
+                    ]
+}

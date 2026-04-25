@@ -1,0 +1,189 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_TRADGRP",
+    "full_name":  "dbo.L_TRADGRP",
+    "description":  "",
+    "total_rows":  "16",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GDEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GATTRIB",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TRDGRPTYPE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTIVE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "TRADGRP_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "TRADGRP_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "GCODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "GCODE":  "RENT",
+                            "GDEF":  "KIRALAMA ",
+                            "GATTRIB":  "0",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "GCODE":  "SATS",
+                            "GDEF":  "KARAVAN SATIŞI",
+                            "GATTRIB":  "0",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "GCODE":  "SSGR",
+                            "GDEF":  "SATIS SONRASI GIDERI",
+                            "GATTRIB":  "0",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "GCODE":  "SSGL",
+                            "GDEF":  "SATIS SONRASI GELIRI",
+                            "GATTRIB":  "0",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "GCODE":  "AKSESUAR",
+                            "GDEF":  "AKSESUAR",
+                            "GATTRIB":  "0",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "GCODE":  "MSATIŞ",
+                            "GDEF":  "MOTORSİKLET SATIŞ",
+                            "GATTRIB":  "0",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "GCODE":  "2.EL SATIŞ",
+                            "GDEF":  "2.EL SATIŞ",
+                            "GATTRIB":  "0",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "GCODE":  "KGELİR",
+                            "GDEF":  "KOMİSYON GELİRİ",
+                            "GATTRIB":  "0",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "GCODE":  "BEDELSİZ",
+                            "GDEF":  "",
+                            "GATTRIB":  "16384",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "GCODE":  "7104",
+                            "GDEF":  "",
+                            "GATTRIB":  "32768",
+                            "TRDGRPTYPE":  "0",
+                            "ACTIVE":  "0"
+                        }
+                    ]
+}

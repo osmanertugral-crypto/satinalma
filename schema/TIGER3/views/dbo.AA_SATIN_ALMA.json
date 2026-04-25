@@ -1,0 +1,252 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_SATIN_ALMA",
+    "full_name":  "dbo.AA_SATIN_ALMA",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[AA_SATIN_ALMA] AS\r\n\r\nselect \r\nS.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,YEAR(L.DATE_) YIL\r\n,MONTH(L.DATE_) AY\r\n,L.DATE_ TARIH\r\n,(SELECT CODE FROM LG_123_CLCARD WHERE LOGICALREF=L.CLIENTREF) CARI_KODU\r\n,(SELECT DEFINITION_ FROM LG_123_CLCARD WHERE LOGICALREF=L.CLIENTREF) CARI_UNVANI\r\n,L.AMOUNT MIKTAR\r\n,(SELECT CODE FROM LG_123_UNITSETL WHERE LOGICALREF=L.UOMREF) BIRIM\r\n,L.LINENET/L.AMOUNT BRIM_FİYAT\r\n,L.LINENET TUTAR\r\n,CASE WHEN REPORTRATE=0 THEN (SELECT TOP 1 RATES2 FROM L_DAILYEXCHANGES WHERE CRTYPE=20 AND EDATE\u003e=L.DATE_ ORDER BY EDATE ASC) ELSE REPORTRATE END AS EUR_KUR\r\n,(L.LINENET/L.AMOUNT)/CASE WHEN REPORTRATE=0 THEN (SELECT TOP 1 RATES2 FROM L_DAILYEXCHANGES WHERE CRTYPE=20 AND EDATE\u003e=L.DATE_ ORDER BY EDATE ASC) ELSE REPORTRATE END EUR_FIYAT\r\n\r\nfrom lg_123_ITEMS AS S\r\nINNER JOIN LG_123_01_STLINE AS L ON L.STOCKREF = S.LOGICALREF\r\n\r\nWHERE L.LINETYPE=0\r\nAND L.CANCELLED=0\r\nAND L.TRCODE IN (1)\r\n--order by S.CODE,L.DATE_) \r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YIL",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI_KODU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI_UNVANI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRIM_FİYAT",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "EUR_KUR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "EUR_FIYAT",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "STOK_KODU":  "ECTWLD100006",
+                            "STOK_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "1355,45",
+                            "TUTAR":  "1355,45",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "38,8962861357101"
+                        },
+                        {
+                            "STOK_KODU":  "ECTWLD100007",
+                            "STOK_ADI":  "WILD LAND ANNEX (VERISON B) ARAC KENAR CADIR",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "4490,42",
+                            "TUTAR":  "4490,42",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "128,858062775842"
+                        },
+                        {
+                            "STOK_KODU":  "ECTWLD100008",
+                            "STOK_ADI":  "WILD LAND UNIVERSAL TARP",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "1847,46",
+                            "TUTAR":  "1847,46",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "53,0151114274072"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100008",
+                            "STOK_ADI":  "URBAN BADGER TEK KISILIK UYKU TULUMU",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "300",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "170,131966666667",
+                            "TUTAR":  "51039,59",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "4,88214368386718"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100009",
+                            "STOK_ADI":  "URBAN BADGER HAFIF CADIR",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "300",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "285,422866666667",
+                            "TUTAR":  "85626,86",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "8,19055626658402"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100010",
+                            "STOK_ADI":  "URBAN BADGER 3-4 KISILIK OTOMATIK TENTELI CADIR",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "300",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "507,9031",
+                            "TUTAR":  "152370,93",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "14,5748971240652"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100011",
+                            "STOK_ADI":  "URBAN BADGER GECMELI CATAL BICAK KASIK SETI",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "500",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "28,66692",
+                            "TUTAR":  "14333,46",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "0,82263213172711"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100012",
+                            "STOK_ADI":  "URBAN BADGER KATLANABILIR SU BIDONU",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "1000",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "28,66692",
+                            "TUTAR":  "28666,92",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "0,82263213172711"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100013",
+                            "STOK_ADI":  "URBAN BADGER KAMP DUSU",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "500",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "39,26122",
+                            "TUTAR":  "19630,61",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "1,12664845413484"
+                        },
+                        {
+                            "STOK_KODU":  "ECTURB100014",
+                            "STOK_ADI":  "URBAN BADGER KATLANIR KOVA",
+                            "YIL":  "2024",
+                            "AY":  "3",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "CARI_KODU":  "32050.ELINK - US",
+                            "CARI_UNVANI":  "E-LINK INTERNATİONAL",
+                            "MIKTAR":  "500",
+                            "BIRIM":  "ADET",
+                            "BRIM_FİYAT":  "35,21046",
+                            "TUTAR":  "17605,23",
+                            "EUR_KUR":  "34,8478",
+                            "EUR_FIYAT":  "1,01040696973697"
+                        }
+                    ]
+}

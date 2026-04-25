@@ -1,0 +1,178 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "TMENU",
+    "full_name":  "dbo.TMENU",
+    "description":  "",
+    "total_rows":  "5",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "TMENUREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MNAME",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FONTSIZE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "BOLD",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "tinyint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "3",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MENTER",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "tinyint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "3",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RWNHIDE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "tinyint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "3",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MSIZE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MLNG",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__TMENU__3B65DEAE18F994E5",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "TMENUREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "TMENUREF":  "2",
+                            "MNAME":  "DEPO KABUL",
+                            "FONTSIZE":  "10",
+                            "BOLD":  "1",
+                            "MENTER":  "1",
+                            "RWNHIDE":  "0",
+                            "MSIZE":  "30",
+                            "MLNG":  "0"
+                        },
+                        {
+                            "TMENUREF":  "3",
+                            "MNAME":  "DEPO HAREKET",
+                            "FONTSIZE":  "10",
+                            "BOLD":  "1",
+                            "MENTER":  "1",
+                            "RWNHIDE":  "0",
+                            "MSIZE":  "30",
+                            "MLNG":  "0"
+                        },
+                        {
+                            "TMENUREF":  "4",
+                            "MNAME":  "IADE",
+                            "FONTSIZE":  "10",
+                            "BOLD":  "1",
+                            "MENTER":  "1",
+                            "RWNHIDE":  "0",
+                            "MSIZE":  "30",
+                            "MLNG":  "0"
+                        },
+                        {
+                            "TMENUREF":  "1005",
+                            "MNAME":  "SEVKIYAT",
+                            "FONTSIZE":  "10",
+                            "BOLD":  "1",
+                            "MENTER":  "1",
+                            "RWNHIDE":  "0",
+                            "MSIZE":  "30",
+                            "MLNG":  "0"
+                        },
+                        {
+                            "TMENUREF":  "1010",
+                            "MNAME":  "ÜRETIME TRANSFER",
+                            "FONTSIZE":  "10",
+                            "BOLD":  "0",
+                            "MENTER":  "1",
+                            "RWNHIDE":  "0",
+                            "MSIZE":  "30",
+                            "MLNG":  "0"
+                        }
+                    ]
+}

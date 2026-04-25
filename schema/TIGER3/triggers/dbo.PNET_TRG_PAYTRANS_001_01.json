@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "PNET_TRG_PAYTRANS_001_01",
+    "on_table":  "dbo.LG_001_01_PAYTRANS",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "DELETE"
+               ],
+    "definition":  "CREATE TRIGGER PNET_TRG_PAYTRANS_001_01 ON LG_001_01_PAYTRANS\r\n                    AFTER DELETE\r\n                    AS\r\n                    INSERT INTO PNET_BNK_REMINDERDEL_001_01 (PAYTRANSREF, DELDATE, ISSUCCESS)\r\n                    SELECT LOGICALREF,GETDATE(), 0 FROM DELETED;"
+}

@@ -1,0 +1,286 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_01_HIZLI_URETIMLER",
+    "full_name":  "dbo.DST_123_01_HIZLI_URETIMLER",
+    "definition":  "\r\nCREATE VIEW [dbo].[DST_123_01_HIZLI_URETIMLER] AS\r\n\r\nSELECT \r\n\r\nCASE WHEN STL.TRCODE=12 THEN \u0027SARF\u0027 WHEN STL.TRCODE=13 THEN \u0027ÜRETİM\u0027 ELSE \u0027DİĞER\u0027 END HAREKET,\r\nMONTH(STL.DATE_) AY,\r\nSTL.DATE_ TARIH,\r\nSTF.FICHENO FIS_NO,\r\nITM.CARDTYPE AS KART_TURU,\r\nITM.CODE STOK_KODU,\r\nITM.NAME STOK_ADI,\r\nITM.SPECODE2 MAMUL_TİPİ,\r\nITM.SPECODE5 ANA_MAMUL_TİPİ,\r\nCASE WHEN STL.UINFO1 = 0 THEN 0 ELSE CASE WHEN STL.TRCODE=13 THEN STL.AMOUNT*(STL.UINFO2/STL.UINFO1) ELSE STL.AMOUNT*(STL.UINFO2/STL.UINFO1)*-1 END END MIKTAR,\r\nCASE WHEN STL.TRCODE=13 THEN STL.PRICE ELSE STL.PRICE*-1 END AS FİŞ_BİRİM_FİYAT,\r\n--STL.PRICE AS BİRİM_FİYAT,\r\nCASE WHEN STL.TRCODE=13 THEN STL.TOTAL ELSE STL.TOTAL*-1 END AS FİŞ_TUTAR,\r\n--STL.TOTAL AS TUTAR,\r\nQPR.FICHENO URETIM_NO,\r\n\r\nSTL.OUTCOST *(CASE WHEN STL.UINFO1 = 0 THEN 0 ELSE CASE WHEN STL.TRCODE=13 THEN STL.AMOUNT*(STL.UINFO2/STL.UINFO1) ELSE STL.AMOUNT*(STL.UINFO2/STL.UINFO1)*-1 END END )[MALIYET],\r\nCAST(CWH.NR AS VARCHAR) + \u0027 - \u0027 + CWH.NAME AS AMBAR\r\n\r\n\r\nFROM LG_123_01_STLINE STL\r\n\t\tLEFT JOIN LG_123_ITEMS ITM ON ITM.LOGICALREF=STL.STOCKREF\r\n\t\tLEFT JOIN LG_123_01_STFICHE STF ON STF.LOGICALREF=STL.STFICHEREF\r\n\t\tLEFT JOIN LG_123_01_QPRODUCT QPR ON QPR.LOGICALREF=STF.QPRODFCREF\r\n\t\tLEFT JOIN L_CAPIWHOUSE CWH ON CWH.NR=STL.SOURCEINDEX AND CWH.FIRMNR=123\r\n\t\t\r\n\r\nWHERE (STF.QPRODFCREF=0  OR STF.QPRODFCREF\u003e0) AND  stl.trcode IN (12,13) --AND --and STF.FICHENO = \u0027URT-00018999-G\u0027--549--6299\r\n---AND QPR.FICHENO=\u0027000268\u0027\r\n--SELECT * FROM LG_123_01_QPRODUCT WHERE\r\n\r\n--SELECT * FROM LG_123_01_STLINE WHERE STFICHEREF=448\r\n--SELECT * FROM LG_123_01_STFICHE WHERE FICHENO=\u0027000027\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "HAREKET",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "6",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KART_TURU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MAMUL_TİPİ",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ANA_MAMUL_TİPİ",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FİŞ_BİRİM_FİYAT",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FİŞ_TUTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_NO",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALIYET",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "84",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "ELSF0099H083",
+                            "STOK_ADI":  "SİGORTA 16 AH 220 W",
+                            "MAMUL_TİPİ":  "ÖN İMALAT",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-1",
+                            "FİŞ_BİRİM_FİYAT":  "-41",
+                            "FİŞ_TUTAR":  "-41",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-41",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "ELSF0099H084",
+                            "STOK_ADI":  "SİGORTA KUTUSU 3/4 KAPAKLI",
+                            "MAMUL_TİPİ":  "",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-1",
+                            "FİŞ_BİRİM_FİYAT":  "-13,588",
+                            "FİŞ_TUTAR":  "-13,59",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-13,588",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "ELTS0099H013",
+                            "STOK_ADI":  "AYDINLATMA DOKUNMATİK GRİ - BEYAZ IŞIK",
+                            "MAMUL_TİPİ":  "",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-1",
+                            "FİŞ_BİRİM_FİYAT":  "-160",
+                            "FİŞ_TUTAR":  "-160",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-160",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "ELTS0099H026",
+                            "STOK_ADI":  "GAZ SENSÖRÜ",
+                            "MAMUL_TİPİ":  "MONTAJ",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-1",
+                            "FİŞ_BİRİM_FİYAT":  "-411",
+                            "FİŞ_TUTAR":  "-411",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-411",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "ELTS0099H036",
+                            "STOK_ADI":  "KONNEKTÖR GÜNEŞ PANEL",
+                            "MAMUL_TİPİ":  "",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-1",
+                            "FİŞ_BİRİM_FİYAT":  "-46,88275",
+                            "FİŞ_TUTAR":  "-46,88",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-46,88275",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "ELTS0099H039",
+                            "STOK_ADI":  "LED ŞERİT GÜN IŞIĞI",
+                            "MAMUL_TİPİ":  "",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-15",
+                            "FİŞ_BİRİM_FİYAT":  "-10,25",
+                            "FİŞ_TUTAR":  "-153,75",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-153,75",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "ELTS0099H060",
+                            "STOK_ADI":  "USB 12V 2Lİ SİYAH",
+                            "MAMUL_TİPİ":  "",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-3",
+                            "FİŞ_BİRİM_FİYAT":  "-135",
+                            "FİŞ_TUTAR":  "-405",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-405",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "ELTS0099H070",
+                            "STOK_ADI":  "SOLAR PANEL 205W",
+                            "MAMUL_TİPİ":  "",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-2",
+                            "FİŞ_BİRİM_FİYAT":  "-2135,144",
+                            "FİŞ_TUTAR":  "-4270,29",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-4270,288",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "HRXX0099H104",
+                            "STOK_ADI":  "MENTEŞE YAPRAK OVAL 6.5CM KROM",
+                            "MAMUL_TİPİ":  "MONTAJ",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-6",
+                            "FİŞ_BİRİM_FİYAT":  "-11",
+                            "FİŞ_TUTAR":  "-66",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-66",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        },
+                        {
+                            "HAREKET":  "SARF",
+                            "AY":  "7",
+                            "TARIH":  "6.07.2023 00:00:00",
+                            "FIS_NO":  "000867",
+                            "KART_TURU":  "10",
+                            "STOK_KODU":  "HRXX0099H106",
+                            "STOK_ADI":  "MENTEŞE-PİSTON 60LIK",
+                            "MAMUL_TİPİ":  "MONTAJ",
+                            "ANA_MAMUL_TİPİ":  "",
+                            "MIKTAR":  "-1",
+                            "FİŞ_BİRİM_FİYAT":  "-20",
+                            "FİŞ_TUTAR":  "-20",
+                            "URETIM_NO":  "000712",
+                            "MALIYET":  "-20",
+                            "AMBAR":  "5 - Montaj Hattı"
+                        }
+                    ]
+}

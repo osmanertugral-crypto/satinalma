@@ -1,0 +1,252 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_01_AYRINTILI_BORCTAKIP_320",
+    "full_name":  "dbo.DST_123_01_AYRINTILI_BORCTAKIP_320",
+    "definition":  "\r\n\r\n--USE [TIGER3]\r\n--GO\r\n\r\n--/****** Object:  View [dbo].[DST_123_01_AYRINTILI_BORCTAKIP_320]    Script Date: 15.08.2023 11:00:01 ******/\r\n--SET ANSI_NULLS ON\r\n--GO\r\n\r\n--SET QUOTED_IDENTIFIER ON\r\n--GO\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[DST_123_01_AYRINTILI_BORCTAKIP_320] AS \r\n\r\nSELECT \r\n\r\n\r\n\r\nCARI,[Cari Adı],Cari_Kodu,VADE,ISLEM_TARIHI,ISLEMNO,ISLEM,GUN,TUTAR_BORC,TUTAR_ALACAK,BAKIYE,DOVIZ,KUR\r\n\r\n\r\nFROM\r\n\r\n(\r\n\r\n\r\nSELECT \r\n*,\r\n\r\nSUM(T.TUTAR_BORC + T.TUTAR_ALACAK) OVER (ORDER BY RowId ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE\r\n,DATEDIFF(DAY, GETDATE(), cast(VADE as date)) GUN\r\n--SUM(T.TUTAR_BORC + T.TUTAR_ALACAK) OVER (ORDER BY RowId ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE\r\n\r\nFROM\r\n\r\n(\r\n\r\n\r\n\r\nSELECT    \r\nROW_NUMBER() OVER (ORDER BY DATEDIFF(DAY, GETDATE(), PYT.DATE_) ASC) AS RowId,\r\n--CLC.CARDTYPE AS Grup,\r\n\r\nCLC.CODE AS [Cari_Kodu], \r\nCLC.DEFINITION_ AS [Cari Adı],\r\nCLC.CODE  + \u0027 / \u0027 + CLC.DEFINITION_ CARI,\r\n\r\n\r\nCASE WHEN PYT.MODULENR = 5 THEN PYT.DATE_ ELSE\r\n\r\n(SELECT TOP 1 DATEADD(day,CAST(SUBSTRING(DAY_,1,50)AS INT),INVOICE.DATE_)   \r\nFROM LG_123_PAYLINES WHERE PAYPLANREF=INVOICE.PAYDEFREF) END AS VADE,\r\n\r\n\r\n--PYT.DATE_ AS [VADE],\r\nPYT.PROCDATE AS [ISLEM_TARIHI],\r\n     CASE WHEN MODULENR = 4 THEN\r\n                          (SELECT     FICHENO\r\n                            FROM          LG_123_01_INVOICE INV\r\n                            WHERE      INV.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 5 THEN\r\n                          (SELECT     CLF.TRANNO\r\n                            FROM          LG_123_01_CLFLINE CLF\r\n                            WHERE      CLF.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 10 THEN\r\n                          (SELECT     KSL.FICHENO\r\n                            FROM          LG_123_01_KSLINES KSL\r\n                            WHERE      KSL.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 7 THEN\r\n                          (SELECT     BNF.TRANNO\r\n                            FROM          LG_123_01_BNFLINE BNF\r\n                            WHERE      BNF.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 6 THEN\r\n                          (SELECT     CSR.ROLLNO\r\n                           FROM          LG_123_01_CSROLL CSR\r\n                            WHERE      CSR.LOGICALREF = PYT.FICHEREF) ELSE \u0027Tanımsız\u0027 END AS [ISLEMNO],\r\n\r\n CASE WHEN PYT.MODULENR = 5 AND \r\n                      PYT.TRCODE = 14 THEN \u0027Açılış\u0027 WHEN MODULENR = 5 AND PYT.TRCODE = 3 THEN \u0027Borç Dekontu\u0027 WHEN MODULENR = 5 AND \r\n                      PYT.TRCODE = 4 THEN \u0027Alacak Dekontu\u0027 WHEN MODULENR = 5 AND PYT.TRCODE = 5 THEN \u0027Virman\u0027 WHEN MODULENR = 4 AND \r\n                      PYT.TRCODE = 8 THEN \u0027Toptan Satış\u0027 WHEN MODULENR = 4 AND PYT.TRCODE = 1 THEN \u0027Mal Alım Faturası\u0027 WHEN MODULENR = 4 AND \r\n                      PYT.TRCODE = 4 THEN \u0027Alınan Hizmet Faturası\u0027 WHEN MODULENR = 4 AND PYT.TRCODE = 9 THEN \u0027Verilen Hizmet\u0027 WHEN MODULENR = 4 AND \r\n                      PYT.TRCODE = 3 THEN \u0027Satış İade\u0027 WHEN MODULENR = 4 AND PYT.TRCODE = 6 THEN \u0027Alım İade\u0027 WHEN MODULENR = 7 AND \r\n                      PYT.TRCODE = 3 THEN \u0027Gelen Havale\u0027 WHEN MODULENR = 7 AND PYT.TRCODE = 4 THEN \u0027Gönderilen Havale\u0027 WHEN MODULENR = 6 AND \r\n                      PYT.TRCODE = 1 THEN \u0027Çek Girişi\u0027 WHEN MODULENR = 6 AND PYT.TRCODE = 2 THEN \u0027Senet Girişi\u0027 WHEN MODULENR = 6 AND \r\n                      PYT.TRCODE = 3 THEN \u0027Çek Çıkışı\u0027 WHEN MODULENR = 6 AND PYT.TRCODE = 4 THEN \u0027Senet Çıkışı\u0027 WHEN MODULENR = 10 AND \r\n                      PYT.TRCODE = 1 THEN \u0027Nakit Tahsilat\u0027 WHEN MODULENR = 10 AND PYT.TRCODE = 2 THEN \u0027Nakit Ödeme\u0027 WHEN MODULENR = 3 AND \r\n                      PYT.TRCODE = 1 THEN \u0027Satış Siparişi\u0027 WHEN MODULENR = 61 AND PYT.TRCODE = 3 THEN \u0027Borç Dekontu\u0027 ELSE \u0027Tanımsız\u0027 END AS [ISLEM],\r\n\r\n\t\t\t\t\t -- DATEDIFF(DAY, GETDATE(), cast(PYT.DATE_ as date)) GUN,\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\t\t\t\t\t  CASE\r\n               WHEN PYT.SIGN = 0 THEN\r\n                   CASE WHEN PYT.TRRATE \u003e 1 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1) * PYT.TRRATE ELSE (PYT.TOTAL - PYT.PAID) \r\n                      * ((PYT.SIGN * - 2) + 1) END\r\n               ELSE\r\n                   0\r\n           END TUTAR_BORC,\r\n\r\n\t\t     CASE\r\n               WHEN PYT.SIGN = 1 THEN\r\n                   (CASE WHEN PYT.TRRATE \u003e 1 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1)  ELSE (PYT.TOTAL - PYT.PAID) \r\n                      * ((PYT.SIGN * - 2) + 1) END) * 1\r\n               ELSE\r\n                   0\r\n           END TUTAR_ALACAK,\r\n\t\t\t\t\t    \r\n\r\n\r\n\r\n                          --(SELECT     SUM(DEBIT - CREDIT) AS Expr1\r\n                          --  FROM          dbo.LV_123_01_CLTOTFIL AS CLT\r\n                          --  WHERE      (CARDREF = CLC.LOGICALREF) AND (TOTTYP = 1)) AS CariBakiyeTL, \r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t--CASE WHEN ABS(ROUND\r\n       --                   ((SELECT     SUM(CLT.DEBIT - CLT.CREDIT)\r\n       --                       FROM         LV_123_01_CLTOTFIL CLT\r\n       --                       WHERE     CLT.CARDREF = CLC.LOGICALREF AND CLT.TOTTYP = 1), 2)) \u003e 1 THEN \u0027Bakiye Verenler\u0027 ELSE \u0027Bakiye Vermeyenler\u0027 END AS [Bakiye Bilgisi], \r\n       --               CASE WHEN\r\n       --                   (SELECT     SUM(CLT.DEBIT - CLT.CREDIT)\r\n       --                     FROM          LV_123_01_CLTOTFIL CLT\r\n       --                     WHERE      CLT.CARDREF = CLC.LOGICALREF AND CLT.TOTTYP = 1) \u003e 0 THEN \u0027Borç Bakiye\u0027 ELSE \u0027Alacak Bakiye\u0027 END AS [Bakiye B-A], \r\n       --                     CASE WHEN GETDATE()\u003c PYT.DATE_ THEN \u0027Vadesi Gelmeyen\u0027 ELSE \u0027Vadesi Geçen\u0027 END AS [Vade Bilgisi], \r\n                             \r\n                        \r\n                      \r\n                      \r\n                      CASE PYT.TRCURR WHEN 0 THEN \u0027TL\u0027 WHEN 1 THEN \u0027USD\u0027 WHEN 20 THEN \u0027EUR\u0027 WHEN 17 THEN \u0027GBP\u0027 WHEN 59 THEN \u0027BAE\u0027 ELSE \u0027Tanımsız\u0027 END AS DOVIZ,\r\n\t\t\t\t\t  PYT.TRRATE KUR\r\n                      \r\n                      --(PYT.TOTAL - PYT.PAID) * (PYT.SIGN * - 2 + 1) AS Tutar, \r\n\t\t\t\t\t  --CASE PYT.SIGN WHEN 0 THEN (CASE WHEN PYT.TRCURR IN (0,160) AND PYT.TRRATE IN (0,1) THEN  PYT.TOTAL  ELSE 0 END) ELSE (CASE WHEN PYT.TRCURR IN (0,160) AND PYT.TRRATE IN (0,1) THEN  PYT.TOTAL  ELSE 0 END) * -1 END   [Tutar],\r\n                      \r\n                      --CASE \r\n                      --WHEN PYT.TRCURR=0 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1)  \r\n                      --ELSE (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1) * TRRATE END Tutar_TRY,\r\n                      --CASE \r\n                      --WHEN PYT.TRCURR=1 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1)  \r\n                      --ELSE 0 END Tutar_USD,\r\n                      --CASE \r\n                      --WHEN PYT.TRCURR=20 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1)  \r\n                      --ELSE 0 END Tutar_EUR,\r\n                      \r\n                      \r\n                      --CASE WHEN TRRATE \u003e 1 THEN (PYT.TOTAL - PYT.PAID) * ((PYT.SIGN * - 2) + 1) * TRRATE ELSE (PYT.TOTAL - PYT.PAID) \r\n                      --* ((PYT.SIGN * - 2) + 1) END AS Tutar_TL, \r\n                      \r\n                      --CASE PYT.SIGN WHEN 0 THEN \u0027Borç\u0027 ELSE \u0027Alacak\u0027 END AS Hareket\r\n                     \r\n                 \r\n\t\t\t\t\t  \r\n\t\t\t\t\t  ---CASE WHEN MODULENR = 4 THEN\r\n                      --    (SELECT     GENEXP1 + \u0027-\u0027 + GENEXP2\r\n                      --      FROM          LG_123_01_INVOICE INV\r\n                      --      WHERE      INV.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 5 THEN\r\n                      --    (SELECT     CLF.LINEEXP\r\n                      --      FROM          LG_123_01_CLFLINE CLF\r\n                      --      WHERE      CLF.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 10 THEN\r\n                      --    (SELECT     KSL.LINEEXP\r\n                      --      FROM          LG_123_01_KSLINES KSL\r\n                      --      WHERE      KSL.LOGICALREF = PYT.FICHEREF) WHEN MODULENR = 7 THEN\r\n                      --    (SELECT     BNF.LINEEXP\r\n                      --      FROM          LG_123_01_BNFLINE BNF\r\n                      --      WHERE      BNF.LOGICALREF = PYT.FICHEREF) ELSE \u0027\u0027 END AS Açıklama,\r\n\r\n--TRGP.GDEF [TIC ISLM GRP]\r\nFROM   dbo.LG_123_01_PAYTRANS AS PYT \r\nLEFT OUTER JOIN dbo.LG_123_CLCARD AS CLC ON PYT.CARDREF = CLC.LOGICALREF\r\n\r\nLEFT JOIN dbo.LG_123_01_INVOICE INVOICE\r\n            ON INVOICE.LOGICALREF = PYT.FICHEREF\r\n\r\nWHERE   (PYT.CANCELLED = 0) AND (PYT.TOTAL - PYT.PAID \u003e 0) AND (PYT.PAIDINCASH = 0) AND (PYT.CARDREF \u003e 0) AND PYT.SIGN IN (1,0)\r\nAND ((PYT.MODULENR = 5 AND PYT.TRCODE IN( 5,4,14)) OR  (PYT.MODULENR = 4 AND PYT.TRCODE IN( 1,4,6)))\r\nand CLC.CODE LIKE \u0027320%\u0027 --AND CLC.CODE=\u0027320.KILIÇ\u0027\r\n)T WHERE YEAR(T.[ISLEM_TARIHI])\u003e2021 \r\n) as TA\r\n\r\nWHERE  Cari_Kodu + \u0027-\u0027 + DOVIZ NOT IN (\u0027320.01.00001-TL\u0027,\u0027320.01.00467-TL\u0027,\u0027320.01.00074-TL\u0027,\u0027320.01.00150-TL\u0027,\u0027320.01.00453-TL\u0027) \r\n---AND Cari_Kodu=\u0027320.YALIN\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CARI",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "221",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Cari Adı",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Cari_Kodu",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_TARIHI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEMNO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "22",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "GUN",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR_BORC",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR_ALACAK",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DOVIZ",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "8",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KUR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CARI":  "320.MİKRO / MİKRO SÜNGER PLASTİK ",
+                            "Cari Adı":  "MİKRO SÜNGER PLASTİK ",
+                            "Cari_Kodu":  "320.MİKRO",
+                            "VADE":  "1.01.2023 00:00:00",
+                            "ISLEM_TARIHI":  "1.01.2023 00:00:00",
+                            "ISLEMNO":  "000101",
+                            "ISLEM":  "Virman",
+                            "GUN":  "-1209",
+                            "TUTAR_BORC":  "1534",
+                            "TUTAR_ALACAK":  "0",
+                            "BAKIYE":  "13918,19",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.HNC / HNC MOTORLU ARAÇLAR İMALAT SAT.KİR.LTD.ŞTİ.",
+                            "Cari Adı":  "HNC MOTORLU ARAÇLAR İMALAT SAT.KİR.LTD.ŞTİ.",
+                            "Cari_Kodu":  "320.HNC",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "10.01.2023 00:00:00",
+                            "ISLEMNO":  "RST2023000000015",
+                            "ISLEM":  "Alım İade",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "20060",
+                            "TUTAR_ALACAK":  "0",
+                            "BAKIYE":  "54698,19",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.ADİNA / ADİNA HOTELS DUSSELDORF GMBH",
+                            "Cari Adı":  "ADİNA HOTELS DUSSELDORF GMBH",
+                            "Cari_Kodu":  "320.ADİNA",
+                            "VADE":  "1.07.2023 00:00:00",
+                            "ISLEM_TARIHI":  "1.07.2023 00:00:00",
+                            "ISLEMNO":  "000801",
+                            "ISLEM":  "Virman",
+                            "GUN":  "-1028",
+                            "TUTAR_BORC":  "297435494,669155",
+                            "TUTAR_ALACAK":  "0",
+                            "BAKIYE":  "297490968,439155",
+                            "DOVIZ":  "GBP",
+                            "KUR":  "3616,75721467483"
+                        },
+                        {
+                            "CARI":  "32050.KÜHNE - EU / KÜEHNE + NAGEL   (AG \u0026 Co.) -  Eu",
+                            "Cari Adı":  "KÜEHNE + NAGEL   (AG \u0026 Co.) -  Eu",
+                            "Cari_Kodu":  "32050.KÜHNE - EU",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "10.09.2023 00:00:00",
+                            "ISLEMNO":  "001019",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-1000",
+                            "BAKIYE":  "297517647,024869",
+                            "DOVIZ":  "EUR",
+                            "KUR":  "28,7034"
+                        },
+                        {
+                            "CARI":  "320.BUZMAVİ USD / BUZMAVİ DENİZ VE HAVA TAŞIMACILIK LİMİTED ŞİRKETİ",
+                            "Cari Adı":  "BUZMAVİ DENİZ VE HAVA TAŞIMACILIK LİMİTED ŞİRKETİ",
+                            "Cari_Kodu":  "320.BUZMAVİ USD",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "7.11.2023 00:00:00",
+                            "ISLEMNO":  "BMF2023000016595",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-314",
+                            "BAKIYE":  "297518283,304869",
+                            "DOVIZ":  "USD",
+                            "KUR":  "28,3884"
+                        },
+                        {
+                            "CARI":  "320.TALİS / TALİS YAPI SANAYİ VE TİCARET LİMİTED ŞİRKETİ ",
+                            "Cari Adı":  "TALİS YAPI SANAYİ VE TİCARET LİMİTED ŞİRKETİ ",
+                            "Cari_Kodu":  "320.TALİS",
+                            "VADE":  "28.03.2024 00:00:00",
+                            "ISLEM_TARIHI":  "27.03.2024 00:00:00",
+                            "ISLEMNO":  "RAR2024000000037",
+                            "ISLEM":  "Alım İade",
+                            "GUN":  "-757",
+                            "TUTAR_BORC":  "6750",
+                            "TUTAR_ALACAK":  "0",
+                            "BAKIYE":  "297498518,534869",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.TEKNOST / TEKNOSTORE ELEKTRONİK TİCARET VE BİLİŞİM HİZMETLERİ ANONİM ŞİRKETİ",
+                            "Cari Adı":  "TEKNOSTORE ELEKTRONİK TİCARET VE BİLİŞİM HİZMETLERİ ANONİM ŞİRKETİ",
+                            "Cari_Kodu":  "320.TEKNOST",
+                            "VADE":  "20.05.2024 00:00:00",
+                            "ISLEM_TARIHI":  "20.05.2024 00:00:00",
+                            "ISLEMNO":  "001550",
+                            "ISLEM":  "Virman",
+                            "GUN":  "-704",
+                            "TUTAR_BORC":  "335",
+                            "TUTAR_ALACAK":  "0",
+                            "BAKIYE":  "297493777,534869",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.OUTDOOR / OUTDOOR TURKEY BİLİŞİM ORGANİZASYON A.Ş.",
+                            "Cari Adı":  "OUTDOOR TURKEY BİLİŞİM ORGANİZASYON A.Ş.",
+                            "Cari_Kodu":  "320.OUTDOOR",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "26.08.2024 00:00:00",
+                            "ISLEMNO":  "OU02024000000039",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-7080",
+                            "BAKIYE":  "297371212,994869",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        },
+                        {
+                            "CARI":  "320.ARİF US / ARİF ATALAY 3E TİCARET $",
+                            "Cari Adı":  "ARİF ATALAY 3E TİCARET $",
+                            "Cari_Kodu":  "320.ARİF US",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "18.10.2024 00:00:00",
+                            "ISLEMNO":  "002675",
+                            "ISLEM":  "Alınan Hizmet Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-300",
+                            "BAKIYE":  "297305884,264869",
+                            "DOVIZ":  "USD",
+                            "KUR":  "34,2915"
+                        },
+                        {
+                            "CARI":  "320.ÖZÇELİK / ÖZÇELİK TORNA MAKİNA GEMİ ALMY DEMİR ÇELİK İNŞ SAN TİC LTD ŞTİ",
+                            "Cari Adı":  "ÖZÇELİK TORNA MAKİNA GEMİ ALMY DEMİR ÇELİK İNŞ SAN TİC LTD ŞTİ",
+                            "Cari_Kodu":  "320.ÖZÇELİK",
+                            "VADE":  null,
+                            "ISLEM_TARIHI":  "28.11.2024 00:00:00",
+                            "ISLEMNO":  "000817",
+                            "ISLEM":  "Mal Alım Faturası",
+                            "GUN":  null,
+                            "TUTAR_BORC":  "0",
+                            "TUTAR_ALACAK":  "-175616",
+                            "BAKIYE":  "297111470,264869",
+                            "DOVIZ":  "TL",
+                            "KUR":  "0"
+                        }
+                    ]
+}

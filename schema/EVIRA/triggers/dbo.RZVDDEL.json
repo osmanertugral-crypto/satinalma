@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "RZVDDEL",
+    "on_table":  "dbo.SIPARISFISLERI",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "DELETE"
+               ],
+    "definition":  "CREATE TRIGGER [dbo].[RZVDDEL] ON [dbo].[SIPARISFISLERI]\r\nFOR DELETE\r\nAS\r\nSET NOCOUNT ON\r\n\r\nDECLARE @DEL_SB_REF AS INT\r\nDECLARE @DEL_RZV AS SMALLINT\r\n\r\nDECLARE @SIPRZVKUL AS INT\r\nSELECT @SIPRZVKUL=SIPRZVKUL FROM GENELTANIMLAR WITH(NOLOCK)\r\nIF ISNULL(@SIPRZVKUL,0)\u003e0 \r\nBEGIN\r\n\tDECLARE cur CURSOR LOCAL FOR  \r\n\tselect RZV,SB_REF from DELETED\r\n\tOPEN cur;  \r\n\tFETCH NEXT FROM cur \r\n\tINTO @DEL_RZV,@DEL_SB_REF;\r\n\tWHILE @@FETCH_STATUS = 0  \r\n\tBEGIN\r\n\t\tIF(ISNULL(@DEL_RZV,0)\u003e0)\r\n\t\tBEGIN\r\n\t\t\tEXEC dbo.REZERVEIPTALSB @DEL_SB_REF,0\r\n\t\tEND\r\n\tFETCH NEXT FROM cur\r\n\tINTO @DEL_RZV,@DEL_SB_REF;\r\n\tEND  \r\n\tCLOSE cur;  \r\n\tDEALLOCATE cur;\r\nEND"
+}

@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AMBARTAKIPDETAY",
+    "full_name":  "dbo.AMBARTAKIPDETAY",
+    "definition":  "CREATE VIEW [dbo].[AMBARTAKIPDETAY] AS\r\nSELECT        HAREKET_TARIHI, AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF AS BIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET, CONVERT(NUMERIC(24,8),SUM(MIKTAR)) AS MIKTAR\r\nFROM            (SELECT        HAREKET_TARIHI, AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET, MIKTAR\r\n                          FROM            dbo.AMBARTAKIPDETAYIN0 WITH(NOLOCK)\r\n                          UNION ALL\r\n                          SELECT        HAREKET_TARIHI, AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET, MIKTAR\r\n                          FROM            dbo.AMBARTAKIPDETAYIN2 WITH(NOLOCK)\r\n                          UNION ALL\r\n                          SELECT        HAREKET_TARIHI, AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET, MIKTAR\r\n                          FROM            dbo.AMBARTAKIPDETAYOUT WITH(NOLOCK)\r\n                           ) AS T\r\nGROUP BY HAREKET_TARIHI, AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "HAREKET_TARIHI",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARYANT_REF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_REF",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADRES",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TAKIP_NO",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DURUM_KODU",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PALET",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PAKET",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "numeric",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6479",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8409",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "9,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6483",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8417",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "17,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6489",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8428",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "130,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6495",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8438",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "9,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6496",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8440",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "120,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6497",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8442",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "48,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6504",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8455",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "150,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6505",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8457",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "400,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6506",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8459",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "5,00000000"
+                        },
+                        {
+                            "HAREKET_TARIHI":  "1.01.2023 00:00:00",
+                            "AMBAR_KODU":  "10",
+                            "STOK_REF":  "6508",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8463",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "276,00000000"
+                        }
+                    ]
+}

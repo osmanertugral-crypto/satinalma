@@ -1,0 +1,258 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_01_CLPARAMS",
+    "full_name":  "dbo.LG_123_01_CLPARAMS",
+    "description":  "",
+    "total_rows":  "3682",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CLREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "HEADERREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PARAMTYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PARAMNR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PARAMVAL1",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PARAMSTR1",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PARAMSTR2",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERNR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_01_CLPARAMS_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_01_CLPARAMS_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "CLREF, HEADERREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "10",
+                            "PARAMVAL1":  "0",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "11",
+                            "PARAMVAL1":  "1",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "8",
+                            "PARAMVAL1":  "0",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "9",
+                            "PARAMVAL1":  "0",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "20",
+                            "PARAMVAL1":  "1",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "25",
+                            "PARAMVAL1":  "1",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "14",
+                            "PARAMVAL1":  "0",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "24",
+                            "PARAMVAL1":  "1",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "106",
+                            "PARAMVAL1":  "0",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "",
+                            "USERNR":  "119"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CLREF":  "0",
+                            "HEADERREF":  "-1",
+                            "PARAMTYPE":  "0",
+                            "PARAMNR":  "23",
+                            "PARAMVAL1":  "0",
+                            "PARAMSTR1":  "",
+                            "PARAMSTR2":  "c:\\temp\\",
+                            "USERNR":  "119"
+                        }
+                    ]
+}

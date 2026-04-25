@@ -1,0 +1,229 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_323_01_CLCARD",
+    "full_name":  "dbo.LV_323_01_CLCARD",
+    "definition":  "CREATE VIEW [dbo].[LV_323_01_CLCARD] AS\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.CODE, LGMAIN.DEFINITION_, LGMAIN.CITY, LGMAIN.COUNTRY, LGMAIN.ACTIVE, LGMAIN.CARDTYPE, LGMAIN.SPECODE, LGMAIN.TRADINGGRP,\n   LGMAIN.CYPHCODE, LGMAIN.INCHARGE, LGMAIN.SPECODE2, LGMAIN.SPECODE3, LGMAIN.SPECODE4, LGMAIN.SPECODE5, LGMAIN.TAXOFFICE, LGMAIN.TAXNR, LGMAIN.TCKNO,\n   LGMAIN.EMAILADDR, LGMAIN.TELNRS1, LGMAIN.TELNRS2, LGMAIN.ORGLOGICREF, LGMAIN.WFLOWCRDREF,LGMAIN.PURCHBRWS, LGMAIN.SALESBRWS, LGMAIN.FINBRWS, LGMAIN.WFLOWCRD,\n      (SELECT SUM(B.DEBIT) FROM LV_323_01_GNTOTCL B WHERE B.TOTTYP=1 AND B.CARDREF=LGMAIN.LOGICALREF) AS DEBIT,\n      (SELECT SUM(B.CREDIT) FROM LV_323_01_GNTOTCL B WHERE B.TOTTYP=1 AND B.CARDREF=LGMAIN.LOGICALREF) AS CREDIT,\n      (SELECT SUM(B.DEBIT) FROM LV_323_01_GNTOTCL B WHERE B.TOTTYP=2 AND B.CARDREF=LGMAIN.LOGICALREF) AS DEBIT_RD,\n      (SELECT SUM(B.CREDIT) FROM LV_323_01_GNTOTCL B WHERE B.TOTTYP=2 AND B.CARDREF=LGMAIN.LOGICALREF) AS CREDIT_RD\nFROM\n     LV_323_CLCARD LGMAIN\nWHERE\n     LGMAIN.CARDTYPE NOT IN (4,22) AND LGMAIN.LOWLEVELCODES1 \u003c\u003e \u00270\u0027\nUNION ALL\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.CODE, LGMAIN.DEFINITION_, LGMAIN.CITY, LGMAIN.COUNTRY, LGMAIN.ACTIVE, LGMAIN.CARDTYPE, LGMAIN.SPECODE, LGMAIN.TRADINGGRP,\n   LGMAIN.CYPHCODE, LGMAIN.INCHARGE, LGMAIN.SPECODE2, LGMAIN.SPECODE3, LGMAIN.SPECODE4, LGMAIN.SPECODE5, LGMAIN.TAXOFFICE, LGMAIN.TAXNR, LGMAIN.TCKNO,\n   LGMAIN.EMAILADDR, LGMAIN.TELNRS1, LGMAIN.TELNRS2, LGMAIN.ORGLOGICREF, LGMAIN.WFLOWCRDREF,LGMAIN.PURCHBRWS, LGMAIN.SALESBRWS, LGMAIN.FINBRWS, LGMAIN.WFLOWCRD,\n      (SELECT SUM(B.DEBIT) FROM LV_323_01_GNTOTCL B WHERE B.TOTTYP=1 AND B.CARDREF=LGMAIN.LOGICALREF) AS DEBIT,\n      (SELECT SUM(B.CREDIT) FROM LV_323_01_GNTOTCL B WHERE B.TOTTYP=1 AND B.CARDREF=LGMAIN.LOGICALREF) AS CREDIT,\n      (SELECT SUM(B.DEBIT) FROM LV_323_01_GNTOTCL B WHERE B.TOTTYP=2 AND B.CARDREF=LGMAIN.LOGICALREF) AS DEBIT_RD,\n      (SELECT SUM(B.CREDIT) FROM LV_323_01_GNTOTCL B WHERE B.TOTTYP=2 AND B.CARDREF=LGMAIN.LOGICALREF) AS CREDIT_RD\nFROM\n     LV_323_CLCARD LGMAIN\nWHERE\n     LGMAIN.CARDTYPE NOT IN (4,22) AND LGMAIN.LOWLEVELCODES1=0",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CITY",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "COUNTRY",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "41",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTIVE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARDTYPE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SPECODE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRADINGGRP",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CYPHCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INCHARGE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "41",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SPECODE2",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SPECODE3",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SPECODE4",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SPECODE5",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TAXOFFICE",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "31",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TAXNR",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "16",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TCKNO",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "16",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "EMAILADDR",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "251",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TELNRS1",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TELNRS2",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORGLOGICREF",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "WFLOWCRDREF",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURCHBRWS",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALESBRWS",
+                        "ORDINAL_POSITION":  25,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FINBRWS",
+                        "ORDINAL_POSITION":  26,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "WFLOWCRD",
+                        "ORDINAL_POSITION":  27,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "1",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  28,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  29,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT_RD",
+                        "ORDINAL_POSITION":  30,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT_RD",
+                        "ORDINAL_POSITION":  31,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

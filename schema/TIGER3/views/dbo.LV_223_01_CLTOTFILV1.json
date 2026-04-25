@@ -1,0 +1,201 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_223_01_CLTOTFILV1",
+    "full_name":  "dbo.LV_223_01_CLTOTFILV1",
+    "definition":  "\nCREATE VIEW [DBO].[LV_223_01_CLTOTFILV1] WITH SCHEMABINDING AS\nSELECT TRN.CLIENTREF AS CARDREF\n ,(CASE TRN.TRCODE WHEN 14 THEN 0 ELSE MONTH_ END) AS MONTH_\n ,TRN.YEAR_\n ,TRN.BRANCH AS BRANCH\n ,TRN.DEPARTMENT AS DEPARTMENT\n ,SUM(ISNULL((CASE ISNULL(PAIDINCASH, 0) WHEN 0 THEN AMOUNT * (1 - SIGN) ELSE AMOUNT END),0)) AS DEBIT\n ,SUM(ISNULL((CASE ISNULL(PAIDINCASH, 0) WHEN 0 THEN REPORTNET * (1 - SIGN) ELSE REPORTNET END),0)) AS DEBIT_RC\n ,SUM(ISNULL((CASE ISNULL(PAIDINCASH, 0) WHEN 0 THEN AMOUNT * (SIGN) ELSE AMOUNT END),0)) AS CREDIT\n ,SUM(ISNULL((CASE ISNULL(PAIDINCASH, 0) WHEN 0 THEN REPORTNET * (SIGN) ELSE REPORTNET END),0)) AS CREDIT_RC\n ,COUNT_BIG(*) AS TRN_CNT_BIG\nFROM [dbo].LG_223_01_CLFLINE TRN\nWHERE TRN.STATUS = 0 AND TRN.CANCELLED = 0 AND TRN.TRCODE \u003c\u003e 12\nGROUP BY TRN.CLIENTREF\n ,(CASE TRN.TRCODE WHEN 14 THEN 0 ELSE MONTH_ END)\n ,TRN.YEAR_\n ,TRN.BRANCH\n ,TRN.DEPARTMENT\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CARDREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTH_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRANCH",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPARTMENT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT_RC",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT_RC",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRN_CNT_BIG",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "0",
+                            "YEAR_":  "2023",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "0",
+                            "DEBIT_RC":  "0",
+                            "CREDIT":  "3956089,38",
+                            "CREDIT_RC":  "198450,42513",
+                            "TRN_CNT_BIG":  "1"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "1",
+                            "YEAR_":  "2023",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "0",
+                            "DEBIT_RC":  "0",
+                            "CREDIT":  "3726768,91",
+                            "CREDIT_RC":  "182796,37",
+                            "TRN_CNT_BIG":  "6"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "1",
+                            "YEAR_":  "2024",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "6409722,32",
+                            "DEBIT_RC":  "198758,29626",
+                            "CREDIT":  "4387447,18",
+                            "CREDIT_RC":  "133624,43219",
+                            "TRN_CNT_BIG":  "29"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "1",
+                            "YEAR_":  "2025",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "7581918,34",
+                            "DEBIT_RC":  "206532,45",
+                            "CREDIT":  "198743,17",
+                            "CREDIT_RC":  "5274,73",
+                            "TRN_CNT_BIG":  "25"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "1",
+                            "YEAR_":  "2026",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "10092270,61",
+                            "DEBIT_RC":  "197707,94544",
+                            "CREDIT":  "34169865,71",
+                            "CREDIT_RC":  "660534,39537",
+                            "TRN_CNT_BIG":  "71"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "2",
+                            "YEAR_":  "2023",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "0",
+                            "DEBIT_RC":  "0",
+                            "CREDIT":  "6806564,34",
+                            "CREDIT_RC":  "337779,39",
+                            "TRN_CNT_BIG":  "13"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "2",
+                            "YEAR_":  "2024",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "7220000",
+                            "DEBIT_RC":  "218471,12982",
+                            "CREDIT":  "1092057,93",
+                            "CREDIT_RC":  "32819",
+                            "TRN_CNT_BIG":  "14"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "2",
+                            "YEAR_":  "2025",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "6007293,32",
+                            "DEBIT_RC":  "160977,42718",
+                            "CREDIT":  "990939,52",
+                            "CREDIT_RC":  "25519,99512",
+                            "TRN_CNT_BIG":  "29"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "2",
+                            "YEAR_":  "2026",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "39157082,38",
+                            "DEBIT_RC":  "2195270,9834",
+                            "CREDIT":  "12704169,2",
+                            "CREDIT_RC":  "224473,71036",
+                            "TRN_CNT_BIG":  "85"
+                        },
+                        {
+                            "CARDREF":  "1660",
+                            "MONTH_":  "3",
+                            "YEAR_":  "2023",
+                            "BRANCH":  "0",
+                            "DEPARTMENT":  "0",
+                            "DEBIT":  "0",
+                            "DEBIT_RC":  "0",
+                            "CREDIT":  "4709893,67",
+                            "CREDIT_RC":  "203262,81",
+                            "TRN_CNT_BIG":  "15"
+                        }
+                    ]
+}

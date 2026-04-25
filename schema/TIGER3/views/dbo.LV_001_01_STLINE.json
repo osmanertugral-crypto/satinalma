@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_001_01_STLINE",
+    "full_name":  "dbo.LV_001_01_STLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_001_01_STLINE] AS\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.INVOICEREF, LGMAIN.STOCKREF, LGMAIN.LINETYPE, LGMAIN.TRCODE, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.INVOICELNNO,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.CODE\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.CODE\n   ELSE \u0027\u0027 END AS CODE,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.DEFINITION_\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.NAME\n   ELSE \u0027\u0027 END AS LINEEXP\nFROM\n     LG_001_01_STLINE LGMAIN WITH(NOLOCK)\n  LEFT OUTER JOIN LG_001_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF\n  LEFT OUTER JOIN LG_001_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF\n  LEFT OUTER JOIN LG_001_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICELNNO",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "20458",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4250",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "2",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X164",
+                            "LINEEXP":  "PİRİNÇ ÇIT ÇIT"
+                        },
+                        {
+                            "LOGICALREF":  "20459",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4165",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "4",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X76",
+                            "LINEEXP":  "AYAK -GÖVDE BAĞLANTISI"
+                        },
+                        {
+                            "LOGICALREF":  "20460",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4756",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "2",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X678",
+                            "LINEEXP":  "ÇAMURLUK"
+                        },
+                        {
+                            "LOGICALREF":  "20461",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4119",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "25",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X30",
+                            "LINEEXP":  "2X1.5  KABLO"
+                        },
+                        {
+                            "LOGICALREF":  "20462",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4147",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "25",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X58",
+                            "LINEEXP":  "6 MM SİYAH KABLO"
+                        },
+                        {
+                            "LOGICALREF":  "20463",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4119",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "25",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X30",
+                            "LINEEXP":  "2X1.5  KABLO"
+                        },
+                        {
+                            "LOGICALREF":  "20464",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4147",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "25",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X58",
+                            "LINEEXP":  "6 MM SİYAH KABLO"
+                        },
+                        {
+                            "LOGICALREF":  "20465",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4147",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "25",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X58",
+                            "LINEEXP":  "6 MM SİYAH KABLO"
+                        },
+                        {
+                            "LOGICALREF":  "20466",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4119",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "25",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X30",
+                            "LINEEXP":  "2X1.5  KABLO"
+                        },
+                        {
+                            "LOGICALREF":  "20467",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "4119",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "25",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X30",
+                            "LINEEXP":  "2X1.5  KABLO"
+                        }
+                    ]
+}

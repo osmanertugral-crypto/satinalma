@@ -1,0 +1,313 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_323_02_GNTOTST",
+    "full_name":  "dbo.LV_323_02_GNTOTST",
+    "definition":  "CREATE VIEW [dbo].[LV_323_02_GNTOTST] AS\nSELECT\n      0 AS LOGICALREF, GNTOTST.STOCKREF, GNTOTST.INVENNO, SUM(GNTOTST.PLNPRODIN) AS PLNPRODIN,\n      SUM(GNTOTST.PLNPRODOUT) AS PLNPRODOUT, SUM(GNTOTST.PLNOTHERIN) AS PLNOTHERIN, SUM(GNTOTST.PLNOTHEROUT) AS PLNOTHEROUT,\n      SUM(GNTOTST.PLNWHOUSEIN) AS PLNWHOUSEIN, SUM(GNTOTST.PLNWHOUSEOUT) AS PLNWHOUSEOUT, SUM(GNTOTST.TEMPIN) AS TEMPIN,\n      SUM(GNTOTST.TEMPOUT) AS TEMPOUT, SUM(GNTOTST.RESERVED) AS RESERVED, SUM(GNTOTST.ACTPORDER) AS ACTPORDER,\n      SUM(GNTOTST.RECEIVED) AS RECEIVED, SUM(GNTOTST.ACTPRODIN) AS ACTPRODIN, SUM(GNTOTST.ACTOTHERIN) AS ACTOTHERIN, SUM(GNTOTST.ACTSORDER) AS ACTSORDER,\n      SUM(GNTOTST.SHIPPED) AS SHIPPED, SUM(GNTOTST.ACTWASTE) AS ACTWASTE, SUM(GNTOTST.ACTOTHEROUT) AS ACTOTHEROUT, SUM(GNTOTST.TRANSFERRED) AS TRANSFERRED,\n      SUM(CASE WHEN GNTOTST.TRANSFERRED\u003e0 THEN GNTOTST.TRANSFERRED*GNTOTST.AVGVALUE\n            WHEN GNTOTST.ACTPRODIN\u003e0 THEN GNTOTST.ACTPRODIN*GNTOTST.AVGVALUE\n            ELSE GNTOTST.PURCASH END)/\n          CASE WHEN SUM(GNTOTST.TRANSFERRED+GNTOTST.PURAMNT+GNTOTST.ACTPRODIN) \u003e0 THEN SUM(GNTOTST.TRANSFERRED+GNTOTST.PURAMNT+GNTOTST.ACTPRODIN)\n             ELSE 1 END AS AVGVALUE,\n      SUM(CASE WHEN GNTOTST.TRANSFERRED\u003e0 THEN GNTOTST.TRANSFERRED*GNTOTST.AVGCURRVAL\n             WHEN GNTOTST.ACTPRODIN\u003e0 THEN GNTOTST.ACTPRODIN*GNTOTST.AVGCURRVAL\n             ELSE GNTOTST.PURCURR END)/\n          CASE WHEN SUM(GNTOTST.TRANSFERRED+GNTOTST.PURAMNT+GNTOTST.ACTPRODIN) \u003e0 THEN SUM(GNTOTST.TRANSFERRED+GNTOTST.PURAMNT+GNTOTST.ACTPRODIN)\n             ELSE 1 END AS AVGCURRVAL,\n      SUM(GNTOTST.PURAMNT) AS PURAMNT, SUM(GNTOTST.PURCASH) AS PURCASH,\n      SUM(GNTOTST.PURCURR) AS PURCURR, SUM(GNTOTST.SALAMNT) AS SALAMNT, SUM(GNTOTST.SALCASH) AS SALCASH, SUM(GNTOTST.SALCURR) AS SALCURR,\n      MAX(GNTOTST.LASTTRDATE) AS LASTTRDATE, SUM(GNTOTST.ONHAND) AS ONHAND, SUM(GNTOTST.ACTWHOUSEIN) AS ACTWHOUSEIN, SUM(GNTOTST.ACTWHOUSEOUT) AS ACTWHOUSEOUT,\n      SUM(GNTOTST.COUNTADD) AS COUNTADD, SUM(GNTOTST.COUNTDEC) AS COUNTDEC, SUM(GNTOTST.DISTRESERVED) AS DISTRESERVED, SUM(GNTOTST.ONVEHICLE) AS ONVEHICLE,\n      0 AS VARIANTREF,\n      SUM(GNTOTST.PLNRSRVPRODIN) AS PLNRSRVPRODIN, SUM(GNTOTST.PLNRSRVPRODOUT) AS PLNRSRVPRODOUT,\n      SUM(GNTOTST.PLNRSRVWHOUSEIN) AS PLNRSRVWHOUSEIN, SUM(GNTOTST.PLNRSRVWHOUSEOUT) AS PLNRSRVWHOUSEOUT,\n      ISNULL(WHOUSE.VIRTUALINVEN,0) VIRTUALINVEN\n FROM\n      LV_323_02_STINVTOT GNTOTST\n      LEFT OUTER JOIN \"TIGER3\"..L_CAPIWHOUSE WHOUSE WITH(NOLOCK)  ON GNTOTST.INVENNO=WHOUSE.NR AND WHOUSE.FIRMNR=323\nGROUP BY\n      GNTOTST.STOCKREF, GNTOTST.INVENNO, ISNULL(WHOUSE.VIRTUALINVEN,0)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVENNO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNPRODIN",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNPRODOUT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNOTHERIN",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNOTHEROUT",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNWHOUSEIN",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNWHOUSEOUT",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TEMPIN",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TEMPOUT",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RESERVED",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTPORDER",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RECEIVED",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTPRODIN",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTOTHERIN",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTSORDER",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIPPED",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWASTE",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTOTHEROUT",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRANSFERRED",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AVGVALUE",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AVGCURRVAL",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURAMNT",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURCASH",
+                        "ORDINAL_POSITION":  25,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURCURR",
+                        "ORDINAL_POSITION":  26,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALAMNT",
+                        "ORDINAL_POSITION":  27,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALCASH",
+                        "ORDINAL_POSITION":  28,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALCURR",
+                        "ORDINAL_POSITION":  29,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LASTTRDATE",
+                        "ORDINAL_POSITION":  30,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONHAND",
+                        "ORDINAL_POSITION":  31,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWHOUSEIN",
+                        "ORDINAL_POSITION":  32,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWHOUSEOUT",
+                        "ORDINAL_POSITION":  33,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "COUNTADD",
+                        "ORDINAL_POSITION":  34,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "COUNTDEC",
+                        "ORDINAL_POSITION":  35,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DISTRESERVED",
+                        "ORDINAL_POSITION":  36,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONVEHICLE",
+                        "ORDINAL_POSITION":  37,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARIANTREF",
+                        "ORDINAL_POSITION":  38,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVPRODIN",
+                        "ORDINAL_POSITION":  39,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVPRODOUT",
+                        "ORDINAL_POSITION":  40,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVWHOUSEIN",
+                        "ORDINAL_POSITION":  41,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVWHOUSEOUT",
+                        "ORDINAL_POSITION":  42,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VIRTUALINVEN",
+                        "ORDINAL_POSITION":  43,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

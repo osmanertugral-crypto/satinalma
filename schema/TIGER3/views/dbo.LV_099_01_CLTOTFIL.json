@@ -1,0 +1,75 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_099_01_CLTOTFIL",
+    "full_name":  "dbo.LV_099_01_CLTOTFIL",
+    "definition":  "CREATE VIEW [DBO].[LV_099_01_CLTOTFIL]\nAS\nSELECT 1 AS LOGICALREF\n ,CARDREF AS CARDREF\n ,1 AS TOTTYP\n ,MONTH_ AS MONTH_\n ,DEBIT AS DEBIT\n ,CREDIT AS CREDIT\n  ,YEAR_ AS YEAR_\n ,BRANCH AS BRANCH\n ,DEPARTMENT AS DEPARTMENT\nFROM LV_099_01_CLTOTFILV1 WITH(NOEXPAND,NOLOCK)\nUNION ALL\nSELECT 1 AS LOGICALREF\n ,CARDREF AS CARDREF\n ,2 AS TOTTYP\n ,MONTH_ AS MONTH_\n ,DEBIT_RC AS DEBIT\n ,CREDIT_RC AS CREDIT\n  ,YEAR_ AS YEAR_\n ,BRANCH AS BRANCH\n ,DEPARTMENT AS DEPARTMENT\nFROM LV_099_01_CLTOTFILV1 WITH(NOEXPAND,NOLOCK)\nWHERE DEBIT_RC \u003c\u003e0 OR  CREDIT_RC\u003c\u003e0",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARDREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTTYP",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTH_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRANCH",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPARTMENT",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

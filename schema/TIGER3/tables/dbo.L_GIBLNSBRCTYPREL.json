@@ -1,0 +1,113 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_GIBLNSBRCTYPREL",
+    "full_name":  "dbo.L_GIBLNSBRCTYPREL",
+    "description":  "",
+    "total_rows":  "4055",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBLINERECTYPRELREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBSUBRECTYPREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "GIBLNSBRCTYPREL_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "11",
+                            "GIBLINERECTYPRELREF":  "1",
+                            "GIBSUBRECTYPREF":  "251"
+                        },
+                        {
+                            "LOGICALREF":  "12",
+                            "GIBLINERECTYPRELREF":  "3",
+                            "GIBSUBRECTYPREF":  "295"
+                        },
+                        {
+                            "LOGICALREF":  "13",
+                            "GIBLINERECTYPRELREF":  "3",
+                            "GIBSUBRECTYPREF":  "293"
+                        },
+                        {
+                            "LOGICALREF":  "14",
+                            "GIBLINERECTYPRELREF":  "3",
+                            "GIBSUBRECTYPREF":  "294"
+                        },
+                        {
+                            "LOGICALREF":  "15",
+                            "GIBLINERECTYPRELREF":  "3",
+                            "GIBSUBRECTYPREF":  "296"
+                        },
+                        {
+                            "LOGICALREF":  "16",
+                            "GIBLINERECTYPRELREF":  "3",
+                            "GIBSUBRECTYPREF":  "290"
+                        },
+                        {
+                            "LOGICALREF":  "17",
+                            "GIBLINERECTYPRELREF":  "3",
+                            "GIBSUBRECTYPREF":  "291"
+                        },
+                        {
+                            "LOGICALREF":  "18",
+                            "GIBLINERECTYPRELREF":  "3",
+                            "GIBSUBRECTYPREF":  "292"
+                        },
+                        {
+                            "LOGICALREF":  "19",
+                            "GIBLINERECTYPRELREF":  "3",
+                            "GIBSUBRECTYPREF":  "297"
+                        },
+                        {
+                            "LOGICALREF":  "30",
+                            "GIBLINERECTYPRELREF":  "5",
+                            "GIBSUBRECTYPREF":  "251"
+                        }
+                    ]
+}

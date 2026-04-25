@@ -1,0 +1,303 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_DETAYLI_ODEME_LISTESI",
+    "full_name":  "dbo.AA_DETAYLI_ODEME_LISTESI",
+    "definition":  "CREATE VIEW AA_DETAYLI_ODEME_LISTESI AS\n\n\n\nSELECT * FROM \n(\nSELECT *,(SELECT SUM(TL_TUTAR) FROM AA_DETAYLI_ODEME_DATA B WHERE A.CAR_ID=B.CAR_ID AND B.ISLEM_TARIHI\u003c=A.ISLEM_TARIHI) AS BAKIYE, ISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_BNFLINE WHERE \nYEAR(DATE_)\u003e2021 AND  CLIENTREF=CAR_ID AND SIGN=1 AND TRCODE=4) ,0) ODEME\n\n FROM AA_DETAYLI_ODEME_DATA A \n ) AS RAPOR WHERE BAKIYE \u003eISNULL((SELECT SUM(AMOUNT) FROM LG_001_01_BNFLINE WHERE  YEAR(DATE_)\u003e2021 AND  CLIENTREF=CAR_ID AND SIGN=1 AND TRCODE=4) ,0) \n\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FAT_ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CAR_ID",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "UNVAN",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "221",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Ödeme_Vade",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_TARIHI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BELGE_NO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_TURU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "22",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "GUN",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TL_TUTAR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_DOVIZ",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "6",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ID_KUR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ID_TUTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADESI_GELMEYEN",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VADESI_GELEN",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ODEME",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FAT_ID":  "2254",
+                            "CAR_ID":  "1647",
+                            "UNVAN":  "320.01.00350 / MURAT GÜL",
+                            "Ödeme_Vade":  "2.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "2.01.2022 00:00:00",
+                            "BELGE_NO":  "0010",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1573",
+                            "TL_TUTAR":  "113",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "113",
+                            "VADESI_GELMEYEN":  "113",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "217",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2337",
+                            "CAR_ID":  "1506",
+                            "UNVAN":  "320.01.00248 / MURAT DOĞAN ",
+                            "Ödeme_Vade":  "5.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "5.01.2022 00:00:00",
+                            "BELGE_NO":  "0019",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1570",
+                            "TL_TUTAR":  "440",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "440",
+                            "VADESI_GELMEYEN":  "440",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "1210",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2341",
+                            "CAR_ID":  "1550",
+                            "UNVAN":  "320.01.00280 / HAKMAR GIDA TURIZM HAYVANCILIK ve İNŞAAT SAN.LTD.ŞTİ.",
+                            "Ödeme_Vade":  "5.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "5.01.2022 00:00:00",
+                            "BELGE_NO":  "0078",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1570",
+                            "TL_TUTAR":  "99,96",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "99,96",
+                            "VADESI_GELMEYEN":  "99,96",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "456,92",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2360",
+                            "CAR_ID":  "1541",
+                            "UNVAN":  "320.01.00278 / KARTAL 14. NOTERLİĞİ",
+                            "Ödeme_Vade":  "4.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "4.01.2022 00:00:00",
+                            "BELGE_NO":  "PG0638284",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1571",
+                            "TL_TUTAR":  "293,38",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "293,38",
+                            "VADESI_GELMEYEN":  "293,38",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "293,38",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2394",
+                            "CAR_ID":  "1550",
+                            "UNVAN":  "320.01.00280 / HAKMAR GIDA TURIZM HAYVANCILIK ve İNŞAAT SAN.LTD.ŞTİ.",
+                            "Ödeme_Vade":  "3.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "3.01.2022 00:00:00",
+                            "BELGE_NO":  "0047",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1572",
+                            "TL_TUTAR":  "138,5",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "138,5",
+                            "VADESI_GELMEYEN":  "138,5",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "277",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2413",
+                            "CAR_ID":  "1550",
+                            "UNVAN":  "320.01.00280 / HAKMAR GIDA TURIZM HAYVANCILIK ve İNŞAAT SAN.LTD.ŞTİ.",
+                            "Ödeme_Vade":  "4.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "4.01.2022 00:00:00",
+                            "BELGE_NO":  "0053",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1571",
+                            "TL_TUTAR":  "79,96",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "79,96",
+                            "VADESI_GELMEYEN":  "79,96",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "356,96",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2414",
+                            "CAR_ID":  "1550",
+                            "UNVAN":  "320.01.00280 / HAKMAR GIDA TURIZM HAYVANCILIK ve İNŞAAT SAN.LTD.ŞTİ.",
+                            "Ödeme_Vade":  "11.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "11.01.2022 00:00:00",
+                            "BELGE_NO":  "0268",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1564",
+                            "TL_TUTAR":  "392,89",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "392,89",
+                            "VADESI_GELMEYEN":  "392,89",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "1347,44",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2485",
+                            "CAR_ID":  "1523",
+                            "UNVAN":  "320.01.00265 / İST KURYE HAVA KARGO İNT. TURZM. HİZM.DIŞ.TİC.LTD.ŞTİ",
+                            "Ödeme_Vade":  "7.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "7.01.2022 00:00:00",
+                            "BELGE_NO":  "GIB2022000000009",
+                            "ISLEM_TURU":  "Satınalma Faturası",
+                            "GUN":  "1568",
+                            "TL_TUTAR":  "290",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "290",
+                            "VADESI_GELMEYEN":  "290",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "826",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2486",
+                            "CAR_ID":  "1523",
+                            "UNVAN":  "320.01.00265 / İST KURYE HAVA KARGO İNT. TURZM. HİZM.DIŞ.TİC.LTD.ŞTİ",
+                            "Ödeme_Vade":  "7.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "7.01.2022 00:00:00",
+                            "BELGE_NO":  "GIB2022000000010",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1568",
+                            "TL_TUTAR":  "300",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "300",
+                            "VADESI_GELMEYEN":  "300",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "826",
+                            "ODEME":  "0"
+                        },
+                        {
+                            "FAT_ID":  "2495",
+                            "CAR_ID":  "1445",
+                            "UNVAN":  "320.01.00212 / HÜSEYİN AKSOY",
+                            "Ödeme_Vade":  "21.01.2022 00:00:00",
+                            "ISLEM_TARIHI":  "21.01.2022 00:00:00",
+                            "BELGE_NO":  "AKS2022000000066",
+                            "ISLEM_TURU":  "Alınan Hizmet Faturası",
+                            "GUN":  "1554",
+                            "TL_TUTAR":  "3367,66",
+                            "ISLEM_DOVIZ":  "TL",
+                            "ID_KUR":  "0",
+                            "ID_TUTAR":  "3367,66",
+                            "VADESI_GELMEYEN":  "3367,66",
+                            "VADESI_GELEN":  "0",
+                            "BAKIYE":  "3367,66",
+                            "ODEME":  "0"
+                        }
+                    ]
+}

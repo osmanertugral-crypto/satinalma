@@ -1,0 +1,189 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_FRMOD",
+    "full_name":  "dbo.L_FRMOD",
+    "description":  "",
+    "total_rows":  "42",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MODULE_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INFOTYPE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OBJID",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INSTID",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LDATA",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "FRMOD_I1",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "MODULE_, INFOTYPE, OBJID, INSTID"
+                    },
+                    {
+                        "index_name":  "FRMOD_I2",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LREF":  "1",
+                            "MODULE_":  "0",
+                            "INFOTYPE":  "1975",
+                            "OBJID":  "226",
+                            "INSTID":  "0",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "2",
+                            "MODULE_":  "12",
+                            "INFOTYPE":  "17",
+                            "OBJID":  "226",
+                            "INSTID":  "0",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "7",
+                            "MODULE_":  "12",
+                            "INFOTYPE":  "1709",
+                            "OBJID":  "2055905467",
+                            "INSTID":  "0",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "8",
+                            "MODULE_":  "12",
+                            "INFOTYPE":  "1907",
+                            "OBJID":  "2055905467",
+                            "INSTID":  "0",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "9",
+                            "MODULE_":  "12",
+                            "INFOTYPE":  "1709",
+                            "OBJID":  "2055905467",
+                            "INSTID":  "1",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "10",
+                            "MODULE_":  "12",
+                            "INFOTYPE":  "1907",
+                            "OBJID":  "2055905467",
+                            "INSTID":  "1",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "11",
+                            "MODULE_":  "0",
+                            "INFOTYPE":  "1975",
+                            "OBJID":  "27",
+                            "INSTID":  "0",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "12",
+                            "MODULE_":  "8",
+                            "INFOTYPE":  "17",
+                            "OBJID":  "27",
+                            "INSTID":  "0",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "13",
+                            "MODULE_":  "8",
+                            "INFOTYPE":  "1709",
+                            "OBJID":  "957317452",
+                            "INSTID":  "0",
+                            "LDATA":  "\u003cbinary\u003e"
+                        },
+                        {
+                            "LREF":  "14",
+                            "MODULE_":  "8",
+                            "INFOTYPE":  "1907",
+                            "OBJID":  "957317452",
+                            "INSTID":  "0",
+                            "LDATA":  "\u003cbinary\u003e"
+                        }
+                    ]
+}

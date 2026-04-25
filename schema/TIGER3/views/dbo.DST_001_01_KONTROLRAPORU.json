@@ -1,0 +1,65 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_001_01_KONTROLRAPORU",
+    "full_name":  "dbo.DST_001_01_KONTROLRAPORU",
+    "definition":  "\r\nCREATE VIEW [dbo].[DST_001_01_KONTROLRAPORU]\r\n\r\nAS\r\n\r\nSELECT DOCNR,DOCDATE\r\n\r\nFROM LG_001_01_APPROVAL\r\nWHERE RECTYPE=111 AND DOCDATE between \u002720221001\u0027 and  \u002720221231\u0027\r\n\r\nEXCEPT\r\n\r\nSELECT \r\nINV.FICHENO,DATE_\r\n\r\n\r\nFROM LG_001_01_INVOICE INV\r\n--LEFT JOIN LG_001_CLCARD CLC ON CLC.LOGICALREF=INV.CLIENTREF\r\n\r\nWHERE TRCODE IN (1,4) and DATE_ between \u002720221001\u0027 and  \u002720221231\u0027\r\n\r\n\r\n--------------------------------------------------\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "DOCNR",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DOCDATE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "DOCNR":  "DCF2022000000414",
+                            "DOCDATE":  "4.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "ERF2022000005751",
+                            "DOCDATE":  "3.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "TGO2022000000249",
+                            "DOCDATE":  "5.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "AAA2022000000024",
+                            "DOCDATE":  "11.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "AS02022000817258",
+                            "DOCDATE":  "12.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "HD02022001258510",
+                            "DOCDATE":  "12.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "ENS2022000005051",
+                            "DOCDATE":  "14.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "OSM2022000001653",
+                            "DOCDATE":  "20.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "DCF2022000000447",
+                            "DOCDATE":  "20.10.2022 00:00:00"
+                        },
+                        {
+                            "DOCNR":  "ELE2022000000730",
+                            "DOCDATE":  "24.10.2022 00:00:00"
+                        }
+                    ]
+}

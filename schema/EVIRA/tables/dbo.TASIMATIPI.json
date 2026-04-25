@@ -1,0 +1,136 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "TASIMATIPI",
+    "full_name":  "dbo.TASIMATIPI",
+    "description":  "",
+    "total_rows":  "10",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "TASIMATIPI_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ADI2",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__TASIMATI__BF69F8F783CED126",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "KODU"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "TASIMATIPI_REF":  "1",
+                            "KODU":  "0",
+                            "ADI":  "Taşıma şekli belirtilmedi",
+                            "ADI2":  "Taşıma şekli belirtilmedi. 1) Bu kod, taşıma şekli"
+                        },
+                        {
+                            "TASIMATIPI_REF":  "2",
+                            "KODU":  "1",
+                            "ADI":  "Deniz Taşımacılığı",
+                            "ADI2":  "Mal ve / veya şahısların sevki deniz yolu ile yapı"
+                        },
+                        {
+                            "TASIMATIPI_REF":  "3",
+                            "KODU":  "2",
+                            "ADI":  "Demiryolu Taşımacılığı",
+                            "ADI2":  "Mal ve / veya şahısların sevki demiryolu yolu ile "
+                        },
+                        {
+                            "TASIMATIPI_REF":  "4",
+                            "KODU":  "3",
+                            "ADI":  "Karayolu Taşımacılığı",
+                            "ADI2":  "Mal ve / veya şahısların sevki karayolu yolu ile y"
+                        },
+                        {
+                            "TASIMATIPI_REF":  "5",
+                            "KODU":  "4",
+                            "ADI":  "Hava Taşımacılığı",
+                            "ADI2":  "Mal ve / veya şahısların sevki havayolu ile yapılı"
+                        },
+                        {
+                            "TASIMATIPI_REF":  "6",
+                            "KODU":  "5",
+                            "ADI":  "Posta",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TASIMATIPI_REF":  "7",
+                            "KODU":  "6",
+                            "ADI":  "Çok Araçlı Ulaşım",
+                            "ADI2":  ""
+                        },
+                        {
+                            "TASIMATIPI_REF":  "8",
+                            "KODU":  "7",
+                            "ADI":  "Sabit Taşıma Tesisleri",
+                            "ADI2":  "Malların sevki sabit taşıma tesisleri aracılığı il"
+                        },
+                        {
+                            "TASIMATIPI_REF":  "9",
+                            "KODU":  "8",
+                            "ADI":  "İç Su Yolu Taşımacılığı",
+                            "ADI2":  "Mal ve / veya şahısların sevki iç su yolu taşımacı"
+                        },
+                        {
+                            "TASIMATIPI_REF":  "10",
+                            "KODU":  "9",
+                            "ADI":  "Taşıma şekli uygulanamaz",
+                            "ADI2":  "Taşıma şekli uygun değildir."
+                        }
+                    ]
+}

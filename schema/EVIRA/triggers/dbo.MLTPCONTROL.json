@@ -1,0 +1,13 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "MLTPCONTROL",
+    "on_table":  "dbo.STOKHAREKETLERI",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "INSERT",
+                   "UPDATE"
+               ],
+    "definition":  "CREATE TRIGGER [dbo].[MLTPCONTROL] ON [dbo].[STOKHAREKETLERI]\r\nAFTER INSERT,UPDATE\r\nAS\r\nSET NOCOUNT ON\r\nDECLARE @BIRIM_REF\t\tINT\r\nDECLARE @ANABIRIM_REF\tINT\r\nDECLARE @CARPAN1\t\tFLOAT\r\nDECLARE @CARPAN2\t\tFLOAT\r\n\r\nSELECT \r\n@CARPAN1          \t= R.CARPAN1 ,\r\n@CARPAN2          \t= R.CARPAN2 ,\r\n@ANABIRIM_REF      \t= R.ANABIRIM_REF ,\r\n@BIRIM_REF\t\t\t= R.BIRIM_REF\r\nFROM INSERTED R\r\n \r\nIF (@ANABIRIM_REF = @BIRIM_REF) AND (@CARPAN1\u003c\u003e@CARPAN2)\r\nBEGIN \r\nrollback transaction RAISERROR (\u0027Ana birim carpanları hatalı.\u0027 , 16, 1)\r\nEND"
+}

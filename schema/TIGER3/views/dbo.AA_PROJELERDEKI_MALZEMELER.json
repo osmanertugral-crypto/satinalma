@@ -1,0 +1,150 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_PROJELERDEKI_MALZEMELER",
+    "full_name":  "dbo.AA_PROJELERDEKI_MALZEMELER",
+    "definition":  "CREATE VIEW AA_PROJELERDEKI_MALZEMELER AS \r\n SELECT \u0027Sarf Fişi\u0027 as FIS_TURU,\r\n FIS.DATE_ AS TARIH,\r\n FIS.FICHENO AS FIS_NO,\r\n (sELECT CODE FROM LG_001_PROJECT WHERE LOGICALREF=SAT.PROJECTREF) AS PROJE_KODU,\r\n MLZ.CODE AS MALZEME_KODU,\r\n MLZ.NAME AS MALZEME_ADI,\r\n SAT.AMOUNT AS MIKTAR\r\n  \r\n  FROM LG_001_01_STLINE SAT\r\n INNER JOIN LG_001_ITEMS MLZ ON MLZ.LOGICALREF=SAT.STOCKREF\r\n INNER JOIN LG_001_01_STFICHE FIS ON FIS.LOGICALREF=SAT.STFICHEREF\r\n\r\n WHERE FIS.PROJECTREF IN (sELECT PROJECTREF FROM LG_001_01_ORFICHE WHERE TRCODE=1 AND CYPHCODE\u003c\u003e\u0027KAPALI\u0027) AND SAT.TRCODE=12",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FIS_TURU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZEME_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZEME_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "G0108",
+                            "MALZEME_KODU":  "2021X631",
+                            "MALZEME_ADI":  "DYSON SİKA  SİYAH KARTUŞ",
+                            "MIKTAR":  "5"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "G0105",
+                            "MALZEME_KODU":  "2021X140",
+                            "MALZEME_ADI":  "KRİKO KPL 140X ÇEVİRME  KOLU",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "G0105",
+                            "MALZEME_KODU":  "2021X673",
+                            "MALZEME_ADI":  "SPANZET KAYIŞI",
+                            "MIKTAR":  "4"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "G0105",
+                            "MALZEME_KODU":  "2021X116",
+                            "MALZEME_ADI":  "GLADİATÖR ÇAPRAZ HALAT",
+                            "MIKTAR":  "4"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "G0109",
+                            "MALZEME_KODU":  "2021X190",
+                            "MALZEME_ADI":  "SİMENS SİGORTA 16A ",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "G0109",
+                            "MALZEME_KODU":  "2021X28",
+                            "MALZEME_ADI":  "25 AMPER SİMENS SİGORTA ",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "G0109",
+                            "MALZEME_KODU":  "2021X78",
+                            "MALZEME_ADI":  "BARA",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "G0109",
+                            "MALZEME_KODU":  "2021X45",
+                            "MALZEME_ADI":  "3-4 SİGORTA KUTUSU",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "RV03",
+                            "MALZEME_KODU":  "2021X119",
+                            "MALZEME_ADI":  "HİDRAFOR JABSCO  ",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "25.11.2021 00:00:00",
+                            "FIS_NO":  "000017",
+                            "PROJE_KODU":  "RV03",
+                            "MALZEME_KODU":  "2021X287",
+                            "MALZEME_ADI":  "THERME SU ISITICI (220 V)",
+                            "MIKTAR":  "1"
+                        }
+                    ]
+}

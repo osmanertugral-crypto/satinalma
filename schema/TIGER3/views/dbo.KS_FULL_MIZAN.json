@@ -1,0 +1,167 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KS_FULL_MIZAN",
+    "full_name":  "dbo.KS_FULL_MIZAN",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[KS_FULL_MIZAN] AS\r\n    SELECT H.UZUNLUK,\r\n           H.HESAP_KODU,\r\n           HESAP_ADI,\r\n           SUM(ISNULL(L.DEBIT, 0)) AS [BORC],\r\n           SUM(ISNULL(L.CREDIT, 0)) AS [ALACAK],\r\n           SUM(CASE WHEN ISNULL(L.BAKIYE, 0) \u003e 0 THEN ABS(ISNULL(L.BAKIYE, 0)) ELSE 0 END) AS BORC_BAKIYE,\r\n           SUM(CASE WHEN ISNULL(L.BAKIYE, 0) \u003c 0 THEN ABS(ISNULL(L.BAKIYE, 0)) ELSE 0 END) AS ALACAK_BAKIYE,\r\n           ROUND(SUM(ISNULL(K_BAKIYE, 0)), 2) AS BAKIYE\r\n    FROM (\r\n             SELECT H.ACTIVE,\r\n                    H.CODE AS [HESAP_KODU],\r\n                    H.DEFINITION_ AS [HESAP_ADI],\r\n                    CASE LEN(CODE)\r\n                        WHEN 1 THEN -2\r\n                        WHEN 2 THEN -1\r\n                        ELSE LEN(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(H.CODE, \u00270\u0027, \u0027\u0027), \u00271\u0027, \u0027\u0027), \u00272\u0027, \u0027\u0027), \u00273\u0027, \u0027\u0027), \u00274\u0027, \u0027\u0027), \u00275\u0027, \u0027\u0027), \u00276\u0027, \u0027\u0027), \u00277\u0027, \u0027\u0027), \u00278\u0027, \u0027\u0027), \u00279\u0027, \u0027\u0027))\r\n                        END AS [UZUNLUK]\r\n             FROM LG_323_EMUHACC H WITH (NOLOCK)\r\n         ) H\r\n             LEFT OUTER JOIN (\r\n             -- Burada gerekli sorguları yazabilirsiniz\r\n             -- Örnek olarak, bu sorguların içinde \u00272023-11-01\u0027 ve \u00272023-11-30\u0027 parametrelerini kullanabilirsiniz\r\n             SELECT L.ACCOUNTCODE,\r\n                    SUM(ROUND(L.DEBIT, 6)) DEBIT,\r\n                    SUM(ROUND(L.CREDIT, 6)) CREDIT,\r\n                    ROUND(SUM(ROUND(L.DEBIT, 6) - ROUND(L.CREDIT, 6)), 6) AS BAKIYE,\r\n                    ROUND(SUM(ROUND(L.DEBIT, 6) - ROUND(L.CREDIT, 6)), 6) AS K_BAKIYE\r\n             FROM LG_323_01_EMFLINE L\r\n             WHERE L.ACCOUNTCODE LIKE \u0027%\u0027\r\n                   AND L.DATE_ BETWEEN \u00272023-01-01\u0027 AND \u00272023-01-31\u0027\r\n                   AND L.TRCODE IN (1, 2, 3, 4, 6, 7)\r\n                   AND L.CANCELLED = 0\r\n                   AND L.STATUS = 0\r\n             GROUP BY L.ACCOUNTCODE\r\n         ) L ON H.HESAP_KODU = SUBSTRING(L.ACCOUNTCODE, 1, LEN(H.HESAP_KODU))\r\n             \r\n    GROUP BY H.ACTIVE, H.HESAP_KODU, H.HESAP_ADI, H.UZUNLUK;\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "UZUNLUK",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BORC",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALACAK",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BORC_BAKIYE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALACAK_BAKIYE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "UZUNLUK":  "0",
+                            "HESAP_KODU":  "100",
+                            "HESAP_ADI":  "KASA",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "1",
+                            "HESAP_KODU":  "100.00",
+                            "HESAP_ADI":  "KASA HESABI - TL",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "2",
+                            "HESAP_KODU":  "100.00.000000",
+                            "HESAP_ADI":  "TL - KASA     ( MERKEZ )",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "1",
+                            "HESAP_KODU":  "100.50",
+                            "HESAP_ADI":  "KASA HESABI - DÖVİZ",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "2",
+                            "HESAP_KODU":  "100.50.000050",
+                            "HESAP_ADI":  "KASA HESABI - $",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "2",
+                            "HESAP_KODU":  "100.50.000075",
+                            "HESAP_ADI":  "KASA HESABI - €",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "0",
+                            "HESAP_KODU":  "101",
+                            "HESAP_ADI":  "ALINAN ÇEKLER",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "1",
+                            "HESAP_KODU":  "101.00",
+                            "HESAP_ADI":  "ALINAN ÇEKLER - TL",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "1",
+                            "HESAP_KODU":  "101.50",
+                            "HESAP_ADI":  "ALINAN ÇEKLER - DÖVİZ",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        },
+                        {
+                            "UZUNLUK":  "2",
+                            "HESAP_KODU":  "101.50.000050",
+                            "HESAP_ADI":  "PORTFÖYDEKİ ÇEKLER - $",
+                            "BORC":  "0",
+                            "ALACAK":  "0",
+                            "BORC_BAKIYE":  "0",
+                            "ALACAK_BAKIYE":  "0",
+                            "BAKIYE":  "0"
+                        }
+                    ]
+}

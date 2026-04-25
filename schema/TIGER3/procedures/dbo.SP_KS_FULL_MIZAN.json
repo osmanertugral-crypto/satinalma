@@ -1,0 +1,27 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "SP_KS_FULL_MIZAN",
+    "full_name":  "dbo.SP_KS_FULL_MIZAN",
+    "created":  "Dec  6 2023 11:30AM",
+    "last_altered":  "Dec  6 2023 11:30AM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@BEGDATE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "nvarchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "10",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ENDDATE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "nvarchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "10",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       }
+                   ],
+    "definition":  "\r\nCREATE PROCEDURE dbo.SP_KS_FULL_MIZAN\r\n    @BEGDATE NVARCHAR(10),\r\n    @ENDDATE NVARCHAR(10)\r\nAS\r\nBEGIN\r\n    SET NOCOUNT ON;\r\n\r\n    -- Bu noktada gerekli sorguları yazabilirsiniz\r\n    -- Örnek olarak, bu sorguların içinde @BEGDATE ve @ENDDATE parametrelerini kullanabilirsiniz\r\n    SELECT H.UZUNLUK,\r\n           H.HESAP_KODU,\r\n           HESAP_ADI,\r\n           SUM(ISNULL(L.DEBIT, 0)) AS [BORC],\r\n           SUM(ISNULL(L.CREDIT, 0)) AS [ALACAK],\r\n           SUM(CASE WHEN ISNULL(L.BAKIYE, 0) \u003e 0 THEN ABS(ISNULL(L.BAKIYE, 0)) ELSE 0 END) AS BORC_BAKIYE,\r\n           SUM(CASE WHEN ISNULL(L.BAKIYE, 0) \u003c 0 THEN ABS(ISNULL(L.BAKIYE, 0)) ELSE 0 END) AS ALACAK_BAKIYE,\r\n           ROUND(SUM(ISNULL(K_BAKIYE, 0)), 2) AS BAKIYE\r\n    FROM (\r\n             SELECT H.ACTIVE,\r\n                    H.CODE AS [HESAP_KODU],\r\n                    H.DEFINITION_ AS [HESAP_ADI],\r\n                    CASE LEN(CODE)\r\n                        WHEN 1 THEN -2\r\n                        WHEN 2 THEN -1\r\n                        ELSE LEN(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(H.CODE, \u00270\u0027, \u0027\u0027), \u00271\u0027, \u0027\u0027), \u00272\u0027, \u0027\u0027), \u00273\u0027, \u0027\u0027), \u00274\u0027, \u0027\u0027), \u00275\u0027, \u0027\u0027), \u00276\u0027, \u0027\u0027), \u00277\u0027, \u0027\u0027), \u00278\u0027, \u0027\u0027), \u00279\u0027, \u0027\u0027))\r\n                        END AS [UZUNLUK]\r\n             FROM LG_123_EMUHACC H WITH (NOLOCK)\r\n         ) H\r\n             LEFT OUTER JOIN (\r\n             -- Burada gerekli sorguları yazabilirsiniz\r\n             -- Örnek olarak, bu sorguların içinde @BEGDATE ve @ENDDATE parametrelerini kullanabilirsiniz\r\n             SELECT L.ACCOUNTCODE,\r\n                    SUM(ROUND(L.DEBIT, 6)) DEBIT,\r\n                    SUM(ROUND(L.CREDIT, 6)) CREDIT,\r\n                    ROUND(SUM(ROUND(L.DEBIT, 6) - ROUND(L.CREDIT, 6)), 6) AS BAKIYE,\r\n                    (\r\n                            (SELECT SUM(ROUND(DEBIT, 6))\r\n                             FROM LG_123_01_EMFLINE AS EMFLINE\r\n                             WHERE DATE_ BETWEEN @BEGDATE AND @ENDDATE\r\n                                   AND ACCOUNTCODE = L.ACCOUNTCODE\r\n                                   AND TRCODE IN (1, 2, 3, 4, 6, 7)\r\n                                   AND CANCELLED = 0 AND STATUS = 0)\r\n                            - (SELECT SUM(ROUND(CREDIT, 6))\r\n                               FROM LG_123_01_EMFLINE AS EMFLINE\r\n                               WHERE DATE_ BETWEEN @BEGDATE AND @ENDDATE\r\n                                     AND ACCOUNTCODE = L.ACCOUNTCODE\r\n                                     AND TRCODE IN (1, 2, 3, 4, 6, 7)\r\n                                     AND CANCELLED = 0 AND STATUS = 0)\r\n                    ) K_BAKIYE\r\n             FROM LG_123_01_EMFLINE L\r\n             WHERE L.ACCOUNTCODE LIKE \u0027%\u0027\r\n                   AND L.DATE_ BETWEEN @BEGDATE AND @ENDDATE\r\n                   AND L.TRCODE IN (1, 2, 3, 4, 6, 7)\r\n                   AND L.CANCELLED = 0\r\n                   AND L.STATUS = 0\r\n             GROUP BY L.ACCOUNTCODE\r\n         ) L ON H.HESAP_KODU = SUBSTRING(L.ACCOUNTCODE, 1, LEN(H.HESAP_KODU))\r\n             \r\n    GROUP BY H.ACTIVE, H.HESAP_KODU, H.HESAP_ADI, H.UZUNLUK;\r\nEND;\r\n"
+}

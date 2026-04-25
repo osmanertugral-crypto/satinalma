@@ -1,0 +1,120 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_XT1226001_123",
+    "full_name":  "dbo.LG_XT1226001_123",
+    "description":  "",
+    "total_rows":  "523",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PARLOGREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_BITIS_TARIHI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "XT1226001_123_XTIND1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGREF"
+                    },
+                    {
+                        "index_name":  "XT1226001_123_XTIND2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "PARLOGREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGREF":  "77",
+                            "PARLOGREF":  "104",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "78",
+                            "PARLOGREF":  "105",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "79",
+                            "PARLOGREF":  "106",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "80",
+                            "PARLOGREF":  "107",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "81",
+                            "PARLOGREF":  "108",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "82",
+                            "PARLOGREF":  "109",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "83",
+                            "PARLOGREF":  "110",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "84",
+                            "PARLOGREF":  "111",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "85",
+                            "PARLOGREF":  "112",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        },
+                        {
+                            "LOGREF":  "86",
+                            "PARLOGREF":  "113",
+                            "URETIM_BITIS_TARIHI":  "1.03.2023 00:00:00"
+                        }
+                    ]
+}

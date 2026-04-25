@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_KUMULATIF_STOK_RAPORU",
+    "full_name":  "dbo.AA_KUMULATIF_STOK_RAPORU",
+    "definition":  "CREATE VIEW [dbo].[AA_KUMULATIF_STOK_RAPORU] AS\r\nselect \r\n\r\nKOD,\tTANIM\t,GEBZE_STOK,\r\n--,MOBILYA_ON_IMALAT,\tMONTAJ_STOK,\tPOLYESTER_STOK\t,ELEKTRIK_STOK,\r\n--DOSEME_STOK,\tTESISAT_STOK,\t\r\nKAYNARCA_STOK,MLM_STOK,URETIM_STOK,SARTLI_STOK,\r\n\r\nTOPLAM_STOK, cast (ALAN*BR_FIYAT as float) as BIRIM_FIYAT\t------URT_STOK\r\n\r\n\r\n\r\n,GEBZE_STOK*BR_FIYAT as GEBZE_TUTAR,MLM_STOK*BR_FIYAT as MLM_TUTAR,URETIM_STOK*BR_FIYAT as URETIM_TUTAR,TOPLAM_STOK*BR_FIYAT AS GENEL_TUTAR,KART_TİPİ\r\n\r\nfrom\r\n\r\n(\r\nSELECT MLZ.CODE AS KOD, \r\n---CASE MLZ.CARDTYPE WHEN 1 THEN \u0027T\u0027WHEN 10 THEN \u0027H\u0027WHEN 11 THEN \u0027Y\u0027WHEN 12 THEN \u0027M\u0027WHEN 4 THEN \u0027S\u0027else \u0027D\u0027end as KART_TİPİ,\r\n MLZ.CARDTYPE  KART_TİPİ,\r\n\r\nMLZ.NAME AS TANIM,\r\n\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE DEPO=0 AND MLZ.LOGICALREF=MLZ_ID),0) DEPO\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE DEPO=1 AND MLZ.LOGICALREF=MLZ_ID),0) SHOWROOM\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE DEPO=2 AND MLZ.LOGICALREF=MLZ_ID),0) URETIM\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE DEPO=3 AND MLZ.LOGICALREF=MLZ_ID),0) GENEL\r\n--,ISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE DEPO=4 AND MLZ.LOGICALREF=MLZ_ID),0) IDARI,\r\n\r\n ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=2),0) AS GEBZE_STOK,\r\n ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=0),0) AS KAYNARCA_STOK,\r\n --ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=1),0) AS SHOWROOM_STOK,\r\n --ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=3),0) AS SERVIS_STOK,\r\n -----------------------------------------------------------------------------------------------------------------------\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=4),0) AS MOBILYA_ON_IMALAT,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=5),0) AS MONTAJ_STOK,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=6),0) AS POLYESTER_STOK,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=7),0) AS ELEKTRIK_STOK,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=8),0) AS DOSEME_STOK,\r\n ------------------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=9),0) AS TESISAT_STOK,\r\n\r\n -------------------------------------------------------------------------------------------------------------------------\r\n  ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=10),0) AS MLM_STOK,\r\n  ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO IN(11,5)),0) AS URETIM_STOK,\r\n  ---ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=5),0) AS MONTAJ_STOK,\r\n  ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO=12),0) AS SARTLI_STOK,\r\n\r\n  ----------------------ISNULL((SELECT SUM(MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE MLZ_ID=MLZ.LOGICALREF AND DEPO IN (4,5,6,7,8,9)),0) AS URT_STOK,\r\n\r\n\r\n\r\n\r\n\r\nISNULL((SELECT SUM (MIKTAR) FROM AA_DEPO_STOK_RAPORU WHERE  MLZ.LOGICALREF=MLZ_ID  AND DEPO IN (0,2,5,10,11,12)),0) TOPLAM_STOK\r\n,(CAST(ISNULL(\r\nCASE WHEN (sELECT TOP 1 PRICE FROM LG_001_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE=1 ORDER BY DATE_ DESC) IS NULL THEN \r\n\t(SELECT TOP 1 PRICE FROM LG_001_PRCLIST WITH (NOLOCK) WHERE CARDREF=MLZ.LOGICALREF ORDER BY BEGDATE DESC) ELSE \r\n\t(sELECT TOP 1 PRICE FROM LG_001_01_STLINE WITH (NOLOCK) WHERE STOCKREF=MLZ.LOGICALREF AND  PRICE\u003e0 AND TRCODE=1 ORDER BY DATE_ DESC) END \r\n\t\r\n\t,0) AS DECIMAL(18,2))*1) AS BR_FIYAT, cast(1 as DECIMAL(18,2)) AS ALAN\r\n\r\n FROM LG_001_ITEMS MLZ  WHERE ACTIVE=0 --AND MLZ.CODE=\u0027KMBY0099H062\u0027\r\n ) as rapor\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KOD",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TANIM",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GEBZE_STOK",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KAYNARCA_STOK",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MLM_STOK",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_STOK",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SARTLI_STOK",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM_STOK",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYAT",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GEBZE_TUTAR",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MLM_TUTAR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_TUTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GENEL_TUTAR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KART_TİPİ",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "KOD":  "G0.TÜRKİYE.01 BANYOLU",
+                            "TANIM":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "-19",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "-19",
+                            "BIRIM_FIYAT":  "188050,85",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "-3572966,15",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "G0.YURTDIŞI.01",
+                            "TANIM":  "GLADIATOR MOBİL YAŞAM KABİNİ ",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "-10",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "-10",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "R0NIN.01",
+                            "TANIM":  "Ronin",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "0",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "TROY.3KİŞİ.YURTDIŞI.01",
+                            "TANIM":  "Troy 3 Kişilik",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "0",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "TROY.2KİŞİ.YURTDIŞI.01",
+                            "TANIM":  "Troy 2 Kişilik",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "0",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "TROY.3KİŞİ.TÜRKİYE.01",
+                            "TANIM":  "Troy 3 Kişilik",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "1",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "TROY.2KİŞİ.TÜRKİYE.02",
+                            "TANIM":  "Troy 2 Kişilik",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "0",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "FREEDOM.01 TÜRKİYE",
+                            "TANIM":  "FREEDOM MOTOKARAVAN",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "0",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "RV01",
+                            "TANIM":  "REVİVA",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "0",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        },
+                        {
+                            "KOD":  "MOHİCAN.TÜRKİYE.01",
+                            "TANIM":  "MOHİCAN ÇEKME KARAVAN",
+                            "GEBZE_STOK":  "0",
+                            "KAYNARCA_STOK":  "0",
+                            "MLM_STOK":  "0",
+                            "URETIM_STOK":  "0",
+                            "SARTLI_STOK":  "0",
+                            "TOPLAM_STOK":  "0",
+                            "BIRIM_FIYAT":  "0",
+                            "GEBZE_TUTAR":  "0",
+                            "MLM_TUTAR":  "0",
+                            "URETIM_TUTAR":  "0",
+                            "GENEL_TUTAR":  "0",
+                            "KART_TİPİ":  "12"
+                        }
+                    ]
+}

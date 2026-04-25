@@ -1,202 +1,220 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getInventory, getInventoryTransactions, createInventoryTransaction, getProducts, syncInventoryFromExcel, getCategories } from '../api';
-import { PageHeader, Card, Button, Badge, Modal, Input, Select, Table, Spinner } from '../components/UI';
-import { Plus, ArrowDown, ArrowUp, RefreshCw, Download, Search } from 'lucide-react';
+import { getEviraInventory, syncEviraInventory } from '../api';
+import { PageHeader, Card, Button, Spinner } from '../components/UI';
+import { RefreshCw, Search, Download, Package, Warehouse, BarChart2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import * as XLSX from 'xlsx';
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleString('tr-TR'); } catch { return iso; }
+}
 
 export default function InventoryPage() {
   const qc = useQueryClient();
   const { user } = useAuth();
   const canEdit = user?.role !== 'viewer';
 
-  const [modal, setModal] = useState(false);
-  const [form, setForm] = useState({ product_id: '', type: 'in', quantity: '', reference: '', notes: '' });
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [invSearch, setInvSearch] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [search, setSearch] = useState('');
+  const [ambarFilter, setAmbarFilter] = useState('');
+  const [syncMsg, setSyncMsg] = useState(null);
 
-  const [syncResult, setSyncResult] = useState(null);
+  const { data, isLoading } = useQuery({
+    queryKey: ['evira-inventory'],
+    queryFn: () => getEviraInventory().then(r => r.data),
+  });
 
   const syncMutation = useMutation({
-    mutationFn: syncInventoryFromExcel,
-    onSuccess: (res) => { 
-      qc.invalidateQueries(['inventory']); 
-      qc.invalidateQueries(['products']);
-      setSyncResult(res.data);
-      setTimeout(() => setSyncResult(null), 5000);
-    }
+    mutationFn: syncEviraInventory,
+    onSuccess: (res) => {
+      qc.invalidateQueries(['evira-inventory']);
+      setSyncMsg({ ok: true, text: res.data?.message || 'Güncellendi' });
+      setTimeout(() => setSyncMsg(null), 4000);
+    },
+    onError: (e) => {
+      setSyncMsg({ ok: false, text: e.response?.data?.error || e.message });
+      setTimeout(() => setSyncMsg(null), 6000);
+    },
   });
 
-  const { data: inventory = [], isLoading } = useQuery({ queryKey: ['inventory'], queryFn: () => getInventory().then(r => r.data) });
-  const { data: categories = [] } = useQuery({ queryKey: ['categories'], queryFn: () => getCategories().then(r => r.data) });
-  const { data: transactions = [] } = useQuery({ queryKey: ['inv-transactions', selectedProduct], queryFn: () => getInventoryTransactions(selectedProduct ? { product_id: selectedProduct } : {}).then(r => r.data) });
+  const rows   = data?.rows   || [];
+  const ambars = data?.ambars || [];
 
-  const filteredInventory = useMemo(() => {
-    return inventory.filter(i => {
-      const matchCat = !categoryFilter || i.category_id === categoryFilter;
-      const matchSearch = !invSearch || (i.product_name || '').toLowerCase().includes(invSearch.toLowerCase()) || (i.code || '').toLowerCase().includes(invSearch.toLowerCase());
-      return matchCat && matchSearch;
+  const filtered = useMemo(() => {
+    return rows.filter(r => {
+      if (ambarFilter && r.ambar_kodu !== ambarFilter) return false;
+      if (search) {
+        const q = search.toLowerCase();
+        return (r.stok_kodu || '').toLowerCase().includes(q) ||
+               (r.stok_adi  || '').toLowerCase().includes(q);
+      }
+      return true;
     });
-  }, [inventory, categoryFilter, invSearch]);
+  }, [rows, ambarFilter, search]);
 
-  function handleInventoryExport() {
-    const rows = filteredInventory.map(i => ({
-      'Kod': i.code,
-      'Ürün Adı': i.product_name,
-      'Kategori': i.category_name || '',
-      'Birim': i.unit,
-      'Stok': i.quantity,
-      'Min. Stok': i.min_stock_level,
-      'Durum': i.low_stock ? 'Düşük' : 'Normal',
-    }));
-    const ws = XLSX.utils.json_to_sheet(rows);
+  const totalQty      = filtered.reduce((s, r) => s + (r.miktar || 0), 0);
+  const uniqueItems   = new Set(filtered.map(r => r.stok_kodu)).size;
+  const activeAmbars  = new Set(filtered.map(r => r.ambar_kodu)).size;
+
+  function handleExport() {
+    const ws = XLSX.utils.json_to_sheet(filtered.map(r => ({
+      'Ambar':      r.ambar_adi,
+      'Stok Kodu':  r.stok_kodu,
+      'Stok Adı':   r.stok_adi,
+      'Birim':      r.birim,
+      'Miktar':     r.miktar,
+    })));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Envanter');
-    XLSX.writeFile(wb, `envanter_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    XLSX.writeFile(wb, `evira_envanter_${new Date().toISOString().slice(0, 10)}.xlsx`);
   }
 
-  const txMutation = useMutation({
-    mutationFn: createInventoryTransaction,
-    onSuccess: () => { qc.invalidateQueries(['inventory']); qc.invalidateQueries(['inv-transactions']); qc.invalidateQueries(['dashboard']); setModal(false); setForm({ product_id: '', type: 'in', quantity: '', reference: '', notes: '' }); }
-  });
+  if (isLoading) return <div className="flex justify-center py-20"><Spinner /></div>;
+
+  const isEmpty = rows.length === 0;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6">
       <PageHeader
         title="Envanter"
-        subtitle="Anlık stok seviyeleri"
-        action={
-          <div className="flex gap-2">
+        subtitle="EVIRA depo stok durumu"
+        actions={
+          <div className="flex items-center gap-2">
             {canEdit && (
-              <Button variant="secondary" onClick={() => syncMutation.mutate()} disabled={syncMutation.isPending}>
-                <RefreshCw size={16} className={syncMutation.isPending ? 'animate-spin' : ''} />
-                {syncMutation.isPending ? 'Güncelleniyor...' : 'Excel\'den Yenile'}
+              <Button
+                onClick={() => syncMutation.mutate()}
+                disabled={syncMutation.isPending}
+                className="flex items-center gap-1.5 text-sm"
+              >
+                {syncMutation.isPending
+                  ? <><Spinner /><span>Güncelleniyor…</span></>
+                  : <><RefreshCw size={13} /><span>EVIRA'dan Güncelle</span></>}
               </Button>
             )}
-            <button
-              onClick={handleInventoryExport}
-              className="flex items-center gap-1.5 px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
-            >
-              <Download size={14} /> Excel
-            </button>
-            {canEdit && <Button onClick={() => setModal(true)}><Plus size={16} /> Stok Hareketi</Button>}
+            {filtered.length > 0 && (
+              <button
+                onClick={handleExport}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                <Download size={13} />Excel
+              </button>
+            )}
           </div>
         }
       />
 
-      {syncResult && (
-        <Card className="p-4 bg-green-50 border-green-200">
-          <p className="text-green-800 text-sm font-medium">
-            ✓ {syncResult.message} — Güncellenen: {syncResult.updated}, Yeni: {syncResult.created}, Atlanan: {syncResult.skipped} (Toplam Excel satırı: {syncResult.total})
-          </p>
-        </Card>
-      )}
-      {syncMutation.error && (
-        <Card className="p-4 bg-red-50 border-red-200">
-          <p className="text-red-700 text-sm">{syncMutation.error.response?.data?.error || 'Senkronizasyon başarısız'}</p>
-        </Card>
+      {/* Sync mesajı */}
+      {syncMsg && (
+        <div className={`mb-4 px-4 py-2.5 rounded-md text-sm ${syncMsg.ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+          {syncMsg.text}
+        </div>
       )}
 
-      <Card>
-        <div className="p-4 border-b border-gray-100 flex gap-3 items-center flex-wrap">
-          <div className="relative">
-            <Search size={14} className="absolute left-3 top-2.5 text-gray-400" />
-            <input
-              className="pl-8 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
-              placeholder="Kod veya ürün adı..."
-              value={invSearch}
-              onChange={e => setInvSearch(e.target.value)}
-            />
+      {/* Özet kartlar */}
+      <div className="grid grid-cols-3 gap-4 mb-5">
+        <Card className="p-4 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+            <Package size={16} className="text-blue-600" />
           </div>
-          <select
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={categoryFilter}
-            onChange={e => setCategoryFilter(e.target.value)}
-          >
-            <option value="">Tüm Kategoriler</option>
-            {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
-          <span className="text-xs text-gray-400 ml-1">{filteredInventory.length} ürün</span>
-        </div>
-        {isLoading ? <Spinner /> : (
-          <Table headers={['Kod', 'Ürün', 'Kategori', 'Birim', 'Stok', 'Min. Stok', 'Stok Durumu', 'Durum']}
-            empty={filteredInventory.length === 0 && 'Envanter verisi bulunamadı'}>
-            {filteredInventory.map(i => {
-              const pct = i.min_stock_level > 0 ? Math.min(100, Math.round((i.quantity / i.min_stock_level) * 100)) : 100;
-              const barColor = pct <= 0 ? 'bg-red-500' : pct < 50 ? 'bg-amber-400' : pct < 100 ? 'bg-yellow-400' : 'bg-emerald-500';
-              return (
-              <tr key={i.id}
-                className={`border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${selectedProduct === i.product_id ? 'bg-blue-50' : ''}`}
-                onClick={() => setSelectedProduct(selectedProduct === i.product_id ? null : i.product_id)}>
-                <td className="px-4 py-3 font-mono text-sm text-gray-500">{i.code}</td>
-                <td className="px-4 py-3 font-medium text-gray-800">{i.product_name}</td>
-                <td className="px-4 py-3 text-sm text-gray-500">{i.category_name || '-'}</td>
-                <td className="px-4 py-3 text-sm text-gray-500">{i.unit}</td>
-                <td className="px-4 py-3 text-sm">
-                  <div className="flex items-center gap-2 min-w-[80px]">
-                    <div className="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                      <div className={`h-full rounded-full transition-all ${barColor}`} style={{ width: `${Math.max(2, pct)}%` }} />
-                    </div>
-                    <span className={`font-bold text-xs shrink-0 ${i.low_stock ? 'text-red-600' : 'text-emerald-600'}`}>{i.quantity}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm text-gray-500">{i.min_stock_level}</td>
-                <td className="px-4 py-3 text-xs text-gray-400">{pct}%</td>
-                <td className="px-4 py-3"><Badge color={i.low_stock ? 'red' : 'green'}>{i.low_stock ? 'Düşük' : 'Normal'}</Badge></td>
-              </tr>
-              );
-            })}
-          </Table>
-        )}
-      </Card>
+          <div>
+            <p className="text-xs text-gray-500">Ürün Çeşidi</p>
+            <p className="text-xl font-bold text-gray-800">{uniqueItems.toLocaleString('tr-TR')}</p>
+          </div>
+        </Card>
+        <Card className="p-4 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+            <BarChart2 size={16} className="text-emerald-600" />
+          </div>
+          <div>
+            <p className="text-xs text-gray-500">Toplam Miktar</p>
+            <p className="text-xl font-bold text-gray-800">{totalQty.toLocaleString('tr-TR', { maximumFractionDigits: 0 })}</p>
+          </div>
+        </Card>
+        <Card className="p-4 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center shrink-0">
+            <Warehouse size={16} className="text-purple-600" />
+          </div>
+          <div>
+            <p className="text-xs text-gray-500">Ambar</p>
+            <p className="text-xl font-bold text-gray-800">{activeAmbars}</p>
+          </div>
+        </Card>
+      </div>
 
-      {/* Hareketler */}
-      <Card className="p-5">
-        <h2 className="font-semibold text-gray-700 mb-4">
-          {selectedProduct ? `Hareket Geçmişi — ${inventory.find(i => i.product_id === selectedProduct)?.product_name || ''}` : 'Son Stok Hareketleri'}
-          {selectedProduct && <button onClick={() => setSelectedProduct(null)} className="ml-2 text-xs text-blue-500 underline">Tümünü Göster</button>}
-        </h2>
-        <Table headers={['Tarih', 'Ürün', 'Tip', 'Miktar', 'Referans', 'Kullanıcı']}
-          empty={transactions.length === 0 && 'Hareket yok'}>
-          {transactions.map(t => (
-            <tr key={t.id} className="border-b border-gray-100 hover:bg-gray-50">
-              <td className="px-4 py-2 text-sm text-gray-500">{new Date(t.created_at).toLocaleDateString('tr-TR')}</td>
-              <td className="px-4 py-2 text-sm font-medium text-gray-800">{t.product_name}</td>
-              <td className="px-4 py-2">
-                {t.type === 'in' ? <span className="flex items-center gap-1 text-emerald-600 text-sm"><ArrowDown size={14} />Giriş</span>
-                  : t.type === 'out' ? <span className="flex items-center gap-1 text-red-500 text-sm"><ArrowUp size={14} />Çıkış</span>
-                  : <Badge color="gray">Düzeltme</Badge>}
-              </td>
-              <td className="px-4 py-2 text-sm font-semibold text-gray-700">{t.quantity}</td>
-              <td className="px-4 py-2 text-sm text-gray-500">{t.reference || '-'}</td>
-              <td className="px-4 py-2 text-sm text-gray-500">{t.created_by_name || '-'}</td>
-            </tr>
-          ))}
-        </Table>
-      </Card>
+      {isEmpty ? (
+        <Card className="p-10 text-center">
+          <Package size={32} className="mx-auto mb-3 text-gray-300" />
+          <p className="text-gray-500 text-sm">Henüz stok verisi yok.</p>
+          {canEdit && (
+            <p className="text-gray-400 text-xs mt-1">
+              "EVIRA'dan Güncelle" butonuna basarak verileri yükleyin.
+            </p>
+          )}
+        </Card>
+      ) : (
+        <Card className="overflow-hidden">
+          {/* Filtreler */}
+          <div className="p-4 border-b border-gray-100 flex flex-wrap gap-3 items-center">
+            <div className="relative flex-1 min-w-[180px]">
+              <Search size={14} className="absolute left-2.5 top-2 text-gray-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Stok kodu veya adı…"
+                className="w-full pl-8 pr-3 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+            </div>
+            <select
+              value={ambarFilter}
+              onChange={e => setAmbarFilter(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            >
+              <option value="">Tüm Ambarlar</option>
+              {ambars.map(a => (
+                <option key={a.ambar_kodu} value={a.ambar_kodu}>{a.ambar_adi || a.ambar_kodu}</option>
+              ))}
+            </select>
+            <span className="text-xs text-gray-400 ml-auto">
+              {filtered.length} / {rows.length} kayıt
+              {data?.synced_at && ` · ${formatDate(data.synced_at)}`}
+            </span>
+          </div>
 
-      {/* Stok Hareketi Modal */}
-      <Modal open={modal} onClose={() => setModal(false)} title="Stok Hareketi Ekle">
-        <Select label="Ürün *" value={form.product_id} onChange={e => setForm(f => ({ ...f, product_id: e.target.value }))}>
-          <option value="">Seçin...</option>
-          {inventory.map(i => <option key={i.product_id} value={i.product_id}>{i.code} — {i.product_name} (Mevcut: {i.quantity})</option>)}
-        </Select>
-        <Select label="Hareket Tipi" value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} className="mt-3">
-          <option value="in">Giriş</option>
-          <option value="out">Çıkış</option>
-          <option value="adjustment">Stok Düzeltme (Mutlak)</option>
-        </Select>
-        <Input label="Miktar *" type="number" value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: e.target.value }))} className="mt-3" />
-        <Input label="Referans (PO No vb.)" value={form.reference} onChange={e => setForm(f => ({ ...f, reference: e.target.value }))} className="mt-3" />
-        <Input label="Notlar" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} className="mt-3" />
-        {txMutation.error && <p className="text-red-500 text-sm mt-2">{txMutation.error.response?.data?.error}</p>}
-        <div className="flex justify-end gap-3 mt-4">
-          <Button variant="secondary" onClick={() => setModal(false)}>İptal</Button>
-          <Button onClick={() => txMutation.mutate(form)} disabled={!form.product_id || !form.quantity || txMutation.isPending}>Kaydet</Button>
-        </div>
-      </Modal>
+          {/* Tablo */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Ambar</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Stok Kodu</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Stok Adı</th>
+                  <th className="text-center px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Birim</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Miktar</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {filtered.map((r, i) => (
+                  <tr key={i} className="hover:bg-gray-50/60">
+                    <td className="px-4 py-2.5">
+                      <span className="inline-block px-2 py-0.5 text-xs rounded-full bg-purple-50 text-purple-700 font-medium">
+                        {r.ambar_adi || r.ambar_kodu}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5 font-mono text-xs text-gray-600">{r.stok_kodu}</td>
+                    <td className="px-4 py-2.5 text-gray-800">{r.stok_adi}</td>
+                    <td className="px-4 py-2.5 text-center text-gray-500">{r.birim}</td>
+                    <td className="px-4 py-2.5 text-right font-semibold text-gray-800">
+                      {Number(r.miktar).toLocaleString('tr-TR', { maximumFractionDigits: 2 })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

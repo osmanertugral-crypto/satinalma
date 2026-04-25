@@ -26,6 +26,9 @@ export const removeSupplierProduct = (id, spId) => api.delete(`/suppliers/${id}/
 
 // Products
 export const getProducts = (params) => api.get('/products', { params });
+export const syncProductsFromTiger3 = () => api.post('/products/sync-tiger3');
+export const syncSuppliersFromTiger3 = () => api.post('/suppliers/sync-tiger3');
+export const syncPurchaseOrdersFromTiger3 = () => api.post('/po/sync-tiger3');
 export const getProduct = (id) => api.get(`/products/${id}`);
 export const getProductStats = (params) => api.get('/products/stats/charts', { params });
 export const createProduct = (data) => api.post('/products', data);
@@ -59,11 +62,19 @@ export const createRFQ = (data) => api.post('/rfq', data);
 export const addRFQResponse = (id, data) => api.post(`/rfq/${id}/responses`, data);
 export const updateRFQStatus = (id, data) => api.put(`/rfq/${id}/status`, data);
 
-// Inventory
+// Inventory (legacy)
 export const getInventory = () => api.get('/inventory');
 export const getInventoryTransactions = (params) => api.get('/inventory/transactions', { params });
 export const createInventoryTransaction = (data) => api.post('/inventory/transaction', data);
 export const syncInventoryFromExcel = () => api.post('/inventory/sync-excel');
+
+// EVIRA Envanter
+export const getEviraInventory = () => api.get('/evira/inventory');
+export const syncEviraInventory = () => api.post('/evira/sync');
+export const getEviraStatus = () => api.get('/evira/sync/status');
+export const testEviraConnection = (data) => api.post('/evira/test-connection', data);
+export const getEviraDbConnection = () => api.get('/evira/connection');
+export const updateEviraDbConnection = (data) => api.put('/evira/connection', data);
 
 // Documents
 export const getDocuments = (params) => api.get('/documents', { params });
@@ -153,3 +164,12 @@ export const importProjects = (file) => {
 // Ciro Raporu
 export const getCiroRaporu = () => api.get('/ciro/raporu');
 export const getCiroRaporuForce = () => api.get('/ciro/raporu', { params: { force: 'true' } });
+
+// Settings (Admin)
+export const getDbConnection = () => api.get('/settings/db-connection');
+export const updateDbConnection = (data) => api.put('/settings/db-connection', data);
+export const testDbConnection = (data) => api.post('/settings/db-connection/test', data);
+export const getSchedulerSettings = () => api.get('/settings/scheduler');
+export const updateSchedulerSettings = (data) => api.put('/settings/scheduler', data);
+export const syncNow = () => api.post('/settings/sync-now', {});
+export const getSyncStatus = () => api.get('/settings/sync-status');

@@ -1,0 +1,228 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "MASRAFMERKEZI",
+    "full_name":  "dbo.MASRAFMERKEZI",
+    "description":  "",
+    "total_rows":  "229",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MASRAF_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MASRAF_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MASRAF_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "300",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OZEL_KOD",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "YETKI_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "(N\u0027\u0027)",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OLUSTURMA_TARIHI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GUNCELLEME_TARIHI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "AKTIF",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "tinyint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "3",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__MASRAFME__7A9F989E3B78D2B2",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "MASRAF_KODU"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MASRAF_REF":  "18",
+                            "MASRAF_KODU":  "00",
+                            "MASRAF_ADI":  "ON LINE SATIS GELIRI",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "25.10.2021 13:46:27",
+                            "GUNCELLEME_TARIHI":  "2.11.2023 10:09:41",
+                            "AKTIF":  "1"
+                        },
+                        {
+                            "MASRAF_REF":  "30",
+                            "MASRAF_KODU":  "001",
+                            "MASRAF_ADI":  "ITHALAT GIDERLERI",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "29.12.2021 17:45:48",
+                            "GUNCELLEME_TARIHI":  "2.11.2023 10:09:48",
+                            "AKTIF":  "1"
+                        },
+                        {
+                            "MASRAF_REF":  "1",
+                            "MASRAF_KODU":  "01",
+                            "MASRAF_ADI":  "IDARI",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "18.05.2021 12:08:42",
+                            "GUNCELLEME_TARIHI":  "17.01.2025 15:31:41",
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "MASRAF_REF":  "2",
+                            "MASRAF_KODU":  "02",
+                            "MASRAF_ADI":  "ÜRETIM",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "18.05.2021 12:08:56",
+                            "GUNCELLEME_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "MASRAF_REF":  "3",
+                            "MASRAF_KODU":  "03",
+                            "MASRAF_ADI":  "YÖNETIM",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "18.05.2021 12:09:05",
+                            "GUNCELLEME_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "MASRAF_REF":  "36",
+                            "MASRAF_KODU":  "04",
+                            "MASRAF_ADI":  "MALI ISLER",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "2.11.2023 10:11:41",
+                            "GUNCELLEME_TARIHI":  null,
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "MASRAF_REF":  "4",
+                            "MASRAF_KODU":  "045",
+                            "MASRAF_ADI":  "GENEL ",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "18.05.2021 12:10:00",
+                            "GUNCELLEME_TARIHI":  "2.11.2023 10:10:52",
+                            "AKTIF":  "1"
+                        },
+                        {
+                            "MASRAF_REF":  "5",
+                            "MASRAF_KODU":  "05",
+                            "MASRAF_ADI":  "PAZARLAMA VE SATIS",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "19.05.2021 12:21:37",
+                            "GUNCELLEME_TARIHI":  "2.11.2023 10:11:59",
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "MASRAF_REF":  "6",
+                            "MASRAF_KODU":  "06",
+                            "MASRAF_ADI":  "AR-GE",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "19.05.2021 14:40:40",
+                            "GUNCELLEME_TARIHI":  "2.11.2023 10:12:11",
+                            "AKTIF":  "0"
+                        },
+                        {
+                            "MASRAF_REF":  "7",
+                            "MASRAF_KODU":  "07",
+                            "MASRAF_ADI":  "SATINALMA",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "OLUSTURMA_TARIHI":  "19.05.2021 14:40:56",
+                            "GUNCELLEME_TARIHI":  "2.11.2023 10:12:21",
+                            "AKTIF":  "0"
+                        }
+                    ]
+}

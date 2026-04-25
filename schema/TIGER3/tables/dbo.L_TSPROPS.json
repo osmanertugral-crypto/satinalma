@@ -1,0 +1,228 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_TSPROPS",
+    "full_name":  "dbo.L_TSPROPS",
+    "description":  "",
+    "total_rows":  "78",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TSID",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USECUSTOMDIR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USEREPORTNAME",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CUSTOMDIR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "235",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "REPORTNAME",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "20",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMNR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "USERNR",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "TSPROPS_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "TSID":  "000000000000000000000001",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "TSID":  "000000000000000000000001",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "TSID":  "000000000000000000000002",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "TSID":  "000000000000000000000002",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "TSID":  "000000000000000000000001",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "TSID":  "000000000000000000000001",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "TSID":  "000000000000000000000003",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "TSID":  "000000000000000000000003",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "TSID":  "000000000000000000000004",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "TSID":  "000000000000000000000004",
+                            "USECUSTOMDIR":  "0",
+                            "USEREPORTNAME":  "0",
+                            "CUSTOMDIR":  "",
+                            "REPORTNAME":  "",
+                            "FIRMNR":  "0",
+                            "USERNR":  "0"
+                        }
+                    ]
+}

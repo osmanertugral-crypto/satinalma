@@ -1,0 +1,165 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_223_01_ORFLINE",
+    "full_name":  "dbo.LV_223_01_ORFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_223_01_ORFLINE] AS\nSELECT\n    LGMAIN.LOGICALREF, LGMAIN.ORDFICHEREF, LGMAIN.STOCKREF, LGMAIN.LINENO_, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.DATE_, LGMAIN.LINETYPE, LGMAIN.TRCODE,   \n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.CODE WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.CODE ELSE \u0027\u0027 END AS CODE,\n CASE WHEN LGMAIN.LINETYPE IN (4) THEN SRVCARD.DEFINITION_ WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_ WHEN LGMAIN.LINETYPE NOT IN (2,3,4) THEN ITEM.NAME ELSE \u0027\u0027 END AS LINEEXP\nFROM\n    LG_223_01_ORFLINE LGMAIN WITH(NOLOCK)\n LEFT OUTER JOIN LG_223_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF AND LGMAIN.LINETYPE NOT IN (2,3,4)\n    LEFT OUTER JOIN lg_223_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF AND LGMAIN.LINETYPE IN (4)\n    LEFT OUTER JOIN LG_223_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF AND LGMAIN.LINETYPE IN (2,3)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDFICHEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENO_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "9730",
+                            "ORDFICHEREF":  "4657",
+                            "STOCKREF":  "5774",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "1",
+                            "PRICE":  "226,3833",
+                            "TOTAL":  "226,38",
+                            "DATE_":  "11.08.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "153-ECTURB100012",
+                            "LINEEXP":  "URBAN BADGER KATLANABİLİR SU BİDONU"
+                        },
+                        {
+                            "LOGICALREF":  "9731",
+                            "ORDFICHEREF":  "4658",
+                            "STOCKREF":  "5797",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "2",
+                            "PRICE":  "3067,3636",
+                            "TOTAL":  "6134,73",
+                            "DATE_":  "13.08.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "153-ECTURB100036",
+                            "LINEEXP":  "URBAN BADGER SALLANAN SANDALYE"
+                        },
+                        {
+                            "LOGICALREF":  "9732",
+                            "ORDFICHEREF":  "4660",
+                            "STOCKREF":  "5771",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "1",
+                            "PRICE":  "1304,25",
+                            "TOTAL":  "1304,25",
+                            "DATE_":  "14.08.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "153-ECTURB100009",
+                            "LINEEXP":  "URBAN BADGER HAFİF ÇADIR"
+                        },
+                        {
+                            "LOGICALREF":  "9733",
+                            "ORDFICHEREF":  "4662",
+                            "STOCKREF":  "5798",
+                            "LINENO_":  "1",
+                            "AMOUNT":  "1",
+                            "PRICE":  "990",
+                            "TOTAL":  "990",
+                            "DATE_":  "15.08.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "153-ECTURB100037",
+                            "LINEEXP":  "URBAN BADGER ÇANTALI KATLANIR SANDALYE KIRMIZI"
+                        },
+                        {
+                            "LOGICALREF":  "9734",
+                            "ORDFICHEREF":  "4662",
+                            "STOCKREF":  "5801",
+                            "LINENO_":  "2",
+                            "AMOUNT":  "1",
+                            "PRICE":  "990",
+                            "TOTAL":  "990",
+                            "DATE_":  "15.08.2024 00:00:00",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "CODE":  "153-ECTURB100040",
+                            "LINEEXP":  "URBAN BADGER ÇANTALI KATLANIR SANDALYE AÇIK MAVİ"
+                        }
+                    ]
+}

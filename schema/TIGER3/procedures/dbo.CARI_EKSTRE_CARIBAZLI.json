@@ -1,0 +1,59 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "CARI_EKSTRE_CARIBAZLI",
+    "full_name":  "dbo.CARI_EKSTRE_CARIBAZLI",
+    "created":  "Jul  4 2022  3:15PM",
+    "last_altered":  "Jul  4 2022  3:15PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@FRM",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "4",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DNM",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "4",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ILKTARIH",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "12",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@SONTARIH",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "12",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@ILK",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "65",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@SON",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "65",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       }
+                   ],
+    "definition":  " \r\nCREATE  PROC [dbo].[CARI_EKSTRE_CARIBAZLI]\r\n(\r\n@FRM VARCHAR(4)\r\n,@DNM VARCHAR(4)\r\n,@ILKTARIH VARCHAR(12)\r\n,@SONTARIH VARCHAR(12)\r\n,@ILK VARCHAR(65)\r\n,@SON VARCHAR(65)\r\n)\r\nAS\r\nEXEC(\u0027\r\nSET NOCOUNT ON\r\nBEGIN TRY\r\nBEGIN TRANSACTION\r\n \r\nDECLARE @DURUM Nvarchar (51)\r\nDECLARE @CLINTREF INTEGER\r\nDECLARE @CARI_KODU NVARCHAR(165)\r\nDECLARE @CARI_ADI NVARCHAR(165)\r\nDECLARE @BAKIYE FLOAT\r\nDECLARE @TARIH datetime\r\nDECLARE @FIS_TUR Nvarchar(165)\r\nDECLARE @OZEL_KOD Nvarchar (165)\r\nDECLARE @BELGE Nvarchar(165)\r\nDECLARE @ACIKLAMA Nvarchar(165)\r\nDECLARE @BORC FLOAT\r\nDECLARE @ALACAK FLOAT\r\nDECLARE @EKLEME_TARIH datetime\r\nDECLARE @EKLEYEN Nvarchar (65)\r\nDECLARE @DEGISTIRME_TARIH datetime\r\nDECLARE @DEGISTIREN Nvarchar (65)\r\n \r\nIF EXISTS(SELECT * FROM tempdb.dbo.sysobjects O\r\nWHERE O.xtype = \u0027\u0027U\u0027\u0027 AND O.id = OBJECT_ID(N\u0027\u0027tempdb..#TMP\u0027\u0027))\r\nBEGIN\r\nDROP TABLE #TMP\r\nEND\r\n \r\nCREATE TABLE #TMP\r\n(\r\n[CLINTREF] [int] NULL ,\r\n[CARI_KODU] [varchar] (165)  NULL ,\r\n[CARI_ADI] [varchar] (165)  NULL ,\r\n[TARIH] [datetime] NULL ,\r\n[FIS_TUR] [varchar] (165)   NULL ,\r\n[OZEL_KOD] [varchar] (165)  NULL ,\r\n[BELGE] [varchar] (165) NULL ,\r\n[ACIKLAMA] [varchar] (165)  NULL,\r\n[BORC] [FLOAT] NULL  ,\r\n[ALACAK] [FLOAT] NULL,\r\n[BAKIYE] [FLOAT] NULL,\r\n[DURUM] [varchar] (5)  NULL,\r\n[EKLEME_TARIH] [datetime] NULL ,\r\n[EKLEYEN] [varchar] (65)  NULL,\r\n[DEGISTIRME_TARIH] [datetime] NULL ,\r\n[DEGISTIREN] [varchar] (65)  NULL\r\n \r\n)\r\n \r\nDECLARE CARI_LISTE cursor for\r\n \r\nSELECT DISTINCT CARI.LOGICALREF, CARI.CODE , CARI.DEFINITION_\r\nFROM LG_\u0027 + @FRM + \u0027_CLCARD CARI  WHERE CARI.LOGICALREF IN(SELECT CLIENTREF FROM LG_\u0027 + @FRM + \u0027_\u0027 + @DNM + \u0027_CLFLINE ) AND  CARI.CODE BETWEEN  \u0027\u0027\u0027+ @ILK +\u0027\u0027\u0027 AND \u0027\u0027\u0027+ @SON +\u0027\u0027\u0027\r\nORDER BY CARI.LOGICALREF,CARI.CODE,CARI.DEFINITION_\r\n \r\nOPEN CARI_LISTE  FETCH NEXT FROM CARI_LISTE\r\nINTO @CLINTREF,@CARI_KODU,@CARI_ADI\r\n \r\nWHILE @@fetch_status = 0\r\n \r\nBEGIN\r\n \r\nDECLARE CARI_DETAY cursor for\r\n \r\nSELECT\r\nCARI_KODU,\r\nCARI_ADI,\r\nTARIH,\r\nFIS_TUR,\r\nOZEL_KOD,\r\nBELGE,\r\nACIKLAMA,\r\nBORC,\r\nALACAK,EKLEME_TARIH,EKLEYEN,DEGISTIREN_TARIH,DEGISTIREN\r\nFROM (\r\nSELECT\r\nMAX(CLNTC.CODE) CARI_KODU,\r\nMAX(CLNTC.DEFINITION_) CARI_ADI ,\r\nNULL TARIH,\r\n\u0027\u0027-\u0027\u0027 FIS_TUR,\r\n\u0027\u0027-\u0027\u0027 OZEL_KOD,\r\n\u0027\u0027-\u0027\u0027 BELGE,\r\n\u0027\u0027Devir Eden Bakiye\u0027\u0027 ACIKLAMA,\r\nISNULL(sum(ROUND((1-CTRNS.SIGN)*AMOUNT,2)),0) BORC,\r\nISNULL(sum(ROUND(CTRNS.SIGN*AMOUNT,2)),0) ALACAK,null EKLEME_TARIH,\u0027\u0027-\u0027\u0027 EKLEYEN,null DEGISTIREN_TARIH,\u0027\u0027-\u0027\u0027 DEGISTIREN\r\nFROM LG_\u0027 + @FRM + \u0027_CLCARD CLNTC  LEFT OUTER JOIN\r\nLG_\u0027 + @FRM + \u0027_\u0027 + @DNM + \u0027_CLFLINE CTRNS  ON (CTRNS.CLIENTREF = CLNTC.LOGICALREF)\r\nWHERE  CTRNS.CANCELLED=0 AND CTRNS.PAIDINCASH=0 AND CLNTC.CODE=@CARI_KODU AND CTRNS.DATE_\u003c CONVERT(DATETIME,\u0027\u0027\u0027 + @ILKTARIH + \u0027\u0027\u0027,104)\r\n \r\nUNION ALL\r\nSELECT\r\nCLNTC.CODE CARI_KODU ,CLNTC.DEFINITION_ CARI_ADI ,\r\nCONVERT(datetime, CTRNS.DATE_, 104)TARIH,\r\ncase WHEN CTRNS.TRCODE=1 THEN \u0027\u0027Nakit Tahsilat\u0027\u0027\r\nWHEN CTRNS.TRCODE=2 THEN \u0027\u0027Nakit Ödeme\u0027\u0027\r\nWHEN CTRNS.TRCODE=3 THEN \u0027\u0027Borç Dekontu\u0027\u0027\r\nWHEN CTRNS.TRCODE=4 THEN \u0027\u0027Alacak Dekontu\u0027\u0027\r\nWHEN CTRNS.TRCODE=5 THEN \u0027\u0027Virman İşlemi\u0027\u0027\r\nWHEN CTRNS.TRCODE=6 THEN \u0027\u0027Kur Farkı İşlemi\u0027\u0027\r\nWHEN CTRNS.TRCODE=12 THEN \u0027\u0027Özel İşlem\u0027\u0027\r\nWHEN CTRNS.TRCODE=14 THEN \u0027\u0027Açılış Fişi\u0027\u0027\r\nWHEN CTRNS.TRCODE=20 THEN \u0027\u0027Gelen Havaleler\u0027\u0027\r\nWHEN CTRNS.TRCODE=21 THEN \u0027\u0027Gönderilen Havaleler\u0027\u0027\r\nWHEN CTRNS.TRCODE=31 THEN \u0027\u0027Mal Alım Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=32 THEN \u0027\u0027Perakende Satış İade Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=33 THEN \u0027\u0027Toptan Satış İade Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=34 THEN \u0027\u0027Alınan Hizmet Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=35 THEN \u0027\u0027Alınan Proforma Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=36 THEN \u0027\u0027Alım İade Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=37 THEN \u0027\u0027Perakende Satış Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=38 THEN \u0027\u0027Toptan Satış Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=39 THEN \u0027\u0027Verilen Hizmet Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=40 THEN \u0027\u0027Verilen Proforma Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=41 THEN \u0027\u0027Verilen Vade Farkı Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=42 THEN \u0027\u0027Alınan Vade Farkı Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=43 THEN \u0027\u0027Alınan Fiyat Farkı Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=44 THEN \u0027\u0027Verilen Fiyat Farkı Faturası\u0027\u0027\r\nWHEN CTRNS.TRCODE=45 THEN \u0027\u0027Verilen Serbest Meslek Makbuzu\u0027\u0027\r\nWHEN CTRNS.TRCODE=46 THEN \u0027\u0027Alınan Serbest Meslek Makbuzu\u0027\u0027\r\nWHEN CTRNS.TRCODE=56 THEN \u0027\u0027Müstahsil Makbuzu\u0027\u0027\r\nWHEN CTRNS.TRCODE=70 THEN \u0027\u0027Kredi Kartı Fişi\u0027\u0027\r\nWHEN CTRNS.TRCODE=71 THEN \u0027\u0027Kredi Kartı Fişi İade\u0027\u0027\r\nWHEN CTRNS.TRCODE=72 THEN \u0027\u0027Firma Kredi Kartı Fişi\u0027\u0027\r\nWHEN CTRNS.TRCODE=73 THEN \u0027\u0027Firma Kredi Kartı Fişi İade\u0027\u0027\r\nWHEN CTRNS.TRCODE=61 THEN \u0027\u0027Çek Girişi\u0027\u0027\r\nWHEN CTRNS.TRCODE=62 THEN \u0027\u0027Senet Girişi\u0027\u0027\r\nWHEN CTRNS.TRCODE=63 THEN \u0027\u0027Çek Çıkış Cari Hesaba\u0027\u0027\r\nWHEN CTRNS.TRCODE=64 THEN \u0027\u0027Senet Çıkış Cari Hesaba\u0027\u0027\r\nWHEN CTRNS.TRCODE=75 THEN \u0027\u0027Özel Dekont\u0027\u0027\r\nend as FIS_TUR,\r\nCTRNS.DOCODE OZEL_KOD,\r\nCTRNS.SPECODE AS BELGE,\r\nCTRNS.LINEEXP AS ACIKLAMA,\r\nISNULL(ROUND((1-CTRNS.SIGN)*AMOUNT,2),0) AS BORC,\r\nISNULL(ROUND(CTRNS.SIGN*AMOUNT,2),0) AS ALACAK,\r\nCONVERT(DATETIME,CTRNS.CAPIBLOCK_CREADEDDATE,104) AS EKLEME_TARIH,\r\nEKLEYEN.NAME EKLEYEN,\r\nCONVERT(DATETIME,CTRNS.CAPIBLOCK_MODIFIEDDATE,104) AS DEGISTIREN_TARIH,\r\nDEGISTIREN.NAME DEGISTIREN\r\nFROM\r\nLG_\u0027 + @FRM + \u0027_\u0027 + @DNM + \u0027_CLFLINE CTRNS LEFT OUTER JOIN\r\nLG_\u0027 + @FRM + \u0027_CLCARD CLNTC  ON (CTRNS.CLIENTREF = CLNTC.LOGICALREF)\r\nLEFT OUTER JOIN L_CAPIUSER EKLEYEN ON  EKLEYEN.NR=CTRNS.CAPIBLOCK_CREATEDBY\r\nLEFT OUTER JOIN L_CAPIUSER DEGISTIREN  ON  DEGISTIREN.NR=CTRNS.CAPIBLOCK_MODIFIEDBY\r\nWHERE  CTRNS.CANCELLED=0 AND CTRNS.PAIDINCASH=0 AND CLNTC.CODE=@CARI_KODU AND CTRNS.DATE_ BETWEEN  CONVERT(DATETIME,\u0027\u0027\u0027 + @ILKTARIH + \u0027\u0027\u0027,104) AND  CONVERT(DATETIME,\u0027\u0027\u0027 + @SONTARIH + \u0027\u0027\u0027,104))VEDAT_OZER\r\nORDER BY VEDAT_OZER.CARI_KODU,VEDAT_OZER.TARIH\r\n \r\nSET  @BAKIYE = 0\r\n \r\nOPEN CARI_DETAY FETCH NEXT FROM CARI_DETAY\r\nINTO\r\n@CARI_KODU,\r\n@CARI_ADI,\r\n@TARIH,\r\n@FIS_TUR,\r\n@OZEL_KOD,\r\n@BELGE,\r\n@ACIKLAMA,\r\n@BORC,\r\n@ALACAK,\r\n@EKLEME_TARIH,\r\n@EKLEYEN,\r\n@DEGISTIRME_TARIH,\r\n@DEGISTIREN\r\n \r\nWHILE @@fetch_status = 0\r\n \r\nBEGIN\r\n \r\nSET  @BAKIYE =ROUND( @BAKIYE  + @BORC - @ALACAK ,2)\r\nSET  @DURUM = CASE WHEN @BAKIYE\u003e0 THEN \u0027\u0027(B)\u0027\u0027 WHEN @BAKIYE\u003c0 THEN \u0027\u0027(A)\u0027\u0027  WHEN @BAKIYE=0 THEN \u0027\u0027(-)\u0027\u0027 ELSE \u0027\u0027\u0027\u0027 END\r\n \r\nINSERT INTO #TMP (\r\nCLINTREF,\r\nCARI_KODU,\r\nCARI_ADI,\r\nTARIH,\r\nFIS_TUR,\r\nOZEL_KOD,\r\nBELGE,\r\nACIKLAMA,\r\nBORC,\r\nALACAK,\r\nBAKIYE,\r\nDURUM,\r\nEKLEME_TARIH,\r\nEKLEYEN,\r\nDEGISTIRME_TARIH,\r\nDEGISTIREN)\r\nVALUES(\r\n@CLINTREF,\r\n@CARI_KODU,\r\n@CARI_ADI,\r\n@TARIH,\r\n@FIS_TUR,\r\n@OZEL_KOD,\r\n@BELGE,\r\n@ACIKLAMA,\r\n@BORC,\r\n@ALACAK,\r\n@BAKIYE,\r\n@DURUM,\r\n@EKLEME_TARIH,\r\n@EKLEYEN,\r\n@DEGISTIRME_TARIH,\r\n@DEGISTIREN)\r\n \r\nFETCH NEXT FROM CARI_DETAY\r\nINTO\r\n@CARI_KODU,\r\n@CARI_ADI,\r\n@TARIH,\r\n@FIS_TUR,\r\n@OZEL_KOD,\r\n@BELGE,\r\n@ACIKLAMA,\r\n@BORC,\r\n@ALACAK,\r\n@EKLEME_TARIH,\r\n@EKLEYEN,\r\n@DEGISTIRME_TARIH,\r\n@DEGISTIREN\r\n \r\nEND\r\nCLOSE CARI_DETAY\r\nDEALLOCATE CARI_DETAY\r\n \r\nFETCH NEXT FROM CARI_LISTE\r\nINTO\r\n@CLINTREF,\r\n@CARI_KODU,\r\n@CARI_ADI\r\nEND\r\nCLOSE CARI_LISTE\r\nDEALLOCATE CARI_LISTE\r\n \r\nCOMMIT TRAN\r\nPRINT(\u0027\u0027Cari Hesap Ekstresini Başarıyla Tamamlanmıştır.\u0027\u0027)\r\nEND TRY\r\n \r\nBEGIN CATCH\r\nIF @@TRANCOUNT \u003e 0\r\nBEGIN\r\nROLLBACK TRAN\r\nPRINT(\u0027\u0027Cari Hesap Ekstresinde Hata Var. Lütfen Tekrar Deneyin !\u0027\u0027)\r\nEND\r\nEND CATCH\r\n \r\nSELECT\r\nCARI_KODU as [Carı Kodu],\r\nCARI_ADI as [Carı Adı],\r\nTARIH as [Tarih],\r\nFIS_TUR as [Fiş Türü],\r\nBELGE [Özel Kod],\r\nOZEL_KOD [Belge No],\r\nACIKLAMA [Açıklama],\r\nBORC [Borç],\r\nALACAK [Alacak],\r\nBAKIYE [Bakiye],\r\nDURUM [B-A],\r\nEKLEME_TARIH [Ekleme Tarihi],\r\nEKLEYEN [Ekleyen Kişi],\r\nDEGISTIRME_TARIH [Değiştirme Tarihi],\r\nDEGISTIREN as [Değiştiren Kişi]\r\nFROM #TMP WHERE  CARI_KODU IS NOT NULL\r\nORDER BY CARI_KODU\r\n \r\n\u0027)"
+}

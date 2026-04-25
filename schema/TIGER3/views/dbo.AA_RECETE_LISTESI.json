@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_RECETE_LISTESI",
+    "full_name":  "dbo.AA_RECETE_LISTESI",
+    "definition":  "CREATE VIEW AA_RECETE_LISTESI AS\r\n\r\n\r\nselect \r\nSM.CODE MAMUL_KODU\r\n,SM.NAME MAMUL_ADI\r\n,S.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,R.AMNT MIKTAR\r\n,U.CODE BIRIM\r\n\r\n\r\n\r\n\r\nfrom LG_001_STCOMPLN AS R\r\nINNER JOIN LG_001_ITEMS AS S ON S.LOGICALREF=R.STCREF\r\nINNER JOIN LG_001_ITEMS AS SM ON SM.LOGICALREF=R.MAINCREF\r\nINNER JOIN LG_001_UNITSETL AS U ON U.LOGICALREF=R.UOMREF\r\n\r\n\r\n\r\n\r\n\r\n--WHERE MAINCREF=4869\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MAMUL_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MAMUL_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X779",
+                            "STOK_ADI":  "130\u0027LUK DIŞ ELEKTRİK GİRİŞİ",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X122",
+                            "STOK_ADI":  "İLKESTER GIN-313 RAL KODLU -JELKOT 9016 BEYAZ ",
+                            "MIKTAR":  "27",
+                            "BIRIM":  "KG"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X172",
+                            "STOK_ADI":  "POLYESTER",
+                            "MIKTAR":  "115",
+                            "BIRIM":  "KG"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X220",
+                            "STOK_ADI":  "WAX",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X103",
+                            "STOK_ADI":  "E MAT 300 CAM ELYAF",
+                            "MIKTAR":  "50",
+                            "BIRIM":  "KG"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X104",
+                            "STOK_ADI":  "E MAT 450 CAM ELYAF",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "KG"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X161",
+                            "STOK_ADI":  "ÖRGÜ ELYAF",
+                            "MIKTAR":  "15",
+                            "BIRIM":  "KG"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X87",
+                            "STOK_ADI":  "BUTANOX M50 ",
+                            "MIKTAR":  "0,5",
+                            "BIRIM":  "KG"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X327",
+                            "STOK_ADI":  "PARMAK RULO",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        },
+                        {
+                            "MAMUL_KODU":  "G0.TÜRKİYE.01 BANYOLU",
+                            "MAMUL_ADI":  "GLADIATOR  MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "2021X26",
+                            "STOK_ADI":  "20 LİK SAPLI POST RULO ",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET"
+                        }
+                    ]
+}

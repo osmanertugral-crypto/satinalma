@@ -1,0 +1,219 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_CPA_DEF",
+    "full_name":  "dbo.L_CPA_DEF",
+    "description":  "",
+    "total_rows":  "5684",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CPAREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "INDEX_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DESCRIPTION",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "255",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SCOPE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "255",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OUTOFSCOPE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "255",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ALSOSCOPE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "255",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "CPA_DEF_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "CPA_DEF_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "CPAREF"
+                    },
+                    {
+                        "index_name":  "CPA_DEF_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CPAREF, INDEX_"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CPAREF":  "1",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "TARIM, ORMANCILIK VE BALIKÇILIK ÜRÜNLERİ",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CPAREF":  "2",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Tarım ve avcılık ürünleri ve ilgili hizmetler",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CPAREF":  "3",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Tek yıllık (uzun ömürlü olmayan) bitkisel ürünler",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CPAREF":  "4",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Tahıllar (pirinç hariç), baklagiller ve yağlı tohumlar",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CPAREF":  "5",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Buğday",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CPAREF":  "6",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Durum buğdayı",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CPAREF":  "7",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Buğday, durum buğdayı hariç",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CPAREF":  "8",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Mısır",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CPAREF":  "9",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Mısır",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CPAREF":  "10",
+                            "INDEX_":  "1",
+                            "DESCRIPTION":  "Arpa, çavdar ve yulaf",
+                            "SCOPE":  "",
+                            "OUTOFSCOPE":  "",
+                            "ALSOSCOPE":  ""
+                        }
+                    ]
+}

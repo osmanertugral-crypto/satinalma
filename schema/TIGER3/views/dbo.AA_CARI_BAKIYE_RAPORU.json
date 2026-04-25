@@ -1,0 +1,116 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_CARI_BAKIYE_RAPORU",
+    "full_name":  "dbo.AA_CARI_BAKIYE_RAPORU",
+    "definition":  "CREATE VIEW AA_CARI_BAKIYE_RAPORU AS \r\nSELECT CARDREF CLREF, (SELECT clc.code FROM dbo.LG_001_CLCARD clc WHERE clc.LOGICALREF= CARDREF) CARI_KOD,\r\n(SELECT clc.DEFINITION_ FROM dbo.LG_001_CLCARD clc WHERE clc.LOGICALREF= CARDREF) CARI_AD,\r\nCONVERT(DECIMAL(38,2),ABS(SUM (GNCLTOT.DEBIT)-SUM (GNCLTOT.CREDIT))) BAKIYE ,\r\nCASE WHEN SUM (GNCLTOT.DEBIT)-SUM (GNCLTOT.CREDIT)\u003c0 THEN \u0027A\u0027 WHEN SUM (GNCLTOT.DEBIT)-SUM (GNCLTOT.CREDIT)\u003e0 THEN \u0027B\u0027 ELSE \u0027\u0027 END   BT\r\n FROM\r\nLV_001_01_GNTOTCL GNCLTOT\r\n WITH(NOLOCK) \r\n WHERE\r\n  (GNCLTOT.TOTTYP = 1 OR GNCLTOT.TOTTYP = 2)  AND   (SELECT clc.code FROM dbo.LG_001_CLCARD clc WHERE clc.LOGICALREF= CARDREF) IS NOT NULL\r\nGROUP BY\r\nGNCLTOT.CARDREF,GNCLTOT.TOTTYP",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CLREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI_KOD",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI_AD",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "1",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CLREF":  "132",
+                            "CARI_KOD":  "120.01.0001",
+                            "CARI_AD":  "YELİZ UÇKUN",
+                            "BAKIYE":  "1473,47",
+                            "BT":  "A"
+                        },
+                        {
+                            "CLREF":  "132",
+                            "CARI_KOD":  "120.01.0001",
+                            "CARI_AD":  "YELİZ UÇKUN",
+                            "BAKIYE":  "23000,00",
+                            "BT":  "A"
+                        },
+                        {
+                            "CLREF":  "133",
+                            "CARI_KOD":  "120.01.0002",
+                            "CARI_AD":  "BARIŞ SEDEF",
+                            "BAKIYE":  "16138,20",
+                            "BT":  "B"
+                        },
+                        {
+                            "CLREF":  "133",
+                            "CARI_KOD":  "120.01.0002",
+                            "CARI_AD":  "BARIŞ SEDEF",
+                            "BAKIYE":  "21500,00",
+                            "BT":  "B"
+                        },
+                        {
+                            "CLREF":  "137",
+                            "CARI_KOD":  "120.01.0006",
+                            "CARI_AD":  "MUHARREM GÜLER",
+                            "BAKIYE":  "161,58",
+                            "BT":  "A"
+                        },
+                        {
+                            "CLREF":  "137",
+                            "CARI_KOD":  "120.01.0006",
+                            "CARI_AD":  "MUHARREM GÜLER",
+                            "BAKIYE":  "2500,00",
+                            "BT":  "A"
+                        },
+                        {
+                            "CLREF":  "141",
+                            "CARI_KOD":  "120.01.0010",
+                            "CARI_AD":  "TAYFUN SARI",
+                            "BAKIYE":  "63,58",
+                            "BT":  "A"
+                        },
+                        {
+                            "CLREF":  "141",
+                            "CARI_KOD":  "120.01.0010",
+                            "CARI_AD":  "TAYFUN SARI",
+                            "BAKIYE":  "0,00",
+                            "BT":  ""
+                        },
+                        {
+                            "CLREF":  "144",
+                            "CARI_KOD":  "120.01.0013",
+                            "CARI_AD":  "NERİMAN GEZER",
+                            "BAKIYE":  "63,77",
+                            "BT":  "A"
+                        },
+                        {
+                            "CLREF":  "144",
+                            "CARI_KOD":  "120.01.0013",
+                            "CARI_AD":  "NERİMAN GEZER",
+                            "BAKIYE":  "1180,00",
+                            "BT":  "A"
+                        }
+                    ]
+}

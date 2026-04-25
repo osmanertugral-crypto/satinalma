@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "TALEP_KARSILAMA_DURUM_RAPORU",
+    "full_name":  "dbo.TALEP_KARSILAMA_DURUM_RAPORU",
+    "definition":  "\r\nCREATE VIEW [dbo].[TALEP_KARSILAMA_DURUM_RAPORU]\r\nAS\r\nSELECT\r\n    TARIH,\r\n    GRUP,\r\n    FIS_NO,\r\n    PROJE,\r\n    STOK_KODU,\r\n    STOK_ADI,\r\n    TALEP_MIKTAR,\r\n    TALEP_KARSILAMA_MIKTAR,\r\n    GEBZE_STOK,\r\n    MONTAJ_STOK,\r\n    URETIM_STOK,\r\n    ISNULL((\r\n        SELECT SUM(MIKTAR) - SUM(SEVKEDILEN_MIKTAR) \r\n        FROM SIPARISFISLERI SF \r\n        INNER JOIN SIPARISHAREKETLERI SH ON SF.SB_REF = SH.SB_REF \r\n        WHERE SF.KAPALI = 0 \r\n        AND SH.STOK_REF = LIST.ANA_STOK_REF \r\n        AND SF.SIPARIS_TURU = 2\r\n    ), 0) AS SIPARIS_MIKTAR\r\nFROM (\r\n    -- First subquery for main products\r\n    SELECT \r\n        PF.TARIH,\r\n        \u00271\u0027 AS GRUP,\r\n        PF.FIS_NO,\r\n        P.PROJE_KODU + \u0027-\u0027 + P.PROJE_ADI AS PROJE,\r\n        PF.TB_REF,\r\n        SK.STOK_REF AS ANA_STOK_REF,\r\n        \u00270\u0027 AS STOK_ALT_REF,\r\n        SK.STOK_KODU,\r\n        SK.STOK_ADI,\r\n        SUM(PH.MIKTAR) AS TALEP_MIKTAR,\r\n        ISNULL((\r\n            SELECT SUM(MIKTAR) \r\n            FROM STOKHAREKETLERI SH \r\n            WHERE SH.TB_REF = PF.TB_REF \r\n            AND SH.STOK_REF = PH.STOK_REF \r\n            AND SH.FIS_TURU IN (25, 303)\r\n        ), 0) AS TALEP_KARSILAMA_MIKTAR,\r\n        ISNULL((\r\n            SELECT CONVERT(NUMERIC(18,2), SUM(MIKTAR)) \r\n            FROM AMBARTAKIP AT \r\n            WHERE AT.STOK_REF = PH.STOK_REF \r\n            AND AT.AMBAR_KODU = 2\r\n        ), 0) AS GEBZE_STOK,\r\n        ISNULL((\r\n            SELECT CONVERT(NUMERIC(18,2), SUM(MIKTAR)) \r\n            FROM AMBARTAKIP AT \r\n            WHERE AT.STOK_REF = PH.STOK_REF \r\n            AND AT.AMBAR_KODU = 5\r\n        ), 0) AS MONTAJ_STOK,\r\n        ISNULL((\r\n            SELECT CONVERT(NUMERIC(18,2), SUM(MIKTAR)) \r\n            FROM AMBARTAKIP AT \r\n            WHERE AT.STOK_REF = PH.STOK_REF \r\n            AND AT.AMBAR_KODU = 11\r\n        ), 0) AS URETIM_STOK\r\n    FROM TALEPFISLERI PF \r\n    LEFT OUTER JOIN TALEPHAREKETLERI PH ON PF.TB_REF = PH.TB_REF\r\n    LEFT OUTER JOIN STOKKARTI SK ON SK.STOK_REF = PH.STOK_REF \r\n    LEFT OUTER JOIN PROJE P ON P.PROJE_REF = PF.PROJE_REF\r\n    WHERE PF.TB_TURU = 1\r\n    GROUP BY \r\n        SK.STOK_KODU, SK.STOK_ADI, PF.TB_REF, PH.STOK_REF,\r\n        SK.STOK_TIPI, SK.STOK_REF, PF.FIS_NO, P.PROJE_KODU,\r\n        P.PROJE_ADI, PF.TARIH\r\n\r\n    UNION ALL\r\n\r\n    -- Second subquery for sub-products\r\n    SELECT \r\n        PF.TARIH,\r\n        \u00272\u0027 AS GRUP,\r\n        PF.FIS_NO,\r\n        P.PROJE_KODU + \u0027-\u0027 + P.PROJE_ADI AS PROJE,\r\n        PF.TB_REF,\r\n        SK.STOK_REF AS ANA_STOK_REF,\r\n        SK.STOK_ALT_REF,\r\n        SK.STOK_ALT_KOD,\r\n        SK.STOK_ALT_ADI,\r\n        SUM(SK.MIKTAR) * SUM(PH.MIKTAR) AS TALEP_MIKTAR,\r\n        ISNULL((\r\n            SELECT SUM(SK.MIKTAR) * SUM(SH.MIKTAR) \r\n            FROM STOKHAREKETLERI SH \r\n            WHERE SH.TB_REF = PF.TB_REF \r\n            AND SH.STOK_REF = PH.STOK_REF \r\n            AND SH.FIS_TURU IN (25, 303)\r\n        ), 0) AS TALEP_KARSILAMA_MIKTAR,\r\n        ISNULL((\r\n            SELECT CONVERT(NUMERIC(18,2), SUM(MIKTAR)) \r\n            FROM AMBARTAKIP AT \r\n            WHERE AT.STOK_REF = SK.STOK_ALT_REF \r\n            AND AT.AMBAR_KODU = 2\r\n        ), 0) AS GEBZE_STOK,\r\n        ISNULL((\r\n            SELECT CONVERT(NUMERIC(18,2), SUM(MIKTAR)) \r\n            FROM AMBARTAKIP AT \r\n            WHERE AT.STOK_REF = SK.STOK_ALT_REF \r\n            AND AT.AMBAR_KODU = 5\r\n        ), 0) AS MONTAJ_STOK,\r\n        ISNULL((\r\n            SELECT CONVERT(NUMERIC(18,2), SUM(MIKTAR)) \r\n            FROM AMBARTAKIP AT \r\n            WHERE AT.STOK_REF = SK.STOK_ALT_REF \r\n            AND AT.AMBAR_KODU = 11\r\n        ), 0) AS URETIM_STOK\r\n    FROM TALEPFISLERI PF \r\n    LEFT OUTER JOIN TALEPHAREKETLERI PH ON PF.TB_REF = PH.TB_REF\r\n    LEFT OUTER JOIN ALT_URUN_VIEW SK ON SK.STOK_REF = PH.STOK_REF \r\n    LEFT OUTER JOIN PROJE P ON P.PROJE_REF = PF.PROJE_REF\r\n    WHERE PF.TB_TURU = 1\r\n    GROUP BY \r\n        SK.STOK_ALT_KOD, SK.STOK_ALT_ADI, PF.TB_REF, PH.STOK_REF,\r\n        SK.STOK_REF, SK.STOK_ALT_REF, PF.FIS_NO, P.PROJE_KODU,\r\n        P.PROJE_ADI, PF.TARIH\r\n) LIST \r\nWHERE \r\n    ANA_STOK_REF IS NOT NULL \r\n    AND LIST.TARIH \u003e= \u00272024-01-01\u0027\r\n    AND LIST.TARIH \u003c= \u00272024-12-31\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GRUP",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "1",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "401",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TALEP_MIKTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TALEP_KARSILAMA_MIKTAR",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "GEBZE_STOK",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "numeric",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTAJ_STOK",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "numeric",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_STOK",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "numeric",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIPARIS_MIKTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "TARIH":  "8.05.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "G0405",
+                            "PROJE":  "G0405-CELCAMP BANYOLU",
+                            "STOK_KODU":  "3DBK0099H001",
+                            "STOK_ADI":  "DUSLUK 40X60 BOGAZ",
+                            "TALEP_MIKTAR":  "1",
+                            "TALEP_KARSILAMA_MIKTAR":  "0",
+                            "GEBZE_STOK":  "39,00",
+                            "MONTAJ_STOK":  "0,00",
+                            "URETIM_STOK":  "0,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "28.11.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "GS0449",
+                            "PROJE":  "GS0449-WILD CAMPERS",
+                            "STOK_KODU":  "3DBK0099H001",
+                            "STOK_ADI":  "DUSLUK 40X60 BOGAZ",
+                            "TALEP_MIKTAR":  "1",
+                            "TALEP_KARSILAMA_MIKTAR":  "0",
+                            "GEBZE_STOK":  "39,00",
+                            "MONTAJ_STOK":  "0,00",
+                            "URETIM_STOK":  "0,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "8.05.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "G0405",
+                            "PROJE":  "G0405-CELCAMP BANYOLU",
+                            "STOK_KODU":  "3DBK0099H002",
+                            "STOK_ADI":  "DUSLUK KARE ÇERÇEVE",
+                            "TALEP_MIKTAR":  "1",
+                            "TALEP_KARSILAMA_MIKTAR":  "0",
+                            "GEBZE_STOK":  "28,00",
+                            "MONTAJ_STOK":  "0,00",
+                            "URETIM_STOK":  "0,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "28.11.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "GS0449",
+                            "PROJE":  "GS0449-WILD CAMPERS",
+                            "STOK_KODU":  "3DBK0099H002",
+                            "STOK_ADI":  "DUSLUK KARE ÇERÇEVE",
+                            "TALEP_MIKTAR":  "1",
+                            "TALEP_KARSILAMA_MIKTAR":  "0",
+                            "GEBZE_STOK":  "28,00",
+                            "MONTAJ_STOK":  "0,00",
+                            "URETIM_STOK":  "0,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "15.01.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "G0358",
+                            "PROJE":  "G0358-CELCAMP BANYOSUZ",
+                            "STOK_KODU":  "3DBK0099H004",
+                            "STOK_ADI":  "MERDIVEN AYAK",
+                            "TALEP_MIKTAR":  "2",
+                            "TALEP_KARSILAMA_MIKTAR":  "2",
+                            "GEBZE_STOK":  "35,00",
+                            "MONTAJ_STOK":  "2,00",
+                            "URETIM_STOK":  "8,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "15.01.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "G0353",
+                            "PROJE":  "G0353-NAYIM AKKAYA BANYOLU",
+                            "STOK_KODU":  "3DBK0099H004",
+                            "STOK_ADI":  "MERDIVEN AYAK",
+                            "TALEP_MIKTAR":  "2",
+                            "TALEP_KARSILAMA_MIKTAR":  "2",
+                            "GEBZE_STOK":  "35,00",
+                            "MONTAJ_STOK":  "2,00",
+                            "URETIM_STOK":  "8,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "15.01.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "G0354",
+                            "PROJE":  "G0354-NAYIM AKKAYA BANYOLU",
+                            "STOK_KODU":  "3DBK0099H004",
+                            "STOK_ADI":  "MERDIVEN AYAK",
+                            "TALEP_MIKTAR":  "2",
+                            "TALEP_KARSILAMA_MIKTAR":  "2",
+                            "GEBZE_STOK":  "35,00",
+                            "MONTAJ_STOK":  "2,00",
+                            "URETIM_STOK":  "8,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "15.01.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "G0356",
+                            "PROJE":  "G0356-NAYIM AKKAYA BANYOLU",
+                            "STOK_KODU":  "3DBK0099H004",
+                            "STOK_ADI":  "MERDIVEN AYAK",
+                            "TALEP_MIKTAR":  "2",
+                            "TALEP_KARSILAMA_MIKTAR":  "2",
+                            "GEBZE_STOK":  "35,00",
+                            "MONTAJ_STOK":  "2,00",
+                            "URETIM_STOK":  "8,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "12.02.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "G0360",
+                            "PROJE":  "G0360-CHILE BANYOSUZ",
+                            "STOK_KODU":  "3DBK0099H004",
+                            "STOK_ADI":  "MERDIVEN AYAK",
+                            "TALEP_MIKTAR":  "2",
+                            "TALEP_KARSILAMA_MIKTAR":  "2",
+                            "GEBZE_STOK":  "35,00",
+                            "MONTAJ_STOK":  "2,00",
+                            "URETIM_STOK":  "8,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        },
+                        {
+                            "TARIH":  "19.02.2024 00:00:00",
+                            "GRUP":  "1",
+                            "FIS_NO":  "G0372",
+                            "PROJE":  "G0372-SEYMANUR ÖZGAN",
+                            "STOK_KODU":  "3DBK0099H004",
+                            "STOK_ADI":  "MERDIVEN AYAK",
+                            "TALEP_MIKTAR":  "2",
+                            "TALEP_KARSILAMA_MIKTAR":  "2",
+                            "GEBZE_STOK":  "35,00",
+                            "MONTAJ_STOK":  "2,00",
+                            "URETIM_STOK":  "8,00",
+                            "SIPARIS_MIKTAR":  "0"
+                        }
+                    ]
+}

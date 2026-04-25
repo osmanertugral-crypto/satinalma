@@ -1,0 +1,184 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "MTB_MALZEME_HAREKET_KARSILASTIRMA",
+    "full_name":  "dbo.MTB_MALZEME_HAREKET_KARSILASTIRMA",
+    "definition":  "\r\nCREATE VIEW [dbo].[MTB_MALZEME_HAREKET_KARSILASTIRMA]\r\nAS\r\n---hareket envanteri\r\n\r\nSELECT  \r\n\r\n\r\nT.[Malzeme Kodu],T.[Malzeme Adi], \r\n(SELECT TOP 1 STOK_GRUP FROM AA_SIPARIS_SATINALMA_RAPORU_YENI_123 WHERE STOK_KODU=T.[Malzeme Kodu]) \u0027Malzeme Grup Kodu\u0027,\r\nISNULL((SELECT SUM(MIKTAR) FROM AA_SIPARIS_SATINALMA_RAPORU_YENI_123 WHERE STOK_KODU=T.[Malzeme Kodu]),0) \u0027SATINALMA\u0027,\r\n(T.[Satinalma Iade Miktari]) \u0027İADE\u0027,\r\n\r\n--(T.[Devir Miktari] + T.[VİRMAN Giriş Miktari] +\r\n\r\n--T.[Satinalma Miktari] -T.[Satinalma Iade Miktari]- ISNULL(ROUND((SELECT SUM (ONHAND) FROM LV_123_01_STINVTOT WHERE STOCKREF=T.LOGICALREF AND INVENNO=2),3),0)) \u0027 SATINALAMA\u0027,\r\n--T.[Satis Iade Miktari],T.[Üretimden Giriş Miktari],T.[Satis Miktari],T.[Satinalma Iade Miktari],\r\n--T.[Sarf-Fire Miktari],T.[Sayım Fazlası],T.[Sayım Eksiği],T.[Diğer Girişler],t.[Diğer Çıkışlar],\r\n\r\n--round((t.[Devir Miktari]+ t.[Satinalma Miktari]+t.[Satis Iade Miktari]+t.[Üretimden Giriş Miktari]+t.[Sayım Fazlası]+t.[Diğer Girişler]) -\r\n--(t.[Satis Miktari]+t.[Satinalma Iade Miktari]+t.[Sarf-Fire Miktari]+t.[Sayım Eksiği]+t.[Diğer Çıkışlar]) ,2) \u0027Eldeki Miktar\u0027 ,\r\n\r\n--ISNULL(ROUND((SELECT SUM (ONHAND) FROM LV_123_01_STINVTOT WHERE STOCKREF=T.LOGICALREF AND INVENNO=2),3),0) \u0027 SATINALAMA\u0027,\r\n\r\n--T.[Malzeme Kodu],T.[Malzeme Adi],(T.[Devir Miktari] +\r\n\r\n--T.[Satinalma Miktari] -T.[Satinalma Iade Miktari]-\r\n--T.[Satis Iade Miktari]--,T.[Üretimden Giriş Miktari],T.[Satis Miktari],T.[Satinalma Iade Miktari],\r\n--T.[Sarf-Fire Miktari],T.[Sayım Fazlası],T.[Sayım Eksiği],T.[Diğer Girişler],t.[Diğer Çıkışlar],\r\n\r\n--round((t.[Devir Miktari]+ t.[Satinalma Miktari]+t.[Satis Iade Miktari]+t.[Üretimden Giriş Miktari]+t.[Sayım Fazlası]+t.[Diğer Girişler]) -\r\n--(t.[Satis Miktari]+t.[Satinalma Iade Miktari]+t.[Sarf-Fire Miktari]+t.[Sayım Eksiği]+t.[Diğer Çıkışlar]) ,2) \u0027Eldeki Miktar\u0027 ,\r\n\r\n--ISNULL(ROUND((SELECT SUM (ONHAND) FROM LV_123_01_STINVTOT WHERE STOCKREF=T.LOGICALREF AND INVENNO=2),3),0)) \u0027 SATINALAMA\u0027,\r\n(A.[2 DEN ÇIKIŞ ]-A.[2 YE GIRIS ])\u0027SİSTEMSEL \u0027\r\n--A.[11 ÇIKIŞ ]-A.[5 ÇIKIŞ ] )\u0027SİSTEMSEL \u0027\r\n,\r\nISNULL(TA.TAMIKTAR,0) \u0027TALEP\u0027,\r\nISNULL((SELECT SUM(ONHAND) FROM LV_123_01_STINVTOT WHERE INVENNO =2 AND STOCKREF=T.LOGICALREF ),0) \u0027Gebze Stok\u0027,\r\nISNULL(T.[Devir Miktari],0)  \u0027Devir\u0027\r\n\r\nFROM (\r\nSELECT \r\nK.CODE \u0027Malzeme Kodu\u0027,\r\nK.NAME \u0027Malzeme Adi\u0027, \r\nK.LOGICALREF,\r\n\r\nSUM(CASE WHEN K.TRCODE=14 AND K.STFICHEREF \u003e0   THEN K.AMOUNT ELSE 0  END) \u0027Devir Miktari\u0027,\r\n\r\nSUM(CASE   WHEN  K.EXIMFCTYPE IN (7) THEN (CASE WHEN K.TRCODE=25 AND K.EXIMFILEREF \u003e0  THEN K.AMOUNT ELSE 0  END) \r\n WHEN  K.EXIMFCTYPE IN (1) THEN (CASE WHEN K.TRCODE=1  THEN 0 ELSE 0  END)\r\nELSE (CASE WHEN K.TRCODE=1 THEN K.AMOUNT ELSE 0 END)  END) \u0027Satinalma Miktari\u0027,\r\n\r\nSUM(CASE WHEN K.TRCODE IN (2,3) AND K.STFICHEREF \u003e0 THEN K.AMOUNT ELSE 0  END) \u0027Satis Iade Miktari\u0027,\r\n\r\nSUM(CASE WHEN K.TRCODE=13 AND K.STFICHEREF \u003e0 THEN K.AMOUNT ELSE 0  END) \u0027Üretimden Giriş Miktari\u0027,\r\nSUM(CASE WHEN K.TRCODE=13 AND K.FROMTRANSFER=1 THEN K.AMOUNT ELSE 0  END) \u0027VİRMAN Giriş Miktari\u0027,\r\nSUM(CASE WHEN K.TRCODE=8 THEN K.AMOUNT ELSE 0  END) \u0027Satis Miktari\u0027,\r\n\r\nSUM(CASE WHEN K.TRCODE=6 THEN K.AMOUNT ELSE 0  END) \u0027Satinalma Iade Miktari\u0027,\r\n\r\nSUM(CASE WHEN K.TRCODE IN (11,12) THEN K.AMOUNT ELSE 0  END) \u0027Sarf-Fire Miktari\u0027,\r\n\r\nSUM(CASE WHEN K.TRCODE=50 THEN K.AMOUNT ELSE 0  END) \u0027Sayım Fazlası\u0027,\r\n\r\nSUM(CASE WHEN K.TRCODE=51 THEN K.AMOUNT ELSE 0  END) \u0027Sayım Eksiği\u0027,\r\n\r\nSUM(CASE WHEN K.TRCODE IN (15,16,17,18,19,30,31,32,33,34) THEN K.AMOUNT ELSE 0  END) \u0027Diğer Girişler\u0027,\r\n\r\nSUM(CASE WHEN K.TRCODE IN (20,21,22,23,24,35,36,37,38,39) THEN K.AMOUNT ELSE 0  END) \u0027Diğer Çıkışlar\u0027,\r\n\r\nCONVERT(DATETIME,\u002701-01-2200\u0027,103) TARIH,\r\nK.CARDTYPE \r\n\r\nFROM (\r\nSELECT  S.TRCODE,I.CODE,S.AMOUNT*(S.UINFO2/S.UINFO1)\u0027Amount\u0027,I.NAME,I.LOWLEVELCODES1,S.STFICHEREF,S.RETCOST, \r\n S.TOTAL,S.VATMATRAH,UN.CODE \u0027B\u0027,I.SPECODE,S.DIFFPRICE,S.DATE_,I.CARDTYPE,I.LOGICALREF,S.OUTCOST,S.DIFFPRCOST,S.EXIMFILEREF,\r\n S.EXIMFCTYPE,S.EXIMWHFCREF,F.FROMTRANSFER\r\n\r\nFROM LG_123_01_STLINE S (NOLOCK)\r\nLEFT OUTER JOIN LG_123_ITEMS I (NOLOCK) ON I.LOGICALREF=S.STOCKREF  AND I.ACTIVE=0\r\nLEFT OUTER JOIN LG_123_UNITSETL UN (NOLOCK) ON UN.LOGICALREF=S.UOMREF\r\nLEFT OUTER JOIN LG_123_01_STFICHE F (NOLOCK) ON F.LOGICALREF=S.STFICHEREF\r\nLEFT OUTER JOIN LG_123_01_INVOICE INV ON INV.LOGICALREF=S.INVOICEREF\r\n\r\nWHERE S.LINETYPE=0   AND S.CANCELLED=0 AND S.TRCODE \u003c\u003e 0 AND S.LPRODSTAT=0 AND I.CARDTYPE\u003c\u003e4  AND S.UINFO1\u003e0   AND S.IOCODE\u003c\u003e3\r\n\r\nAND I.CARDTYPE not IN (4,22)  \r\n\r\nGROUP BY S.TRCODE,I.CODE,I.LOWLEVELCODES1,S.AMOUNT,S.UINFO2,S.UINFO1,I.NAME,S.STFICHEREF,S.OUTCOST,S.DIFFPRCOST,S.EXIMFILEREF,S.RETCOST,\r\n S.TOTAL,S.VATMATRAH,UN.CODE,I.SPECODE,S.DIFFPRICE,S.DATE_,I.CARDTYPE,I.LOGICALREF, S.EXIMFCTYPE,S.EXIMWHFCREF,S.STOCKREF,S.LOGICALREF,S.INVOICEREF,F.FROMTRANSFER)  K\r\n\r\nGROUP BY K.CODE,K.NAME,K.LOWLEVELCODES1,K.B, K.SPECODE,K.CARDTYPE,K.LOGICALREF\r\n) AS T \r\n\r\nLEFT JOIN \r\n---A\r\n(SELECT \r\nITM.LOGICALREF,\r\nITM.CODE, ITM.NAME,\r\nISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_STLINE WHERE TRCODE=25 AND SOURCEINDEX=2  AND IOCODE=3 AND STOCKREF= ITM.LOGICALREF AND CANCELLED=0) ,0)\u00272 DEN ÇIKIŞ \u0027,\r\nISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_STLINE WHERE TRCODE=25 AND SOURCEINDEX=2 AND DESTINDEX IN (5,11) AND IOCODE=2 AND STOCKREF= ITM.LOGICALREF AND CANCELLED=0) ,0)\u00272 YE GIRIS \u0027\r\n--ISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_STLINE WHERE TRCODE=25 AND SOURCEINDEX=2 AND DESTINDEX=11 AND IOCODE=3 AND STOCKREF= ITM.LOGICALREF AND CANCELLED=0),0) \u002711 GİRİŞ \u0027,\r\n--ISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_STLINE WHERE TRCODE=25 AND SOURCEINDEX=2 AND DESTINDEX=11 AND IOCODE=2 AND STOCKREF= ITM.LOGICALREF AND CANCELLED=0),0) \u002711 ÇIKIŞ \u0027\r\n\r\nFROM  LG_123_ITEMS ITM \r\n  ) A ON A.LOGICALREF=T.[LOGICALREF]\r\n\r\n LEFT JOIN \r\n (SELECT ALT_MAL_REF,ALT_KOD,SUM(MIKTAR)\u0027TAMIKTAR\u0027 FROM DST_123_KARSILASTIRMA_YARDIMCI GROUP BY ALT_KOD,ALT_MAL_REF)  TA\r\n\r\n ON TA.ALT_KOD=T.[Malzeme Kodu]\r\n\r\n --GROUP BY T.[Malzeme Kodu],T.[Malzeme Adi]\r\n  --WHERE T.[Malzeme Kodu]=\u0027MKSF0099H002\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Malzeme Kodu",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Malzeme Adi",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Malzeme Grup Kodu",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATINALMA",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "İADE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SİSTEMSEL ",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TALEP",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Gebze Stok",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "Devir",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Malzeme Kodu":  "2021X617",
+                            "Malzeme Adi":  "MAKYAJ AYNASI",
+                            "Malzeme Grup Kodu":  null,
+                            "SATINALMA":  "0",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "1",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "2021X627",
+                            "Malzeme Adi":  "NURGAZ ÇİFTLİ OCAK",
+                            "Malzeme Grup Kodu":  null,
+                            "SATINALMA":  "0",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "1",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "2021X870",
+                            "Malzeme Adi":  "28X45 BANYO LAVABO",
+                            "Malzeme Grup Kodu":  null,
+                            "SATINALMA":  "0",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "5",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "A2021X05",
+                            "Malzeme Adi":  "KUKSA BARDAK BEAR",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "SATINALMA":  "6",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "1",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "A2021X07",
+                            "Malzeme Adi":  "KUKSA BARDAK LEON",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "SATINALMA":  "20",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "2",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "NMN206",
+                            "Malzeme Adi":  "3000X125X100 30 DANS STROFOR KÖPÜK ",
+                            "Malzeme Grup Kodu":  "NUMUNE",
+                            "SATINALMA":  "3,75",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "0",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "A2021X26",
+                            "Malzeme Adi":  "TELESKOBİK BARBEKÜ ÇATALI",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "SATINALMA":  "184",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "3",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "A2021X61",
+                            "Malzeme Adi":  "SİLİKON MATARA",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "SATINALMA":  "4",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "1",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "A2021X75",
+                            "Malzeme Adi":  "AYAKLI KATLANIR MANGAL",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "SATINALMA":  "36",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "5",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        },
+                        {
+                            "Malzeme Kodu":  "A2021X79",
+                            "Malzeme Adi":  "CAMPOUT KAMP DUŞU 20 LT",
+                            "Malzeme Grup Kodu":  "ETİCARET",
+                            "SATINALMA":  "17",
+                            "İADE":  "0",
+                            "SİSTEMSEL ":  "5",
+                            "TALEP":  "0",
+                            "Gebze Stok":  "0",
+                            "Devir":  "0"
+                        }
+                    ]
+}

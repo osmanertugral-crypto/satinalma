@@ -1,0 +1,234 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KREKPOT_BIRIM_FIYAT",
+    "full_name":  "dbo.KREKPOT_BIRIM_FIYAT",
+    "definition":  "create view KREKPOT_BIRIM_FIYAT as\nSELECT MLZ_ID, FIS_NO,FİŞ_TARİHİ,FİŞ_ÖZEL_KODU,PROJE_KODU,URETIM_BITIS_TARIHI,ANAMALZEME_URETIM_TARIHI,MALZEME_ÖZEL_KODU_ANAMALZEME,ANA_ÜRÜN_MİKTAR,KARAVAN_KODU_TÜR,KARAVAN_KODU,KARAVAN_ADI,ALT_KOD_TÜR,MALZEME_ÖZEL_KODU_ALT,ALIM_TARIH,ALIM_TARIH_AY,ALIM_TARIH_HAFTA,ALT_KOD,ALT_ADI,MIKTAR,RAPOR.BIRIM,\n       PROJELERE_ÇIKIŞLAR,PROJELERE_ÇIKIŞLAR_YENI,ELDE_KALAN,[ÜRETİM DEPO],AÇIK_SATINALMA_SİPARİŞLERİ,\n\n--(ANA_ÜRÜN_MİKTAR*MIKTAR) AS TOPLAM_İHTİYAÇ,\n       0 AS TOPLAM_İHTİYAÇ,\n       BIRIM_FIYATLAR ,[SON SATINALMA CARİ ÜNVANI], (MIKTAR*BIRIM_FIYATLAR) AS TUTAR ,ANASTOKGRUPKODU,ALTSTOKGRUPKODU\n\nFROM (\n         SELECT ANAMLZ.LOGICALREF AS MLZ_ID,\n                DEMFICHE.FICHENO FIS_NO,\n                PRO.CODE PROJE_KODU,\n                convert(varchar, DEMFICHE.DATE_, 104)FİŞ_TARİHİ,\n--DEMFICHE.DATE_ FİŞ_TARİHİ,\n                convert(varchar, XT12.URETIM_BITIS_TARIHI, 104)URETIM_BITIS_TARIHI,\n----------------------------\n                convert(varchar, DATEADD(day,ANAMLZ.SPECODE4*-1,XT12.URETIM_BITIS_TARIHI), 104)AS ANAMALZEME_URETIM_TARIHI,\n                convert(varchar, DATEADD(day,ALT_MLZ.SPECODE4*-1,XT12.URETIM_BITIS_TARIHI), 104)AS ALIM_TARIH_ESKI,\n                convert(varchar, DATEADD(day,(convert(int,ALT_MLZ.SPECODE4)+convert(int,ANAMLZ.SPECODE4))*-1,XT12.URETIM_BITIS_TARIHI), 104)AS ALIM_TARIH,\n--convert(int,ALT_MLZ.SPECODE4)+convert(int,ANAMLZ.SPECODE4) AS XX,\n\n\n                DATEPART(WK,(convert(datetime, DATEADD(day,(convert(int,ALT_MLZ.SPECODE4)+convert(int,ANAMLZ.SPECODE4))*-1,XT12.URETIM_BITIS_TARIHI), 104)))AS ALIM_TARIH_HAFTA,\n\n\n----------------------------------\n                ANAMLZ.STGRPCODE ANASTOKGRUPKODU,\n                ALT_MLZ.STGRPCODE ALTSTOKGRUPKODU,\n--XT12.URETIM_BITIS_TARIHI  URETIM_BITIS_TARIHI,\n                ALT_MLZ.SPECODE4 MALZEME_ÖZEL_KODU_ALT,\n                DEMFICHE.SPECODE FİŞ_ÖZEL_KODU,\n--convert(varchar, DATEADD(day,ALT_MLZ.SPECODE4*-1,XT12.URETIM_BITIS_TARIHI), 104)AS ALIM_TARIH,\n\n-- DATEADD(day,ALT_MLZ.SPECODE4*-1,XT12.URETIM_BITIS_TARIHI) AS ALIM_TARIH,\n                MONTH(DATEADD(day,(convert(int,ALT_MLZ.SPECODE4)+convert(int,ANAMLZ.SPECODE4))*-1,XT12.URETIM_BITIS_TARIHI)) ALIM_TARIH_AY,\n\n                DEM.AMOUNT AS [ANA_ÜRÜN_MİKTAR],\n                ANAMLZ.SPECODE4 MALZEME_ÖZEL_KODU_ANAMALZEME,\n                CASE ANAMLZ.CARDTYPE WHEN 10 THEN \u0027Hammadde\u0027 WHEN 11 THEN \u0027Yarımamül\u0027WHEN 12 THEN \u0027Mamül\u0027WHEN 1 THEN \u0027Ticarimal\u0027ELSE \u0027DIGER\u0027END AS KARAVAN_KODU_TÜR,\n                ANAMLZ.CODE AS KARAVAN_KODU,\n                ANAMLZ.NAME AS KARAVAN_ADI,\n                ALT_MLZ.CODE AS ALT_KOD,\n                CASE ALT_MLZ.CARDTYPE WHEN 10 THEN \u0027Hammadde\u0027 WHEN 11 THEN \u0027Yarımamül\u0027WHEN 12 THEN \u0027Mamül\u0027WHEN 1 THEN \u0027Ticarimal\u0027ELSE \u0027DIGER\u0027END AS ALT_KOD_TÜR,\n                ALT_MLZ.NAME AS ALT_ADI\n                 ,BAGTBL.AMNT AS MIKTAR\n                 ,UNT.CODE [BIRIM]\n---,(SELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WHERE LINETYPE=0 AND PRICE\u003c\u003e0 AND STOCKREF=BAGTBL.STCREF AND TRCODE IN (1,50) ORDER BY DATE_ DESC ) BIRIM_FIYATLAR ---27012023 tarıhlı degısım\n\n------------------27.01.2023\n--,CAST(CAST(\n--\tISNULL\n--\t(CASE WHEN \n\n--\t(sELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=BAGTBL.STCREF AND  PRICE\u003e0 AND TRCODE IN (1,50) ORDER BY DATE_ DESC) IS NULL THEN (SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK)  WHERE CARDREF=BAGTBL.STCREF ORDER BY BEGDATE DESC    )\t\n\n--\tELSE (sELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK)  WHERE STOCKREF=BAGTBL.STCREF AND  PRICE\u003e0 AND TRCODE IN (1,50) ORDER BY DATE_ DESC) END ,0) AS  DECIMAL(18,2)) AS float) AS BIRIM_FIYATLAR\n                ---------------------27.01.2023 revıze\n                 ,CASE ALT_MLZ.CARDTYPE WHEN 10 THEN\n                                            CAST(CAST(\n                                                    ISNULL\n                                                    (CASE WHEN\n\n                                                              (sELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=BAGTBL.STCREF AND  PRICE\u003e0 AND TRCODE IN (1,50) ORDER BY DATE_ DESC) IS NULL THEN (SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK)  WHERE CARDREF=BAGTBL.STCREF ORDER BY BEGDATE DESC    )\n\n                                                          ELSE (sELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK)  WHERE STOCKREF=BAGTBL.STCREF AND  PRICE\u003e0 AND TRCODE IN (1,50) ORDER BY DATE_ DESC) END ,0) AS  DECIMAL(18,2)) AS float)\n\n                                        else (sELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=BAGTBL.STCREF AND  PRICE\u003e0 AND TRCODE IN (13) ORDER BY DATE_ DESC)end\n                    AS BIRIM_FIYATLAR\n\n                 ,(SELECT DEFINITION_ FROM LG_123_CLCARD WITH (NOLOCK) WHERE LOGICALREF IN (SELECT TOP 1 CLIENTREF FROM LG_123_01_STLINE WITH (NOLOCK) WHERE TRCODE=1 AND STOCKREF IN (ALT_MLZ.LOGICALREF) AND DATE_ IN (SELECT MAX(DATE_) FROM LG_123_01_STLINE WHERE TRCODE=1 AND STOCKREF IN (ALT_MLZ.LOGICALREF)))) \u0027SON SATINALMA CARİ ÜNVANI\u0027\n\n\n\n\n\n-------\n--,CASE WHEN (SELECT TOP 1 FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND FIYAT IS NOT NULL ORDER BY FIYAT DESC) IS NULL THEN\n--(SELECT TOP 1 TANIMLI_FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND TANIMLI_FIYAT IS NOT NULL ORDER BY TANIMLI_FIYAT DESC) \n--ELSE (SELECT TOP 1 FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND FIYAT IS NOT NULL ORDER BY FIYAT DESC)\n--END AS BIRIM_FIYATLAR\n\n                 ,ISNULL((SELECT  SUM(MIKTAR) FROM AA_SARF_PROJE_123_BURAK WITH (NOLOCK) WHERE STOK_KODU=ALT_MLZ.CODE AND PROJE_KODU=PRO.CODE),0)AS PROJELERE_ÇIKIŞLAR\n----------------\n                 ,CASE WHEN ISNULL((SELECT  SUM(MIKTAR) FROM AA_SARF_PROJE_123_BURAK WITH (NOLOCK) WHERE STOK_KODU=ALT_MLZ.CODE AND PROJE_KODU=PRO.CODE),0)\u003e0 THEN BAGTBL.AMNT ELSE 0 END AS [PROJELERE_ÇIKIŞLAR_YENI]\n\n-------------------------------------\n---,ISNULL((SELECT  SUM(MIKTAR) FROM AA_SARF_PROJE_123 WHERE STOK_KODU=ALT_MLZ.CODE AND PROJE_KODU=PRO.CODE),0)AS PROJELERE_ÇIKIŞLAR_YENI\n\n--,CASE WHEN  \n\n--CASE ANAMLZ.CARDTYPE WHEN 10 THEN \u0027Hammadde\u0027 WHEN 11 THEN \u0027Yarımamül\u0027WHEN 12 THEN \u0027Mamül\u0027WHEN 1 THEN \u0027Ticarimal\u0027ELSE \u0027DIGER\u0027END=\u0027Yarımamül\u0027\n--AND (SELECT SUM(PROJELERE_ÇIKIŞLAR) FROM DST_123_ÜRETİM_İHTİYAÇ_RAPORU_ALT WHERE ALT_KOD=ALT_MLZ.CODE)\u003e0\n\n--THEN 1111111\n\n\n--ELSE ISNULL((SELECT  SUM(MIKTAR) FROM AA_SARF_PROJE_123 WHERE STOK_KODU=ALT_MLZ.CODE AND PROJE_KODU=PRO.CODE),0)END AS PROJELERE_ÇIKIŞLAR_YENI\n\n\n------------------------------\n--,ISNULL(GNT.ONHAND,0) AS ELDE_KALAN\n\n--,ISNULL(CAST(GNT.ONHAND AS float),0) AS ELDE_KALAN1\n--,ISNULL(CAST (GNT.ONHAND AS float) AS decimal(15,33)AS float)),0) AS ELDE_KALAN1\n                 ,ISNULL(CAST(GNT.ONHAND AS decimal(12,1)),0) AS ELDE_KALAN\n\n                 ,ISNULL((SELECT SUM(ONHAND) FROM LV_123_01_STINVTOT WITH (NOLOCK) WHERE INVENNO=11 AND STOCKREF=ALT_MLZ.LOGICALREF),0) AS \u0027ÜRETİM DEPO\u0027\n\n\n                 ,ISNULL((SELECT SUM(BEKLEYEN)FROM AA_SIPARIS_SATINALMA_RAPORU_YENI_123 WITH (NOLOCK) WHERE ALT_MLZ.CODE=STOK_KODU AND IADE_MIKTAR=0 AND KAPALI=0 ),0) AS AÇIK_SATINALMA_SİPARİŞLERİ ---AND IADE_MIKTAR=0\n         FROM lg_123_ITEMS ANAMLZ WITH (NOLOCK)\n                  INNER JOIN LG_123_STCOMPLN BAGTBL WITH (NOLOCK) ON ANAMLZ.LOGICALREF=BAGTBL.MAINCREF\n                  LEFT OUTER JOIN LG_123_ITEMS ALT_MLZ WITH (NOLOCK) ON ALT_MLZ.LOGICALREF=BAGTBL.STCREF\n                  LEFT JOIN LG_123_01_DEMANDLINE DEM WITH (NOLOCK) ON DEM.ITEMREF=BAGTBL.MAINCREF\n                  LEFT JOIN LG_123_01_DEMANDFICHE DEMFICHE WITH (NOLOCK) ON DEMFICHE.LOGICALREF=DEM.DEMANDFICHEREF\n                  LEFT JOIN LG_XT1226001_123 XT12 WITH (NOLOCK) ON XT12.PARLOGREF=DEMFICHE.LOGICALREF\n                  LEFT JOIN LG_123_PROJECT PRO WITH (NOLOCK) ON PRO.LOGICALREF=DEMFICHE.PROJECTREF\n                  LEFT JOIN LV_123_01_GNTOTST GNT WITH (NOLOCK) ON GNT.STOCKREF=ALT_MLZ.LOGICALREF AND GNT.INVENNO=2\n                  LEFT JOIN LG_123_UNITSETF UNT WITH (NOLOCK) ON UNT.LOGICALREF=ALT_MLZ.UNITSETREF\n         WHERE DEMFICHE.STATUS=0\n           AND CASE ANAMLZ.CARDTYPE WHEN 10 THEN \u0027Hammadde\u0027 WHEN 11 THEN \u0027Yarımamül\u0027WHEN 12 THEN \u0027Mamül\u0027WHEN 1 THEN \u0027Ticarimal\u0027ELSE \u0027DIGER\u0027END=\u0027Mamül\u0027\n         --AND PRO.CODE=\u0027G0255\u0027\n         --and ALT_MLZ.code=\u0027KRXX0099H027\u0027\n         --AND ANAMLZ.CODE=\u0027G0.TÜRKİYE.01 BANYOLU\u0027\n\n     ) AS RAPOR\n-- ORDER BY FIS_NO\n\n-------------\n\nUNION ALL\n\n\nSELECT MLZ_ID , FIS_NO,FİŞ_TARİHİ,FİŞ_ÖZEL_KODU,PROJE_KODU,URETIM_BITIS_TARIHI,ANAMALZEME_URETIM_TARIHI,MALZEME_ÖZEL_KODU_ANAMALZEME,ANA_ÜRÜN_MİKTAR,KARAVAN_KODU_TÜR,KARAVAN_KODU,KARAVAN_ADI,ALT_KOD_TÜR,MALZEME_ÖZEL_KODU_ALT,ALIM_TARIH,ALIM_TARIH_AY,ALIM_TARIH_HAFTA,ALT_KOD,ALT_ADI,MIKTAR,RAPOR.BIRIM,\n       PROJELERE_ÇIKIŞLAR,PROJELERE_ÇIKIŞLAR_YENI,ELDE_KALAN,[ÜRETİM DEPO],AÇIK_SATINALMA_SİPARİŞLERİ,\n\n--(ANA_ÜRÜN_MİKTAR*MIKTAR) AS TOPLAM_İHTİYAÇ,\n       0 AS TOPLAM_İHTİYAÇ,\n       BIRIM_FIYATLAR , [SON SATINALMA CARİ ÜNVANI],(MIKTAR*BIRIM_FIYATLAR) AS TUTAR ,ANASTOKGRUPKODU,ALTSTOKGRUPKODU\n\nFROM (\n         SELECT ANAMLZ.LOGICALREF AS MLZ_ID,\n                DEMFICHE.FICHENO FIS_NO,\n                PRO.CODE PROJE_KODU,\n                convert(varchar, DEMFICHE.DATE_, 104)FİŞ_TARİHİ,\n--DEMFICHE.DATE_ FİŞ_TARİHİ,\n                convert(varchar, XT12.URETIM_BITIS_TARIHI, 104)URETIM_BITIS_TARIHI,\n----------------------------\n                convert(varchar, DATEADD(day,ANAMLZ.SPECODE4*-1,XT12.URETIM_BITIS_TARIHI), 104)AS ANAMALZEME_URETIM_TARIHI,\n                convert(varchar, DATEADD(day,ALT_MLZ.SPECODE4*-1,XT12.URETIM_BITIS_TARIHI), 104)AS ALIM_TARIH_ESKI,\n                convert(varchar, DATEADD(day,(convert(int,ALT_MLZ.SPECODE4)+convert(int,ANAMLZ.SPECODE4))*-1,XT12.URETIM_BITIS_TARIHI), 104)AS ALIM_TARIH,\n--convert(int,ALT_MLZ.SPECODE4)+convert(int,ANAMLZ.SPECODE4) AS XX,\n\n\n                DATEPART(WK,(convert(datetime, DATEADD(day,(convert(int,ALT_MLZ.SPECODE4)+convert(int,ANAMLZ.SPECODE4))*-1,XT12.URETIM_BITIS_TARIHI), 104)))AS ALIM_TARIH_HAFTA,\n\n\n----------------------------------\n                ANAMLZ.STGRPCODE ANASTOKGRUPKODU,\n                ALT_MLZ.STGRPCODE ALTSTOKGRUPKODU,\n--XT12.URETIM_BITIS_TARIHI  URETIM_BITIS_TARIHI,\n                ALT_MLZ.SPECODE4 MALZEME_ÖZEL_KODU_ALT,\n                DEMFICHE.SPECODE FİŞ_ÖZEL_KODU,\n--convert(varchar, DATEADD(day,ALT_MLZ.SPECODE4*-1,XT12.URETIM_BITIS_TARIHI), 104)AS ALIM_TARIH,\n\n-- DATEADD(day,ALT_MLZ.SPECODE4*-1,XT12.URETIM_BITIS_TARIHI) AS ALIM_TARIH,\n                MONTH(DATEADD(day,(convert(int,ALT_MLZ.SPECODE4)+convert(int,ANAMLZ.SPECODE4))*-1,XT12.URETIM_BITIS_TARIHI)) ALIM_TARIH_AY,\n\n                DEM.AMOUNT AS [ANA_ÜRÜN_MİKTAR],\n                ANAMLZ.SPECODE4 MALZEME_ÖZEL_KODU_ANAMALZEME,\n                CASE ANAMLZ.CARDTYPE WHEN 10 THEN \u0027Hammadde\u0027 WHEN 11 THEN \u0027Yarımamül\u0027WHEN 12 THEN \u0027Mamül\u0027WHEN 1 THEN \u0027Ticarimal\u0027ELSE \u0027DIGER\u0027END AS KARAVAN_KODU_TÜR,\n                ANAMLZ.CODE AS KARAVAN_KODU,\n                ANAMLZ.NAME AS KARAVAN_ADI,\n                ALT_MLZ.CODE AS ALT_KOD,\n                CASE ALT_MLZ.CARDTYPE WHEN 10 THEN \u0027Hammadde\u0027 WHEN 11 THEN \u0027Yarımamül\u0027WHEN 12 THEN \u0027Mamül\u0027WHEN 1 THEN \u0027Ticarimal\u0027ELSE \u0027DIGER\u0027END AS ALT_KOD_TÜR,\n                ALT_MLZ.NAME AS ALT_ADI\n--,BAGTBL.AMNT AS MIKTAR\n------\n                 ,BAGTBL.AMNT *(SELECT MIKTAR FROM DST_123_ÜRETİM_İHTİYAÇ_RAPORU_ALT WITH (NOLOCK) WHERE ALT_KOD=ANAMLZ.CODE and PROJE_KODU=PRO.CODE)AS MIKTAR---\n\n-------------\n                 ,UNT.CODE [BIRIM]\n--,(SELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WHERE LINETYPE=0 AND PRICE\u003c\u003e0 AND STOCKREF=BAGTBL.STCREF AND TRCODE IN (1,50) ORDER BY DATE_ DESC ) BIRIM_FIYATLAR---27012023 TARIHLI\n------\n                 ,CAST(CAST(\n                 ISNULL\n                 (CASE WHEN\n\n                           (sELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK) WHERE STOCKREF=BAGTBL.STCREF AND  PRICE\u003e0 AND TRCODE IN (1,50) ORDER BY DATE_ DESC) IS NULL THEN (SELECT TOP 1 PRICE FROM LG_123_PRCLIST WITH (NOLOCK)  WHERE CARDREF=BAGTBL.STCREF ORDER BY BEGDATE DESC    )\n\n                       ELSE (sELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WITH (NOLOCK)  WHERE STOCKREF=BAGTBL.STCREF AND  PRICE\u003e0 AND TRCODE IN (1,50) ORDER BY DATE_ DESC) END ,0) AS  DECIMAL(18,2)) AS float) AS BIRIM_FIYATLAR\n\n                 ,(SELECT DEFINITION_ FROM LG_123_CLCARD WITH (NOLOCK) WHERE LOGICALREF IN (SELECT TOP 1 CLIENTREF FROM LG_123_01_STLINE WITH (NOLOCK) WHERE TRCODE=1 AND STOCKREF IN (ALT_MLZ.LOGICALREF) AND  DATE_ IN (SELECT MAX(DATE_) FROM LG_123_01_STLINE WHERE TRCODE=1 AND  STOCKREF IN (ALT_MLZ.LOGICALREF)))) \u0027SON SATINALMA CARİ ÜNVANI\u0027\n-------\n\n\n\n--,CASE WHEN (SELECT TOP 1 FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND FIYAT IS NOT NULL ORDER BY FIYAT DESC) IS NULL THEN\n--(SELECT TOP 1 TANIMLI_FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND TANIMLI_FIYAT IS NOT NULL ORDER BY TANIMLI_FIYAT DESC) \n--ELSE (SELECT TOP 1 FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND FIYAT IS NOT NULL ORDER BY FIYAT DESC)\n--END AS BIRIM_FIYATLAR\n\n---,ISNULL((SELECT  SUM(MIKTAR) FROM AA_SARF_PROJE_123 WHERE STOK_KODU=ALT_MLZ.CODE AND PROJE_KODU=PRO.CODE),0)AS PROJELERE_ÇIKIŞLAR\n\n\n                 ,CASE WHEN\n\n\n                               (SELECT SUM(PROJELERE_ÇIKIŞLAR) FROM DST_123_ÜRETİM_İHTİYAÇ_RAPORU_ALT WITH (NOLOCK) WHERE ALT_KOD=ANAMLZ.CODE )\u003e0\n\n                           THEN BAGTBL.AMNT *(SELECT PROJELERE_ÇIKIŞLAR FROM DST_123_ÜRETİM_İHTİYAÇ_RAPORU_ALT WITH (NOLOCK) WHERE ALT_KOD=ANAMLZ.CODE and PROJE_KODU=PRO.CODE )\n\n\n                       ELSE 0 END  AS PROJELERE_ÇIKIŞLAR\n\n-------------------------190323------\n                 ,CASE WHEN\n                               CASE WHEN\n\n\n                                            (SELECT SUM(PROJELERE_ÇIKIŞLAR) FROM DST_123_ÜRETİM_İHTİYAÇ_RAPORU_ALT WITH (NOLOCK) WHERE ALT_KOD=ANAMLZ.CODE )\u003e0\n\n                                        THEN BAGTBL.AMNT *(SELECT PROJELERE_ÇIKIŞLAR FROM DST_123_ÜRETİM_İHTİYAÇ_RAPORU_ALT WITH (NOLOCK) WHERE ALT_KOD=ANAMLZ.CODE and PROJE_KODU=PRO.CODE )\n\n\n                                    ELSE 0 END \u003e0 THEN BAGTBL.AMNT *(SELECT MIKTAR FROM DST_123_ÜRETİM_İHTİYAÇ_RAPORU_ALT WITH (NOLOCK) WHERE ALT_KOD=ANAMLZ.CODE and PROJE_KODU=PRO.CODE)ELSE 0 END AS [PROJELERE_ÇIKIŞLAR_YENI]\n\n\n\n\n\n------------------------------\n--,ISNULL(GNT.ONHAND,0) AS ELDE_KALAN\n\n---,ISNULL(CAST(GNT.ONHAND AS  int),0) AS ELDE_KALAN1\n\n                 ,ISNULL(CAST(GNT.ONHAND AS decimal(12,1)),0) AS ELDE_KALAN\n                 ,ISNULL((SELECT SUM(ONHAND) FROM LV_123_01_STINVTOT WITH (NOLOCK) WHERE INVENNO=11 AND STOCKREF=ALT_MLZ.LOGICALREF),0) AS \u0027ÜRETİM DEPO\u0027\n\n\n\n                 ,ISNULL((SELECT SUM(BEKLEYEN)FROM AA_SIPARIS_SATINALMA_RAPORU_YENI_123 WITH (NOLOCK) WHERE ALT_MLZ.CODE=STOK_KODU AND IADE_MIKTAR=0 AND KAPALI=0 ),0) AS AÇIK_SATINALMA_SİPARİŞLERİ ---AND IADE_MIKTAR=0\n         FROM lg_123_ITEMS ANAMLZ WITH (NOLOCK)\n                  INNER JOIN LG_123_STCOMPLN BAGTBL  WITH (NOLOCK) ON ANAMLZ.LOGICALREF=BAGTBL.MAINCREF\n                  LEFT OUTER JOIN LG_123_ITEMS ALT_MLZ WITH (NOLOCK) ON ALT_MLZ.LOGICALREF=BAGTBL.STCREF\n                  LEFT JOIN LG_123_01_DEMANDLINE DEM WITH (NOLOCK) ON DEM.ITEMREF=BAGTBL.MAINCREF\n                  LEFT JOIN LG_123_01_DEMANDFICHE DEMFICHE WITH (NOLOCK) ON DEMFICHE.LOGICALREF=DEM.DEMANDFICHEREF\n                  LEFT JOIN LG_XT1226001_123 XT12 WITH (NOLOCK) ON XT12.PARLOGREF=DEMFICHE.LOGICALREF\n                  LEFT JOIN LG_123_PROJECT PRO WITH (NOLOCK) ON PRO.LOGICALREF=DEMFICHE.PROJECTREF\n                  LEFT JOIN LV_123_01_GNTOTST GNT WITH (NOLOCK) ON GNT.STOCKREF=ALT_MLZ.LOGICALREF AND GNT.INVENNO=2\n                  LEFT JOIN LG_123_UNITSETF UNT WITH (NOLOCK) ON UNT.LOGICALREF=ALT_MLZ.UNITSETREF\n         WHERE ANAMLZ.SPECODE5=\u0027ANAMLZ\u0027 AND DEMFICHE.STATUS=0\n           AND CASE ANAMLZ.CARDTYPE WHEN 10 THEN \u0027Hammadde\u0027 WHEN 11 THEN \u0027Yarımamül\u0027WHEN 12 THEN \u0027Mamül\u0027WHEN 1 THEN \u0027Ticarimal\u0027ELSE \u0027DIGER\u0027END=\u0027Yarımamül\u0027\n         --AND PRO.CODE=\u0027G0255\u0027\n         --and ALT_MLZ.code=\u0027KRXX0099H027\u0027\n         --AND ANAMLZ.CODE=\u0027GLKA1091Y001\u0027\n\n     ) AS RAPOR",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MLZ_ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FİŞ_TARİHİ",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FİŞ_ÖZEL_KODU",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_BITIS_TARIHI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ANAMALZEME_URETIM_TARIHI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZEME_ÖZEL_KODU_ANAMALZEME",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ANA_ÜRÜN_MİKTAR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KARAVAN_KODU_TÜR",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KARAVAN_KODU",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KARAVAN_ADI",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALT_KOD_TÜR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZEME_ÖZEL_KODU_ALT",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALIM_TARIH",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALIM_TARIH_AY",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALIM_TARIH_HAFTA",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALT_KOD",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALT_ADI",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJELERE_ÇIKIŞLAR",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJELERE_ÇIKIŞLAR_YENI",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ELDE_KALAN",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ÜRETİM DEPO",
+                        "ORDINAL_POSITION":  25,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "AÇIK_SATINALMA_SİPARİŞLERİ",
+                        "ORDINAL_POSITION":  26,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM_İHTİYAÇ",
+                        "ORDINAL_POSITION":  27,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYATLAR",
+                        "ORDINAL_POSITION":  28,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SON SATINALMA CARİ ÜNVANI",
+                        "ORDINAL_POSITION":  29,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  30,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ANASTOKGRUPKODU",
+                        "ORDINAL_POSITION":  31,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALTSTOKGRUPKODU",
+                        "ORDINAL_POSITION":  32,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  "ATLANDI: Exception calling \"Fill\" with \"1\" argument(s): \"Yürütme Zaman Aşımı Süresi Doldu. Zaman aşımı süresi işlem tamamlanmadan önce doldu veya sunucu yanıt vermiyor.\""
+}

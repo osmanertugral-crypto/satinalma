@@ -1,0 +1,120 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "AMBARYETKI",
+    "full_name":  "dbo.AMBARYETKI",
+    "description":  "",
+    "total_rows":  "10",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBARYETKI_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "KULLANICIGRUP_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I1",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "KULLANICIGRUP_KODU, AMBAR_KODU"
+                    },
+                    {
+                        "index_name":  "PK__AMBARYET__6C96A349267007EB",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "KULLANICIGRUP_KODU, AMBAR_KODU"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "AMBARYETKI_REF":  "1",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "0"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "9",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "1"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "4",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "2"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "8",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "3"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "5",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "4"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "6",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "5"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "7",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "6"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "3",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "7"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "2",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "8"
+                        },
+                        {
+                            "AMBARYETKI_REF":  "10",
+                            "KULLANICIGRUP_KODU":  "Enka",
+                            "AMBAR_KODU":  "9"
+                        }
+                    ]
+}

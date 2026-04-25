@@ -4,9 +4,71 @@ const { getDb } = require('../db/schema');
 const { authenticate, authorize } = require('../middleware/auth');
 const { normTr } = require('../utils/searchUtils');
 const { getExcelSuppliers, getExcelSupplierStats, getExcelSupplierPanelDetail } = require('../utils/excelPurchaseFallback');
+const tiger3 = require('../utils/tiger3');
 
 const router = express.Router();
 router.use(authenticate);
+
+// ── Tiger3 tedarikçi sync ─────────────────────────────────────────────────────
+async function syncSuppliersFromTIGER3() {
+  const db = getDb();
+
+  const rows = await tiger3.query(`
+    SELECT
+      C.CODE                                AS CODE,
+      ISNULL(C.DEFINITION_, '')             AS NAME,
+      ISNULL(C.ADDR1, '')                   AS ADDRESS,
+      ISNULL(C.CITY, '')                    AS CITY,
+      ISNULL(C.TELNRS1, '')                 AS PHONE,
+      ISNULL(C.EMAILADDR, '')               AS EMAIL,
+      ISNULL(C.TAXNR, '')                   AS TAX_NUMBER,
+      ISNULL(C.TAXOFFICE, '')               AS TAX_OFFICE,
+      ISNULL(C.INCHARGE, '')                AS CONTACT_NAME,
+      C.ACTIVE
+    FROM LG_123_CLCARD C
+    WHERE C.LOGICALREF IN (
+      SELECT DISTINCT CLIENTREF FROM LG_123_01_ORFICHE WHERE TRCODE = 2
+    )
+  `);
+
+  const existingMap = new Map(
+    db.prepare('SELECT id, external_code FROM suppliers WHERE external_code IS NOT NULL').all()
+      .map(r => [r.external_code, r.id])
+  );
+
+  const updateStmt = db.prepare(`
+    UPDATE suppliers
+    SET name=?, address=?, city=?, phone=?, email=?, tax_number=?, tax_office=?,
+        contact_name=?, active=?, updated_at=datetime('now')
+    WHERE external_code=?
+  `);
+  const insertStmt = db.prepare(`
+    INSERT INTO suppliers (id, name, external_code, address, city, phone, email, tax_number, tax_office, contact_name, active)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  let inserted = 0, updated = 0;
+  db.transaction((items) => {
+    for (const r of items) {
+      const active = r.ACTIVE ? 1 : 0;
+      const args = [
+        r.NAME || null, r.ADDRESS || null, r.CITY || null,
+        r.PHONE || null, r.EMAIL || null, r.TAX_NUMBER || null,
+        r.TAX_OFFICE || null, r.CONTACT_NAME || null, active,
+      ];
+      if (existingMap.has(r.CODE)) {
+        updateStmt.run(...args, r.CODE);
+        updated++;
+      } else {
+        insertStmt.run(uuidv4(), r.NAME || r.CODE, r.CODE, ...args.slice(1));
+        inserted++;
+      }
+    }
+  })(rows);
+
+  console.log(`[Suppliers] Tiger3 sync: ${inserted} yeni, ${updated} güncellendi, toplam ${rows.length}`);
+  return { inserted, updated, total: rows.length };
+}
 
 // GET /api/suppliers
 router.get('/', (req, res) => {
@@ -95,6 +157,16 @@ router.get('/:id', (req, res) => {
   `).all(req.params.id);
 
   res.json({ ...supplier, products });
+});
+
+// POST /api/suppliers/sync-tiger3
+router.post('/sync-tiger3', authorize('admin'), async (req, res) => {
+  try {
+    const result = await syncSuppliersFromTIGER3();
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // POST /api/suppliers
@@ -279,4 +351,4 @@ router.delete('/:id/products/:spId', authorize('admin', 'user'), (req, res) => {
   res.json({ message: 'İlişki kaldırıldı' });
 });
 
-module.exports = router;
+module.exports = Object.assign(router, { syncSuppliersFromTIGER3 });

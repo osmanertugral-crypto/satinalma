@@ -1,0 +1,65 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KREKPOT_MUH_HESAP",
+    "full_name":  "dbo.KREKPOT_MUH_HESAP",
+    "definition":  "\r\n\r\n\r\nCREATE   view [dbo].[KREKPOT_MUH_HESAP] as\r\nSELECT EMUHACC.SPECODE CODE,\r\nSUM(DEBIT) AMOUNT_\r\nFROM LG_123_01_EMFLINE EMFLINE WITH(NOLOCK) \r\nINNER JOIN LG_123_01_EMFICHE EMFICHE WITH(NOLOCK) ON EMFICHE.LOGICALREF = EMFLINE.ACCFICHEREF \r\nLEFT JOIN LG_123_EMUHACC EMUHACC WITH(NOLOCK) ON EMUHACC.LOGICALREF = EMFLINE.ACCOUNTREF \r\nWHERE EMFLINE.CANCELLED = 0 AND  EMUHACC.SPECODE \u003c\u003e \u0027\u0027\r\nAND YEAR(EMFICHE.DATE_) = YEAR_\r\nAND MONTH(EMFICHE.DATE_) IN (MONTH_)\r\nGROUP BY EMUHACC.SPECODE\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CODE":  "10.2",
+                            "AMOUNT_":  "4842492,882"
+                        },
+                        {
+                            "CODE":  "13.2",
+                            "AMOUNT_":  "6879117,068"
+                        },
+                        {
+                            "CODE":  "14.4",
+                            "AMOUNT_":  "40271,2866"
+                        },
+                        {
+                            "CODE":  "13.1",
+                            "AMOUNT_":  "50565508,66"
+                        },
+                        {
+                            "CODE":  "14.7",
+                            "AMOUNT_":  "29806,67"
+                        },
+                        {
+                            "CODE":  "13.3",
+                            "AMOUNT_":  "1205415,702"
+                        },
+                        {
+                            "CODE":  "15.12",
+                            "AMOUNT_":  "313454,836"
+                        },
+                        {
+                            "CODE":  "13.14",
+                            "AMOUNT_":  "1971362,331691"
+                        },
+                        {
+                            "CODE":  ",",
+                            "AMOUNT_":  "119741756,638539"
+                        },
+                        {
+                            "CODE":  "13.7",
+                            "AMOUNT_":  "600996,26"
+                        }
+                    ]
+}

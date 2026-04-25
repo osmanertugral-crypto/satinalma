@@ -1,0 +1,147 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDATE_BNTRANS_099_02",
+    "full_name":  "dbo.LG_UPDATE_BNTRANS_099_02",
+    "created":  "Sep  1 2025 12:03PM",
+    "last_altered":  "Sep  1 2025 12:03PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@COEF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@BNACCREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@AMOUNT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRANSTYPE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRCODE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CLIENTREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@DT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@SIGN",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRNET",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPORTNET",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CANCELLED",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRNSTATE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRANSDUEDATE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@OPSTAT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STATUS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CSTRANSREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@COSTTYPE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDATE_BNTRANS_099_02\n       @COEF         SMALLINT,\n       @BNACCREF     INT,\n       @AMOUNT       FLOAT,\n       @TRANSTYPE    SMALLINT,\n       @TRCODE       SMALLINT,\n       @CLIENTREF    INT,\n       @DT           DATETIME,\n       @SIGN         SMALLINT,\n       @TRNET        FLOAT,\n       @REPORTNET    FLOAT,\n       @CANCELLED    SMALLINT,\n       @TRNSTATE     SMALLINT,\n       @TRANSDUEDATE DATETIME,\n       @OPSTAT       SMALLINT,\n      @STATUS       SMALLINT,\n       @CSTRANSREF   INT,\n       @COSTTYPE     SMALLINT AS\nDECLARE @MON        SMALLINT\nDECLARE @FND        SMALLINT\nDECLARE @CALCSIGN   SMALLINT\nDECLARE @CALCAMNT   FLOAT\nDECLARE @CALCTYP    SMALLINT\nDECLARE @VALID      SMALLINT\nDECLARE @BNCARDTYPE SMALLINT\nDECLARE @EPSILON    FLOAT\nDECLARE @NEWLREF    INT\nDECLARE @DEBITINC   FLOAT\nDECLARE @CREDITINC  FLOAT\nDECLARE @ACTIVE     SMALLINT\nDECLARE @par_Year       SMALLINT\nSELECT @EPSILON = 0.0000001,\n       @ACTIVE  = 0\nSELECT @VALID = 0\nIF (@BNACCREF \u003c\u003e 0) AND (@AMOUNT \u003e @EPSILON) AND (@TRANSTYPE \u003e 0) AND (@CANCELLED = 0) AND (@TRNSTATE = 0) AND ((@STATUS = 0) OR (@STATUS IS NULL)) AND (@CSTRANSREF \u003c\u003e -1)\n  SELECT @VALID = 1\nIF (@VALID = 1) AND ((@TRCODE = 3) OR (@TRCODE = 4))\n  IF (@CLIENTREF \u003c\u003e 0)\n    SELECT @VALID = 1\n  ELSE SELECT @VALID = 0\nIF (@VALID = 1) AND ((@OPSTAT \u003c\u003e 0) AND (@OPSTAT \u003c\u003e 2))\n  SELECT @VALID = 0\n               EXECUTE LG_FINDRELATIVEMONTH_099_02 @DT, @MON OUTPUT, @par_Year OUTPUT\nIF (@VALID = 1)\n  BEGIN IF (@TRCODE = 5)\n         BEGIN\n          SELECT @MON  = 0\n         END\n        ELSE\n          BEGIN IF (@TRANSDUEDATE IS NULL)\n                  EXECUTE LG_FINDRELATIVEMONTH_099_02 @DT, @MON OUTPUT, @par_Year OUTPUT\n                ELSE EXECUTE LG_FINDRELATIVEMONTH_099_02 @TRANSDUEDATE, @MON OUTPUT, @par_Year OUTPUT\n          END\n        SELECT @FND      = 0,\n               @CALCSIGN = @SIGN,\n               @CALCAMNT = 0,\n               @CALCTYP  = 0\n        SELECT @BNCARDTYPE = CARDTYPE FROM LG_099_BANKACC WHERE LOGICALREF = @BNACCREF\n        IF (@BNCARDTYPE = 3) OR (@BNCARDTYPE = 4) OR (@BNCARDTYPE = 6)\n          SELECT @CALCAMNT = @TRNET\n        ELSE SELECT @CALCAMNT = @AMOUNT\n        IF (@BNCARDTYPE = 1) OR (@BNCARDTYPE = 3)\n          SELECT @CALCTYP = @TRANSTYPE\n        ELSE SELECT @CALCTYP = 4 + @TRANSTYPE\n        IF (@CALCAMNT \u003e @EPSILON)\n          BEGIN IF NOT EXISTS(SELECT LOGICALREF FROM LG_099_02_BNTOTFIL\n                                WHERE (CARDREF = @BNACCREF) AND\n                                      (TOTTYP  = @CALCTYP)  AND\n                                      (MONTH_  = @MON)\n                                  AND (YEAR_   = @par_Year)\n                                      )\n                  BEGIN --EXECUTE LREF_LG_099_02_BNTOTFIL @NEWLREF OUTPUT\n                        INSERT INTO LG_099_02_BNTOTFIL\n                          (CARDREF, TOTTYP, MONTH_, DEBIT, CREDIT\n                          ,YEAR_\n                          )\n                          VALUES\n                          (@BNACCREF, @CALCTYP, @MON, 0, 0\n                          , @par_Year\n                          )\n                  END\n                IF NOT EXISTS(SELECT LOGICALREF FROM LG_099_02_GNTOTBN\n                                WHERE (CARDREF = @BNACCREF) AND\n                                      (TOTTYP  = -1))\n                  BEGIN --EXECUTE LREF_LG_099_02_GNTOTBN @NEWLREF OUTPUT\n                        INSERT INTO LG_099_02_GNTOTBN\n                          (CARDREF, TOTTYP, DEBIT, CREDIT\n                          )\n                          VALUES\n                          (@BNACCREF, -1, 0, 0\n                          )\n                  END\n                IF (@CALCSIGN = @ACTIVE)\n                  BEGIN SELECT @DEBITINC = @CALCAMNT\n                        SELECT @CREDITINC = 0\n                  END\n                ELSE\n                  BEGIN SELECT @DEBITINC = 0\n                        SELECT @CREDITINC = @CALCAMNT\n                  END\n                SELECT @DEBITINC = @DEBITINC * @COEF\n                SELECT @CREDITINC = @CREDITINC * @COEF\n                UPDATE LG_099_02_BNTOTFIL\n                  SET DEBIT  = DEBIT + @DEBITINC,\n                      CREDIT = CREDIT + @CREDITINC\n                  WHERE (CARDREF = @BNACCREF) AND\n                        (TOTTYP = @CALCTYP) AND\n                        (MONTH_ = @MON)\n                    AND (YEAR_   = @par_Year)\n                UPDATE LG_099_02_GNTOTBN\n                  SET DEBIT  = DEBIT + @DEBITINC,\n                      CREDIT = CREDIT + @CREDITINC\n                  WHERE (CARDREF = @BNACCREF) AND\n                        (TOTTYP  = -1)\n          END\n        SELECT @CALCAMNT = @REPORTNET\n        SELECT @CALCTYP = @CALCTYP + 8\n        IF (@CALCAMNT \u003e @EPSILON)\n          BEGIN IF NOT EXISTS(SELECT LOGICALREF FROM LG_099_02_BNTOTFIL\n                                WHERE (CARDREF = @BNACCREF) AND\n                                      (TOTTYP  = @CALCTYP)  AND\n                                      (MONTH_  = @MON)\n                                  AND (YEAR_   = @par_Year)\n                                      )\n                  BEGIN --EXECUTE LREF_LG_099_02_BNTOTFIL @NEWLREF OUTPUT\n                        INSERT INTO LG_099_02_BNTOTFIL\n                          (CARDREF, TOTTYP, MONTH_, DEBIT, CREDIT\n                          ,YEAR_\n                          )\n                           VALUES\n                          (@BNACCREF, @CALCTYP, @MON, 0, 0\n                          ,@par_Year\n                          )\n                  END\n                IF (@CALCSIGN = @ACTIVE)\n                  BEGIN SELECT @DEBITINC = @CALCAMNT\n                        SELECT @CREDITINC = 0\n                  END\n                ELSE\n                  BEGIN SELECT @DEBITINC = 0\n                        SELECT @CREDITINC = @CALCAMNT\n                  END\n                SELECT @DEBITINC = @DEBITINC * @COEF\n                SELECT @CREDITINC = @CREDITINC * @COEF\n                UPDATE LG_099_02_BNTOTFIL\n                  SET DEBIT  = DEBIT + @DEBITINC,\n                      CREDIT = CREDIT + @CREDITINC\n                  WHERE (CARDREF = @BNACCREF) AND\n                        (TOTTYP = @CALCTYP) AND\n                        (MONTH_ = @MON)\n                    AND (YEAR_   = @par_Year)\n          END\n  END"
+}

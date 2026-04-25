@@ -1,0 +1,205 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_GIBFAREGTYPE",
+    "full_name":  "dbo.L_GIBFAREGTYPE",
+    "description":  "",
+    "total_rows":  "726",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NOTIFNO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ITEMNO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBDEF",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "256",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RATE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "GIBFAREGTYPE_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "GIBCODE":  "1",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.",
+                            "GIBDEF":  "Binalar",
+                            "RATE":  "0",
+                            "YEAR_":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "GIBCODE":  "2",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.1.",
+                            "GIBDEF":  "Ticari, sınai, zirai ve mesleki işletmelerin idare binaları ile bunların sağlık ve sosyal hizmetlerinde kullandıkları binalar, ticarethane, muayenehane, yazıhane, banka, sigorta, pansiyon, otel, okul, hamam, banyo binaları",
+                            "RATE":  "0",
+                            "YEAR_":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "GIBCODE":  "3",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.1.1.",
+                            "GIBDEF":  "Beton, kargir, demir, çelik",
+                            "RATE":  "2",
+                            "YEAR_":  "50"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "GIBCODE":  "4",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.1.2.",
+                            "GIBDEF":  "Yarı kargir, yarı ahşap (Ahşap yapılar üzerine beton ve emsali püskürtmek suretiyle yapılmış binalar dahil)",
+                            "RATE":  "3,03",
+                            "YEAR_":  "33"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "GIBCODE":  "5",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.1.3.",
+                            "GIBDEF":  "Ahşap, kerpiç",
+                            "RATE":  "5",
+                            "YEAR_":  "20"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "GIBCODE":  "6",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.1.4.",
+                            "GIBDEF":  "Galip malzemesi saç, çinko, teneke olan mevsimlik faaliyette bulunan sinema, gazino ve emsali yerlerdeki cam veya ahşap tesisler ile benzeri binalar",
+                            "RATE":  "6,66",
+                            "YEAR_":  "15"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "GIBCODE":  "7",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.1.5.",
+                            "GIBDEF":  "Galip malzemesi teneke muvakkat barakalar, inşaat şantiye binaları ve prefabrik yapılar",
+                            "RATE":  "10",
+                            "YEAR_":  "10"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "GIBCODE":  "8",
+                            "NOTIFNO":  "365",
+                            "ITEMNO":  "1.1.6.",
+                            "GIBDEF":  "Galip malzemesi cam olan binalar (Depo ve tesisler) ve benzerleri",
+                            "RATE":  "6,66",
+                            "YEAR_":  "15"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "GIBCODE":  "9",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.1.7.",
+                            "GIBDEF":  "Sarnıç ve benzerleri",
+                            "RATE":  "2",
+                            "YEAR_":  "50"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "GIBCODE":  "10",
+                            "NOTIFNO":  "333",
+                            "ITEMNO":  "1.1.8.",
+                            "GIBDEF":  "Tanklar",
+                            "RATE":  "0",
+                            "YEAR_":  "0"
+                        }
+                    ]
+}

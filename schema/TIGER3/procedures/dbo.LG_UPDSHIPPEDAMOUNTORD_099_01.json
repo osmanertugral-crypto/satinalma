@@ -1,0 +1,19 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDSHIPPEDAMOUNTORD_099_01",
+    "full_name":  "dbo.LG_UPDSHIPPEDAMOUNTORD_099_01",
+    "created":  "Sep  1 2025 12:02PM",
+    "last_altered":  "Sep  1 2025 12:02PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@pOrdTransRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDSHIPPEDAMOUNTORD_099_01 (@pOrdTransRef INT)\nAS\nBEGIN\n DECLARE @clogicalRef INT\n  ,@csourceLink INT\n  ,@ctransDate DATETIME\n  ,@cAmount FLOAT\n  ,@cUnit1CFact FLOAT\n  ,@cUnit2CFact FLOAT\n DECLARE cStline CURSOR\n FOR\n SELECT LOGICALREF\n  ,SOURCELINK\n  ,DATE_\n  ,AMOUNT\n  ,UINFO1\n  ,UINFO2\n FROM LG_099_01_STLINE WITH(NOLOCK)\n WHERE ORDTRANSREF = @pOrdTransRef\n OPEN cStline\n FETCH NEXT\n FROM cStline\n INTO @clogicalRef\n  ,@csourceLink\n  ,@ctransDate\n  ,@cAmount\n  ,@cUnit1CFact\n  ,@cUnit2CFact\n WHILE @@FETCH_STATUS = 0\n BEGIN\n  EXECUTE LG_UPDSHIPPEDAMOUNT_099_01 @clogicalRef\n   ,@pOrdTransRef\n   ,@csourceLink\n   ,@cAmount\n   ,@ctransDate\n   ,@cUnit1CFact\n   ,@cUnit2CFact\n   ,1\n  FETCH NEXT\n  FROM cStline\n  INTO @clogicalRef\n   ,@csourceLink\n   ,@ctransDate\n   ,@cAmount\n   ,@cUnit1CFact\n   ,@cUnit2CFact\n END\n CLOSE cStline\n DEALLOCATE cStline\nEND\n"
+}

@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_01_CARI_MUHASEBE_KONTROL",
+    "full_name":  "dbo.DST_123_01_CARI_MUHASEBE_KONTROL",
+    "definition":  "\r\nCREATE VIEW [dbo].[DST_123_01_CARI_MUHASEBE_KONTROL]\r\n\r\nAS\r\n\r\nSELECT  CLCARD.CODE \u0027C/H KODU\u0027 ,CLCARD.DEFINITION_ \u0027C/H UNVANI\u0027 \r\n,ISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_CLFLINE WHERE SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027\r\nAND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) \u0027C/H BORÇ\u0027 ,ISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_CLFLINE WHERE SIGN=1 AND CANCELLED=0 \r\nAND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) \u0027C/H ALACAK\u0027 \r\n,ISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_CLFLINE WHERE SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) - ISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_CLFLINE WHERE SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) \u0027C/H BAKİYE\u0027 \r\n,EMUHACC.CODE \u0027HESAP KODU\u0027 ,EMUHACC.DEFINITION_ \u0027HESAP AÇIKLAMASI\u0027 ,ISNULL((SELECT SUM(DEBIT) FROM LG_123_01_EMFLINE WHERE SPECODE NOT IN  (\u0027D\u0027) AND SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) \u0027MUHASEBE BORÇ\u0027 \r\n,ISNULL((SELECT SUM(CREDIT) FROM LG_123_01_EMFLINE WHERE SPECODE NOT IN (\u0027D\u0027) AND SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) \u0027MUHASEBE ALACAK\u0027\r\n,ISNULL((SELECT SUM(DEBIT) FROM LG_123_01_EMFLINE WHERE  SPECODE NOT IN  (\u0027D\u0027) AND SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) - ISNULL((SELECT SUM(CREDIT) FROM LG_123_01_EMFLINE WHERE SPECODE NOT IN  (\u0027D\u0027) AND SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) \u0027MUHASEBE BAKİYE\u0027 \r\n\r\n---\r\n,(ISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_CLFLINE WHERE SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0) - ISNULL((SELECT SUM(AMOUNT) FROM LG_123_01_CLFLINE WHERE SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND CLIENTREF=CLCARD.LOGICALREF AND PAIDINCASH=0),0))-\r\n(ISNULL((SELECT SUM(DEBIT) FROM LG_123_01_EMFLINE WHERE  SPECODE NOT IN  (\u0027D\u0027) AND SIGN=0 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0) - ISNULL((SELECT SUM(CREDIT) FROM LG_123_01_EMFLINE WHERE SPECODE NOT IN  (\u0027D\u0027) AND SIGN=1 AND CANCELLED=0 AND DATE_ BETWEEN \u002720230101\u0027 and \u002720291231\u0027 AND ACCOUNTREF=EMUHACC.LOGICALREF),0)) \u0027FARK\u0027 \r\n\r\nFROM LG_123_CRDACREF CRDACREF \r\nLEFT JOIN LG_123_CLCARD CLCARD ON CLCARD.LOGICALREF=CRDACREF.CARDREF \r\nLEFT JOIN LG_123_EMUHACC EMUHACC ON EMUHACC.LOGICALREF=CRDACREF.ACCOUNTREF \r\nWHERE CRDACREF.TRCODE = 5 And TYP = 1\r\n\r\n--AND CLCARD.DEFINITION_ LIKE \u0027YEL%\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "C/H KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "C/H UNVANI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "C/H BORÇ",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "C/H ALACAK",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "C/H BAKİYE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP KODU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HESAP AÇIKLAMASI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUHASEBE BORÇ",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUHASEBE ALACAK",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUHASEBE BAKİYE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FARK",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "C/H KODU":  "320.ÜNİVARSALY",
+                            "C/H UNVANI":  "ÜNİVERSAL YAPIŞTIRICI VE KİMYA SANAYİ VE TİCARET LİMİTED ŞİRKETİ.",
+                            "C/H BORÇ":  "14435,11",
+                            "C/H ALACAK":  "14435,11",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "320.00.260015",
+                            "HESAP AÇIKLAMASI":  "ÜNİVERSAL YAPIŞTIRICI VE KİMYA SAN TİC LTD ŞTİ",
+                            "MUHASEBE BORÇ":  "14435,11",
+                            "MUHASEBE ALACAK":  "14435,11",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.AYŞEM",
+                            "C/H UNVANI":  "AYŞEM SARI ",
+                            "C/H BORÇ":  "1795497",
+                            "C/H ALACAK":  "1795497",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.00.010046",
+                            "HESAP AÇIKLAMASI":  "AYŞEM SARI ",
+                            "MUHASEBE BORÇ":  "1795497",
+                            "MUHASEBE ALACAK":  "1795497",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "320.MNGHAVA",
+                            "C/H UNVANI":  "MNG HAVAYOLLARI VE TAŞIMACILIK A.Ş.",
+                            "C/H BORÇ":  "2762,92",
+                            "C/H ALACAK":  "2762,92",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "320.00.160155",
+                            "HESAP AÇIKLAMASI":  "MNG HAVAYOLLARI VE TAŞIMACILIK ANONİM ŞİRKETİ",
+                            "MUHASEBE BORÇ":  "2762,92",
+                            "MUHASEBE ALACAK":  "2762,92",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "320.EŞREF",
+                            "C/H UNVANI":  "EŞREF TÜRK ( TÜRK NAKLİYAT )",
+                            "C/H BORÇ":  "4800",
+                            "C/H ALACAK":  "4800",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "320.00.060124",
+                            "HESAP AÇIKLAMASI":  "EŞREF TÜRK ( TÜRK NAKLİYAT )",
+                            "MUHASEBE BORÇ":  "4800",
+                            "MUHASEBE ALACAK":  "4800",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.DOBLİN",
+                            "C/H UNVANI":  "DOBLİN YELKEN SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "C/H BORÇ":  "300000",
+                            "C/H ALACAK":  "300000",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.00.050014",
+                            "HESAP AÇIKLAMASI":  "DOBLİN YELKEN SANAYİ VE TİCARET LTD ŞTİ",
+                            "MUHASEBE BORÇ":  "300000",
+                            "MUHASEBE ALACAK":  "300000",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.NİELS",
+                            "C/H UNVANI":  "NİELS NİSSEN",
+                            "C/H BORÇ":  "940110,32",
+                            "C/H ALACAK":  "940110,32",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.00.170012",
+                            "HESAP AÇIKLAMASI":  "NİELS NİSSEN",
+                            "MUHASEBE BORÇ":  "940110,32",
+                            "MUHASEBE ALACAK":  "940110,32",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.SERTAÇ",
+                            "C/H UNVANI":  "SERTAÇ BİNGÜL IŞIK ECZANESİ",
+                            "C/H BORÇ":  "740000",
+                            "C/H ALACAK":  "740000",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.00.220026",
+                            "HESAP AÇIKLAMASI":  "SERTAÇ BİNGÜL",
+                            "MUHASEBE BORÇ":  "740000",
+                            "MUHASEBE ALACAK":  "740000",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "320.ERKAN",
+                            "C/H UNVANI":  "ERKAN TÜRK",
+                            "C/H BORÇ":  "4800",
+                            "C/H ALACAK":  "4800",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "320.00.060125",
+                            "HESAP AÇIKLAMASI":  "ERKAN TÜRK",
+                            "MUHASEBE BORÇ":  "4800",
+                            "MUHASEBE ALACAK":  "4800",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "320.ÖZÇELİK",
+                            "C/H UNVANI":  "ÖZÇELİK TORNA MAKİNA GEMİ ALMY DEMİR ÇELİK İNŞ SAN TİC LTD ŞTİ",
+                            "C/H BORÇ":  "4774222,8",
+                            "C/H ALACAK":  "3672747,6",
+                            "C/H BAKİYE":  "1101475,2",
+                            "HESAP KODU":  "320.00.190041",
+                            "HESAP AÇIKLAMASI":  "ÖZÇELİK TORNA MAKİNA GEMİ ALMY DEMİR ÇELİK İNŞ SAN TİC LTD ŞTİ",
+                            "MUHASEBE BORÇ":  "7495221,6",
+                            "MUHASEBE ALACAK":  "6393746,4",
+                            "MUHASEBE BAKİYE":  "1101475,2",
+                            "FARK":  "0"
+                        },
+                        {
+                            "C/H KODU":  "120.AYLİN",
+                            "C/H UNVANI":  "AYLİN SÖNMEZER",
+                            "C/H BORÇ":  "350",
+                            "C/H ALACAK":  "350",
+                            "C/H BAKİYE":  "0",
+                            "HESAP KODU":  "120.00.010047",
+                            "HESAP AÇIKLAMASI":  "AYLİN SÖNMEZER",
+                            "MUHASEBE BORÇ":  "350",
+                            "MUHASEBE ALACAK":  "350",
+                            "MUHASEBE BAKİYE":  "0",
+                            "FARK":  "0"
+                        }
+                    ]
+}

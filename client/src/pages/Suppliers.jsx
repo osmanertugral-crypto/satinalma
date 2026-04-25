@@ -279,7 +279,10 @@ export default function SuppliersPage() {
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                       <XAxis dataKey="ay" tick={{ fontSize: 12 }} />
                       <YAxis tick={{ fontSize: 11 }} />
-                      <Tooltip labelFormatter={(_label, payload) => payload?.[0]?.payload?.ayFull || _label} />
+                      <Tooltip
+                        labelFormatter={(_label, payload) => payload?.[0]?.payload?.ayFull || _label}
+                        formatter={(value) => [value, 'Tedarikçi Sayısı']}
+                      />
                       <Legend />
                       <Line type="monotone" dataKey="tedarikci_sayisi" name="Tedarikçi Sayısı" stroke="#8b5cf6" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
                     </LineChart>

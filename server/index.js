@@ -31,6 +31,8 @@ app.use('/api/finance', require('./routes/finance'));
 app.use('/api/damage-reports', require('./routes/damage-reports'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/ciro', require('./routes/ciro'));
+app.use('/api/settings', require('./routes/settings'));
+app.use('/api/evira', require('./routes/evira'));
 
 // Üretim modunda React build'ini sun
 if (process.env.NODE_ENV === 'production') {
@@ -48,6 +50,7 @@ app.use((err, req, res, next) => {
 
 // Veritabanını başlat ve sunucuyu başlat
 initDb();
+require('./utils/scheduler').start();
 app.listen(PORT, () => {
   console.log(`Server çalışıyor: http://localhost:${PORT}`);
 });

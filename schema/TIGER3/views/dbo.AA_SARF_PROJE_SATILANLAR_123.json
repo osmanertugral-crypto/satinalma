@@ -1,0 +1,286 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_SARF_PROJE_SATILANLAR_123",
+    "full_name":  "dbo.AA_SARF_PROJE_SATILANLAR_123",
+    "definition":  "\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[AA_SARF_PROJE_SATILANLAR_123] AS\r\n\r\n\r\nselect \r\nYEAR(F.DATE_) YEAR_\r\n,MONTH(F.DATE_) MONTH_\r\n,F.DATE_ DATE_\r\n,F.FICHENO FISNO\r\n,(SELECT CODE FROM LG_123_PROJECT WHERE LOGICALREF=L.PROJECTREF) IS_EMRI_N0\r\n,(SELECT NAME FROM LG_123_PROJECT WHERE LOGICALREF=L.PROJECTREF) IS_EMRI_ADI\r\n,S.CODE STOK_KODU\r\n,S.NAME STOK_ADI\r\n,AMOUNT MIKTAR\r\n,U.CODE BRIM\r\n,(SELECT TOP 1 PRICE FROM LG_123_01_STLINE WHERE LINETYPE=0 AND STOCKREF=L.STOCKREF AND  TRCODE IN (50,1) AND DATE_\u003c= L.DATE_ ORDER BY DATE_ DESC) BRIM_FIYAT\r\n,(SELECT TOP 1 PRICE FROM LG_123_01_STLINE WHERE LINETYPE=0 AND STOCKREF=L.STOCKREF AND   TRCODE IN (50,1)  AND DATE_\u003c= L.DATE_ ORDER BY DATE_ DESC)*L.AMOUNT  TUTAR\r\n,CASE SUBSTRING((SELECT CODE FROM LG_123_PROJECT WHERE LOGICALREF=L.PROJECTREF),1,2) \r\nWHEN \u0027G0\u0027 THEN \u0027GLADIATOR KABIN\u0027 \r\nWHEN \u0027G1\u0027 THEN \u0027GLADIATOR KABIN\u0027 \r\nWHEN \u0027R0\u0027 THEN \u0027RONIN KABIN\u0027\r\nWHEN \u0027RX\u0027 THEN \u0027RONIN XL\u0027\r\nWHEN \u0027FO\u0027 THEN \u0027RONIN KABINR\u0027\r\nWHEN \u0027F0\u0027 THEN \u0027FREDOOM\u0027\r\nWHEN \u0027T0\u0027 THEN \u0027TROY\u0027\r\nWHEN \u0027MC\u0027 THEN \u0027MOHICAN\u0027\r\nWHEN \u0027RV\u0027 THEN \u0027REVIVA\u0027\r\nWHEN \u0027GL\u0027 THEN \u0027GLADIATOR XL\u0027\r\nWHEN \u0027GL\u0027 THEN \u0027GLADIATOR XL\u0027\r\nWHEN \u0027PA\u0027 THEN \u0027PAN ANATOLIA\u0027 \r\nWHEN \u002720\u0027 THEN \u0027AKSESUAR\u0027 \r\nEND TUR\r\n,(SELECT MAX(MONTH(DATE_)) FROM LG_123_01_STLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE IN (7,8) ) SATIS_AY\r\n,(SELECT MAX(YEAR(DATE_)) FROM LG_123_01_STLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE IN (7,8) ) SATIS_YIL\r\n\r\n\r\n\r\n\r\n\r\nFROM LG_123_01_STLINE AS L\r\nINNER JOIN LG_123_01_STFICHE AS F ON F.LOGICALREF=L.STFICHEREF\r\nINNER JOIN LG_123_ITEMS AS S ON S.LOGICALREF=L.STOCKREF\r\nINNER JOIN LG_123_UNITSETL AS U ON U.LOGICALREF=L.UOMREF\r\n\r\nWHERE F.TRCODE=12 \r\n--AND S.CODE=\u00272021X201\u0027\r\nAND (SELECT MAX(MONTH(DATE_)) FROM LG_123_01_STLINE WHERE PROJECTREF=L.PROJECTREF AND TRCODE IN (7,8) and YEAR(DATE_)\u003e2021 ) IS NOT NULL\r\nand YEAR(F.DATE_)\u003e2021\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTH_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FISNO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "IS_EMRI_N0",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "IS_EMRI_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRIM",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRIM_FIYAT",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "15",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIS_AY",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIS_YIL",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELSF0099H083",
+                            "STOK_ADI":  "SİGORTA 16 AH 220 W",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "38",
+                            "TUTAR":  "38",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELSF0099H084",
+                            "STOK_ADI":  "SİGORTA KUTUSU 3/4 KAPAKLI",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "17,5",
+                            "TUTAR":  "17,5",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELTS0099H013",
+                            "STOK_ADI":  "AYDINLATMA DOKUNMATİK GRİ - BEYAZ IŞIK",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "160",
+                            "TUTAR":  "160",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELTS0099H026",
+                            "STOK_ADI":  "GAZ SENSÖRÜ",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "411",
+                            "TUTAR":  "411",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELTS0099H036",
+                            "STOK_ADI":  "KONNEKTÖR GÜNEŞ PANEL",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "117,0588",
+                            "TUTAR":  "117,0588",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELTS0099H039",
+                            "STOK_ADI":  "LED ŞERİT GÜN IŞIĞI",
+                            "MIKTAR":  "15",
+                            "BRIM":  "METRE",
+                            "BRIM_FIYAT":  "8,25",
+                            "TUTAR":  "123,75",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELTS0099H060",
+                            "STOK_ADI":  "USB 12V 2Lİ SİYAH",
+                            "MIKTAR":  "3",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "135",
+                            "TUTAR":  "405",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "ELTS0099H070",
+                            "STOK_ADI":  "SOLAR PANEL 205W",
+                            "MIKTAR":  "2",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "2612,5",
+                            "TUTAR":  "5225",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "HRXX0099H104",
+                            "STOK_ADI":  "MENTEŞE YAPRAK OVAL 6.5CM KROM",
+                            "MIKTAR":  "6",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "292",
+                            "TUTAR":  "1752",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        },
+                        {
+                            "YEAR_":  "2023",
+                            "MONTH_":  "7",
+                            "DATE_":  "6.07.2023 00:00:00",
+                            "FISNO":  "000867",
+                            "IS_EMRI_N0":  null,
+                            "IS_EMRI_ADI":  null,
+                            "STOK_KODU":  "HRXX0099H106",
+                            "STOK_ADI":  "MENTEŞE-PİSTON 60LIK",
+                            "MIKTAR":  "1",
+                            "BRIM":  "ADET",
+                            "BRIM_FIYAT":  "20",
+                            "TUTAR":  "20",
+                            "TUR":  null,
+                            "SATIS_AY":  "12",
+                            "SATIS_YIL":  "2026"
+                        }
+                    ]
+}

@@ -1,0 +1,252 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_123_01_CLFLINE",
+    "full_name":  "dbo.LV_123_01_CLFLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_123_01_CLFLINE] AS\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.CLIENTREF, LGMAIN.LINENR, CLIENT.CODE, CLIENT.DEFINITION_ LINEEXP, LGMAIN.SOURCEFREF, LGMAIN.DATE_, LGMAIN.TRANNO, LGMAIN.TRCODE, LGMAIN.MODULENR, LGMAIN.FTIME,\n      CASE WHEN  LGMAIN.SIGN=0 THEN LGMAIN.AMOUNT ELSE 0 END DEBIT,\n      CASE WHEN  LGMAIN.SIGN=1 THEN LGMAIN.AMOUNT ELSE 0 END CREDIT\nFROM\n     LG_123_01_CLFLINE LGMAIN WITH(NOLOCK)\n  LEFT OUTER JOIN LG_123_CLCARD CLIENT WITH(NOLOCK) ON LGMAIN.CLIENTREF = CLIENT.LOGICALREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CLIENTREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENR",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SOURCEFREF",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRANNO",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MODULENR",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FTIME",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "27926",
+                            "CLIENTREF":  "1658",
+                            "LINENR":  "0",
+                            "CODE":  "320.CLS",
+                            "LINEEXP":  "CLS GÜMRÜK MÜŞAVİRLİĞİ LTD.ŞTİ.",
+                            "SOURCEFREF":  "14757",
+                            "DATE_":  "11.03.2024 00:00:00",
+                            "TRANNO":  "001911",
+                            "TRCODE":  "34",
+                            "MODULENR":  "4",
+                            "FTIME":  "169031680",
+                            "DEBIT":  "0",
+                            "CREDIT":  "281451,78"
+                        },
+                        {
+                            "LOGICALREF":  "27927",
+                            "CLIENTREF":  "2898",
+                            "LINENR":  "1",
+                            "CODE":  "309.TEB4915",
+                            "LINEEXP":  "K.K. - TEB                 4915 - 0008",
+                            "SOURCEFREF":  "9943",
+                            "DATE_":  "13.03.2024 00:00:00",
+                            "TRANNO":  "001551",
+                            "TRCODE":  "21",
+                            "MODULENR":  "7",
+                            "FTIME":  "169818392",
+                            "DEBIT":  "30000",
+                            "CREDIT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "27928",
+                            "CLIENTREF":  "2898",
+                            "LINENR":  "1",
+                            "CODE":  "309.TEB4915",
+                            "LINEEXP":  "K.K. - TEB                 4915 - 0008",
+                            "SOURCEFREF":  "9944",
+                            "DATE_":  "13.03.2024 00:00:00",
+                            "TRANNO":  "001552",
+                            "TRCODE":  "21",
+                            "MODULENR":  "7",
+                            "FTIME":  "169874712",
+                            "DEBIT":  "10000",
+                            "CREDIT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "27929",
+                            "CLIENTREF":  "2628",
+                            "LINENR":  "0",
+                            "CODE":  "320.MUHTE",
+                            "LINEEXP":  "MUHTELİF SATICILAR",
+                            "SOURCEFREF":  "14758",
+                            "DATE_":  "16.03.2024 00:00:00",
+                            "TRANNO":  "001912",
+                            "TRCODE":  "34",
+                            "MODULENR":  "4",
+                            "FTIME":  "170467328",
+                            "DEBIT":  "0",
+                            "CREDIT":  "225"
+                        },
+                        {
+                            "LOGICALREF":  "27930",
+                            "CLIENTREF":  "2628",
+                            "LINENR":  "1",
+                            "CODE":  "320.MUHTE",
+                            "LINEEXP":  "MUHTELİF SATICILAR",
+                            "SOURCEFREF":  "9948",
+                            "DATE_":  "16.03.2024 00:00:00",
+                            "TRANNO":  "000381",
+                            "TRCODE":  "28",
+                            "MODULENR":  "7",
+                            "FTIME":  "170473223",
+                            "DEBIT":  "225",
+                            "CREDIT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "27931",
+                            "CLIENTREF":  "2628",
+                            "LINENR":  "0",
+                            "CODE":  "320.MUHTE",
+                            "LINEEXP":  "MUHTELİF SATICILAR",
+                            "SOURCEFREF":  "14759",
+                            "DATE_":  "18.03.2024 00:00:00",
+                            "TRANNO":  "001913",
+                            "TRCODE":  "34",
+                            "MODULENR":  "4",
+                            "FTIME":  "170590499",
+                            "DEBIT":  "0",
+                            "CREDIT":  "225"
+                        },
+                        {
+                            "LOGICALREF":  "27932",
+                            "CLIENTREF":  "2628",
+                            "LINENR":  "1",
+                            "CODE":  "320.MUHTE",
+                            "LINEEXP":  "MUHTELİF SATICILAR",
+                            "SOURCEFREF":  "9949",
+                            "DATE_":  "18.03.2024 00:00:00",
+                            "TRANNO":  "000382",
+                            "TRCODE":  "28",
+                            "MODULENR":  "7",
+                            "FTIME":  "170598497",
+                            "DEBIT":  "225",
+                            "CREDIT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "27934",
+                            "CLIENTREF":  "1628",
+                            "LINENR":  "0",
+                            "CODE":  "320.COBIN",
+                            "LINEEXP":  "COBİN LOJİSTİK MAKİNA İNŞAAT SAN VE TİC A.Ş",
+                            "SOURCEFREF":  "14761",
+                            "DATE_":  "13.03.2024 00:00:00",
+                            "TRANNO":  "CLE2024000000700",
+                            "TRCODE":  "34",
+                            "MODULENR":  "4",
+                            "FTIME":  "235345920",
+                            "DEBIT":  "0",
+                            "CREDIT":  "4799,3"
+                        },
+                        {
+                            "LOGICALREF":  "27935",
+                            "CLIENTREF":  "3360",
+                            "LINENR":  "0",
+                            "CODE":  "320.ÖMERD",
+                            "LINEEXP":  "ÖMER DEMİRBAŞ     [ CARETTA REKLAM AJANSI ]",
+                            "SOURCEFREF":  "14762",
+                            "DATE_":  "13.03.2024 00:00:00",
+                            "TRANNO":  "000524",
+                            "TRCODE":  "31",
+                            "MODULENR":  "4",
+                            "FTIME":  "204219648",
+                            "DEBIT":  "0",
+                            "CREDIT":  "18690"
+                        },
+                        {
+                            "LOGICALREF":  "27937",
+                            "CLIENTREF":  "2019",
+                            "LINENR":  "0",
+                            "CODE":  "320.CEMİLT",
+                            "LINEEXP":  "CEMİL TURAN",
+                            "SOURCEFREF":  "14764",
+                            "DATE_":  "12.03.2024 00:00:00",
+                            "TRANNO":  "CTF2024000000061",
+                            "TRCODE":  "31",
+                            "MODULENR":  "4",
+                            "FTIME":  "186528000",
+                            "DEBIT":  "0",
+                            "CREDIT":  "7200"
+                        }
+                    ]
+}

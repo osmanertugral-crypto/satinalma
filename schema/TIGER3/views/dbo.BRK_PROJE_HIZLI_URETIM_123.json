@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_PROJE_HIZLI_URETIM_123",
+    "full_name":  "dbo.BRK_PROJE_HIZLI_URETIM_123",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[BRK_PROJE_HIZLI_URETIM_123] AS\r\n\r\nSELECT \r\n    STFICHE.FICHENO AS FIS_NO, \r\n    STFICHE.DATE_ AS FIS_TARIHI, \r\n    ITEMS.CODE AS URUN_KODU, \r\n    ITEMS.NAME AS URUN_ADI, \r\n    PROJECT.CODE AS PROJE_KODU, \r\n    PROJECT.NAME AS PROJE_ADI, \r\n    ITEM_PROJECT.SPECODE2 AS PROJE_TUR,\r\n    (SELECT DEFINITION_ \r\n     FROM LG_123_SPECODES WITH (NOLOCK) \r\n     WHERE SPECODETYPE = 1 AND SPECODE = ITEM_PROJECT.SPECODE2) AS PROJE_TUR_AÇIKLAMA,\r\n    STLINE.AMOUNT AS ADET,  \r\n    STLINE.OUTCOST AS BIRIM_FIYAT, \r\n    STLINE.AMOUNT * STLINE.OUTCOST AS TOPLAM\r\nFROM LG_123_01_STLINE STLINE WITH(NOLOCK)\r\nINNER JOIN LG_123_01_STFICHE STFICHE WITH(NOLOCK) ON STLINE.STFICHEREF = STFICHE.LOGICALREF\r\nINNER JOIN LG_123_ITEMS ITEMS WITH(NOLOCK) ON STLINE.STOCKREF = ITEMS.LOGICALREF\r\nINNER JOIN LG_123_PROJECT PROJECT WITH(NOLOCK) ON STFICHE.PROJECTREF = PROJECT.LOGICALREF\r\nLEFT JOIN LG_123_ITEMS ITEM_PROJECT WITH(NOLOCK) ON PROJECT.CODE = ITEM_PROJECT.CODE\r\nWHERE STLINE.TRCODE = 13\r\n  AND STLINE.CANCELLED = 0\r\n  AND ITEMS.CYPHCODE = \u0027KARAVAN\u0027;\r\n\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_TARIHI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URUN_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URUN_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_TUR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_TUR_AÇIKLAMA",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "41",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADET",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYAT",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FIS_NO":  "001953",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "URB047",
+                            "URUN_ADI":  "GXLE032 ÖMER HAYAL",
+                            "PROJE_KODU":  "URB047",
+                            "PROJE_ADI":  "GXLE032 ÖMER HAYAL",
+                            "PROJE_TUR":  "URB",
+                            "PROJE_TUR_AÇIKLAMA":  "ÇADIR",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "44778,02655059",
+                            "TOPLAM":  "44778,02655059"
+                        },
+                        {
+                            "FIS_NO":  "001959",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "G0357",
+                            "URUN_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "PROJE_TUR_AÇIKLAMA":  "GLADİATOR",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "249303,60930825",
+                            "TOPLAM":  "249303,60930825"
+                        },
+                        {
+                            "FIS_NO":  "001969",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "G0371",
+                            "URUN_ADI":  "RESTAR BANYOSUZ",
+                            "PROJE_KODU":  "G0371",
+                            "PROJE_ADI":  "RESTAR BANYOSUZ",
+                            "PROJE_TUR":  "GL",
+                            "PROJE_TUR_AÇIKLAMA":  "GLADİATOR",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "210970,27724909",
+                            "TOPLAM":  "210970,27724909"
+                        },
+                        {
+                            "FIS_NO":  "001972",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "F025",
+                            "URUN_ADI":  "HASAN ÖZGÜN",
+                            "PROJE_KODU":  "F025",
+                            "PROJE_ADI":  "RESTAR FREEDOM",
+                            "PROJE_TUR":  "FRARCZ",
+                            "PROJE_TUR_AÇIKLAMA":  "FREEDOM ARAÇSIZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "300163,3126688",
+                            "TOPLAM":  "300163,3126688"
+                        },
+                        {
+                            "FIS_NO":  "001973",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "F028",
+                            "URUN_ADI":  "RESTAR FREEDOM",
+                            "PROJE_KODU":  "F028",
+                            "PROJE_ADI":  "RESTAR FREEDOM",
+                            "PROJE_TUR":  "FR",
+                            "PROJE_TUR_AÇIKLAMA":  "FREEDOM ARAÇLI",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "960092,58637628",
+                            "TOPLAM":  "960092,58637628"
+                        },
+                        {
+                            "FIS_NO":  "001974",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "F029",
+                            "URUN_ADI":  "RESTAR FREEDOM",
+                            "PROJE_KODU":  "F029",
+                            "PROJE_ADI":  "RESTAR FREEDOM",
+                            "PROJE_TUR":  "FR",
+                            "PROJE_TUR_AÇIKLAMA":  "FREEDOM ARAÇLI",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "1027800,24085202",
+                            "TOPLAM":  "1027800,24085202"
+                        },
+                        {
+                            "FIS_NO":  "001977",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "G0347",
+                            "URUN_ADI":  "WİLD CAMPERS BANYOLU",
+                            "PROJE_KODU":  "G0347",
+                            "PROJE_ADI":  "WİLDCAMPERS BANYOLU",
+                            "PROJE_TUR":  "GL",
+                            "PROJE_TUR_AÇIKLAMA":  "GLADİATOR",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "182935,18452201",
+                            "TOPLAM":  "182935,18452201"
+                        },
+                        {
+                            "FIS_NO":  "001979",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "GXLE029",
+                            "URUN_ADI":  "BERTRAND",
+                            "PROJE_KODU":  "GXLE029",
+                            "PROJE_ADI":  "BERTRAND",
+                            "PROJE_TUR":  "GXL",
+                            "PROJE_TUR_AÇIKLAMA":  "GLADİATOR XL",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "326871,95886186",
+                            "TOPLAM":  "326871,95886186"
+                        },
+                        {
+                            "FIS_NO":  "001980",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "GXLE031",
+                            "URUN_ADI":  "SOCİETE BOUAZİZ",
+                            "PROJE_KODU":  "GXLE031",
+                            "PROJE_ADI":  "SOCİETE BOUAZİZ",
+                            "PROJE_TUR":  "GXL",
+                            "PROJE_TUR_AÇIKLAMA":  "GLADİATOR XL",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "270273,87340009",
+                            "TOPLAM":  "270273,87340009"
+                        },
+                        {
+                            "FIS_NO":  "001981",
+                            "FIS_TARIHI":  "18.04.2024 00:00:00",
+                            "URUN_KODU":  "GXLS040",
+                            "URUN_ADI":  "RAHED",
+                            "PROJE_KODU":  "GXLS040",
+                            "PROJE_ADI":  "RAHED",
+                            "PROJE_TUR":  "GXL",
+                            "PROJE_TUR_AÇIKLAMA":  "GLADİATOR XL",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "374225,48804375",
+                            "TOPLAM":  "374225,48804375"
+                        }
+                    ]
+}

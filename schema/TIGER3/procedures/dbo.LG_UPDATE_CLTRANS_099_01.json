@@ -1,0 +1,123 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDATE_CLTRANS_099_01",
+    "full_name":  "dbo.LG_UPDATE_CLTRANS_099_01",
+    "created":  "Sep  1 2025 12:02PM",
+    "last_altered":  "Sep  1 2025 12:02PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@COEF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRCODE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@SIGN",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRAMOUNT",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRREPORTNET",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CLIENTREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@MODULENR",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@CANCELLED",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPORTRATE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STATUS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@AFFECTCOLLATRL",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@AFFECTRISK",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@PAIDINCASH",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@FROMTOTALS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDATE_CLTRANS_099_01\n       @COEF        SMALLINT,\n       @TRCODE      SMALLINT,\n       @SIGN        SMALLINT,\n       @TRAMOUNT    FLOAT,\n       @TRREPORTNET FLOAT,\n       @CLIENTREF   INT,\n       @MODULENR    SMALLINT,\n       @CANCELLED   SMALLINT,\n       @REPORTRATE  FLOAT,\n       @STATUS      SMALLINT,\n       @AFFECTCOLLATRL SMALLINT,\n       @AFFECTRISK SMALLINT,\n       @PAIDINCASH SMALLINT,\n       @FROMTOTALS SMALLINT AS\nDECLARE @CALCSIGN   SMALLINT\nDECLARE @ACTIVE     SMALLINT\nDECLARE @PASSIVE    SMALLINT\nDECLARE @EPSILON    FLOAT\nDECLARE @AMOUNT     FLOAT\nDECLARE @REPORTNET  FLOAT\nDECLARE @FND        SMALLINT\nDECLARE @LOCALTYPE  SMALLINT\nDECLARE @CURRTYPE   SMALLINT\nDECLARE @NUMSREF    INT\nDECLARE @NEWLREF    INT\nDECLARE @RISKTYPE   SMALLINT\nDECLARE @DEBITINC   FLOAT\nDECLARE @CREDITINC  FLOAT\nDECLARE @RISKINC    FLOAT\nDECLARE @PAIDINCASHINV INT\nSELECT @ACTIVE  = 0\nSELECT @PASSIVE = 1\nSELECT @EPSILON = 0.0000001\nSELECT @LOCALTYPE = 1\nSELECT @CURRTYPE = 2\nIF (@TRCODE \u003c\u003e 12) AND (@CANCELLED = 0) AND ((@STATUS = 0) OR (@STATUS IS NULL))\n  BEGIN SELECT @PAIDINCASHINV = @PAIDINCASH\n        SELECT @CALCSIGN = @SIGN\n        IF (@TRAMOUNT \u003c 0) OR (@TRREPORTNET \u003c 0)\n          IF (@CALCSIGN = 1)\n            SELECT @CALCSIGN = 0\n          ELSE SELECT @CALCSIGN = 1\n        SELECT @AMOUNT = ABS(@TRAMOUNT)\n        SELECT @REPORTNET = ABS(@TRREPORTNET)\n        IF @AMOUNT \u003e @EPSILON\n          BEGIN\n                IF @CALCSIGN = @ACTIVE\n                  BEGIN SELECT @DEBITINC = @AMOUNT\n                        SELECT @CREDITINC = 0\n                  END\n                ELSE\n                  BEGIN SELECT @DEBITINC = 0\n                        SELECT @CREDITINC = @AMOUNT\n                  END\n                IF @PAIDINCASHINV = 1\n                 BEGIN IF @DEBITINC = 0\n                        SELECT @DEBITINC = @CREDITINC\n                       ELSE SELECT @CREDITINC = @DEBITINC\n                 END\n                SELECT @DEBITINC = @COEF * @DEBITINC\n                SELECT @CREDITINC = @COEF * @CREDITINC\n                IF (@MODULENR \u003c\u003e 6) AND (@MODULENR \u003c\u003e 61) AND (@PAIDINCASHINV = 0) AND (ISNULL(@AFFECTRISK,0) = 0)\n                  BEGIN EXECUTE LG_GETCLNUMSREF_099_01 @CLIENTREF, @NUMSREF OUTPUT, @RISKTYPE OUTPUT\n                        IF @SIGN = 0\n                          SELECT @RISKINC = @COEF * @AMOUNT\n                        ELSE SELECT @RISKINC = -1 * (@COEF * @AMOUNT)\n                       UPDATE LG_099_01_CLRNUMS\n                              SET RISKTOTAL = RISKTOTAL + @RISKINC,\n                                  ACCRISKTOTAL = ACCRISKTOTAL + @RISKINC\n                              WHERE LOGICALREF = @NUMSREF\n                       IF (@FROMTOTALS = 0) AND (@REPORTRATE \u003c\u003e 0)\n                         BEGIN SELECT @RISKINC = @RISKINC / @REPORTRATE\n                               UPDATE LG_099_01_CLRNUMS\n                                      SET REPRISKTOTAL = REPRISKTOTAL + @RISKINC,\n                                          REPACCRISKTOTAL = REPACCRISKTOTAL + @RISKINC\n                                      WHERE LOGICALREF = @NUMSREF\n                         END\n                       IF (@FROMTOTALS = 1) AND (@REPORTNET \u003c\u003e 0)\n                         BEGIN IF @SIGN = 0\n                                SELECT @RISKINC = @REPORTNET\n                               ELSE SELECT @RISKINC = -1 * @REPORTNET\n                               UPDATE LG_099_01_CLRNUMS\n                                      SET REPRISKTOTAL = REPRISKTOTAL + @RISKINC,\n                                          REPACCRISKTOTAL = REPACCRISKTOTAL + @RISKINC\n                                      WHERE LOGICALREF = @NUMSREF\n                         END\n                  END\n                IF (@MODULENR \u003c\u003e 6 ) AND (@MODULENR \u003c\u003e61) AND (@PAIDINCASHINV = 0)  AND (@AFFECTCOLLATRL = 1)\n                  BEGIN EXECUTE LG_GETCOLLTRLREF_099_01 @CLIENTREF, @NUMSREF OUTPUT, @RISKTYPE OUTPUT\n                        IF @SIGN = 0\n                          SELECT @RISKINC = @COEF * @AMOUNT\n                        ELSE SELECT @RISKINC = -1 * (@COEF * @AMOUNT)\n                       UPDATE LG_099_01_CLCOLLATRLRISK\n                              SET RISKTOTAL = RISKTOTAL + @RISKINC\n                              WHERE LOGICALREF = @NUMSREF\n                       IF (@FROMTOTALS = 0) AND (@REPORTRATE \u003c\u003e 0)\n                         BEGIN SELECT @RISKINC = @RISKINC / @REPORTRATE\n                               UPDATE LG_099_01_CLCOLLATRLRISK\n                                      SET REPRISKTOTAL = REPRISKTOTAL + @RISKINC\n                                      WHERE LOGICALREF = @NUMSREF\n                         END\n                       IF (@FROMTOTALS = 1) AND (@REPORTNET \u003c\u003e 0)\n                         BEGIN IF @SIGN = 0\n                                SELECT @RISKINC = @REPORTNET\n                               ELSE SELECT @RISKINC = -1 * @REPORTNET\n                               UPDATE LG_099_01_CLCOLLATRLRISK\n                                      SET REPRISKTOTAL = REPRISKTOTAL + @RISKINC\n                                      WHERE LOGICALREF = @NUMSREF\n                         END\n                  END\n          END\n        IF @REPORTNET \u003e @EPSILON\n          BEGIN\n                IF @CALCSIGN = @ACTIVE\n                  BEGIN SELECT @DEBITINC = @REPORTNET\n                        SELECT @CREDITINC = 0\n                  END\n                ELSE\n                  BEGIN SELECT @DEBITINC = 0\n                        SELECT @CREDITINC = @REPORTNET\n                  END\n                IF @PAIDINCASHINV = 1\n                 BEGIN IF @DEBITINC = 0\n                        SELECT @DEBITINC = @CREDITINC\n                       ELSE SELECT @CREDITINC = @DEBITINC\n                 END\n                SELECT @DEBITINC = @COEF * @DEBITINC\n                SELECT @CREDITINC = @COEF * @CREDITINC\n          END\n END"
+}

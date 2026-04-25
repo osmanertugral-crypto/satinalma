@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_FATURA_KARLILIK",
+    "full_name":  "dbo.BRK_FATURA_KARLILIK",
+    "definition":  "\r\n\r\nCREATE VIEW\t[dbo].[BRK_FATURA_KARLILIK] AS\r\n\r\nSELECT \r\n    INVOICE.FICHENO AS FATURA_NO,\r\n    INVOICE.DOCODE AS BELGE_NO,\r\n    CLCARD.SPECODE2 AS CARİ_OZELKOD2,\r\n    CLCARD.DEFINITION_ AS CARİ_ADI,\r\n    INVOICE.SPECODE AS CARİ_ÖZELKOD1,\r\n    LG_SLSMAN.CODE AS SATIŞ_ELEMAN_KODU,\r\n    STLINE.AMOUNT * STLINE.PRICE AS TL_TOPLAM_TUTAR,\r\n    STLINE.AMOUNT * STLINE.OUTCOST AS TL_MALİYET,\r\n    STLINE.AMOUNT * STLINE.PRICE - STLINE.AMOUNT * STLINE.OUTCOST AS TL_KAR,\r\n    CASE \r\n        WHEN STLINE.REPORTRATE = 0 THEN 0 \r\n        ELSE STLINE.TOTAL / STLINE.REPORTRATE * \r\n             CASE WHEN STLINE.TRCODE IN (6) THEN -1 ELSE 1 END * \r\n             CASE WHEN STLINE.LINETYPE = 1 THEN 0 ELSE 1 END\r\n    END AS RD_TUTARI,\r\n    STLINE.AMOUNT * STLINE.OUTCOSTCURR AS RD_ÇıkışMaliyeti,\r\n    CASE \r\n        WHEN STLINE.REPORTRATE = 0 THEN 0 \r\n        ELSE STLINE.TOTAL / STLINE.REPORTRATE * \r\n             CASE WHEN STLINE.TRCODE IN (6) THEN -1 ELSE 1 END * \r\n             CASE WHEN STLINE.LINETYPE = 1 THEN 0 ELSE 1 END\r\n    END - STLINE.AMOUNT * STLINE.OUTCOSTCURR AS RD_KAR\r\nFROM\r\n    LG_123_01_STLINE STLINE\r\n    LEFT JOIN LG_123_01_STFICHE STFICHE WITH (NOLOCK) ON STLINE.STFICHEREF = STFICHE.LOGICALREF\r\n    LEFT JOIN LG_123_01_INVOICE INVOICE WITH (NOLOCK) ON INVOICE.LOGICALREF = STFICHE.INVOICEREF\r\n    LEFT JOIN LG_123_CLCARD CLCARD WITH (NOLOCK) ON CLCARD.LOGICALREF = STFICHE.CLIENTREF\r\n    LEFT JOIN LG_SLSMAN WITH (NOLOCK) ON STFICHE.SALESMANREF = LG_SLSMAN.LOGICALREF AND LG_SLSMAN.FIRMNR = \u0027123\u0027\r\nWHERE\r\n    INVOICE.CANCELLED = 0\r\n    AND STLINE.LINETYPE IN (0, 2, 4, 8)\r\n    AND INVOICE.TRCODE = 8\r\n    AND (STFICHE.BILLED = 1 OR STFICHE.BILLED IS NULL)",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FATURA_NO",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BELGE_NO",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "33",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARİ_OZELKOD2",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARİ_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARİ_ÖZELKOD1",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIŞ_ELEMAN_KODU",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TL_TOPLAM_TUTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TL_MALİYET",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TL_KAR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RD_TUTARI",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RD_ÇıkışMaliyeti",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RD_KAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FATURA_NO":  "RST2024000000036",
+                            "BELGE_NO":  "RST2024000000036",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "2C ENDÜSTRİ MAKİNELERİ VE İTH. İHR. TİC. LTD. ŞTİ.",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "1966,8414",
+                            "TL_MALİYET":  "15200",
+                            "TL_KAR":  "-13233,1586",
+                            "RD_TUTARI":  "58,2447979149269",
+                            "RD_ÇıkışMaliyeti":  "525,90242432",
+                            "RD_KAR":  "-467,657626405073"
+                        },
+                        {
+                            "FATURA_NO":  "RST2025000000604",
+                            "BELGE_NO":  "RST2025000000604",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "RETECH İÇ VE DIŞ TİCARET ANONİM ŞİRKETİ",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "191,67",
+                            "TL_MALİYET":  "44,316994",
+                            "TL_KAR":  "147,353006",
+                            "RD_TUTARI":  "4,00393562619071",
+                            "RD_ÇıkışMaliyeti":  "1,33505225",
+                            "RD_KAR":  "2,66888337619071"
+                        },
+                        {
+                            "FATURA_NO":  "RST2025000000605",
+                            "BELGE_NO":  "RST2025000000605 ",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "RETECH İÇ VE DIŞ TİCARET ANONİM ŞİRKETİ",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "383,33",
+                            "TL_MALİYET":  "88,633988",
+                            "TL_KAR":  "294,696012",
+                            "RD_TUTARI":  "8,00766235502524",
+                            "RD_ÇıkışMaliyeti":  "2,6701045",
+                            "RD_KAR":  "5,33755785502524"
+                        },
+                        {
+                            "FATURA_NO":  "RST2023000000028",
+                            "BELGE_NO":  "RST2023000000028",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "RETECH İÇ VE DIŞ TİCARET ANONİM ŞİRKETİ",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "984254,6903",
+                            "TL_MALİYET":  "702338,91500006",
+                            "TL_KAR":  "281915,77529994",
+                            "RD_TUTARI":  "48406,9999852456",
+                            "RD_ÇıkışMaliyeti":  "35227,67170847",
+                            "RD_KAR":  "13179,3282767756"
+                        },
+                        {
+                            "FATURA_NO":  "RST2023000000032",
+                            "BELGE_NO":  "RST2023000000032",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "RETECH İÇ VE DIŞ TİCARET ANONİM ŞİRKETİ",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "768302,2104",
+                            "TL_MALİYET":  "357025,9790176",
+                            "TL_KAR":  "411276,2313824",
+                            "RD_TUTARI":  "37837,3344036562",
+                            "RD_ÇıkışMaliyeti":  "8584,50223092",
+                            "RD_KAR":  "29252,8321727362"
+                        },
+                        {
+                            "FATURA_NO":  "RAR2023000000006",
+                            "BELGE_NO":  "RAR2023000000006",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "HAKAN KOYUNCU",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "1386138,61",
+                            "TL_MALİYET":  "634632,79256571",
+                            "TL_KAR":  "751505,81743429",
+                            "RD_TUTARI":  "0",
+                            "RD_ÇıkışMaliyeti":  "31428,89237289",
+                            "RD_KAR":  "-31428,89237289"
+                        },
+                        {
+                            "FATURA_NO":  "RST2023000000085",
+                            "BELGE_NO":  "RST2023000000085",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "VEGA AJANS TANITIM ORG. HİZ. LTD. ŞTİ.",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "461386,14",
+                            "TL_MALİYET":  "367280,96870373",
+                            "TL_KAR":  "94105,17129627",
+                            "RD_TUTARI":  "22805,5606906131",
+                            "RD_ÇıkışMaliyeti":  "18255,85568175",
+                            "RD_KAR":  "4549,70500886306"
+                        },
+                        {
+                            "FATURA_NO":  "RAR2023000000011",
+                            "BELGE_NO":  "RAR2023000000011",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "EMİN ERDEM",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "34059,5",
+                            "TL_MALİYET":  "124319,91080271",
+                            "TL_KAR":  "-90260,41080271",
+                            "RD_TUTARI":  "1694,92411047524",
+                            "RD_ÇıkışMaliyeti":  "5870,32575333",
+                            "RD_KAR":  "-4175,40164285476"
+                        },
+                        {
+                            "FATURA_NO":  "RST2023000000081",
+                            "BELGE_NO":  "RST2023000000081",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "RETECH İÇ VE DIŞ TİCARET ANONİM ŞİRKETİ",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "532965,6216",
+                            "TL_MALİYET":  "200906,5393863",
+                            "TL_KAR":  "332059,0822137",
+                            "RD_TUTARI":  "26435,9999206373",
+                            "RD_ÇıkışMaliyeti":  "10026,80388746",
+                            "RD_KAR":  "16409,1960331773"
+                        },
+                        {
+                            "FATURA_NO":  "RST2023000000055",
+                            "BELGE_NO":  "RST2023000000055",
+                            "CARİ_OZELKOD2":  "",
+                            "CARİ_ADI":  "AMAZON TURKEY PERAKENDE HİZMETLERİ LİMİTED ŞİRKETİ",
+                            "CARİ_ÖZELKOD1":  "",
+                            "SATIŞ_ELEMAN_KODU":  null,
+                            "TL_TOPLAM_TUTAR":  "224,25",
+                            "TL_MALİYET":  "0",
+                            "TL_KAR":  "224,25",
+                            "RD_TUTARI":  "10,964429776311",
+                            "RD_ÇıkışMaliyeti":  "0",
+                            "RD_KAR":  "10,964429776311"
+                        }
+                    ]
+}

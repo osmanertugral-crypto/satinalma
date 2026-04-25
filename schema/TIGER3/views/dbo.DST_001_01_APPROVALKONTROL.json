@@ -1,0 +1,150 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_001_01_APPROVALKONTROL",
+    "full_name":  "dbo.DST_001_01_APPROVALKONTROL",
+    "definition":  "CREATE VIEW DST_001_01_APPROVALKONTROL AS\r\n\r\nSELECT       \r\nAPPROVAL.SENDERTITLE AS GFirma, \r\n--CL.DEFINITION_ AS Müşteri, \r\nAPPROVAL.DOCNR AS [Connect E-Fat No], \r\nAPPROVAL.DOCDATE AS [C.E-Fat Tarh], \r\nAPPROVAL.DOCTOTAL AS [C.E-Fat Tutarı] ,\r\n--INVOICE.FICHENO AS [Logo Fatura No],\r\n--INVOICE.DATE_ AS [Logo Fatura Tarihi],\r\n--INVOICE.DOCODE AS [Logo Fatura Belge No],\r\n--INVOICE.NETTOTAL AS [Logo Fatura Tutarı], \r\nCASE APPROVAL.STATUS WHEN \u00270\u0027 THEN \u0027blob\u0027\u0027ta\u0027 WHEN \u00271\u0027 THEN \u0027Onay satirlari olusturulmus\u0027 WHEN \u00272\u0027 THEN \u0027Onay bekliyor\u0027 WHEN \u00273\u0027 THEN \u0027Onaylandi\u0027 WHEN \u00274\u0027 THEN \u0027Paketlendi/Kaydedildi\u0027 WHEN \u00275\u0027 THEN \u0027Onay satirlari olusturulmus\u0027\r\nWHEN \u00276\u0027 THEN \u0027Bankaya iletildi\u0027 WHEN \u00277\u0027 THEN \u0027LDX\u0027\u0027e iletildi\u0027 WHEN \u00278\u0027 THEN \u0027Arsive gönderildi.\u0027 WHEN \u00279\u0027 THEN \u0027Onay Reddi\u0027 WHEN \u002710\u0027 THEN \u0027Doküman Reddi\u0027 END AS STATUS, \r\nCASE APPROVAL.TRCODE WHEN \u00271\u0027 THEN \u0027Satinalma Faturasi\u0027 WHEN \u00273\u0027 THEN \u0027Toptan Satis iade Faturasi\u0027 WHEN \u00274\u0027 THEN \u0027Alinan Hizmet Faturasi\u0027 WHEN \u002713\u0027 THEN \u0027Satinalma Fiyat Farki Faturasi\u0027 WHEN \u002714\u0027 THEN \u0027Satis Fiyat Farki Faturasi\u0027\r\nWHEN \u00278\u0027 THEN \u0027Toptan Satış Faturası\u0027 WHEN \u00279\u0027 THEN \u0027Verilen Hizmet Faturası\u0027 END AS TRCODE, \r\nCASE APPROVAL.PROFILEID WHEN \u00270\u0027 THEN \u0027Temel Fatura\u0027 WHEN \u00271\u0027 THEN \u0027Ticari Fatura\u0027 END AS PROFILEID\r\nFROM          LG_001_01_APPROVAL AS APPROVAL WITH (NOLOCK) \r\n--LEFT OUTER JOIN\r\n                        -- dbo.LG_001_01_INVOICE AS INVOICE WITH (NOLOCK) ON INVOICE.FICHENO = APPROVAL.DOCNR AND INVOICE.TRCODE IN (1, 4, 8, 3, 9, 13, 14) LEFT OUTER JOIN\r\n                         --dbo.LG_001_CLCARD AS CL ON INVOICE.CLIENTREF = CL.LOGICALREF\r\nWHERE        (APPROVAL.TRCODE IN (1, 4, 8, 3, 9, 13, 14)) AND (APPROVAL.DOCDATE BETWEEN \u002720220101\u0027 AND \u002720221231\u0027) AND APPROVAL.RECTYPE=111\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "GFirma",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Connect E-Fat No",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "C.E-Fat Tarh",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "C.E-Fat Tutarı",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "27",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROFILEID",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "GFirma":  "ERFA LASTİK CONTA SIZD. MAM.SAN.TİC.LTD.ŞTİ.",
+                            "Connect E-Fat No":  "ERF2022000000028",
+                            "C.E-Fat Tarh":  "4.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "1770",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "CANER ÇINAR",
+                            "Connect E-Fat No":  "AEF2022000000003",
+                            "C.E-Fat Tarh":  "4.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "3028,5",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        },
+                        {
+                            "GFirma":  "DSM GRUP DAN.I·LT.VE SAT.TI·C.A.S¸",
+                            "Connect E-Fat No":  "MDF2022000041793",
+                            "C.E-Fat Tarh":  "5.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "14,75",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        },
+                        {
+                            "GFirma":  "HEMY MARİN DENİZCİLİK TURİZM VE TİCARET LTD.ŞTİ.",
+                            "Connect E-Fat No":  "HMY2022000000001",
+                            "C.E-Fat Tarh":  "5.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "12607,1201171875",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "AKPINAR CİVATA HIRDAVAT İNŞAAT SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "Connect E-Fat No":  "AKP2022000000186",
+                            "C.E-Fat Tarh":  "5.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "2206,1298828125",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        },
+                        {
+                            "GFirma":  "DOĞU GIDA DAY.TÜK.MAL.TEKS.SAN.DIŞ TİC.LTD.ŞTİ",
+                            "Connect E-Fat No":  "AAA2022000000001",
+                            "C.E-Fat Tarh":  "5.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "2699,84008789063",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        },
+                        {
+                            "GFirma":  "MNG KARGO YURTİÇİ VE YURTDIŞI TAŞIMACILIK A.Ş.",
+                            "Connect E-Fat No":  "BAF2022000003905",
+                            "C.E-Fat Tarh":  "5.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "13,289999961853",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        },
+                        {
+                            "GFirma":  "MNG KARGO YURTİÇİ VE YURTDIŞI TAŞIMACILIK A.Ş.",
+                            "Connect E-Fat No":  "BAF2022000003908",
+                            "C.E-Fat Tarh":  "5.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "13,289999961853",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        },
+                        {
+                            "GFirma":  "UTKU ELEKTRİK SAN. VE TİC. LTD. ŞTİ",
+                            "Connect E-Fat No":  "UTK2022000000023",
+                            "C.E-Fat Tarh":  "5.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "3837,080078125",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "ORKA YALITIM MÜHENDİSLİK VE SANAYİ TİCARET LİMİTED ŞİRKETİ",
+                            "Connect E-Fat No":  "ORK2022000000001",
+                            "C.E-Fat Tarh":  "6.01.2022 00:00:00",
+                            "C.E-Fat Tutarı":  "2360",
+                            "STATUS":  "Onaylandi",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        }
+                    ]
+}

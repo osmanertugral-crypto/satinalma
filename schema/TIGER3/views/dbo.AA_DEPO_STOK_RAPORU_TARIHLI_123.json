@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_DEPO_STOK_RAPORU_TARIHLI_123",
+    "full_name":  "dbo.AA_DEPO_STOK_RAPORU_TARIHLI_123",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\n\r\nCREATE   VIEW [dbo].[AA_DEPO_STOK_RAPORU_TARIHLI_123] AS\r\nSELECT       ITM.LOGICALREF AS MLZ_ID, ITM.CODE, ITM.NAME, SUM(ISNULL(STN.ONHAND, 0)) - SUM(ISNULL(STN.ONVEHICLE, 0)) AS MIKTAR, STN.INVENNO AS DEPO,\r\n                             (SELECT        NAME\r\n                               FROM            dbo.L_CAPIWHOUSE\r\n                               WHERE        (STN.INVENNO = NR) AND (FIRMNR = 123)) AS DEPO_ADI\r\nFROM            dbo.LV_123_01_STINVTOT AS STN WITH (nolock) LEFT OUTER JOIN\r\n                         dbo.LG_123_ITEMS AS ITM WITH (nolock) ON STN.STOCKREF = ITM.LOGICALREF\r\nWHERE        (STN.INVENNO \u003c\u003e - 1) AND (STN.DATE_ \u003c= \u00272025-10-31\u0027)\r\nGROUP BY STN.INVENNO, STN.STOCKREF, ITM.CODE, ITM.NAME, ITM.LOGICALREF\r\nHAVING        (SUM(STN.ONHAND) \u003e= - 99999999) AND (SUM(STN.ONHAND) \u003c= 99999999)\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MLZ_ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MLZ_ID":  "4707",
+                            "CODE":  "2021X627",
+                            "NAME":  "NURGAZ ÇİFTLİ OCAK",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5226",
+                            "CODE":  "A2021X02",
+                            "NAME":  "EVEREST BENZİNLİ DAĞCI OCAĞI",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "4707",
+                            "CODE":  "2021X627",
+                            "NAME":  "NURGAZ ÇİFTLİ OCAK",
+                            "MIKTAR":  "0",
+                            "DEPO":  "12",
+                            "DEPO_ADI":  "Bozuk Depo"
+                        },
+                        {
+                            "MLZ_ID":  "5233",
+                            "CODE":  "A2021X09",
+                            "NAME":  "ÜÇ AYAK IZGARA ALÜMİNYUM TELESKOBİK",
+                            "MIKTAR":  "1",
+                            "DEPO":  "13",
+                            "DEPO_ADI":  "Zimmet"
+                        },
+                        {
+                            "MLZ_ID":  "5225",
+                            "CODE":  "A2021X01",
+                            "NAME":  "190 GR KARTUŞ",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  null,
+                            "CODE":  null,
+                            "NAME":  null,
+                            "MIKTAR":  "2",
+                            "DEPO":  "0",
+                            "DEPO_ADI":  "E TICARET FIKTIF"
+                        },
+                        {
+                            "MLZ_ID":  "5240",
+                            "CODE":  "NMN206",
+                            "NAME":  "3000X125X100 30 DANS STROFOR KÖPÜK ",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5229",
+                            "CODE":  "A2021X05",
+                            "NAME":  "KUKSA BARDAK BEAR",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "4697",
+                            "CODE":  "2021X617",
+                            "NAME":  "MAKYAJ AYNASI",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5230",
+                            "CODE":  "A2021X06",
+                            "NAME":  "KUKSA BARDAK FOX",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        }
+                    ]
+}

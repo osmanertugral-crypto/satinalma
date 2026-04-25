@@ -1,0 +1,116 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AARP_GUNLUK_SATINALMA_FATURALARI",
+    "full_name":  "dbo.AARP_GUNLUK_SATINALMA_FATURALARI",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[AARP_GUNLUK_SATINALMA_FATURALARI] AS\r\n--select \r\n--FAT.DATE_ TARIH,\r\n--FAT.FICHENO FIS_NO,\r\n--CAR.DEFINITION_ CARI_ADI,\r\n--FAT.NETTOTAL TUTAR,\r\n--(SELECT NAME FROM L_CAPIUSER KUL WHERE KUL.NR=FAT.CAPIBLOCK_CREATEDBY) GIREN_KULLANICI\r\n-- from LG_001_01_INVOICE FAT\r\n--INNER JOIN LG_001_CLCARD CAR ON FAT.CLIENTREF=CAR.LOGICALREF\r\n--WHERE TRCODE=01 AND year(date_)=2022 and \r\n--convert(varchar,FAT.DATE_,104)\r\n--\u003e=\r\n--convert(varchar,GETDATE()-1,104)\r\n\r\n\r\nSELECT \r\n\r\ndate_ AS  TARIH,\r\nDOCNR AS FIS_NO,\r\nLGMAIN.SENDERTITLE AS CARI_ADI,\r\nLGMAIN.DOCTOTAL AS TUTAR,\r\nLGMAIN.SENDER AS GIREN_KULLANICI\r\n\r\n\r\n FROM \r\nLG_001_01_APPROVAL LGMAIN WITH(NOLOCK) \r\n --WHERE \r\n --LGMAIN.DATE_ = CONVERT(dateTime, convert(varchar,format(getdate(),\u0027MM-dd-yyyy\u0027),105), 101)\r\n--(STATUS IN (0,1)) AND (OPTYPE=1) AND (RECTYPE IN (111,113,115,119)) AND \r\n--((LGMAIN.DATE_ \u003e= CONVERT(dateTime, convert(varchar,format(getdate(),\u0027MM-dd-yyyy\u0027),105), 101))\r\n--AND (LGMAIN.DATE_ \u003c= CONVERT(dateTime, convert(varchar,format(getdate(),\u0027MM-dd-yyyy\u0027),105), 101)))\r\n\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARI_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GIREN_KULLANICI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "TARIH":  "8.11.2021 00:00:00",
+                            "FIS_NO":  "ZCF2021000080763",
+                            "CARI_ADI":  "ZEPLİN TURİZM TAŞ.YAT.SAN.VE TİC.LTD.ŞTİ",
+                            "TUTAR":  "5919,25",
+                            "GIREN_KULLANICI":  "9970221779"
+                        },
+                        {
+                            "TARIH":  "8.11.2021 00:00:00",
+                            "FIS_NO":  "ECK2021000001636",
+                            "CARI_ADI":  "ECK MARINE ELEKTRIK SAN.VE TİC.LTD.ŞTİ",
+                            "TUTAR":  "8973,900390625",
+                            "GIREN_KULLANICI":  "3240468024"
+                        },
+                        {
+                            "TARIH":  "8.11.2021 00:00:00",
+                            "FIS_NO":  "ME02021000000415",
+                            "CARI_ADI":  "MIL ENERJI SAN VE TIC LTD ŞTI",
+                            "TUTAR":  "42650",
+                            "GIREN_KULLANICI":  "6210441136"
+                        },
+                        {
+                            "TARIH":  "8.11.2021 00:00:00",
+                            "FIS_NO":  "ZCF2021000080763",
+                            "CARI_ADI":  "",
+                            "TUTAR":  "5919,25",
+                            "GIREN_KULLANICI":  "9970221779"
+                        },
+                        {
+                            "TARIH":  "8.11.2021 00:00:00",
+                            "FIS_NO":  "DS02021000003936",
+                            "CARI_ADI":  "TIRSAN SSH OTOMOTİV SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TUTAR":  "460",
+                            "GIREN_KULLANICI":  "2650058495"
+                        },
+                        {
+                            "TARIH":  "8.11.2021 00:00:00",
+                            "FIS_NO":  "M012021000000035",
+                            "CARI_ADI":  "TIMEDECOR İNŞAAT SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+                            "TUTAR":  "2293,919921875",
+                            "GIREN_KULLANICI":  "8430390364"
+                        },
+                        {
+                            "TARIH":  "9.11.2021 00:00:00",
+                            "FIS_NO":  "GFF2021000012038",
+                            "CARI_ADI":  "Göver Çelik Halat İthalat İhracat San. ve Tic. Ltd. Şti.",
+                            "TUTAR":  "1062",
+                            "GIREN_KULLANICI":  "4100099311"
+                        },
+                        {
+                            "TARIH":  "9.11.2021 00:00:00",
+                            "FIS_NO":  "AEF2021000000474",
+                            "CARI_ADI":  "CANER ÇINAR",
+                            "TUTAR":  "362",
+                            "GIREN_KULLANICI":  "59515417254"
+                        },
+                        {
+                            "TARIH":  "9.11.2021 00:00:00",
+                            "FIS_NO":  "TEF2021000001667",
+                            "CARI_ADI":  "Termosa Mobil Sistemleri A.Ş.",
+                            "TUTAR":  "2488,6201171875",
+                            "GIREN_KULLANICI":  "8400382127"
+                        },
+                        {
+                            "TARIH":  "9.11.2021 00:00:00",
+                            "FIS_NO":  "GFF2021000012135",
+                            "CARI_ADI":  "Göver Çelik Halat İthalat İhracat San. ve Tic. Ltd. Şti.",
+                            "TUTAR":  "955,799987792969",
+                            "GIREN_KULLANICI":  "4100099311"
+                        }
+                    ]
+}

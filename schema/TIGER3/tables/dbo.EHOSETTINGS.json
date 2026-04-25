@@ -1,0 +1,136 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "EHOSETTINGS",
+    "full_name":  "dbo.EHOSETTINGS",
+    "description":  "",
+    "total_rows":  "17",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Id",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SettingKey",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "255",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SettingValue",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "255",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ModifiedDate",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__EHOSETTI__3214EC07FC47B440",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "Id"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Id":  "1",
+                            "SettingKey":  "IdmLoginMail123-1045",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "28.08.2025 11:25:01"
+                        },
+                        {
+                            "Id":  "2",
+                            "SettingKey":  "IdmLoginMail223-1045",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "28.08.2025 11:44:56"
+                        },
+                        {
+                            "Id":  "3",
+                            "SettingKey":  "IdmLoginMail123-1023",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "7.02.2025 11:29:09"
+                        },
+                        {
+                            "Id":  "4",
+                            "SettingKey":  "IdmLoginMail123-1055",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "23.09.2025 15:36:14"
+                        },
+                        {
+                            "Id":  "5",
+                            "SettingKey":  "IdmLoginMail223-1055",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "23.09.2025 09:47:52"
+                        },
+                        {
+                            "Id":  "6",
+                            "SettingKey":  "IdmLoginMail123-1018",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "9.02.2026 17:21:15"
+                        },
+                        {
+                            "Id":  "7",
+                            "SettingKey":  "IdmLoginMail223-1056",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "7.01.2026 10:28:48"
+                        },
+                        {
+                            "Id":  "8",
+                            "SettingKey":  "IdmLoginMail123-1056",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "13.02.2026 09:35:30"
+                        },
+                        {
+                            "Id":  "9",
+                            "SettingKey":  "IdmLoginMail123-1044",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "24.10.2025 14:23:10"
+                        },
+                        {
+                            "Id":  "10",
+                            "SettingKey":  "IdmLoginMail223-1057",
+                            "SettingValue":  "muhasebe@restar.com.tr",
+                            "ModifiedDate":  "12.02.2026 13:36:41"
+                        }
+                    ]
+}

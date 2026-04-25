@@ -1,0 +1,235 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_SATIS_DURUMU",
+    "full_name":  "dbo.AA_SATIS_DURUMU",
+    "definition":  "\r\nCREATE VIEW [dbo].[AA_SATIS_DURUMU] AS\r\n\r\n\r\nSELECT\r\nP.CODE \u0027PROJE KODU\u0027\r\n,P.NAME \u0027FATURA ISMI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE] WHERE IS_EMRI_N0=P.CODE AND RECETE_TURU=\u0027STANDART\u0027),0) \u0027STANDART MALIYETI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE] WHERE IS_EMRI_N0=P.CODE AND RECETE_TURU=\u0027OPSIYONEL\u0027),0) \u0027OPSIYON MALIYETI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE] WHERE IS_EMRI_N0=P.CODE AND RECETE_TURU=\u0027ARABA\u0027),0) \u0027ARAÇ MALIYETI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE] WHERE IS_EMRI_N0=P.CODE AND RECETE_TURU=\u0027OTV\u0027),0) \u0027VERGI MALIYETI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE] WHERE IS_EMRI_N0=P.CODE),0) \u0027TOPLAM MALIYET\u0027\r\n,ISNULL((select sum(LINENET) from LG_001_01_ORFLINE WHERE TRCODE=1 AND LINENO_=1 AND PROJECTREF=P.LOGICALREF),0) \u0027STANDART SATIŞ\u0027 \r\n,ISNULL((select sum(LINENET) from LG_001_01_ORFLINE WHERE TRCODE=1 AND  LINENO_\u003c\u003e1 AND PROJECTREF=P.LOGICALREF),0)-(SELECT SUM(TOTAL) FROM LG_001_01_ORFLINE WHERE PROJECTREF=P.LOGICALREF AND STOCKREF IN (SELECT LOGICALREF FROM LG_001_ITEMS WHERE STGRPCODE=\u0027ARABA\u0027)) \u0027OPSIYON SATIŞ\u0027 \r\n,(SELECT SUM(TOTAL) FROM LG_001_01_ORFLINE WHERE PROJECTREF=P.LOGICALREF AND STOCKREF IN (SELECT LOGICALREF FROM LG_001_ITEMS WHERE STGRPCODE=\u0027ARABA\u0027)) ARAC_SATIS\r\n,ISNULL((select sum(LINENET) from LG_001_01_ORFLINE WHERE TRCODE=1 AND  PROJECTREF=P.LOGICALREF),0) \u0027TOPLAM GELIR\u0027  \r\n,ISNULL((select sum(LINENET) from LG_001_01_ORFLINE WHERE TRCODE=1 AND  PROJECTREF=P.LOGICALREF),0)-\r\nISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE] WHERE IS_EMRI_N0=P.CODE),0)  KAZANC\r\n\r\n--,P.LOGICALREF\r\nFROM LG_001_PROJECT AS P\r\nWHERE \r\nP.LOGICALREF IN (SELECT PROJECTREF FROM LG_001_01_INVOICE WHERE TRCODE IN (7,8,9))\r\n--AND P.CODE=\u0027RXL011\u0027\r\n\r\n\r\n--SELECT * FROM LG_001_01_ORFICHE WHERE FICHENO=\u0027000054\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PROJE KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FATURA ISMI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STANDART MALIYETI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "OPSIYON MALIYETI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARAÇ MALIYETI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "VERGI MALIYETI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM MALIYET",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "STANDART SATIŞ",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "OPSIYON SATIŞ",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARAC_SATIS",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM GELIR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KAZANC",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "PROJE KODU":  "DİĞER GELİRLER",
+                            "FATURA ISMI":  "DİĞER GELİRLER",
+                            "STANDART MALIYETI":  "1287,66667",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "1287,66667",
+                            "STANDART SATIŞ":  "200",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "200",
+                            "KAZANC":  "-1087,66667"
+                        },
+                        {
+                            "PROJE KODU":  "RXL008",
+                            "FATURA ISMI":  "HAYRİ TOPÇUOĞLU RONIN XL 63 M 1167 ARAÇ BERABER",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        },
+                        {
+                            "PROJE KODU":  "G0105",
+                            "FATURA ISMI":  "EHRENFRIED ",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        },
+                        {
+                            "PROJE KODU":  "RV01",
+                            "FATURA ISMI":  "RESTAR RENT",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        },
+                        {
+                            "PROJE KODU":  "F002",
+                            "FATURA ISMI":  "RESTAR RENT",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        },
+                        {
+                            "PROJE KODU":  "RXL009",
+                            "FATURA ISMI":  "BURAK KALYONCU",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        },
+                        {
+                            "PROJE KODU":  "RV03",
+                            "FATURA ISMI":  "GÖKHAN GÖKBÖRÜ",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        },
+                        {
+                            "PROJE KODU":  "G0112",
+                            "FATURA ISMI":  "FAHRETTİN ERTEKİN GLADIATOR",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        },
+                        {
+                            "PROJE KODU":  "02",
+                            "FATURA ISMI":  "KİRALAMA GELİRLERİ",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        },
+                        {
+                            "PROJE KODU":  "G094",
+                            "FATURA ISMI":  "ERDİNÇ ERGÜN",
+                            "STANDART MALIYETI":  "0",
+                            "OPSIYON MALIYETI":  "0",
+                            "ARAÇ MALIYETI":  "0",
+                            "VERGI MALIYETI":  "0",
+                            "TOPLAM MALIYET":  "0",
+                            "STANDART SATIŞ":  "0",
+                            "OPSIYON SATIŞ":  null,
+                            "ARAC_SATIS":  null,
+                            "TOPLAM GELIR":  "0",
+                            "KAZANC":  "0"
+                        }
+                    ]
+}

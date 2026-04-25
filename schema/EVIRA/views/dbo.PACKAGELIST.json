@@ -1,0 +1,236 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "PACKAGELIST",
+    "full_name":  "dbo.PACKAGELIST",
+    "definition":  "CREATE VIEW [dbo].[PACKAGELIST] AS \r\nSELECT \r\n\tPL.PAKET_REF,AT.PAKET,PL.AKTIF,PL.FIRMA_REF,PL.SB_REF,PL.TB_REF,PL.PB_REF,PL.OLUSTURMA_TARIHI,PL.PAKET_DURUMU,\r\n\tPLE.PAKETEK_REF,PLE.AGIRLIK,PLE.BURUTAGIRLIK,PLE.UZUNLUK,PLE.YUKSEKLIK,PLE.GENISLIK,PLE.E1,PLE.E2,PLE.E3,PLE.E4,PLE.E5, PLE.E6,PLE.E7,PLE.E8,PLE.E9,PLE.E10, \r\n\t(SELECT SIPARIS_NO FROM SIPARISFISLERI   WITH (NOLOCK) WHERE SB_REF=PL.SB_REF) AS SIPARIS_NO,\r\n\t(SELECT FIS_NO     FROM TALEPFISLERI     WITH (NOLOCK) WHERE TB_REF=PL.TB_REF) AS TALEP_NO,\r\n    (SELECT FIS_NO     FROM PLANLAMAFISLERI  WITH (NOLOCK) WHERE PB_REF=PL.PB_REF) AS PLANLAMA_NO,\r\n\tFK.FIRMA_KODU,\r\n\tFK.FIRMA_UNVANI,\r\n\tAT.AMBAR_KODU,PS.ADRES\r\nFROM AMBARTAKIP AT WITH(NOLOCK) \r\n\tINNER JOIN PAKET PL WITH(NOLOCK) ON PL.PAKET=AT.PAKET\r\n    LEFT OUTER JOIN PACKAGESHELF PS ON PS.PAKET=AT.PAKET AND PS.AMBAR_KODU=AT.AMBAR_KODU\r\n\tLEFT OUTER JOIN PAKETEK PLE WITH (NOLOCK) ON PLE.PAKET=PL.PAKET \t\r\n\tLEFT OUTER JOIN FIRMAKARTI FK WITH (NOLOCK) ON FK.FIRMA_REF=PL.FIRMA_REF \t\r\nWHERE AT.PAKET\u003c\u003e\u0027\u0027 \r\nGROUP BY AT.AMBAR_KODU,AT.PAKET,PS.ADRES,FK.FIRMA_KODU,FK.FIRMA_UNVANI\r\n\t,PL.PAKET_REF,PL.PAKET,PL.AKTIF,PL.FIRMA_REF,PL.SB_REF,PL.TB_REF,PL.PB_REF,PL.OLUSTURMA_TARIHI,PL.PAKET_DURUMU,\r\n\tPLE.PAKETEK_REF,PLE.AGIRLIK,PLE.BURUTAGIRLIK,PLE.UZUNLUK,PLE.YUKSEKLIK,PLE.GENISLIK,PLE.E1,PLE.E2,PLE.E3,PLE.E4,PLE.E5, PLE.E6,PLE.E7,PLE.E8,PLE.E9,PLE.E10\r\nHAVING SUM(AT.MIKTAR)\u003c\u003e0",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PAKET_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "PAKET",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "AKTIF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "tinyint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA_REF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SB_REF",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TB_REF",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "PB_REF",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OLUSTURMA_TARIHI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PAKET_DURUMU",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "tinyint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PAKETEK_REF",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AGIRLIK",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BURUTAGIRLIK",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "UZUNLUK",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YUKSEKLIK",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GENISLIK",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E1",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E2",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E3",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E4",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E5",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E6",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E7",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E8",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E9",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "E10",
+                        "ORDINAL_POSITION":  25,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIPARIS_NO",
+                        "ORDINAL_POSITION":  26,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TALEP_NO",
+                        "ORDINAL_POSITION":  27,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLANLAMA_NO",
+                        "ORDINAL_POSITION":  28,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA_KODU",
+                        "ORDINAL_POSITION":  29,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA_UNVANI",
+                        "ORDINAL_POSITION":  30,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "250",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  31,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADRES",
+                        "ORDINAL_POSITION":  32,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

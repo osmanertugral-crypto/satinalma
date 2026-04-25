@@ -1,0 +1,286 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "EVIRA_HAREKET_RAPORU",
+    "full_name":  "dbo.EVIRA_HAREKET_RAPORU",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[EVIRA_HAREKET_RAPORU]\r\nAS\r\n\r\nSELECT \r\n(SELECT P.PROJE_KODU FROM PROJE P WHERE P.PROJE_REF=SF.PROJE_REF) PROJE_KODU,\r\n(SELECT P.PROJE_ADI FROM PROJE P WHERE P.PROJE_REF=SF.PROJE_REF) PROJE_ADI,\r\n\tSF.TARIH,\r\n\tSF.FIS_NO ,\r\n\tAMBAR_KODU=(SELECT AMBAR_KODU+\u0027,\u0027+AMBAR_ADI FROM AMBAR WHERE AMBAR_KODU=SH.AMBAR_KODU),\r\n\tHEDEF_AMBAR=(SELECT AMBAR_KODU+\u0027,\u0027+AMBAR_ADI FROM AMBAR WHERE AMBAR_KODU=SH.HEDEF_AMBAR),\r\n\tFIS_TURU =(SELECT FIS_ADI FROM FISTURLERI WHERE FIS_TURU=SF.FIS_TURU),\r\n\tISLEMTIPI= CASE SF.FIS_GCD WHEN \u00270\u0027 THEN \u0027GIRIS\u0027 WHEN \u00271\u0027 THEN \u0027CIKIS\u0027 WHEN \u00272\u0027 THEN \u0027TRANSFER\u0027 ELSE \u0027YOK\u0027 END,\r\n\tFIRMA=\r\n\t\r\n\tCASE WHEN (SELECT FIRMA_UNVANI FROM FIRMAKARTI WHERE FIRMA_REF=SH.FIRMA_REF) IS NULL\r\n\tTHEN\r\n\t(SELECT FIRMA_UNVANI FROM SIPARISFISLERI SF , FIRMAKARTI FK WHERE SF.FIRMA_REF=FK.FIRMA_REF AND SF.SB_REF=SH.SB_REF)\r\n\tELSE\r\n\t(SELECT FIRMA_UNVANI FROM FIRMAKARTI WHERE FIRMA_REF=SH.FIRMA_REF)\r\n\tEND,\r\n\tSK.STOK_KODU,\r\n\tSK.STOK_ADI,\r\nSUM(MIKTAR) MIKTAR,\r\n\tBIRIM=(SELECT BIRIM FROM STOKBIRIM WHERE BIRIM_REF=ANABIRIM_REF)\t,\r\n\tKULLANICI=(SELECT KULLANICI_ADI +\u0027 - \u0027 + ADI_SOYADI FROM KULLANICI WHERE KULLANICI_REF=SF.KULLANICI_REF)\t,\r\n\tTAKIP_NO\r\nFROM \r\n\tSTOKKARTI SK ,\r\n\tSTOKFISLERI SF,\r\n\tSTOKHAREKETLERI SH\r\nWHERE \r\n\tSK.STOK_REF=SH.STOK_REF\r\n\tAND SH.FB_REF=SF.FB_REF\r\n\tAND SH.FIS_TURU IN (12,13,300,302,303,304,305,306,307,308,309,900)\r\n\t--AND SF.TARIH\u003e=@P_TARIH1 AND SF.TARIH\u003c=@P_TARIH2\r\n\t\r\nGROUP BY \r\n\tSK.STOK_KODU,STOK_ADI,TARIH,FIS_NO,SH.AMBAR_KODU,SH.HEDEF_AMBAR,SH.FIS_TURU,SF.FIS_GCD,SH.FIRMA_REF,SH.ANABIRIM_REF,SF.KULLANICI_REF,SH.TAKIP_NO\r\n\t,SH.STOK_REF,SH.PAKET,SH.HEDEF_PAKET,SF.SAAT,SF.SB_REF,SF.FIS_TURU,SH.SB_REF\r\n\t,SF.PROJE_REF,SF.BELGE_NO\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "300",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "151",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HEDEF_AMBAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "151",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_TURU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEMTIPI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "8",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "250",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "15",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KULLANICI",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "48",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TAKIP_NO",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "PROJE_KODU":  null,
+                            "PROJE_ADI":  null,
+                            "TARIH":  "5.07.2023 00:00:00",
+                            "FIS_NO":  "0000703",
+                            "AMBAR_KODU":  "12,Bozuk Depo",
+                            "HEDEF_AMBAR":  "12,Bozuk Depo",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "2021X617",
+                            "STOK_ADI":  "MAKYAJ AYNASI",
+                            "MIKTAR":  "2",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "989 - Salih HANEDAR",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  null,
+                            "PROJE_ADI":  null,
+                            "TARIH":  "2.06.2023 00:00:00",
+                            "FIS_NO":  "0000650",
+                            "AMBAR_KODU":  "12,Bozuk Depo",
+                            "HEDEF_AMBAR":  "12,Bozuk Depo",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "2021X870",
+                            "STOK_ADI":  "28X45 BANYO LAVABO",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "989 - Salih HANEDAR",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  "FABRIKA GIDER",
+                            "PROJE_ADI":  "FABRIKA GIDERI",
+                            "TARIH":  "1.02.2025 00:00:00",
+                            "FIS_NO":  "0002467",
+                            "AMBAR_KODU":  "12,Bozuk Depo",
+                            "HEDEF_AMBAR":  "12,Bozuk Depo",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "2021X870",
+                            "STOK_ADI":  "28X45 BANYO LAVABO",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  "GSM0509",
+                            "PROJE_ADI":  "Deniz Ulas Tansel Ongel",
+                            "TARIH":  "5.11.2025 00:00:00",
+                            "FIS_NO":  "0013880",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "5,Montaj Hattı",
+                            "FIS_TURU":  "Montaja Transfer",
+                            "ISLEMTIPI":  "TRANSFER",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X09",
+                            "STOK_ADI":  "ÜÇ AYAK IZGARA ALÜMINYUM TELESKOBIK",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  "REKLAM VE PROMOSYON GIDERLERI",
+                            "PROJE_ADI":  "REKLAM VE PROMOSYON GIDERLERI",
+                            "TARIH":  "2.02.2025 00:00:00",
+                            "FIS_NO":  "0002596",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X25",
+                            "STOK_ADI":  "MINI TENCERE TAVA SETI",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  null,
+                            "PROJE_ADI":  null,
+                            "TARIH":  "16.03.2023 00:00:00",
+                            "FIS_NO":  "0000405",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X26",
+                            "STOK_ADI":  "TELESKOBIK BARBEKÜ ÇATALI",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "5 - Burak KANBEROGLU",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  null,
+                            "PROJE_ADI":  null,
+                            "TARIH":  "30.03.2023 00:00:00",
+                            "FIS_NO":  "0000515",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X26",
+                            "STOK_ADI":  "TELESKOBIK BARBEKÜ ÇATALI",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "5 - Burak KANBEROGLU",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  null,
+                            "PROJE_ADI":  null,
+                            "TARIH":  "19.04.2023 00:00:00",
+                            "FIS_NO":  "0000587",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X26",
+                            "STOK_ADI":  "TELESKOBIK BARBEKÜ ÇATALI",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "5 - Burak KANBEROGLU",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  "REKLAM VE PROMOSYON GIDERLERI",
+                            "PROJE_ADI":  "REKLAM VE PROMOSYON GIDERLERI",
+                            "TARIH":  "8.07.2025 00:00:00",
+                            "FIS_NO":  "0002593",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2021X32",
+                            "STOK_ADI":  "Campout Büyük Balta",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN",
+                            "TAKIP_NO":  ""
+                        },
+                        {
+                            "PROJE_KODU":  "FABRIKA GIDER",
+                            "PROJE_ADI":  "FABRIKA GIDERI",
+                            "TARIH":  "1.01.2025 00:00:00",
+                            "FIS_NO":  "0002588",
+                            "AMBAR_KODU":  "14,E Ticaret",
+                            "HEDEF_AMBAR":  "14,E Ticaret",
+                            "FIS_TURU":  "Sarf",
+                            "ISLEMTIPI":  "CIKIS",
+                            "FIRMA":  null,
+                            "STOK_KODU":  "A2025X149",
+                            "STOK_ADI":  "PORTATIF KAVURMA SACI KÜÇÜK",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "ADET",
+                            "KULLANICI":  "2 - Uğur AYDIN",
+                            "TAKIP_NO":  ""
+                        }
+                    ]
+}

@@ -1,0 +1,286 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_GIDER_RAPORU_YENI_123",
+    "full_name":  "dbo.AA_GIDER_RAPORU_YENI_123",
+    "definition":  "--USE [TIGER3]\r\n--GO\r\n\r\n--/****** Object:  View [dbo].[AA_GIDER_RAPORU_YENI]    Script Date: 3.03.2023 12:58:08 ******/\r\n--SET ANSI_NULLS ON\r\n--GO\r\n\r\n--SET QUOTED_IDENTIFIER ON\r\n--GO\r\n\r\n\r\nCREATE VIEW [dbo].[AA_GIDER_RAPORU_YENI_123] AS \r\nselect \r\nLEFT(H.CODE,3) AS ANA_KOD,\r\nH.CODE\r\n,H.DEFINITION_\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =1),0) \u002701_OCAK\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =2),0) \u002702_SUBAT\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =3),0) \u002703_MART\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =4),0) \u002704_NISAN\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =5),0) \u002705_MAYIS\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =6),0) \u002706_HAZIRAN\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =7),0) \u002707_TEMMUZ\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =8),0) \u002708_AGUSTOS\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =9),0) \u002709_EYLUL\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =10),0) \u002710_EKIM\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =11),0) \u002711_KASIM\u0027\r\n,ISNULL((SELECT SUM(DEBIT+CREDIT*-1) FROM LG_123_01_EMFLINE WHERE ACCOUNTCODE=H.CODE AND CANCELLED=0 AND YEAR(DATE_)=2023 AND MONTH(DATE_) =12),0) \u002712_ARALIK\u0027\r\n\r\nfrom LG_123_EMUHACC  AS H\r\n\r\n\r\nWHERE (H.CODE LIKE\u00277%\u0027 OR  H.CODE LIKE\u0027610%\u0027 OR   H.CODE LIKE\u0027689%\u0027 OR  H.CODE LIKE\u0027656%\u0027 OR H.CODE LIKE\u0027264%\u0027 OR H.CODE LIKE\u0027150%\u0027 \r\nOR H.CODE LIKE\u0027253%\u0027 OR H.CODE LIKE\u0027254%\u0027 OR H.CODE LIKE\u0027255%\u0027 ) AND H.CODE NOT LIKE\u0027710%\u0027 AND H.CODE NOT LIKE\u0027711%\u0027\r\n--AND LEN(H.CODE)=3\r\nAND H.CODE IN (SELECT ACCOUNTCODE FROM LG_123_01_EMFLINE)\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "ANA_KOD",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "3",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "01_OCAK",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "02_SUBAT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "03_MART",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "04_NISAN",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "05_MAYIS",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "06_HAZIRAN",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "07_TEMMUZ",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "08_AGUSTOS",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "09_EYLUL",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "10_EKIM",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "11_KASIM",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "12_ARALIK",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "ANA_KOD":  "150",
+                            "CODE":  "150.00.000000",
+                            "DEFINITION_":  "YURTİÇİ ÜRETİM STOKLARI",
+                            "01_OCAK":  "32257308,33",
+                            "02_SUBAT":  "3961038,2",
+                            "03_MART":  "6173842,96",
+                            "04_NISAN":  "8935990,00000001",
+                            "05_MAYIS":  "5260648,42",
+                            "06_HAZIRAN":  "10640953,37",
+                            "07_TEMMUZ":  "7119591,58",
+                            "08_AGUSTOS":  "2843618,15",
+                            "09_EYLUL":  "2060383,59",
+                            "10_EKIM":  "6558790,06",
+                            "11_KASIM":  "6265472,49",
+                            "12_ARALIK":  "-92077637,15"
+                        },
+                        {
+                            "ANA_KOD":  "253",
+                            "CODE":  "253.00.002021",
+                            "DEFINITION_":  "TESİS, MAKİNE VE CİHAZLAR - 2021",
+                            "01_OCAK":  "404334,75",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "-404334,75"
+                        },
+                        {
+                            "ANA_KOD":  "253",
+                            "CODE":  "253.00.002022",
+                            "DEFINITION_":  "TESİS, MAKİNE VE CİHAZLAR - 2022",
+                            "01_OCAK":  "4243273,75",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "-4243273,75"
+                        },
+                        {
+                            "ANA_KOD":  "254",
+                            "CODE":  "254.00.002022",
+                            "DEFINITION_":  "BİNEK ARAÇLAR - 2022",
+                            "01_OCAK":  "3002487,12",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "-3002487,12"
+                        },
+                        {
+                            "ANA_KOD":  "254",
+                            "CODE":  "254.50.002022",
+                            "DEFINITION_":  "TİCARİ ARAÇLAR - 2022",
+                            "01_OCAK":  "101694,92",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "-101694,92"
+                        },
+                        {
+                            "ANA_KOD":  "255",
+                            "CODE":  "255.00.000001",
+                            "DEFINITION_":  "İŞLETME ve BÜRO DEMİRBAŞLARI",
+                            "01_OCAK":  "1873582,8",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "5349,83",
+                            "04_NISAN":  "12538,5",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "39077,11",
+                            "07_TEMMUZ":  "75903,26",
+                            "08_AGUSTOS":  "39054,38",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "38899,17",
+                            "11_KASIM":  "277507,23",
+                            "12_ARALIK":  "-2361912,28"
+                        },
+                        {
+                            "ANA_KOD":  "264",
+                            "CODE":  "264.00.100000",
+                            "DEFINITION_":  "TUZLA",
+                            "01_OCAK":  "3423,24",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "-3423,24"
+                        },
+                        {
+                            "ANA_KOD":  "264",
+                            "CODE":  "264.00.200000",
+                            "DEFINITION_":  "GOSB FABRİKA TADİLAT VE ONARIM MALİYETLERİ ",
+                            "01_OCAK":  "7245507,57",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "211900",
+                            "10_EKIM":  "174993,6",
+                            "11_KASIM":  "90000",
+                            "12_ARALIK":  "-7722401,17"
+                        },
+                        {
+                            "ANA_KOD":  "264",
+                            "CODE":  "264.00.500000",
+                            "DEFINITION_":  "ENKA MUALLİNKÖY ÖZEL MALİYET",
+                            "01_OCAK":  "38000",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "0",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "-38000"
+                        },
+                        {
+                            "ANA_KOD":  "610",
+                            "CODE":  "610.00.000018",
+                            "DEFINITION_":  "HİZMET    İADELERİ %18   (-)",
+                            "01_OCAK":  "0",
+                            "02_SUBAT":  "0",
+                            "03_MART":  "0",
+                            "04_NISAN":  "0",
+                            "05_MAYIS":  "0",
+                            "06_HAZIRAN":  "0",
+                            "07_TEMMUZ":  "0",
+                            "08_AGUSTOS":  "124322,03",
+                            "09_EYLUL":  "0",
+                            "10_EKIM":  "0",
+                            "11_KASIM":  "0",
+                            "12_ARALIK":  "-124322,03"
+                        }
+                    ]
+}

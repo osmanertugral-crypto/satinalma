@@ -3,9 +3,105 @@ const { v4: uuidv4 } = require('uuid');
 const { getDb, calculatePoStatus } = require('../db/schema');
 const { authenticate, authorize } = require('../middleware/auth');
 const { getExcelOrders, getExcelOrderById } = require('../utils/excelPurchaseFallback');
+const tiger3 = require('../utils/tiger3');
 
 const router = express.Router();
 router.use(authenticate);
+
+// ── Tiger3 sipariş sync ───────────────────────────────────────────────────────
+async function syncPurchaseOrdersFromTIGER3() {
+  const db = getDb();
+
+  // Tiger3'ten sipariş başlıkları ve kalemleri paralel çek
+  const [orders, lines] = await Promise.all([
+    tiger3.query(`
+      SELECT
+        F.FICHENO                             AS FICHENO,
+        CONVERT(VARCHAR(10), F.DATE_, 120)    AS ORDER_DATE,
+        C.CODE                                AS SUPPLIER_CODE,
+        ISNULL(F.NETTOTAL, 0)                 AS TOTAL_AMOUNT,
+        CASE ISNULL(F.TRCURR, 0)
+          WHEN 1 THEN 'USD' WHEN 2 THEN 'EUR' ELSE 'TRY'
+        END                                   AS CURRENCY,
+        CASE
+          WHEN F.CANCELLED = 1 THEN 'cancelled'
+          WHEN F.STATUS = 1    THEN 'delivered'
+          ELSE 'sent'
+        END                                   AS STATUS
+      FROM LG_123_01_ORFICHE F
+      JOIN LG_123_CLCARD C ON C.LOGICALREF = F.CLIENTREF
+      WHERE F.TRCODE = 2
+    `),
+    tiger3.query(`
+      SELECT
+        F.FICHENO                             AS FICHENO,
+        S.CODE                                AS STOK_KODU,
+        ISNULL(L.AMOUNT, 0)                   AS QUANTITY,
+        ISNULL(L.PRICE, 0)                    AS UNIT_PRICE,
+        ISNULL(L.SHIPPEDAMOUNT, 0)            AS RECEIVED_QUANTITY
+      FROM LG_123_01_ORFLINE L
+      JOIN LG_123_01_ORFICHE F ON F.LOGICALREF = L.ORDFICHEREF
+      JOIN LG_123_ITEMS       S ON S.LOGICALREF = L.STOCKREF
+      WHERE L.TRCODE = 2
+        AND L.CANCELLED = 0
+        AND L.LINETYPE = 0
+        AND L.AMOUNT > 0
+    `),
+  ]);
+
+  // Tiger3 kaynaklı eski verileri temizle (manuel PO-YYYY-NNNN formatı korunur)
+  db.prepare("DELETE FROM po_items WHERE po_id IN (SELECT id FROM purchase_orders WHERE po_number NOT LIKE 'PO-%')").run();
+  db.prepare("DELETE FROM purchase_orders WHERE po_number NOT LIKE 'PO-%'").run();
+
+  // Tedarikçi ve ürün arama haritaları
+  const supplierMap = new Map(
+    db.prepare('SELECT id, external_code FROM suppliers WHERE external_code IS NOT NULL').all()
+      .map(r => [r.external_code, r.id])
+  );
+  const productMap = new Map(
+    db.prepare('SELECT id, code FROM products').all().map(r => [r.code, r.id])
+  );
+
+  const insertPo = db.prepare(`
+    INSERT INTO purchase_orders (id, po_number, supplier_id, order_date, currency, total_amount, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `);
+  const insertItem = db.prepare(`
+    INSERT INTO po_items (id, po_id, product_id, quantity, unit_price, received_quantity)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
+
+  // Sipariş başlıklarını ekle, FICHENO → po UUID haritası oluştur
+  let poInserted = 0, poSkipped = 0;
+  const poIdMap = new Map();
+
+  db.transaction((rows) => {
+    for (const r of rows) {
+      const supplierId = supplierMap.get(r.SUPPLIER_CODE);
+      if (!supplierId) { poSkipped++; continue; }
+      const poId = uuidv4();
+      insertPo.run(poId, r.FICHENO, supplierId, r.ORDER_DATE, r.CURRENCY, r.TOTAL_AMOUNT, r.STATUS);
+      poIdMap.set(r.FICHENO, poId);
+      poInserted++;
+    }
+  })(orders);
+
+  // Sipariş kalemlerini ekle
+  let itemInserted = 0, itemSkipped = 0;
+  db.transaction((rows) => {
+    for (const r of rows) {
+      const poId = poIdMap.get(r.FICHENO);
+      if (!poId) { itemSkipped++; continue; }
+      const productId = productMap.get(r.STOK_KODU);
+      if (!productId) { itemSkipped++; continue; }
+      insertItem.run(uuidv4(), poId, productId, r.QUANTITY, r.UNIT_PRICE, r.RECEIVED_QUANTITY);
+      itemInserted++;
+    }
+  })(lines);
+
+  console.log(`[PO] Tiger3 sync: ${poInserted} sipariş, ${poSkipped} atlandı, ${itemInserted} kalem, ${itemSkipped} kalem atlandı`);
+  return { poInserted, poSkipped, itemInserted, itemSkipped };
+}
 
 function getNextPoNumber(db) {
   const year = new Date().getFullYear();
@@ -135,4 +231,14 @@ router.delete('/:id', authorize('admin'), (req, res) => {
   res.json({ message: 'Sipariş silindi' });
 });
 
-module.exports = router;
+// POST /api/po/sync-tiger3
+router.post('/sync-tiger3', authorize('admin'), async (req, res) => {
+  try {
+    const result = await syncPurchaseOrdersFromTIGER3();
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+module.exports = Object.assign(router, { syncPurchaseOrdersFromTIGER3 });

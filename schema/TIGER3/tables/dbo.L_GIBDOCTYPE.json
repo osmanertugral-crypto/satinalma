@@ -1,0 +1,228 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_GIBDOCTYPE",
+    "full_name":  "dbo.L_GIBDOCTYPE",
+    "description":  "",
+    "total_rows":  "31",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBDEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SIMPLEMETHOD",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "IDACCOUNT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SELFEMP",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FCTYPE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SERIALREQUIRED",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "GIBDOCTYPE_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "GIBCODE":  "1",
+                            "GIBDEF":  "Fatura",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "GIBCODE":  "2",
+                            "GIBDEF":  "ÖKC Fişi",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "GIBCODE":  "3",
+                            "GIBDEF":  "Perakende Satış Fişi",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "GIBCODE":  "4",
+                            "GIBDEF":  "Serbest Meslek Makbuzu",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "GIBCODE":  "5",
+                            "GIBDEF":  "Gider Pusulası",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "GIBCODE":  "6",
+                            "GIBDEF":  "Müstahsil Makbuzu",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "1"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "GIBCODE":  "8",
+                            "GIBDEF":  "Diğer",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "GIBCODE":  "9",
+                            "GIBDEF":  "e-Fatura",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "GIBCODE":  "10",
+                            "GIBDEF":  "e-Arşiv Fatura",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "GIBCODE":  "11",
+                            "GIBDEF":  "Çoklu(Birden Fazla) Belge Girişi",
+                            "SIMPLEMETHOD":  "1",
+                            "IDACCOUNT":  "1",
+                            "SELFEMP":  "1",
+                            "FCTYPE":  "1",
+                            "SERIALREQUIRED":  "0"
+                        }
+                    ]
+}

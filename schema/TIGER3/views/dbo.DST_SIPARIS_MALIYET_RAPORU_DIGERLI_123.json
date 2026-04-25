@@ -1,0 +1,45 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_SIPARIS_MALIYET_RAPORU_DIGERLI_123",
+    "full_name":  "dbo.DST_SIPARIS_MALIYET_RAPORU_DIGERLI_123",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[DST_SIPARIS_MALIYET_RAPORU_DIGERLI_123] AS\r\n\r\n\r\n\r\nSELECT MONTH((sELECT ENDDATE FROM LG_123_PROJECT WHERE CODE=PROJE )) DONEM,* FROM AA_SIPARIS_MALIYET_RAPORU_123\r\nUNION ALL\r\nSELECT MONTH((sELECT ENDDATE FROM LG_123_PROJECT WHERE CODE=IS_EMRI_N0 )) DONEM,IS_EMRI_N0 AS PROJE, \u0027DİĞER\u0027AS OZEL_KOD, 0 AS SIPARIS_TUTARI , SUM(TUTAR)-\r\n(SELECT SUM(MALIYET_TUTARI) FROM AA_SIPARIS_MALIYET_RAPORU_123 WHERE PROJE=AA.IS_EMRI_N0)\r\n\r\n AS TUTAR FROM AA_SARF_PROJE_123 AA  GROUP BY  AA.IS_EMRI_N0\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "DONEM",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OZEL_KOD",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIPARIS_TUTARI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALIYET_TUTARI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  "ATLANDI: Exception calling \"Fill\" with \"1\" argument(s): \"Yürütme Zaman Aşımı Süresi Doldu. Zaman aşımı süresi işlem tamamlanmadan önce doldu veya sunucu yanıt vermiyor.\""
+}

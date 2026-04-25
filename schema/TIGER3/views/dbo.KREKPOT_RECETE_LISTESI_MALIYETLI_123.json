@@ -1,0 +1,184 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KREKPOT_RECETE_LISTESI_MALIYETLI_123",
+    "full_name":  "dbo.KREKPOT_RECETE_LISTESI_MALIYETLI_123",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\nCREATE     VIEW [dbo].[KREKPOT_RECETE_LISTESI_MALIYETLI_123] AS\r\n\r\n-- Eğer bunu bir view olarak kaydedecekseniz başına CREATE VIEW [dbo].[VIEW_ADI] AS ekleyebilirsiniz.\r\n\r\nSELECT \r\n    SM.CODE AS MAMUL_KODU,\r\n    SM.CAPIBLOCK_CREADEDDATE AS TARIH,\r\n    SM.NAME AS MAMUL_ADI,\r\n    S.CODE AS STOK_KODU,\r\n    S.NAME AS STOK_ADI,\r\n    R.AMNT AS MIKTAR,\r\n    U.CODE AS BIRIM,\r\n    \r\n    -- 1. YENİ EKLENTİ: Mamülün oluşturulma tarihindeki alt malzeme birim alış maliyeti\r\n    CAST(ISNULL(SON_ALIS.BR_FIYAT, ISNULL(FIYAT_KARTI.PRICE, 0)) AS DECIMAL(18,2)) AS GUNCEL_ALIS_FIYATI,\r\n    \r\n    -- 2. YENİ EKLENTİ: Reçetedeki miktar ile birim fiyatın çarpımı (Toplam Satır Maliyeti)\r\n    CAST(R.AMNT * ISNULL(SON_ALIS.BR_FIYAT, ISNULL(FIYAT_KARTI.PRICE, 0)) AS DECIMAL(18,2)) AS TOPLAM_TUTAR\r\n\r\nFROM LG_123_STCOMPLN AS R WITH (NOLOCK)\r\nINNER JOIN LG_123_ITEMS AS S WITH (NOLOCK) ON S.LOGICALREF = R.STCREF\r\nINNER JOIN LG_123_ITEMS AS SM WITH (NOLOCK) ON SM.LOGICALREF = R.MAINCREF\r\nINNER JOIN LG_123_UNITSETL AS U WITH (NOLOCK) ON U.LOGICALREF = R.UOMREF\r\n\r\n-- MALİYET BULUCU 1: Alt malzeme için ilgili tarihten önceki en son Alış/Devir fişi\r\nOUTER APPLY (\r\n    SELECT TOP 1 (STL.LINENET + STL.DIFFPRICE) / NULLIF(STL.AMOUNT, 0) AS BR_FIYAT\r\n    FROM LG_123_01_STLINE STL WITH (NOLOCK)\r\n    WHERE STL.STOCKREF = S.LOGICALREF -- Aramayı alt malzeme (S) için yapıyoruz\r\n      AND STL.PRICE \u003e 0\r\n      AND STL.TRCODE IN (1, 14) \r\n      AND STL.DATE_ \u003c= SM.CAPIBLOCK_CREADEDDATE -- Hedef tarih: Mamül kartının (SM) oluşturulma tarihi\r\n    ORDER BY STL.DATE_ + dbo.LG_INTTOTIME(STL.FTIME) DESC\r\n) SON_ALIS\r\n\r\n-- MALİYET BULUCU 2: Eğer fişlerde hareket yoksa Fiyat Kartlarına (PRCLIST) bak\r\nOUTER APPLY (\r\n    SELECT TOP 1 PRC.PRICE\r\n    FROM LG_123_PRCLIST PRC WITH (NOLOCK)\r\n    WHERE PRC.CARDREF = S.LOGICALREF\r\n      AND PRC.BEGDATE \u003c= SM.CAPIBLOCK_CREADEDDATE\r\n    ORDER BY PRC.BEGDATE DESC\r\n) FIYAT_KARTI\r\n\r\nWHERE SM.CARDTYPE = 12 \r\n  AND SM.CYPHCODE = \u0027KARAVAN\u0027\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MAMUL_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MAMUL_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GUNCEL_ALIS_FIYATI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM_TUTAR",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "decimal",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H003",
+                            "STOK_ADI":  "ANAHTAR DÜĞME SİYAH",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "13,98",
+                            "TOPLAM_TUTAR":  "13,98"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H006",
+                            "STOK_ADI":  "BARA VİDALI 6LI 150 A",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "210,00",
+                            "TOPLAM_TUTAR":  "210,00"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H007",
+                            "STOK_ADI":  "BICAK SİGORTA 10 A",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "0,65",
+                            "TOPLAM_TUTAR":  "0,65"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H008",
+                            "STOK_ADI":  "BICAK SİGORTA 15 A",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "0,65",
+                            "TOPLAM_TUTAR":  "0,65"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H009",
+                            "STOK_ADI":  "BICAK SİGORTA 20 A",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "0,65",
+                            "TOPLAM_TUTAR":  "0,65"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H026",
+                            "STOK_ADI":  "KABLO KORUMA KAPAK GÜNEŞ PANELİ SİYAH",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "114,88",
+                            "TOPLAM_TUTAR":  "114,88"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H054",
+                            "STOK_ADI":  "FİŞ ERKEK 1X16 TOPRAKLI DÜZ",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "31,63",
+                            "TOPLAM_TUTAR":  "31,63"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H078",
+                            "STOK_ADI":  "TEKLİ ÇERÇEVE SİYAH",
+                            "MIKTAR":  "8",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "20,00",
+                            "TOPLAM_TUTAR":  "160,00"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H081",
+                            "STOK_ADI":  "TOPRAKLI PRİZ Ç.K. KAPAKLI SIYAH",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "23,40",
+                            "TOPLAM_TUTAR":  "70,20"
+                        },
+                        {
+                            "MAMUL_KODU":  "GXLD047-01",
+                            "TARIH":  "29.03.2024 09:26:01",
+                            "MAMUL_ADI":  "GLADIATOR XL MOBİL YAŞAM KABİNİ",
+                            "STOK_KODU":  "ELSF0099H082",
+                            "STOK_ADI":  "SİGORTA 12V 80 AMPER",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "GUNCEL_ALIS_FIYATI":  "38,28",
+                            "TOPLAM_TUTAR":  "38,28"
+                        }
+                    ]
+}

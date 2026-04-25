@@ -1,0 +1,182 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_TAXDECLLINEACC",
+    "full_name":  "dbo.LG_123_TAXDECLLINEACC",
+    "description":  "",
+    "total_rows":  "435",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TAXDECLHDREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TAXDECLLNREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ACCOUNTREF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FIELDNR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ISSUBACC",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_TAXDECLLINEACC_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1565",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5822",
+                            "ACCOUNTREF":  "5362",
+                            "FIELDNR":  "2",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1566",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5829",
+                            "ACCOUNTREF":  "4963",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1567",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5831",
+                            "ACCOUNTREF":  "4958",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1568",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5831",
+                            "ACCOUNTREF":  "4959",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1569",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5831",
+                            "ACCOUNTREF":  "7605",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1570",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5833",
+                            "ACCOUNTREF":  "4960",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1571",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5833",
+                            "ACCOUNTREF":  "4961",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1572",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5835",
+                            "ACCOUNTREF":  "4955",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1573",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5835",
+                            "ACCOUNTREF":  "4956",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "1574",
+                            "TAXDECLHDREF":  "61",
+                            "TAXDECLLNREF":  "5835",
+                            "ACCOUNTREF":  "4957",
+                            "FIELDNR":  "1",
+                            "ISSUBACC":  "0"
+                        }
+                    ]
+}

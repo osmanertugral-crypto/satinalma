@@ -1,0 +1,182 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_GIBRECTYPE",
+    "full_name":  "dbo.L_GIBRECTYPE",
+    "description":  "",
+    "total_rows":  "23",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "21",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GIBDEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "FCTYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SUBRECUSETYPE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CONSTSUBRECTYPREF",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "GIBRECTYPE_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "GIBCODE":  "1",
+                            "GIBDEF":  "Mal Alışı",
+                            "FCTYPE":  "1",
+                            "SUBRECUSETYPE":  "2",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "GIBCODE":  "3",
+                            "GIBDEF":  "Serbest Meslek Kazancına Ait Giderler (GVK Md. 68)",
+                            "FCTYPE":  "1",
+                            "SUBRECUSETYPE":  "1",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "GIBCODE":  "4",
+                            "GIBDEF":  "İndirilecek Giderler (GVK Md. 40)",
+                            "FCTYPE":  "1",
+                            "SUBRECUSETYPE":  "1",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "GIBCODE":  "5",
+                            "GIBDEF":  "Gider Kabul Edilmeyen Ödemeler (GVK Md. 41)",
+                            "FCTYPE":  "1",
+                            "SUBRECUSETYPE":  "1",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "GIBCODE":  "6",
+                            "GIBDEF":  "Zirai İşletme Hesabı Esasında Giderler (GVK Md.57)",
+                            "FCTYPE":  "1",
+                            "SUBRECUSETYPE":  "1",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "GIBCODE":  "7",
+                            "GIBDEF":  "Çalışan/Personel Bordro Giderleri",
+                            "FCTYPE":  "1",
+                            "SUBRECUSETYPE":  "1",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "GIBCODE":  "14",
+                            "GIBDEF":  "Ortak Hesap Giderleri",
+                            "FCTYPE":  "1",
+                            "SUBRECUSETYPE":  "1",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "GIBCODE":  "1",
+                            "GIBDEF":  "Mal Satışı",
+                            "FCTYPE":  "2",
+                            "SUBRECUSETYPE":  "2",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "11",
+                            "GIBCODE":  "2",
+                            "GIBDEF":  "Hizmet Satışı",
+                            "FCTYPE":  "2",
+                            "SUBRECUSETYPE":  "2",
+                            "CONSTSUBRECTYPREF":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "13",
+                            "GIBCODE":  "4",
+                            "GIBDEF":  "Diğer Hasılat",
+                            "FCTYPE":  "2",
+                            "SUBRECUSETYPE":  "1",
+                            "CONSTSUBRECTYPREF":  "0"
+                        }
+                    ]
+}

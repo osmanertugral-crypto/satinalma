@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "ONR_TARIHLI_DEPO_RAPORU_123",
+    "full_name":  "dbo.ONR_TARIHLI_DEPO_RAPORU_123",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n--4706\r\nCREATE     VIEW [dbo].[ONR_TARIHLI_DEPO_RAPORU_123] AS \r\nSELECT \r\n\tLIST.AMBAR_KODU,\r\n\tS.STOK_KODU,\r\n\tS.STOK_ADI, \r\n\tLIST.MIKTAR,\r\n\tSB.BIRIM,\r\n\t--ADRES,\r\n\t--TAKIP_NO,\r\n\t--DURUM_KODU,\r\n\t--PALET,\r\n\t(SELECT AMBAR_ADI FROM EVIRA..AMBAR WHERE AMBAR_KODU=LIST.AMBAR_KODU) AS AMBAR_ADI\r\n\t\r\nFROM \r\n\r\n(\r\n\r\nSELECT  \r\n\tAMBAR_KODU,\r\n\tSTOK_REF,\r\n\tBIRIM_REF,\r\n\tISNULL(CONVERT(FLOAT,SUM(AT.MIKTAR)),0) AS MIKTAR\r\n\t--,ADRES,\r\n\t--TAKIP_NO,\r\n\t--DURUM_KODU,\r\n\t--PALET\r\n\t\r\nFROM \r\n\tEVIRA..AMBARTAKIPDETAY AT \r\nWHERE  \r\n\t\r\n\tAT.HAREKET_TARIHI\u003c=\u00272025-11-20\u0027\r\n\t\r\n\r\nGROUP BY \r\n\tSTOK_REF,\r\n\tBIRIM_REF,\r\n\tAMBAR_KODU\r\n\t--,ADRES,\r\n\t--TAKIP_NO,\r\n\t--DURUM_KODU,\r\n\t--PALET\r\n\t\r\n\t\r\nHAVING \t\r\n\tISNULL(CONVERT(NUMERIC(28,2),SUM(AT.MIKTAR)),0)\u003c\u003e0\t\r\n\t\r\n\r\n) AS LIST \r\n\tLEFT OUTER JOIN EVIRA..STOKKARTI S ON S.STOK_REF=LIST.STOK_REF\r\n\tLEFT OUTER JOIN EVIRA..STOKBIRIM SB ON SB.BIRIM_REF=LIST.BIRIM_REF\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "15",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "AMBAR_KODU":  "12",
+                            "STOK_KODU":  "2021X870",
+                            "STOK_ADI":  "28X45 BANYO LAVABO",
+                            "MIKTAR":  "3",
+                            "BIRIM":  "ADET",
+                            "AMBAR_ADI":  "Bozuk Depo"
+                        },
+                        {
+                            "AMBAR_KODU":  "13",
+                            "STOK_KODU":  "A2021X74",
+                            "STOK_ADI":  "CAMPOUT ALÜMINYUM KAMP MASASI BÜYÜK",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "AMBAR_ADI":  "Zimmet"
+                        },
+                        {
+                            "AMBAR_KODU":  "11",
+                            "STOK_KODU":  "DSXX0099H020",
+                            "STOK_ADI":  "KUMAS PELUS GRI",
+                            "MIKTAR":  "77",
+                            "BIRIM":  "METRE",
+                            "AMBAR_ADI":  "Üretim Depo"
+                        },
+                        {
+                            "AMBAR_KODU":  "5",
+                            "STOK_KODU":  "ELTS0099H012",
+                            "STOK_ADI":  "AKÜ LITYUM 100 AH",
+                            "MIKTAR":  "1",
+                            "BIRIM":  "ADET",
+                            "AMBAR_ADI":  "Montaj Hattı"
+                        },
+                        {
+                            "AMBAR_KODU":  "11",
+                            "STOK_KODU":  "ELSF0099H007",
+                            "STOK_ADI":  "BICAK SIGORTA 10 A",
+                            "MIKTAR":  "32",
+                            "BIRIM":  "ADET",
+                            "AMBAR_ADI":  "Üretim Depo"
+                        },
+                        {
+                            "AMBAR_KODU":  "2",
+                            "STOK_KODU":  "ELTS0099H026",
+                            "STOK_ADI":  "GAZ SENSÖRÜ",
+                            "MIKTAR":  "40",
+                            "BIRIM":  "ADET",
+                            "AMBAR_ADI":  "GEBZE"
+                        },
+                        {
+                            "AMBAR_KODU":  "5",
+                            "STOK_KODU":  "ELTS0099H026",
+                            "STOK_ADI":  "GAZ SENSÖRÜ",
+                            "MIKTAR":  "30",
+                            "BIRIM":  "ADET",
+                            "AMBAR_ADI":  "Montaj Hattı"
+                        },
+                        {
+                            "AMBAR_KODU":  "5",
+                            "STOK_KODU":  "ELSF0099H021",
+                            "STOK_ADI":  "KABLO ANTIGRON 4X0,75 ",
+                            "MIKTAR":  "270",
+                            "BIRIM":  "METRE",
+                            "AMBAR_ADI":  "Montaj Hattı"
+                        },
+                        {
+                            "AMBAR_KODU":  "2",
+                            "STOK_KODU":  "ELSF0099H031",
+                            "STOK_ADI":  "KABLO TELLI 10MM KIRMIZI",
+                            "MIKTAR":  "100",
+                            "BIRIM":  "METRE",
+                            "AMBAR_ADI":  "GEBZE"
+                        },
+                        {
+                            "AMBAR_KODU":  "5",
+                            "STOK_KODU":  "ELSF0099H031",
+                            "STOK_ADI":  "KABLO TELLI 10MM KIRMIZI",
+                            "MIKTAR":  "36",
+                            "BIRIM":  "METRE",
+                            "AMBAR_ADI":  "Montaj Hattı"
+                        }
+                    ]
+}

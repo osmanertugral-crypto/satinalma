@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_001_01_GELİR_TABLOSU",
+    "full_name":  "dbo.DST_001_01_GELİR_TABLOSU",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[DST_001_01_GELİR_TABLOSU] AS\r\nSELECT     \r\n--EMF.FICHENO AS [Fiş No], \r\n--CASE \r\n--WHEN EMF.TRCODE=1 THEN \u0027Açılış\u0027\r\n--WHEN EMF.TRCODE=2 THEN \u0027Tahsil\u0027\r\n--WHEN EMF.TRCODE=3 THEN \u0027Tediye\u0027\r\n--WHEN EMF.TRCODE=4 THEN \u0027Mahsup\u0027\r\n--WHEN EMF.TRCODE=5 THEN \u0027Özel Fiş\u0027\r\n--WHEN EMF.TRCODE=6 THEN \u0027Kur Farkı Fişi\u0027\r\n--WHEN EMF.TRCODE=7 THEN \u0027Kapanış\u0027\r\n--WHEN EMF.TRCODE=8 THEN \u0027Enflasyon Muhasebesi Fişi\u0027\r\n--WHEN EMF.TRCODE=9 THEN \u0027Konsolidasyon Düzeltme Fişi\u0027\r\n--WHEN EMF.TRCODE=9 THEN \u0027TFRS Düzeltme Fişi\u0027\r\n--ELSE \u0027\u0027 end [Fiş Türü],\r\nEML.KEBIRCODE [Kebir],\r\n--CASE EMF.MODULENR \r\n--WHEN 1 THEN \u0027Malzeme Fişi\u0027 WHEN 2 THEN \u0027Satınalma Ft\u0027 WHEN 3 THEN \u0027Satış Ft\u0027 WHEN 4 THEN \u0027Cari Hesap Fişi\u0027 \r\n--WHEN 5 THEN \u0027Çek-Senet Bordro\u0027 WHEN 6 THEN \u0027Banka Fişi\u0027 WHEN 7 THEN \u0027Kasa İşlemi\u0027 WHEN 20 THEN \u0027Dağıtım Fişi\u0027 \r\n--WHEN 25 THEN \u0027Sabit Kıymet\u0027 WHEN 0 THEN \u0027Kaynak Fiş Yok\u0027 ELSE \u0027\u0027 END AS [Kaynak Fiş Türü], \r\nMONTH(EMF.DATE_) AY ,\r\n--EMF.DATE_ AS [Fiş Tarihi], \r\n--EMF.JOURNALNO AS [Yevmiye No], \r\nEMU.CODE AS [Hesap Kodu],\r\nEMU.DEFINITION_ AS [Hesap Adı],\r\n \r\nSUM(EML.DEBIT)AS Borç,\r\nSUM(EML.CREDIT) AS Alacak,\r\n\r\nSUM(CASE WHEN  EML.DEBIT \u003eEML.CREDIT THEN EML.DEBIT -EML.CREDIT ELSE 0 END )AS Borç_Bakiye,\r\n--(EML.DEBIT -EML.CREDIT) AS \r\nSUM(CASE WHEN  EML.DEBIT \u003cEML.CREDIT THEN EML.CREDIT -EML.DEBIT ELSE 0 END) AS Alacak_Bakiye,\r\n\r\nSUM(CASE WHEN  EML.DEBIT \u003eEML.CREDIT THEN EML.DEBIT -EML.CREDIT ELSE 0 END )-SUM(CASE WHEN  EML.DEBIT \u003cEML.CREDIT THEN EML.CREDIT -EML.DEBIT ELSE 0 END) AS BAKIYE,\r\n--EML.CREDIT-EML.DEBIT as Alacak_Bakiye,\r\n--CASE WHEN EML.TRCURR = 0 THEN \u0027TL\u0027 WHEN EML.TRCURR = 1 THEN \u0027USD\u0027 WHEN EML.TRCURR = 20 THEN \u0027EUR\u0027 ELSE \u0027\u0027 END AS Döviz,\r\nSUM(CASE WHEN EML.SIGN = 0 THEN EML.TRNET ELSE 0 END) AS [Borç İD], SUM(CASE WHEN EML.SIGN = 1 THEN EML.TRNET ELSE 0 END) AS [Alacak İD]\r\n--EML.LINEEXP AS Açıklama\r\n--,EML.CROSSCODE [Karşı Hesap]\r\n--,EMF.CAPIBLOCK_CREADEDDATE [Eklenme Tarihi]\r\n--,CPU.NAME [Ekleyen]\r\n\r\n\r\n\r\nFROM dbo.LG_001_01_EMFLINE AS EML WITH (NOLOCK) \r\n       LEFT OUTER JOIN dbo.LG_001_EMUHACC AS EMU WITH (NOLOCK)  ON EML.ACCOUNTREF = EMU.LOGICALREF \r\n       LEFT OUTER JOIN dbo.LG_001_01_EMFICHE AS EMF WITH (NOLOCK)  ON EMF.LOGICALREF = EML.ACCFICHEREF\r\n       --LEFT OUTER JOIN L_CAPIUSER AS CPU  WITH (NOLOCK) ON CPU.NR=EMF.CAPIBLOCK_CREATEDBY\r\n\r\nWHERE EML.CANCELLED=0 AND EMF.DATE_ BETWEEN \u002720220101\u0027 AND \u002721001231\u0027\r\nand \r\n\r\nEML.KEBIRCODE IN (\u0027600\u0027,\u0027601\u0027,\u0027602\u0027) --and EMU.CODE=\u0027601.01.001.0006\u0027\r\nGROUP BY EML.KEBIRCODE,EMF.DATE_,EMU.CODE,EMU.DEFINITION_\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "Kebir",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AY",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Hesap Kodu",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Hesap Adı",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç_Bakiye",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak_Bakiye",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Borç İD",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Alacak İD",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.009.0006",
+                            "Hesap Adı":  "FORD OTOSANA SATIŞ GELİRİ ",
+                            "Borç":  "0",
+                            "Alacak":  "87500",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "87500",
+                            "BAKIYE":  "-87500",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "87500"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.003.0009",
+                            "Hesap Adı":  "34 BFD 056 ARAÇ KİRALAMA GELİRİ",
+                            "Borç":  "0",
+                            "Alacak":  "3601,69",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "3601,69",
+                            "BAKIYE":  "-3601,69",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "3601,69"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.006.0002",
+                            "Hesap Adı":  "34 DIT 607 KİRALIK ARAÇ OGS/HGS GELİRLERİ",
+                            "Borç":  "0",
+                            "Alacak":  "3421,4",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "3421,4",
+                            "BAKIYE":  "-3421,4",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "3421,4"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.006.0005",
+                            "Hesap Adı":  "34 DRM 012 KİRALIK ARAÇ OGS/HGS GELİRLERİ",
+                            "Borç":  "0",
+                            "Alacak":  "2003,39",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "2003,39",
+                            "BAKIYE":  "-2003,39",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "2003,39"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.008.002",
+                            "Hesap Adı":  "AMAZON ÜRÜN SATIŞ GELİRİ",
+                            "Borç":  "0",
+                            "Alacak":  "172,37",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "172,37",
+                            "BAKIYE":  "-172,37",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "172,37"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.009.0001",
+                            "Hesap Adı":  "RESTAR ÜST YAPI SATIŞLARI",
+                            "Borç":  "0",
+                            "Alacak":  "152542,37",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "152542,37",
+                            "BAKIYE":  "-152542,37",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "152542,37"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.009.0005",
+                            "Hesap Adı":  "AKSESUAR SATIŞ GELİRİ",
+                            "Borç":  "0",
+                            "Alacak":  "63,56",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "63,56",
+                            "BAKIYE":  "-63,56",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "63,56"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.003.0008",
+                            "Hesap Adı":  "41 AL 456 ARAÇ KİRALAMA GELİRİ",
+                            "Borç":  "0",
+                            "Alacak":  "2542,37",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "2542,37",
+                            "BAKIYE":  "-2542,37",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "2542,37"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.006.0008",
+                            "Hesap Adı":  "34 BFD 056 KİRALIK ARAÇ OGS/HGS GELİRLERİ",
+                            "Borç":  "0",
+                            "Alacak":  "748,94",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "748,94",
+                            "BAKIYE":  "-748,94",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "748,94"
+                        },
+                        {
+                            "Kebir":  "600",
+                            "AY":  "1",
+                            "Hesap Kodu":  "600.01.003.0009",
+                            "Hesap Adı":  "34 BFD 056 ARAÇ KİRALAMA GELİRİ",
+                            "Borç":  "0",
+                            "Alacak":  "5042,38",
+                            "Borç_Bakiye":  "0",
+                            "Alacak_Bakiye":  "5042,38",
+                            "BAKIYE":  "-5042,38",
+                            "Borç İD":  "0",
+                            "Alacak İD":  "5042,38"
+                        }
+                    ]
+}

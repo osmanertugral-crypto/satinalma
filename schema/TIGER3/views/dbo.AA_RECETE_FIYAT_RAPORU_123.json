@@ -1,0 +1,150 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_RECETE_FIYAT_RAPORU_123",
+    "full_name":  "dbo.AA_RECETE_FIYAT_RAPORU_123",
+    "definition":  "\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[AA_RECETE_FIYAT_RAPORU_123] AS \r\n\r\nSELECT KARAVAN_KODU,KARAVAN_ADI,ALT_KOD,ALT_ADI,MIKTAR,BIRIM_FIYATLAR , (MIKTAR*BIRIM_FIYATLAR) AS TUTAR FROM (\r\nSELECT ANAMLZ.LOGICALREF AS MLZ_ID,\r\n\r\nANAMLZ.CODE AS KARAVAN_KODU,\r\nANAMLZ.NAME AS KARAVAN_ADI,\r\nALT_MLZ.CODE AS ALT_KOD,\r\nALT_MLZ.NAME AS ALT_ADI\r\n,BAGTBL.AMNT AS MIKTAR\r\n,(SELECT TOP 1 LINENET/AMOUNT FROM LG_123_01_STLINE WHERE LINETYPE=0 AND PRICE\u003c\u003e0 AND STOCKREF=BAGTBL.STCREF AND TRCODE IN (1,50) ORDER BY DATE_ DESC ) BIRIM_FIYATLAR\r\n--,CASE WHEN (SELECT TOP 1 FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND FIYAT IS NOT NULL ORDER BY FIYAT DESC) IS NULL THEN\r\n--(SELECT TOP 1 TANIMLI_FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND TANIMLI_FIYAT IS NOT NULL ORDER BY TANIMLI_FIYAT DESC) \r\n--ELSE (SELECT TOP 1 FIYAT FROM AA_FIYATLANDIRMA_RAPORU WHERE MLZ_ID=BAGTBL.STCREF AND FIYAT IS NOT NULL ORDER BY FIYAT DESC)\r\n--END AS BIRIM_FIYATLAR\r\nFROM lg_123_ITEMS ANAMLZ\r\nINNER JOIN LG_123_STCOMPLN BAGTBL ON ANAMLZ.LOGICALREF=BAGTBL.MAINCREF\r\nLEFT OUTER JOIN LG_123_ITEMS ALT_MLZ ON ALT_MLZ.LOGICALREF=BAGTBL.STCREF\r\n WHERE ANAMLZ.SPECODE5=\u0027ANAMLZ\u0027 \r\n\r\n ) AS RAPOR\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "KARAVAN_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "KARAVAN_ADI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALT_KOD",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALT_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYATLAR",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "KARAVAN_KODU":  "GSE0103",
+                            "KARAVAN_ADI":  "Hotomobil Customer",
+                            "ALT_KOD":  "202X1253",
+                            "ALT_ADI":  "KOMBİNE ANAHTAR",
+                            "MIKTAR":  "10,05",
+                            "BIRIM_FIYATLAR":  null,
+                            "TUTAR":  null
+                        },
+                        {
+                            "KARAVAN_KODU":  "RXL037",
+                            "KARAVAN_ADI":  "RESTAR RONİN XL",
+                            "ALT_KOD":  "0001",
+                            "ALT_ADI":  "KABİN DONANIM",
+                            "MIKTAR":  "1",
+                            "BIRIM_FIYATLAR":  null,
+                            "TUTAR":  null
+                        },
+                        {
+                            "KARAVAN_KODU":  "GLYT0099Y001",
+                            "KARAVAN_ADI":  "GLADİATOR YATAK",
+                            "ALT_KOD":  "DSXX0099H001",
+                            "ALT_ADI":  "BASKILI ASTAR TELA",
+                            "MIKTAR":  "4",
+                            "BIRIM_FIYATLAR":  "61,5262",
+                            "TUTAR":  "246,1048"
+                        },
+                        {
+                            "KARAVAN_KODU":  "GLYT0099Y002",
+                            "KARAVAN_ADI":  "GLADİATOR YATAK KİNG SİZE EK",
+                            "ALT_KOD":  "DSXX0099H001",
+                            "ALT_ADI":  "BASKILI ASTAR TELA",
+                            "MIKTAR":  "2",
+                            "BIRIM_FIYATLAR":  "61,5262",
+                            "TUTAR":  "123,0524"
+                        },
+                        {
+                            "KARAVAN_KODU":  "XLYT0099Y001",
+                            "KARAVAN_ADI":  "GLADİATOR XL YATAK",
+                            "ALT_KOD":  "DSXX0099H001",
+                            "ALT_ADI":  "BASKILI ASTAR TELA",
+                            "MIKTAR":  "5,5",
+                            "BIRIM_FIYATLAR":  "61,5262",
+                            "TUTAR":  "338,3941"
+                        },
+                        {
+                            "KARAVAN_KODU":  "GLYT0099Y003",
+                            "KARAVAN_ADI":  "GLADİATOR YATAK VİSCO",
+                            "ALT_KOD":  "DSXX0099H001",
+                            "ALT_ADI":  "BASKILI ASTAR TELA",
+                            "MIKTAR":  "5",
+                            "BIRIM_FIYATLAR":  "61,5262",
+                            "TUTAR":  "307,631"
+                        },
+                        {
+                            "KARAVAN_KODU":  "GLYT0099Y004",
+                            "KARAVAN_ADI":  "GLADİATOR YATAK KİNG SİZE EK VİSCO",
+                            "ALT_KOD":  "DSXX0099H001",
+                            "ALT_ADI":  "BASKILI ASTAR TELA",
+                            "MIKTAR":  "2",
+                            "BIRIM_FIYATLAR":  "61,5262",
+                            "TUTAR":  "123,0524"
+                        },
+                        {
+                            "KARAVAN_KODU":  "GSE087",
+                            "KARAVAN_ADI":  "GLADIATOR MOBİL YAŞAM KABİNİ",
+                            "ALT_KOD":  "DSXX0099H001",
+                            "ALT_ADI":  "BASKILI ASTAR TELA",
+                            "MIKTAR":  "5",
+                            "BIRIM_FIYATLAR":  "61,5262",
+                            "TUTAR":  "307,631"
+                        },
+                        {
+                            "KARAVAN_KODU":  "GSE086",
+                            "KARAVAN_ADI":  "Jan Urbanek",
+                            "ALT_KOD":  "DSXX0099H001",
+                            "ALT_ADI":  "BASKILI ASTAR TELA",
+                            "MIKTAR":  "5",
+                            "BIRIM_FIYATLAR":  "61,5262",
+                            "TUTAR":  "307,631"
+                        },
+                        {
+                            "KARAVAN_KODU":  "GS0450",
+                            "KARAVAN_ADI":  "Antonio Pachón Ruiz",
+                            "ALT_KOD":  "DSXX0099H001",
+                            "ALT_ADI":  "BASKILI ASTAR TELA",
+                            "MIKTAR":  "14",
+                            "BIRIM_FIYATLAR":  "61,5262",
+                            "TUTAR":  "861,3668"
+                        }
+                    ]
+}

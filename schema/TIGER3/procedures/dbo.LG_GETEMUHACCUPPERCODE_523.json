@@ -1,0 +1,43 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_GETEMUHACCUPPERCODE_523",
+    "full_name":  "dbo.LG_GETEMUHACCUPPERCODE_523",
+    "created":  "Sep  1 2025 11:54AM",
+    "last_altered":  "Sep  1 2025 11:54AM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@accountCode",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "110",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@level",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@sBuffer",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "varchar",
+                           "CHARACTER_MAXIMUM_LENGTH":  "110",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@upperRef",
+                           "PARAMETER_MODE":  "INOUT",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_GETEMUHACCUPPERCODE_523\n       @accountCode VARCHAR(110),\n       @level INT,\n       @sBuffer VARCHAR(110) OUTPUT,\n       @upperRef INT OUTPUT AS\nDECLARE @size INT,\n        @sep VARCHAR(1),\n        @fndSep INT,\n        @cnt INT,\n        @i INT\nSELECT @sep =\u0027.\u0027,\n       @size = LEN(@accountCode),\n       @cnt = 1,\n       @sBuffer = \u0027\u0027,\n       @fndSep = 0,\n       @i = -1,\n       @level = @level - 1\n IF    @level \u003c 0\n  BEGIN\n        SET @sBuffer = \u0027\u0027\n        SET    @upperRef = 0\n        RETURN\n  END\n WHILE @cnt \u003c= @size\n  BEGIN\n      IF(SUBSTRING(@accountCode,@cnt,1) = @sep)\n       SET @fndSep = 1\n      ELSE\n       SET @fndSep = 0\n      IF(@fndSep = 0 OR @i \u003c @level -1)\n        SET @sBuffer = @sBuffer + SUBSTRING(@accountCode,@cnt,1)\n      IF(@fndSep = 1)\n        SET @i = @i + 1\n      IF(@i = @level)\n       BREAK;\n      SET @cnt = @cnt + 1\n  END\n  SELECT @upperRef = LOGICALREF FROM LG_523_EMUHACC WHERE CODE = @sBuffer\n"
+}

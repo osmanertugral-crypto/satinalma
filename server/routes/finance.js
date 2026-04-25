@@ -4,6 +4,8 @@ const XLSX = require('xlsx');
 const path = require('path');
 const { authenticate } = require('../middleware/auth');
 const { refreshExcelQueries } = require('../utils/excelRefresh');
+const { getDb } = require('../db/schema');
+const tiger3 = require('../utils/tiger3');
 
 router.use(authenticate);
 
@@ -33,6 +35,57 @@ function readSheet(wb, name) {
   });
 }
 function num(v) { return typeof v === 'number' ? v : 0; }
+
+// TIGER3'ten ekstre verisi çek ve SQLite cache'e yaz
+async function syncFromTIGER3() {
+  const rows = await tiger3.query('SELECT * FROM PRC_CARI_HESAP_EKSTRESI_123_ONR');
+
+  const db = getDb();
+  const tx = db.transaction(() => {
+    db.prepare('DELETE FROM finance_ekstre_cache').run();
+    const stmt = db.prepare(`
+      INSERT INTO finance_ekstre_cache
+        (code, definition_, sign, borc, alacak, indate, duedate,
+         vadesuresi, islem_dovizi, islem_doviz_tutari, typ, fis_no, belge_no,
+         satir_aciklamasi, cari_tur, logicalref)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+    `);
+    let count = 0;
+    for (const r of rows) {
+      stmt.run(
+        String(r.CODE || '').trim(),
+        String(r.DEFINITION_ || r.DEFINITION || '').trim(),
+        +r.SIGN || 0,
+        +r.BORC || 0,
+        +r.ALACAK || 0,
+        r.INDATE ? String(r.INDATE).substring(0, 10) : null,
+        r.DUEDATE ? String(r.DUEDATE).substring(0, 10) : null,
+        +r.VADESURESI || 0,
+        String(r.ISLEM_DOVIZI || '').trim(),
+        +r.ISLEM_DOVIZ_TUTARI || 0,
+        String(r.TYP || r.TYPE || '').trim(),
+        String(r.FIS_NO || '').trim(),
+        String(r.BELGE_NO || '').trim(),
+        String(r.SATIR_ACIKLAMASI || '').trim(),
+        String(r.CARI_TUR || r['CARI TUR'] || '').trim(),
+        +r.LOGICALREF || 0
+      );
+      count++;
+    }
+    return count;
+  });
+  return tx();
+}
+
+function getEkstreRows(code) {
+  const db = getDb();
+  return db.prepare('SELECT * FROM finance_ekstre_cache WHERE code = ?').all(code).map(r => ({
+    CODE: r.code, DEFINITION_: r.definition_, SIGN: r.sign, BORC: r.borc, ALACAK: r.alacak,
+    INDATE: r.indate, DUEDATE: r.duedate, VADESURESI: r.vadesuresi, ISLEM_DOVIZI: r.islem_dovizi,
+    ISLEM_DOVIZ_TUTARI: r.islem_doviz_tutari, TYP: r.typ, FIS_NO: r.fis_no, BELGE_NO: r.belge_no,
+    SATIR_ACIKLAMASI: r.satir_aciklamasi, 'CARI TUR': r.cari_tur, LOGICALREF: r.logicalref,
+  }));
+}
 
 // ── TCMB döviz kurları (cache 1 saat) ──
 let kurCache = { ts: 0, data: null };
@@ -73,29 +126,74 @@ router.get('/kurlar', async (req, res) => {
 
 // ═══════════════════════════════════════════
 // GET /api/finance/ozet
-// 320 RESTAR ÖZET – borç/alacak döviz bazlı özet
+// finance_ekstre_cache'ten borç/alacak döviz bazlı özet
 // ═══════════════════════════════════════════
 router.get('/ozet', (req, res) => {
   try {
-    const wb = XLSX.readFile(EXCEL_PATH);
-    const ws = wb.Sheets['320 RESTAR ÖZET'];
-    const raw = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+    const db = getDb();
+    const emptyGroup = { yurticiUretim: { doviz: 0, tl: 0 }, diger: { doviz: 0, tl: 0 }, toplam: { tl: 0 } };
+    const empty = { borc: { TL: emptyGroup, USD: emptyGroup, EUR: emptyGroup }, alacak: { TL: emptyGroup, USD: emptyGroup, EUR: emptyGroup }, genelToplam: 0 };
 
-    // Borç satırları: 3=TL, 4=USD, 5=EUR
-    // Alacak satırları: 12=TL, 13=USD, 14=EUR
-    function parseRow(r) {
+    const count = db.prepare('SELECT COUNT(*) as c FROM finance_ekstre_cache').get().c;
+    if (count === 0) return res.json(empty);
+
+    // borc = alacak < 0 (faturalar, borcumuz); alacak = borc > 0 (ödemeler / alacaklar)
+    const aggRows = db.prepare(`
+      SELECT
+        COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz,
+        cari_tur,
+        SUM(CASE WHEN alacak < 0 THEN ABS(alacak) ELSE 0 END) AS borc_tl,
+        SUM(CASE WHEN alacak < 0 THEN ABS(islem_doviz_tutari) ELSE 0 END) AS borc_doviz,
+        SUM(CASE WHEN borc > 0 THEN borc ELSE 0 END) AS alacak_tl,
+        SUM(CASE WHEN borc > 0 THEN islem_doviz_tutari ELSE 0 END) AS alacak_doviz
+      FROM finance_ekstre_cache
+      GROUP BY COALESCE(NULLIF(islem_dovizi,''), 'TL'), cari_tur
+    `).all();
+
+    function buildSection(doviz) {
+      const isTL = doviz === 'TL';
+      const dRows = aggRows.filter(r => r.doviz === doviz);
+      const uretimRows = dRows.filter(r => /üretim/i.test(r.cari_tur || ''));
+      const digerRows  = dRows.filter(r => !/üretim/i.test(r.cari_tur || ''));
+
+      function makeGroup(grp) {
+        return {
+          doviz: isTL ? grp.reduce((s, r) => s + r.borc_tl, 0) : grp.reduce((s, r) => s + r.borc_doviz, 0),
+          tl:    grp.reduce((s, r) => s + r.borc_tl, 0),
+        };
+      }
+      function makeAlacakGroup(grp) {
+        return {
+          doviz: isTL ? grp.reduce((s, r) => s + r.alacak_tl, 0) : grp.reduce((s, r) => s + r.alacak_doviz, 0),
+          tl:    grp.reduce((s, r) => s + r.alacak_tl, 0),
+        };
+      }
+
       return {
-        yurticiUretim: { doviz: num(raw[r]?.[1]), tl: num(raw[r]?.[2]) },
-        diger:         { doviz: num(raw[r]?.[6]), tl: num(raw[r]?.[7]) },
-        toplam:        { tl: num(raw[r]?.[11]) },
+        borc: {
+          yurticiUretim: makeGroup(uretimRows),
+          diger:         makeGroup(digerRows),
+          toplam:        { tl: dRows.reduce((s, r) => s + r.borc_tl, 0) },
+        },
+        alacak: {
+          yurticiUretim: makeAlacakGroup(uretimRows),
+          diger:         makeAlacakGroup(digerRows),
+          toplam:        { tl: dRows.reduce((s, r) => s + r.alacak_tl, 0) },
+        },
       };
     }
 
-    const borc = { TL: parseRow(3), USD: parseRow(4), EUR: parseRow(5) };
-    const alacak = { TL: parseRow(12), USD: parseRow(13), EUR: parseRow(14) };
-    const genelToplam = num(raw[15]?.[11]);
+    const tl  = buildSection('TL');
+    const usd = buildSection('USD');
+    const eur = buildSection('EUR');
 
-    res.json({ borc, alacak, genelToplam });
+    const genelToplam = [tl, usd, eur].reduce((s, sec) => s + sec.borc.toplam.tl - sec.alacak.toplam.tl, 0);
+
+    res.json({
+      borc:   { TL: tl.borc,   USD: usd.borc,   EUR: eur.borc   },
+      alacak: { TL: tl.alacak, USD: usd.alacak, EUR: eur.alacak },
+      genelToplam,
+    });
   } catch (err) {
     console.error('Finance ozet error:', err);
     res.status(500).json({ error: err.message });
@@ -104,43 +202,38 @@ router.get('/ozet', (req, res) => {
 
 // ═══════════════════════════════════════════
 // GET /api/finance/cariler
-// 320 BORÇ-ALACAK RESTAR – filtreli cari listesi
-// Sütun F = BAKİYE (orijinal döviz cinsinden)
-// Negatif = borcumuz, Pozitif = alacağımız
+// finance_ekstre_cache'ten cari bazlı bakiye listesi
+// bakiye < 0 = borcumuz, bakiye > 0 = alacağımız
 // ═══════════════════════════════════════════
 router.get('/cariler', (req, res) => {
   try {
     const { cariKontrol, doviz } = req.query;
-    const wb = XLSX.readFile(EXCEL_PATH);
-    let rows = readSheet(wb, '320 BORÇ-ALACAK RESTAR');
+    const db = getDb();
+
+    const count = db.prepare('SELECT COUNT(*) as c FROM finance_ekstre_cache').get().c;
+    if (count === 0) return res.json([]);
+
+    const today = new Date().toISOString().split('T')[0];
+    let rows = db.prepare(`
+      SELECT
+        code AS cariKodu,
+        MAX(definition_) AS cariAdi,
+        COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz,
+        MAX(cari_tur) AS cariKontrol,
+        SUM(CASE WHEN borc > 0 THEN borc ELSE 0 END)
+          - SUM(CASE WHEN alacak < 0 THEN ABS(alacak) ELSE 0 END) AS bakiye,
+        SUM(CASE WHEN alacak < 0 AND duedate IS NOT NULL AND duedate <= ? THEN ABS(alacak) ELSE 0 END) AS vadesiGelen,
+        SUM(CASE WHEN alacak < 0 AND (duedate IS NULL OR duedate > ?) THEN ABS(alacak) ELSE 0 END) AS vadesiGelmeyen
+      FROM finance_ekstre_cache
+      GROUP BY code, COALESCE(NULLIF(islem_dovizi,''), 'TL')
+    `).all(today, today);
 
     if (cariKontrol && cariKontrol !== 'TÜMÜ')
-      rows = rows.filter(r => (r['CARİ KONTROL'] || '') === cariKontrol);
+      rows = rows.filter(r => (r.cariKontrol || '') === cariKontrol);
     if (doviz && doviz !== 'TÜMÜ')
-      rows = rows.filter(r => (r['İŞLEM DÖVİZİ'] || '') === doviz);
+      rows = rows.filter(r => r.doviz === doviz);
 
-    const mapped = rows.filter(r => r['CARİ KODU']).map(r => ({
-      cariKodu:        r['CARİ KODU'],
-      cariAdi:         r['CARİ ADI'] || '',
-      doviz:           r['İŞLEM DÖVİZİ'] || 'TL',
-      cariKontrol:     r['CARİ KONTROL'] || '',
-      bakiye:          num(r['BAKİYE']),          // F sütunu – orijinal döviz
-      durumu:          r['DURUMU'] || '',
-      vadeSuresi:      num(r['VADE SURESI']),
-      vadesiGelen:     num(r['VADESI_GELEN']),
-      vadesiGelmeyen:  num(r['VADESI_GELMEYEN']),
-      enUzakFaturaTarihi: formatDate(r['EN UZAK FATURA TARİHİ']),
-      enUzakFaturaNo:  r['EN UZAK FATURA NO'] || '',
-      enUzakFaturaTutari: num(r['EN UZAK FATURA TUTARI']),
-      enUzakGun:       typeof r['EN UZAK FATURA GÜNÜ'] === 'number' ? r['EN UZAK FATURA GÜNÜ'] : null,
-      enYakinGun:      typeof r['EN YAKIN FATURA GÜNÜ'] === 'number' ? r['EN YAKIN FATURA GÜNÜ'] : null,
-      ortGun:          typeof r['ORTALAMA BEKLEYEN FATURA GÜNÜ'] === 'number' ? r['ORTALAMA BEKLEYEN FATURA GÜNÜ'] : null,
-      sonOdemeTarih:   formatDate(r['SON ÖDEME TARİHİ']),
-      sonOdemeGun:     typeof r['SON ÖDEMEDEN SONRA GEÇEN GÜN'] === 'number' ? r['SON ÖDEMEDEN SONRA GEÇEN GÜN'] : null,
-      sonOdemeTutar:   typeof r['SON ÖDEME TUTARI'] === 'number' ? r['SON ÖDEME TUTARI'] : null,
-    }));
-
-    res.json(mapped);
+    res.json(rows.filter(r => r.cariKodu));
   } catch (err) {
     console.error('Finance cariler error:', err);
     res.status(500).json({ error: err.message });
@@ -157,8 +250,7 @@ router.get('/cari-detay', (req, res) => {
     const { code } = req.query;
     if (!code) return res.status(400).json({ error: 'code gerekli' });
 
-    const wb = XLSX.readFile(EXCEL_PATH);
-    const allRows = readSheet(wb, 'RESTAR EKSTRE').filter(r => r['CODE'] === code);
+    const allRows = getEkstreRows(code);
 
     // Tüm işlemler tarih sırasına göre
     const islemler = allRows.map(r => ({
@@ -290,9 +382,7 @@ router.get('/cari-detay', (req, res) => {
   }
 });
 
-// POST /api/finance/refresh-excel — SQL sorgularını arka planda yeniler
-// Hemen 202 döner, işlem arka planda devam eder.
-// GET /api/finance/refresh-status ile durum sorgulanabilir.
+// POST /api/finance/refresh-excel — Önce TIGER3, başarısız olursa Excel
 let refreshState = { status: 'idle', startedAt: null, finishedAt: null, message: null, error: null };
 
 router.post('/refresh-excel', (req, res) => {
@@ -307,18 +397,23 @@ router.post('/refresh-excel', (req, res) => {
 
   refreshState = { status: 'running', startedAt: new Date().toISOString(), finishedAt: null, message: null, error: null };
 
-  // Arka planda çalıştır — await YOK, istek hemen döner
-  refreshExcelQueries(EXCEL_PATH)
-    .then(log => {
-      refreshState = { status: 'done', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: 'Cari Extre güncellendi', error: null };
-      console.log('Finance Excel yenilendi:', log);
-    })
-    .catch(err => {
-      refreshState = { status: 'error', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: null, error: err.message };
-      console.error('Finance Excel refresh hatası:', err.message);
-    });
+  const run = async () => {
+    try {
+      const count = await syncFromTIGER3();
+      refreshState = { status: 'done', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: `TIGER3'ten ${count} kayıt alındı`, error: null };
+    } catch (tiger3Err) {
+      console.warn('Finance: TIGER3 bağlanamadı, Excel fallback:', tiger3Err.message);
+      try {
+        await refreshExcelQueries(EXCEL_PATH);
+        refreshState = { status: 'done', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: 'Excel güncellendi (TIGER3 bağlantı hatası)', error: null };
+      } catch (excelErr) {
+        refreshState = { status: 'error', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: null, error: excelErr.message };
+      }
+    }
+  };
+  run();
 
-  res.json({ success: true, running: true, message: 'SQL sorguları arka planda çalıştırılıyor, tamamlandığında sayfa otomatik yenilenecek…' });
+  res.json({ success: true, running: true, message: 'Güncelleme arka planda başlatıldı…' });
 });
 
 router.get('/refresh-status', (req, res) => {
@@ -326,3 +421,4 @@ router.get('/refresh-status', (req, res) => {
 });
 
 module.exports = router;
+module.exports.syncFromTIGER3 = syncFromTIGER3;

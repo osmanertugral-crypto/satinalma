@@ -1,0 +1,40 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "ACKPLN",
+    "full_name":  "dbo.ACKPLN",
+    "definition":  "CREATE VIEW [dbo].[ACKPLN] AS \r\nSELECT     AMBAR_KODU, STOK_REF,VARYANT_REF, SUM(ACIK_MIKTAR) AS ACIK_MIKTAR\r\nFROM         (SELECT     STOK_REF,VARYANT_REF, ACIK_MIKTAR, AMBAR_KODU\r\n                       FROM          dbo.ACKPLN_URUN WITH(NOLOCK)\r\n                       UNION ALL\r\n                       SELECT     STOK_REF,VARYANT_REF, ACIK_MIKTAR, AMBAR_KODU\r\n                       FROM         dbo.ACKPLN_GRUPURUN WITH(NOLOCK)\r\n                       UNION ALL\r\n                       SELECT     STOK_REF,VARYANT_REF, ACIK_MIKTAR, AMBAR_KODU\r\n                       FROM         dbo.ACKPLN_GRUPURUND WITH(NOLOCK)) AS LIST\r\nGROUP BY STOK_REF,VARYANT_REF, AMBAR_KODU",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARYANT_REF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIK_MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

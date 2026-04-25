@@ -1,0 +1,166 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_001_WFLOWROLELN",
+    "full_name":  "dbo.LG_001_WFLOWROLELN",
+    "description":  "",
+    "total_rows":  "11",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "LINENR",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "WFROLEREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "WFUSERNR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "WFGRPNR",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I001_WFLOWROLELN_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I001_WFLOWROLELN_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "WFROLEREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "LINENR":  "1",
+                            "WFROLEREF":  "1",
+                            "WFUSERNR":  "108",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "LINENR":  "1",
+                            "WFROLEREF":  "2",
+                            "WFUSERNR":  "108",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "LINENR":  "1",
+                            "WFROLEREF":  "3",
+                            "WFUSERNR":  "108",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "LINENR":  "2",
+                            "WFROLEREF":  "3",
+                            "WFUSERNR":  "14",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "LINENR":  "3",
+                            "WFROLEREF":  "3",
+                            "WFUSERNR":  "105",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "LINENR":  "1",
+                            "WFROLEREF":  "4",
+                            "WFUSERNR":  "14",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "LINENR":  "2",
+                            "WFROLEREF":  "4",
+                            "WFUSERNR":  "108",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "LINENR":  "3",
+                            "WFROLEREF":  "4",
+                            "WFUSERNR":  "105",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "LINENR":  "1",
+                            "WFROLEREF":  "5",
+                            "WFUSERNR":  "108",
+                            "WFGRPNR":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "LINENR":  "2",
+                            "WFROLEREF":  "5",
+                            "WFUSERNR":  "14",
+                            "WFGRPNR":  "0"
+                        }
+                    ]
+}

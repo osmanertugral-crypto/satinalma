@@ -1,0 +1,286 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KS_NAKIT_AKIS_KUMULATIF_BURAK",
+    "full_name":  "dbo.KS_NAKIT_AKIS_KUMULATIF_BURAK",
+    "definition":  "CREATE VIEW [dbo].[KS_NAKIT_AKIS_KUMULATIF_BURAK] AS\r\n\r\n-- Query for Firm 123\r\nSELECT  \r\n    \u0027123\u0027 AS FIRMNR,\r\n    CLCARD.CODE, \r\n    CLCARD.DEFINITION_,\r\n    BNFICHE.FICHENO FICHENO,\r\n    BNFICHE.DATE_ DATE_,\r\n    BNFLINE.LINEEXP,\r\n    EMFICHE.FICHENO MUH_FICHENO,\r\n    EMFICHE.DATE_ MUH_DATE_,\r\n    CASE \r\n        WHEN CLCARD.CODE LIKE \u0027120.07%\u0027 THEN \u0027Mağaza Para\u0027 \r\n        WHEN CLCARD.CODE LIKE \u0027335.01%\u0027 THEN \u0027Personel\u0027  \r\n        WHEN CLCARD.CODE LIKE \u0027336.%\u0027 THEN \u0027Personel\u0027  \r\n        WHEN CLCARD.CODE LIKE \u0027195.%\u0027 THEN \u0027Personel\u0027  \r\n        WHEN CLCARD.CODE LIKE \u0027196.%\u0027 THEN \u0027Personel\u0027  \r\n        WHEN CLCARD.CODE LIKE \u0027108.01%\u0027 THEN \u0027KKartı\u0027    \r\n        WHEN CLCARD.CODE LIKE \u0027329.%\u0027 THEN \u0027Şirket KKartı\u0027    \r\n        WHEN CLCARD.CODE LIKE \u0027108.02%\u0027 THEN \u0027HGS\u0027 \r\n        ELSE  \r\n            CASE BNFLINE.TRCODE \r\n                WHEN 1 THEN \u0027Banka İşlem\u0027 \r\n                WHEN 3 THEN \u0027Cari\u0027 \r\n                WHEN 4 THEN \u0027Cari\u0027 \r\n                WHEN 6 THEN \u0027Kur Farkı\u0027 \r\n                ELSE\r\n                    CASE BNFLINE.MODULENR \r\n                        WHEN 7 THEN \u0027Virman\u0027  \r\n                        WHEN 6 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 61 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 62 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 63 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 64 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 65 THEN \u0027Çek/Senet\u0027 \r\n                    END\r\n            END\r\n    END AS TYPE,\r\n    CASE BNFLINE.SIGN WHEN 1 THEN \u0027Ödemeler\u0027 WHEN 0 THEN \u0027Tahsilat\u0027 END AS SIGN,\r\n    BNFLINE.TRCODE,\r\n    (CASE BNFLINE.SIGN WHEN 1 THEN BNFLINE.AMOUNT * (-1) WHEN 0 THEN BNFLINE.AMOUNT END) AS TOTAL,\r\n    DATEPART(wk, BNFLINE.DATE_) HAFTA,\r\n    BNFLINE.DATE_ AS BAS_TAR,\r\n    BNFLINE.DATE_ AS BIT_TAR\r\nFROM dbo.LG_123_01_BNFLINE AS BNFLINE WITH (NOLOCK)\r\nLEFT OUTER JOIN dbo.LG_123_01_BNFICHE AS BNFICHE WITH (NOLOCK) \r\n    ON BNFLINE.SOURCEFREF = BNFICHE.LOGICALREF AND BNFLINE.MODULENR = BNFICHE.MODULENR\r\nLEFT OUTER JOIN dbo.LG_123_CLCARD AS CLCARD WITH (NOLOCK) \r\n    ON BNFLINE.CLIENTREF = CLCARD.LOGICALREF\r\nLEFT OUTER JOIN dbo.LG_123_01_EMFICHE AS EMFICHE WITH (NOLOCK) \r\n    ON BNFLINE.ACCFICHEREF = EMFICHE.LOGICALREF\r\nLEFT OUTER JOIN dbo.L_CURRENCYLIST AS L_CURRENCYLIST WITH (NOLOCK) \r\n    ON L_CURRENCYLIST.CURTYPE = BNFLINE.TRCURR AND L_CURRENCYLIST.FIRMNR = \u0027123\u0027\r\nWHERE (YEAR(BNFLINE.DATE_) = 2024) AND BNFLINE.TRCODE NOT IN (2)\r\n\r\nUNION ALL\r\n\r\n-- Query for Firm 223\r\nSELECT  \r\n    \u0027223\u0027 AS FIRMNR,\r\n    CLCARD.CODE, \r\n    CLCARD.DEFINITION_,\r\n    BNFICHE.FICHENO FICHENO,\r\n    BNFICHE.DATE_ DATE_,\r\n    BNFLINE.LINEEXP,\r\n    EMFICHE.FICHENO MUH_FICHENO,\r\n    EMFICHE.DATE_ MUH_DATE_,\r\n    CASE \r\n        WHEN CLCARD.CODE LIKE \u0027120.07%\u0027 THEN \u0027Mağaza Para\u0027 \r\n        WHEN CLCARD.CODE LIKE \u0027335.01%\u0027 THEN \u0027Personel\u0027  \r\n        WHEN CLCARD.CODE LIKE \u0027336.%\u0027 THEN \u0027Personel\u0027  \r\n        WHEN CLCARD.CODE LIKE \u0027195.%\u0027 THEN \u0027Personel\u0027  \r\n        WHEN CLCARD.CODE LIKE \u0027196.%\u0027 THEN \u0027Personel\u0027  \r\n        WHEN CLCARD.CODE LIKE \u0027108.01%\u0027 THEN \u0027KKartı\u0027    \r\n        WHEN CLCARD.CODE LIKE \u0027329.%\u0027 THEN \u0027Şirket KKartı\u0027    \r\n        WHEN CLCARD.CODE LIKE \u0027108.02%\u0027 THEN \u0027HGS\u0027 \r\n        ELSE  \r\n            CASE BNFLINE.TRCODE \r\n                WHEN 1 THEN \u0027Banka İşlem\u0027 \r\n                WHEN 3 THEN \u0027Cari\u0027 \r\n                WHEN 4 THEN \u0027Cari\u0027 \r\n                WHEN 6 THEN \u0027Kur Farkı\u0027 \r\n                ELSE\r\n                    CASE BNFLINE.MODULENR \r\n                        WHEN 7 THEN \u0027Virman\u0027  \r\n                        WHEN 6 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 61 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 62 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 63 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 64 THEN \u0027Çek/Senet\u0027 \r\n                        WHEN 65 THEN \u0027Çek/Senet\u0027 \r\n                    END\r\n            END\r\n    END AS TYPE,\r\n    CASE BNFLINE.SIGN WHEN 1 THEN \u0027Ödemeler\u0027 WHEN 0 THEN \u0027Tahsilat\u0027 END AS SIGN,\r\n    BNFLINE.TRCODE,\r\n    (CASE BNFLINE.SIGN WHEN 1 THEN BNFLINE.AMOUNT * (-1) WHEN 0 THEN BNFLINE.AMOUNT END) AS TOTAL,\r\n    DATEPART(wk, BNFLINE.DATE_) HAFTA,\r\n    BNFLINE.DATE_ AS BAS_TAR,\r\n    BNFLINE.DATE_ AS BIT_TAR\r\nFROM dbo.LG_223_01_BNFLINE AS BNFLINE WITH (NOLOCK)\r\nLEFT OUTER JOIN dbo.LG_223_01_BNFICHE AS BNFICHE WITH (NOLOCK) \r\n    ON BNFLINE.SOURCEFREF = BNFICHE.LOGICALREF AND BNFLINE.MODULENR = BNFICHE.MODULENR\r\nLEFT OUTER JOIN dbo.LG_223_CLCARD AS CLCARD WITH (NOLOCK) \r\n    ON BNFLINE.CLIENTREF = CLCARD.LOGICALREF\r\nLEFT OUTER JOIN dbo.LG_223_01_EMFICHE AS EMFICHE WITH (NOLOCK) \r\n    ON BNFLINE.ACCFICHEREF = EMFICHE.LOGICALREF\r\nLEFT OUTER JOIN dbo.L_CURRENCYLIST AS L_CURRENCYLIST WITH (NOLOCK) \r\n    ON L_CURRENCYLIST.CURTYPE = BNFLINE.TRCURR AND L_CURRENCYLIST.FIRMNR = \u0027223\u0027\r\nWHERE (YEAR(BNFLINE.DATE_) = 2024) AND BNFLINE.TRCODE NOT IN (2)\r\n\r\nUNION ALL\r\n\r\n-- Bank Account Opening Balances for Firm 123\r\nSELECT \r\n    \u0027123\u0027 AS FIRMNR,\r\n    BANKACC.CODE, \r\n    BANKACC.DEFINITION_,\r\n    \u0027\u0027 AS FICHENO,\r\n    CONVERT(DATE, GETDATE()) AS DATE_,\r\n    BNFLINE.LINEEXP,\r\n    \u0027\u0027 AS MUH_FICHENO,\r\n    CONVERT(DATE, GETDATE()) AS MUH_DATE_,\r\n    \u0027Banka\u0027 AS TYPE,\r\n    \u0027Açılış Bakiye\u0027 AS SIGN,\r\n    7 AS TRCODE,\r\n    (SUM((CASE BNFLINE.SIGN \r\n        WHEN 1 THEN ROUND((CASE BNFLINE.TRCURR WHEN 0 THEN BNFLINE.AMOUNT ELSE BNFLINE.TRNET END), 2) * (-1) \r\n        ELSE ROUND((CASE BNFLINE.TRCURR WHEN 0 THEN BNFLINE.AMOUNT ELSE BNFLINE.TRNET END), 2) \r\n    END))) * MAX(ISNULL(EXCHANGE.RATES1, 1)) AS TOTAL,\r\n    DATEPART(wk, GETDATE()) AS HAFTA,\r\n    MIN(GETDATE()) AS BAS_TAR,\r\n    MAX(GETDATE()) AS BIT_TAR\r\nFROM dbo.LG_123_01_BNFLINE AS BNFLINE WITH (NOLOCK)\r\nLEFT OUTER JOIN dbo.LG_123_BNCARD AS BNCARD WITH (NOLOCK) ON BNFLINE.BANKREF = BNCARD.LOGICALREF\r\nLEFT OUTER JOIN dbo.LG_123_BANKACC AS BANKACC WITH (NOLOCK) ON BNFLINE.BNACCREF = BANKACC.LOGICALREF\r\nLEFT OUTER JOIN dbo.LG_123_01_BNFICHE AS BNFICHE WITH (NOLOCK) ON BNFLINE.SOURCEFREF = BNFICHE.LOGICALREF\r\nLEFT OUTER JOIN dbo.L_CURRENCYLIST AS L_CURRENCYLIST WITH (NOLOCK) \r\n    ON L_CURRENCYLIST.CURTYPE = BNFLINE.TRCURR AND L_CURRENCYLIST.FIRMNR = \u0027123\u0027\r\nLEFT OUTER JOIN dbo.LG_EXCHANGE_123 AS EXCHANGE WITH(NOLOCK) \r\n    ON EXCHANGE.CRTYPE = L_CURRENCYLIST.CURTYPE AND EXCHANGE.EDATE = CONVERT(DATE, GETDATE())\r\nWHERE BNFLINE.CANCELLED = 0 AND BANKACC.CARDTYPE IN (1,3)\r\nGROUP BY BANKACC.CODE, BNFLINE.LINEEXP, BANKACC.DEFINITION_, BANKACC.LOGICALREF, BNCARD.LOGICALREF, \r\n         BNFLINE.TRCURR, L_CURRENCYLIST.CURCODE\r\n\r\nUNION ALL\r\n\r\n-- Bank Account Opening Balances for Firm 223\r\nSELECT \r\n    \u0027223\u0027 AS FIRMNR,\r\n    BANKACC.CODE, \r\n    BANKACC.DEFINITION_,\r\n    \u0027\u0027 AS FICHENO,\r\n    CONVERT(DATE, GETDATE()) AS DATE_,\r\n    BNFLINE.LINEEXP,\r\n    \u0027\u0027 AS MUH_FICHENO,\r\n    CONVERT(DATE, GETDATE()) AS MUH_DATE_,\r\n    \u0027Banka\u0027 AS TYPE,\r\n    \u0027Açılış Bakiye\u0027 AS SIGN,\r\n    7 AS TRCODE,\r\n    (SUM((CASE BNFLINE.SIGN \r\n        WHEN 1 THEN ROUND((CASE BNFLINE.TRCURR WHEN 0 THEN BNFLINE.AMOUNT ELSE BNFLINE.TRNET END), 2) * (-1) \r\n        ELSE ROUND((CASE BNFLINE.TRCURR WHEN 0 THEN BNFLINE.AMOUNT ELSE BNFLINE.TRNET END), 2) \r\n    END))) * MAX(ISNULL(EXCHANGE.RATES1, 1)) AS TOTAL,\r\n    DATEPART(wk, GETDATE()) AS HAFTA,\r\n    MIN(GETDATE()) AS BAS_TAR,\r\n    MAX(GETDATE()) AS BIT_TAR\r\nFROM dbo.LG_223_01_BNFLINE AS BNFLINE WITH (NOLOCK)\r\nLEFT OUTER JOIN dbo.LG_223_BNCARD AS BNCARD WITH (NOLOCK) ON BNFLINE.BANKREF = BNCARD.LOGICALREF\r\nLEFT OUTER JOIN dbo.LG_223_BANKACC AS BANKACC WITH (NOLOCK) ON BNFLINE.BNACCREF = BANKACC.LOGICALREF\r\nLEFT OUTER JOIN dbo.LG_223_01_BNFICHE AS BNFICHE WITH (NOLOCK) ON BNFLINE.SOURCEFREF = BNFICHE.LOGICALREF\r\nLEFT OUTER JOIN dbo.L_CURRENCYLIST AS L_CURRENCYLIST WITH (NOLOCK) \r\n    ON L_CURRENCYLIST.CURTYPE = BNFLINE.TRCURR AND L_CURRENCYLIST.FIRMNR = \u0027223\u0027\r\nLEFT OUTER JOIN dbo.LG_EXCHANGE_223 AS EXCHANGE WITH(NOLOCK) \r\n    ON EXCHANGE.CRTYPE = L_CURRENCYLIST.CURTYPE AND EXCHANGE.EDATE = CONVERT(DATE, GETDATE())\r\nWHERE BNFLINE.CANCELLED = 0 AND BANKACC.CARDTYPE IN (1,3)\r\nGROUP BY BANKACC.CODE, BNFLINE.LINEEXP, BANKACC.DEFINITION_, BANKACC.LOGICALREF, BNCARD.LOGICALREF, \r\n         BNFLINE.TRCURR, L_CURRENCYLIST.CURCODE\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FIRMNR",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "3",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FICHENO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUH_FICHENO",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "33",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MUH_DATE_",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYPE",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIGN",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "HAFTA",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAS_TAR",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIT_TAR",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.ÖZTÜRKM",
+                            "DEFINITION_":  "YUSUF ELYASA ÖZTÜRK MARİNE",
+                            "FICHENO":  "001459",
+                            "DATE_":  "1.03.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.-Yusuf Elyesa Öztürk",
+                            "MUH_FICHENO":  "013764",
+                            "MUH_DATE_":  "1.03.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-8640",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "1.03.2024 00:00:00",
+                            "BIT_TAR":  "1.03.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.TEKNİKG",
+                            "DEFINITION_":  "TEKNİK GÜBRE TARIM PEYZAJ İNŞAAT SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "FICHENO":  "001459",
+                            "DATE_":  "1.03.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.-TEKNİK GÜBRE TARIM PEYZAJ İNŞAAT SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+                            "MUH_FICHENO":  "013764",
+                            "MUH_DATE_":  "1.03.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-24577,92",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "1.03.2024 00:00:00",
+                            "BIT_TAR":  "1.03.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.ÖMERAR",
+                            "DEFINITION_":  "ÖMER ARAS  [ Mert Cam Ayna Tasarım ]",
+                            "FICHENO":  "001459",
+                            "DATE_":  "1.03.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.-ÖMER ARAS  [ Mert Cam Ayna Tasarım ]",
+                            "MUH_FICHENO":  "013764",
+                            "MUH_DATE_":  "1.03.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-30",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "1.03.2024 00:00:00",
+                            "BIT_TAR":  "1.03.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.DSMB",
+                            "DEFINITION_":  "DSM BİLİŞİM TEKNOLOJİLERİ TİCARET LİMİTED ŞİRKETİ",
+                            "FICHENO":  "001459",
+                            "DATE_":  "1.03.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.-DSM BİLİŞİM TEKNOLOJİLERİ TİCARET LİMİTED ŞİRKETİ",
+                            "MUH_FICHENO":  "013764",
+                            "MUH_DATE_":  "1.03.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-33533",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "1.03.2024 00:00:00",
+                            "BIT_TAR":  "1.03.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.ÖMERAR",
+                            "DEFINITION_":  "ÖMER ARAS  [ Mert Cam Ayna Tasarım ]",
+                            "FICHENO":  "001459",
+                            "DATE_":  "1.03.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.-ÖMER ARAS  [ Mert Cam Ayna Tasarım ]",
+                            "MUH_FICHENO":  "013764",
+                            "MUH_DATE_":  "1.03.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-1920",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "1.03.2024 00:00:00",
+                            "BIT_TAR":  "1.03.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.AÇSA",
+                            "DEFINITION_":  "AÇSA OTOMOTİV BİLGİSAYAR VE TEKSTİL SANAYİ VE TİC. LTD. ŞTİ.",
+                            "FICHENO":  "001459",
+                            "DATE_":  "1.03.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.-AÇSA OTOMOTİV BİLGİSAYAR VE TEKSTİL SANAYİ VE TİC. LTD. ŞTİ.",
+                            "MUH_FICHENO":  "013764",
+                            "MUH_DATE_":  "1.03.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-400000",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "1.03.2024 00:00:00",
+                            "BIT_TAR":  "1.03.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.TUNCA",
+                            "DEFINITION_":  "TUNCAY ÖZÇELİK",
+                            "FICHENO":  "001459",
+                            "DATE_":  "1.03.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.-TUNCAY ÖZÇELİK",
+                            "MUH_FICHENO":  "013764",
+                            "MUH_DATE_":  "1.03.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-400000",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "1.03.2024 00:00:00",
+                            "BIT_TAR":  "1.03.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "120.RETECH - EUR",
+                            "DEFINITION_":  "RETECH İÇ VE DIŞ TİCARET ANONİM ŞİRKETİ",
+                            "FICHENO":  "000523",
+                            "DATE_":  "1.03.2024 00:00:00",
+                            "LINEEXP":  "Gelen Hv.-RETECH İÇ VE DIŞ TİCARET ANONİM ŞİRKETİ",
+                            "MUH_FICHENO":  "015995",
+                            "MUH_DATE_":  "1.03.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Tahsilat",
+                            "TRCODE":  "3",
+                            "TOTAL":  "1400000",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "1.03.2024 00:00:00",
+                            "BIT_TAR":  "1.03.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.AGUS",
+                            "DEFINITION_":  "AGUS KARAVAN TİC. LTD. ŞTİ.",
+                            "FICHENO":  "001460",
+                            "DATE_":  "29.02.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.- AGUS KARAVAN                  ",
+                            "MUH_FICHENO":  "013770",
+                            "MUH_DATE_":  "29.02.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-2700",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "29.02.2024 00:00:00",
+                            "BIT_TAR":  "29.02.2024 00:00:00"
+                        },
+                        {
+                            "FIRMNR":  "123",
+                            "CODE":  "320.HAYRİO",
+                            "DEFINITION_":  "HAYRİOĞLU POLYESTER İNŞAAT YAPI ÜRÜNLERİ SANAYİ VE TİC. LTD. ŞTİ.",
+                            "FICHENO":  "001461",
+                            "DATE_":  "29.02.2024 00:00:00",
+                            "LINEEXP":  "Giden Hv.-HAYRİOĞLU POLYESTER İNŞAAT YAPI ÜRÜNLERİ SANAYİ VE TİC. LTD. ŞTİ.",
+                            "MUH_FICHENO":  "013772",
+                            "MUH_DATE_":  "29.02.2024 00:00:00",
+                            "TYPE":  "Cari",
+                            "SIGN":  "Ödemeler",
+                            "TRCODE":  "4",
+                            "TOTAL":  "-32160",
+                            "HAFTA":  "9",
+                            "BAS_TAR":  "29.02.2024 00:00:00",
+                            "BIT_TAR":  "29.02.2024 00:00:00"
+                        }
+                    ]
+}

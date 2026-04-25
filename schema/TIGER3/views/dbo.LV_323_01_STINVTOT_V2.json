@@ -1,0 +1,320 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_323_01_STINVTOT_V2",
+    "full_name":  "dbo.LV_323_01_STINVTOT_V2",
+    "definition":  "\nCREATE VIEW [DBO].LV_323_01_STINVTOT_V2 WITH SCHEMABINDING\nAS\n  SELECT ST.STOCKREF AS STOCKREF,\n         ST.SOURCEINDEX AS INVENNO,\n         ORF.SOURCEINDEX AS ORFINVENNO,\n         ST.DATE_ AS DATE_,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  23)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PORDCLSPLNAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNAMOUNT - ST.PORDCLSPLNAMNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNPRODIN,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  24)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PORDCLSPLNAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNAMOUNT - ST.PORDCLSPLNAMNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNPRODOUT,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  26)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PORDCLSPLNAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNAMOUNT - ST.PORDCLSPLNAMNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNOTHERIN,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  27)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PORDCLSPLNAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNAMOUNT - ST.PORDCLSPLNAMNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNOTHEROUT,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  28)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PORDCLSPLNAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNAMOUNT - ST.PORDCLSPLNAMNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNWHOUSEIN,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  29)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PORDCLSPLNAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNAMOUNT - ST.PORDCLSPLNAMNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNWHOUSEOUT,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         1)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS TEMPIN,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                               ST.LINETYPE,\n                                         0,\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         2)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS TEMPOUT,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  COALESCE(ORF.DORESERVE, -1),\n                                  COALESCE(ORF.CLOSED, 0),\n                                  0,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  18)\n               * STSHP.SHIPPEDRSRVAMT,0))\n            AS RESERVED,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  COALESCE(ORF.DORESERVE, -1),\n                                  0,\n                                  0,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  19)\n               * STSHP.SHIPPEDAMOUNT,0))\n            AS ACTPORDER,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         COALESCE(ORF.DORESERVE, -1),\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         20)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS RECEIVED,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         ST.LPRODSTAT,\n                                         ST.LPRODRSRVSTAT,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         3)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ACTPRODIN,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         ST.LPRODSTAT,\n                                         ST.LPRODRSRVSTAT,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         4)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ACTOTHERIN,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  COALESCE(ORF.DORESERVE, -1),\n                                  0,\n                                  0,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  21)\n               *STSHP.SHIPPEDAMOUNT,0))\n            AS ACTSORDER,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         COALESCE(ORF.DORESERVE, -1),\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         22)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS SHIPPED,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         ST.LPRODSTAT,\n                                         ST.LPRODRSRVSTAT,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         5)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ACTWASTE,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         ST.LPRODSTAT,\n                                         ST.LPRODRSRVSTAT,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         6)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ACTOTHEROUT,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         7)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS TRANSFERRED,\n         SUM(ISNULL(DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                       ST.IOCODE,\n                                       ST.LINETYPE,\n                                       0,\n                                       0,\n                                       0,\n                                       0,\n                                       ST.SOURCELINK,\n                                       ST.BILLED,\n                                       17)\n                    * (ST.LINENET+ST.DIFFPRICE),\n                    0))\n            AS AVGVALUE,\n         SUM(\n            ISNULL(\n                 DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                    ST.IOCODE,\n                                    ST.LINETYPE,\n                                    0,\n                                    0,\n                                    0,\n                                    0,\n                                    ST.SOURCELINK,\n                                    ST.BILLED,\n                                    17)\n               * (CASE WHEN ST.REPORTRATE = 0 THEN 0 ELSE (ST.LINENET+ST.DIFFPRICE) END)\n               / (CASE WHEN ST.REPORTRATE = 0 THEN 1 ELSE ST.REPORTRATE END),\n               0))\n            AS AVGCURRVAL,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         8)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS PURAMNT,\n         SUM(ISNULL(DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                       ST.IOCODE,\n                                       ST.LINETYPE,\n                                       0,\n                                       0,\n                                       0,\n                                       0,\n                                       ST.SOURCELINK,\n                                       ST.BILLED,\n                                       9)\n                    * (ST.LINENET+ST.DIFFPRICE),\n                    0))\n            AS PURCASH,\n         SUM(\n            ISNULL(\n                 DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                    ST.IOCODE,\n                                    ST.LINETYPE,\n                                    0,\n                                    0,\n                                    0,\n                                    0,\n                                    ST.SOURCELINK,\n                                    ST.BILLED,\n                                    9)\n               * (CASE WHEN ST.REPORTRATE = 0 THEN 0 ELSE (ST.LINENET+ST.DIFFPRICE) END)\n               / (CASE WHEN ST.REPORTRATE = 0 THEN 1 ELSE ST.REPORTRATE END),\n               0))\n            AS PURCURR,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         10)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS SALAMNT,\n         SUM(ISNULL(DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                       ST.IOCODE,\n                                       ST.LINETYPE,\n                                       0,\n                                       0,\n                                       0,\n                                       0,\n                                       ST.SOURCELINK,\n                                       ST.BILLED,\n                                       11)\n                    * (ST.LINENET+ST.DIFFPRICE),\n                    0))\n            AS SALCASH,\n         SUM(\n            ISNULL(\n                 DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                    ST.IOCODE,\n                                    ST.LINETYPE,\n                                    0,\n                                    0,\n                                    0,\n                                    0,\n                                    ST.SOURCELINK,\n                                    ST.BILLED,\n                                    11)\n               * (CASE WHEN ST.REPORTRATE = 0 THEN 0 ELSE (ST.LINENET+ST.DIFFPRICE) END)\n               / (CASE WHEN ST.REPORTRATE = 0 THEN 1 ELSE ST.REPORTRATE END),\n               0))\n            AS SALCURR,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         ST.LPRODSTAT,\n                                         ST.LPRODRSRVSTAT,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         12)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ONHAND,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         ST.LPRODSTAT,\n                                         ST.LPRODRSRVSTAT,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         13)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ACTWHOUSEIN,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         ST.LPRODSTAT,\n                                         ST.LPRODRSRVSTAT,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         14)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ACTWHOUSEOUT,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         15)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS COUNTADD,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         0,\n                                         0,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         16)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS COUNTDEC,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         0,\n                                         0,\n                                         ST.DISTORDLINEREF,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         25)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ONVEHICLE,\n         ST.VARIANTREF AS VARIANTREF,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  30)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PLNUNRSRVAMOUNT + ST.PORDCLSPLNUNRSRVAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNUNRSRVAMOUNT - ST.PORDCLSPLNUNRSRVAMNT - ST.PLNAMOUNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNRSRVPRODIN,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  31)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PLNUNRSRVAMOUNT + ST.PORDCLSPLNUNRSRVAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNUNRSRVAMOUNT - ST.PORDCLSPLNUNRSRVAMNT - ST.PLNAMOUNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNRSRVPRODOUT,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  32)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PLNUNRSRVAMOUNT + ST.PORDCLSPLNUNRSRVAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNUNRSRVAMOUNT - ST.PORDCLSPLNUNRSRVAMNT - ST.PLNAMOUNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNRSRVWHOUSEIN,\n         SUM(\n            ISNULL(\n               DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                  ST.IOCODE,\n                                  ST.LINETYPE,\n                                  0,\n                                  ST.LPRODSTAT,\n                                  ST.LPRODRSRVSTAT,\n                                  0,\n                                  ST.SOURCELINK,\n                                  ST.BILLED,\n                                  33)\n               * (CASE\n                     WHEN ST.PLNAMOUNT + ST.PLNUNRSRVAMOUNT + ST.PORDCLSPLNUNRSRVAMNT \u003e= ST.AMOUNT\n                     THEN\n                        0\n                     ELSE\n                        ST.AMOUNT - ST.PLNUNRSRVAMOUNT - ST.PORDCLSPLNUNRSRVAMNT - ST.PLNAMOUNT\n                  END)\n               * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n               0))\n            AS PLNRSRVWHOUSEOUT,\n         SUM(ISNULL(  DBO.LG_323_01_GETSTTRANSCOEF(ST.TRCODE,\n                                         ST.IOCODE,\n                                         ST.LINETYPE,\n                                         0,\n                                         ST.LPRODSTAT,\n                                         ST.LPRODRSRVSTAT,\n                                         0,\n                                         ST.SOURCELINK,\n                                         ST.BILLED,\n                                         17)\n                    * ST.AMOUNT\n                    * (DBO.LG_323_01_GETUNITCOEF(ST.UINFO1, ST.UINFO2)),\n                    0))\n            AS ONHAND_AVG,\n         (CASE WHEN ST.LINETYPE IN (4,11) THEN 1 ELSE 0 END) AS TYP,\n         COUNT_BIG(*) AS CNT\n    FROM    [DBO].LG_323_01_STLINE ST\n         INNER JOIN\n            [DBO].LG_323_01_ORFLINE ORF\n         ON (ST.ORDTRANSREF = ORF.LOGICALREF)\n         INNER JOIN\n            [DBO].LG_323_01_STSHIPPEDAMOUNT STSHP\n         ON (ST.LOGICALREF = STSHP.TRANSREF)\n   WHERE (    ST.CANCELLED = 0\n          AND ST.STATUS = 0\n          AND ST.ORDTRANSREF \u003c\u003e 0\n          AND ST.STOCKREF \u003c\u003e 0\n          AND ST.LINETYPE NOT IN (2, 3, 7))\n         AND NOT ((ST.TRCODE IN (5, 10) AND ST.STFICHEREF = 0))\nGROUP BY ST.STOCKREF,\n         ST.DATE_,\n         ST.SOURCEINDEX,\n         ORF.SOURCEINDEX,\n         ST.VARIANTREF,\n         (CASE WHEN ST.LINETYPE IN (4,11) THEN 1 ELSE 0 END)\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVENNO",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ORFINVENNO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNPRODIN",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNPRODOUT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNOTHERIN",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNOTHEROUT",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNWHOUSEIN",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNWHOUSEOUT",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TEMPIN",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TEMPOUT",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RESERVED",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTPORDER",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RECEIVED",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTPRODIN",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTOTHERIN",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTSORDER",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIPPED",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWASTE",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTOTHEROUT",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRANSFERRED",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AVGVALUE",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AVGCURRVAL",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURAMNT",
+                        "ORDINAL_POSITION":  25,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURCASH",
+                        "ORDINAL_POSITION":  26,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PURCURR",
+                        "ORDINAL_POSITION":  27,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALAMNT",
+                        "ORDINAL_POSITION":  28,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALCASH",
+                        "ORDINAL_POSITION":  29,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SALCURR",
+                        "ORDINAL_POSITION":  30,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONHAND",
+                        "ORDINAL_POSITION":  31,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWHOUSEIN",
+                        "ORDINAL_POSITION":  32,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACTWHOUSEOUT",
+                        "ORDINAL_POSITION":  33,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "COUNTADD",
+                        "ORDINAL_POSITION":  34,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "COUNTDEC",
+                        "ORDINAL_POSITION":  35,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONVEHICLE",
+                        "ORDINAL_POSITION":  36,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARIANTREF",
+                        "ORDINAL_POSITION":  37,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVPRODIN",
+                        "ORDINAL_POSITION":  38,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVPRODOUT",
+                        "ORDINAL_POSITION":  39,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVWHOUSEIN",
+                        "ORDINAL_POSITION":  40,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PLNRSRVWHOUSEOUT",
+                        "ORDINAL_POSITION":  41,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONHAND_AVG",
+                        "ORDINAL_POSITION":  42,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  43,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CNT",
+                        "ORDINAL_POSITION":  44,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

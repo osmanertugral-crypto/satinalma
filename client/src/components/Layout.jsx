@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Users, Package, FileText,
   TrendingUp, Warehouse, LogOut,
-  Menu, X, ListChecks, LineChart, Container, ClipboardList, Wallet, BarChart2
+  Menu, X, ListChecks, LineChart, Container, ClipboardList, Wallet, BarChart2, Settings
 } from 'lucide-react';
 
 const navItems = [
@@ -60,15 +60,26 @@ export default function Layout() {
             </NavLink>
           ))}
           {user?.role === 'admin' && (
-            <NavLink
-              to="/admin/users"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'}`
-              }
-            >
-              <Users size={18} className="shrink-0" />
-              {sidebarOpen && <span className="truncate">Kullanıcılar</span>}
-            </NavLink>
+            <>
+              <NavLink
+                to="/admin/users"
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'}`
+                }
+              >
+                <Users size={18} className="shrink-0" />
+                {sidebarOpen && <span className="truncate">Kullanıcılar</span>}
+              </NavLink>
+              <NavLink
+                to="/admin/settings"
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'}`
+                }
+              >
+                <Settings size={18} className="shrink-0" />
+                {sidebarOpen && <span className="truncate">Ayarlar</span>}
+              </NavLink>
+            </>
           )}
         </nav>
         <div className="p-4 border-t border-slate-700">

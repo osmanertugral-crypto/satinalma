@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_DEPO_STOK_RAPORU_123",
+    "full_name":  "dbo.AA_DEPO_STOK_RAPORU_123",
+    "definition":  "\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[AA_DEPO_STOK_RAPORU_123] AS\r\nSELECT       ITM.LOGICALREF AS MLZ_ID, ITM.CODE, ITM.NAME, SUM(ISNULL(STN.ONHAND, 0)) - SUM(ISNULL(STN.ONVEHICLE, 0)) AS MIKTAR, STN.INVENNO AS DEPO,\r\n                             (SELECT        NAME\r\n                               FROM            dbo.L_CAPIWHOUSE\r\n                               WHERE        (STN.INVENNO = NR) AND (FIRMNR = 123)) AS DEPO_ADI\r\nFROM            dbo.LV_123_01_STINVTOT AS STN WITH (nolock) LEFT OUTER JOIN\r\n                         dbo.LG_123_ITEMS AS ITM WITH (nolock) ON STN.STOCKREF = ITM.LOGICALREF\r\nWHERE        (STN.INVENNO \u003c\u003e - 1) AND (STN.DATE_ \u003c= GETDATE())\r\nGROUP BY STN.INVENNO, STN.STOCKREF, ITM.CODE, ITM.NAME, ITM.LOGICALREF\r\nHAVING        (SUM(STN.ONHAND) \u003e= - 99999999) AND (SUM(STN.ONHAND) \u003c= 99999999)\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MLZ_ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MLZ_ID":  null,
+                            "CODE":  null,
+                            "NAME":  null,
+                            "MIKTAR":  "1",
+                            "DEPO":  "0",
+                            "DEPO_ADI":  "E TICARET FIKTIF"
+                        },
+                        {
+                            "MLZ_ID":  "4697",
+                            "CODE":  "2021X617",
+                            "NAME":  "MAKYAJ AYNASI",
+                            "MIKTAR":  "0",
+                            "DEPO":  "12",
+                            "DEPO_ADI":  "Bozuk Depo"
+                        },
+                        {
+                            "MLZ_ID":  "4963",
+                            "CODE":  "2021X870",
+                            "NAME":  "28X45 BANYO LAVABO",
+                            "MIKTAR":  "0",
+                            "DEPO":  "2",
+                            "DEPO_ADI":  "GEBZE"
+                        },
+                        {
+                            "MLZ_ID":  "5233",
+                            "CODE":  "A2021X09",
+                            "NAME":  "ÜÇ AYAK IZGARA ALÜMİNYUM TELESKOBİK",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5239",
+                            "CODE":  "A2021X15",
+                            "NAME":  "TİTANYUM OCAK",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5242",
+                            "CODE":  "A2021X18",
+                            "NAME":  "ÇİFT KATMANLI KUPA KARABİNALI",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5267",
+                            "CODE":  "A2021X43",
+                            "NAME":  "ATEŞ ÜSTÜ IZGARA ORTA + ÇANTA",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5269",
+                            "CODE":  "A2021X45",
+                            "NAME":  "UYKU TULUMU",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5270",
+                            "CODE":  "A2021X46",
+                            "NAME":  "CAMPOUT KATLANIR KAMP MASASI",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5280",
+                            "CODE":  "A2021X56",
+                            "NAME":  "CİBİNLİKLİ HAMAK",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        }
+                    ]
+}

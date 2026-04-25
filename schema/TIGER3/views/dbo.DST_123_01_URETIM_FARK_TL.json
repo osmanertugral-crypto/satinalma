@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_01_URETIM_FARK_TL",
+    "full_name":  "dbo.DST_123_01_URETIM_FARK_TL",
+    "definition":  "CREATE VIEW [dbo].[DST_123_01_URETIM_FARK_TL] AS\r\n\r\nSELECT\r\n\r\nTA.*\r\n\r\nFROM\r\n\r\n(SELECT\r\n\r\n LEFT(STF.FICHENO,12) [SARF FIS NO]\r\n,STF.DATE_ [TARIH]\r\n,ROUND(SUM(VATMATRAH),2) [SARF TOPLAM]\r\n\r\n,[UG TOPLAM] = (SELECT ROUND(SUM(VATMATRAH),2) FROM LG_123_01_STLINE STLU WHERE STLU.QPRODFCREF = STLS.QPRODFCREF AND STLU.TRCODE = 13 AND STLU.CANCELLED = 0 )\r\n,[UG FİŞNO] = (SELECT STF1.FICHENO FROM LG_123_01_STFICHE STF1 ,LG_123_01_STLINE STLU WHERE STF1.LOGICALREF =STLU.STFICHEREF AND STLU.QPRODFCREF = STLS.QPRODFCREF AND STLU.TRCODE = 13 AND STLU.CANCELLED = 0 )\r\n,QPR.FICHENO URETIM_NO\r\nFROM LG_123_01_STLINE STLS\r\nLEFT JOIN LG_123_01_STFICHE STF ON STF.LOGICALREF = STLS.STFICHEREF\r\nLEFT JOIN LG_123_01_QPRODUCT QPR ON QPR.LOGICALREF=STF.QPRODFCREF\r\n\r\nWHERE STLS.TRCODE = 12 AND STLS.CANCELLED = 0 AND STLS.QPRODFCREF \u003e 0\r\n\r\nGROUP BY STF.FICHENO , STF.DATE_ , STLS.QPRODFCREF ,QPR.FICHENO\r\n\r\n) TA\r\n\r\nWHERE TA.[SARF TOPLAM] \u003c\u003e TA.[UG TOPLAM]\r\n\r\n\r\n\r\n-------------------------------------\r\n\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "SARF FIS NO",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "12",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SARF TOPLAM",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "UG TOPLAM",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "UG FİŞNO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URETIM_NO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "SARF FIS NO":  "000131",
+                            "TARIH":  "24.01.2023 00:00:00",
+                            "SARF TOPLAM":  "132186,13",
+                            "UG TOPLAM":  "132186,12",
+                            "UG FİŞNO":  "000089",
+                            "URETIM_NO":  "000099"
+                        },
+                        {
+                            "SARF FIS NO":  "000137",
+                            "TARIH":  "24.01.2023 00:00:00",
+                            "SARF TOPLAM":  "106836,13",
+                            "UG TOPLAM":  "106836,12",
+                            "UG FİŞNO":  "000095",
+                            "URETIM_NO":  "000105"
+                        },
+                        {
+                            "SARF FIS NO":  "000140",
+                            "TARIH":  "24.01.2023 00:00:00",
+                            "SARF TOPLAM":  "357066,79",
+                            "UG TOPLAM":  "357066,78",
+                            "UG FİŞNO":  "000096",
+                            "URETIM_NO":  "000124"
+                        },
+                        {
+                            "SARF FIS NO":  "000139",
+                            "TARIH":  "24.01.2023 00:00:00",
+                            "SARF TOPLAM":  "360028,01",
+                            "UG TOPLAM":  "360028",
+                            "UG FİŞNO":  "000097",
+                            "URETIM_NO":  "000125"
+                        },
+                        {
+                            "SARF FIS NO":  "000166",
+                            "TARIH":  "6.02.2023 00:00:00",
+                            "SARF TOPLAM":  "16865,14",
+                            "UG TOPLAM":  "16865,13",
+                            "UG FİŞNO":  "000123",
+                            "URETIM_NO":  "000153"
+                        },
+                        {
+                            "SARF FIS NO":  "000150",
+                            "TARIH":  "1.02.2023 00:00:00",
+                            "SARF TOPLAM":  "86996,85",
+                            "UG TOPLAM":  "86996,86",
+                            "UG FİŞNO":  "000107",
+                            "URETIM_NO":  "000137"
+                        },
+                        {
+                            "SARF FIS NO":  "000151",
+                            "TARIH":  "1.02.2023 00:00:00",
+                            "SARF TOPLAM":  "16945,14",
+                            "UG TOPLAM":  "16945,13",
+                            "UG FİŞNO":  "000108",
+                            "URETIM_NO":  "000138"
+                        },
+                        {
+                            "SARF FIS NO":  "000248",
+                            "TARIH":  "14.02.2023 00:00:00",
+                            "SARF TOPLAM":  "365868,84",
+                            "UG TOPLAM":  "365868,83",
+                            "UG FİŞNO":  "000203",
+                            "URETIM_NO":  "000233"
+                        },
+                        {
+                            "SARF FIS NO":  "000239",
+                            "TARIH":  "10.02.2023 00:00:00",
+                            "SARF TOPLAM":  "367280,98",
+                            "UG TOPLAM":  "367280,97",
+                            "UG FİŞNO":  "000195",
+                            "URETIM_NO":  "000225"
+                        },
+                        {
+                            "SARF FIS NO":  "000211",
+                            "TARIH":  "9.02.2023 00:00:00",
+                            "SARF TOPLAM":  "95817,16",
+                            "UG TOPLAM":  "95817,15",
+                            "UG FİŞNO":  "000168",
+                            "URETIM_NO":  "000198"
+                        }
+                    ]
+}

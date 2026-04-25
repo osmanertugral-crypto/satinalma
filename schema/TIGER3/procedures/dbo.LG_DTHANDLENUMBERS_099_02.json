@@ -1,0 +1,123 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_DTHANDLENUMBERS_099_02",
+    "full_name":  "dbo.LG_DTHANDLENUMBERS_099_02",
+    "created":  "Sep  1 2025 12:03PM",
+    "last_altered":  "Sep  1 2025 12:03PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@par_Coef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_ItemRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_VariantRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_OrdLineRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DOrdDate",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_ShipAmount",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_RemAmount",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_UomRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_SourceIndex",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DOrdStatus",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DOrdGoDate",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_DOrdRetDate",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "datetime",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_uinfo1",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@par_uinfo2",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_DTHANDLENUMBERS_099_02\n       @par_Coef           SMALLINT,\n       @par_ItemRef        INT,\n       @par_VariantRef     INT,\n       @par_OrdLineRef     INT,\n       @par_DOrdDate       DATETIME,\n       @par_ShipAmount     FLOAT,\n       @par_RemAmount      FLOAT,\n       @par_UomRef         INT,\n       @par_SourceIndex    SMALLINT,\n       @par_DOrdStatus     INT,\n       @par_DOrdGoDate     DATETIME,\n       @par_DOrdRetDate    DATETIME,\n       @par_uinfo1         FLOAT,\n       @par_uinfo2         FLOAT\nAS\nIF (@par_OrdLineRef \u003c\u003e 0) AND\n   (EXISTS(SELECT LOGICALREF FROM LG_099_02_ORFLINE WHERE LOGICALREF = @par_OrdLineRef))\n BEGIN\n      IF (@par_DOrdStatus = 0)\n       UPDATE LG_099_02_ORFLINE\n           SET DISTRESERVED = DISTRESERVED + @par_Coef * @par_ShipAmount\n           WHERE (LOGICALREF = @par_OrdLineRef)\n      IF (@par_DOrdStatus = 1) OR (@par_DOrdStatus = 2)\n       UPDATE LG_099_02_ORFLINE\n           SET ONVEHICLE = ONVEHICLE + @par_Coef * @par_ShipAmount\n           WHERE (LOGICALREF = @par_OrdLineRef)\n      IF (@par_DOrdStatus = 2) AND (@par_RemAmount \u003e 0)\n       UPDATE LG_099_02_ORFLINE\n           SET ONVEHICLE = ONVEHICLE - @par_Coef * @par_RemAmount\n           WHERE (LOGICALREF = @par_OrdLineRef)\n END\n"
+}

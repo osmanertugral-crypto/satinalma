@@ -1,0 +1,94 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_SATIS_DURUMU_123",
+    "full_name":  "dbo.DST_SATIS_DURUMU_123",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[DST_SATIS_DURUMU_123] AS\r\n\r\n\r\nSELECT\r\nP.CODE \u0027PROJE KODU\u0027\r\n,P.NAME \u0027FATURA ISMI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE_123] WHERE IS_EMRI_N0=P.CODE AND RECETE_TURU=\u0027STANDART\u0027),0) \u0027STANDART MALIYETI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE_123] WHERE IS_EMRI_N0=P.CODE AND RECETE_TURU=\u0027OPSIYONEL\u0027),0) \u0027OPSIYON MALIYETI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE_123] WHERE IS_EMRI_N0=P.CODE AND RECETE_TURU=\u0027ARABA\u0027),0) \u0027ARAÇ MALIYETI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE_123] WHERE IS_EMRI_N0=P.CODE AND RECETE_TURU=\u0027OTV\u0027),0) \u0027VERGI MALIYETI\u0027\r\n,ISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE_123] WHERE IS_EMRI_N0=P.CODE),0) \u0027TOPLAM MALIYET\u0027\r\n,ISNULL((select sum(LINENET) from LG_123_01_ORFLINE WHERE TRCODE=1 AND LINENO_=1 AND PROJECTREF=P.LOGICALREF),0) \u0027STANDART SATIŞ\u0027 \r\n,ISNULL((select sum(LINENET) from LG_123_01_ORFLINE WHERE TRCODE=1 AND  LINENO_\u003c\u003e1 AND PROJECTREF=P.LOGICALREF),0)-(SELECT SUM(TOTAL) FROM LG_123_01_ORFLINE WHERE PROJECTREF=P.LOGICALREF AND STOCKREF IN (SELECT LOGICALREF FROM LG_123_ITEMS WHERE STGRPCODE=\u0027ARABA\u0027)) \u0027OPSIYON SATIŞ\u0027 \r\n,(SELECT SUM(TOTAL) FROM LG_123_01_ORFLINE WHERE PROJECTREF=P.LOGICALREF AND STOCKREF IN (SELECT LOGICALREF FROM LG_123_ITEMS WHERE STGRPCODE=\u0027ARABA\u0027)) ARAC_SATIS\r\n,ISNULL((select sum(LINENET) from LG_123_01_ORFLINE WHERE TRCODE=1 AND  PROJECTREF=P.LOGICALREF),0) \u0027TOPLAM GELIR\u0027  \r\n,ISNULL((select sum(LINENET) from LG_123_01_ORFLINE WHERE TRCODE=1 AND  PROJECTREF=P.LOGICALREF),0)-\r\nISNULL((SELEct SUM(TUTAR) FROM [AA_SARF_PROJE_123] WHERE IS_EMRI_N0=P.CODE),0)  KAZANC\r\n\r\n--,P.LOGICALREF\r\nFROM LG_123_PROJECT AS P\r\nWHERE \r\nP.LOGICALREF IN (SELECT PROJECTREF FROM LG_123_01_INVOICE WHERE TRCODE IN (7,8,9))\r\n--AND P.CODE=\u0027RXL011\u0027\r\n\r\n\r\n--SELECT * FROM LG_123_01_ORFICHE WHERE FICHENO=\u0027000054\u0027\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "PROJE KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FATURA ISMI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STANDART MALIYETI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "OPSIYON MALIYETI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARAÇ MALIYETI",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "VERGI MALIYETI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM MALIYET",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "STANDART SATIŞ",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "OPSIYON SATIŞ",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ARAC_SATIS",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM GELIR",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KAZANC",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    }
+                ],
+    "sample_data":  "ATLANDI: Exception calling \"Fill\" with \"1\" argument(s): \"Yürütme Zaman Aşımı Süresi Doldu. Zaman aşımı süresi işlem tamamlanmadan önce doldu veya sunucu yanıt vermiyor.\""
+}

@@ -1,0 +1,99 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "KREKPOT_TEST_SORGU",
+    "full_name":  "dbo.KREKPOT_TEST_SORGU",
+    "definition":  "\r\n\r\n\r\n\r\n\r\nCREATE     view [dbo].[KREKPOT_TEST_SORGU] as\r\nSELECT EMUHACC.CODE, EMUHACC.SPECODE, EMUHACC.DEFINITION_, SUM(DEBIT - CREDIT) AMOUNT_\r\nFROM LG_123_01_EMFLINE EMFLINE WITH(NOLOCK) \r\nINNER JOIN LG_123_01_EMFICHE EMFICHE WITH(NOLOCK) ON EMFICHE.LOGICALREF = EMFLINE.ACCFICHEREF \r\nLEFT JOIN LG_123_EMUHACC EMUHACC WITH(NOLOCK) ON EMUHACC.LOGICALREF = EMFLINE.ACCOUNTREF \r\nWHERE EMFLINE.CANCELLED = 0 --AND  EMUHACC.SPECODE \u003c\u003e \u0027\u0027\r\nAND YEAR(EMFICHE.DATE_) = 2025\r\nAND MONTH(EMFICHE.DATE_) IN (11)\r\nGROUP BY EMUHACC.CODE, EMUHACC.SPECODE, EMUHACC.DEFINITION_\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SPECODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "11",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEFINITION_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT_",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CODE":  "102.00.270000",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "TL - VAKIFLAR",
+                            "AMOUNT_":  "6541,75999999981"
+                        },
+                        {
+                            "CODE":  "100.00.000000",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "TL - KASA     ( MERKEZ )",
+                            "AMOUNT_":  "21708,54"
+                        },
+                        {
+                            "CODE":  "102.75.270000",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "EURO - VAKIFLAR",
+                            "AMOUNT_":  "-7262,81999999986"
+                        },
+                        {
+                            "CODE":  "120.00.010062",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "ALM FRIDIT AB",
+                            "AMOUNT_":  "12043,15"
+                        },
+                        {
+                            "CODE":  "120.00.010084",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "ALTUĞ GÜZELKÜÇÜK",
+                            "AMOUNT_":  "0"
+                        },
+                        {
+                            "CODE":  "102.00.080000",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "TL - GARANTİ",
+                            "AMOUNT_":  "305,759999999485"
+                        },
+                        {
+                            "CODE":  "120.00.010085",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "ALİ ULU",
+                            "AMOUNT_":  "0"
+                        },
+                        {
+                            "CODE":  "108.00.050000",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "DENİZBANK POS ",
+                            "AMOUNT_":  "-443,080000000003"
+                        },
+                        {
+                            "CODE":  "120.00.010083",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "ARİF EMRE BOYRACI",
+                            "AMOUNT_":  "0"
+                        },
+                        {
+                            "CODE":  "102.00.280000",
+                            "SPECODE":  "",
+                            "DEFINITION_":  "TL - YAPI KREDİ",
+                            "AMOUNT_":  "-1764,15000000004"
+                        }
+                    ]
+}

@@ -28,6 +28,7 @@ import ProjectsPage from './pages/Projects';
 import ProjectDetailPage from './pages/ProjectDetail';
 import CiroRaporuPage from './pages/CiroRaporu';
 import DepartmentRequestsPage from './pages/DepartmentRequests';
+import SettingsPage from './pages/Settings';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30000 } }
@@ -78,6 +79,7 @@ function App() {
               <Route path="department-requests" element={<DepartmentRequestsPage />} />
               <Route path="reports" element={<ReportsPage />} />
               <Route path="admin/users" element={<AdminRoute><AdminUsersPage /></AdminRoute>} />
+              <Route path="admin/settings" element={<AdminRoute><SettingsPage /></AdminRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>

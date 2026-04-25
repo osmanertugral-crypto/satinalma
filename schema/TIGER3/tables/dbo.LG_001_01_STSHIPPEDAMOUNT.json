@@ -1,0 +1,166 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_001_01_STSHIPPEDAMOUNT",
+    "full_name":  "dbo.LG_001_01_STSHIPPEDAMOUNT",
+    "description":  "",
+    "total_rows":  "8619",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TRANSREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "ORDTRANSREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIPPEDAMOUNT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "SHIPPEDRSRVAMT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I001_01_STSHIPPEDAMOUNT_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I001_01_STSHIPPEDAMOUNT_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "SHIPPEDAMOUNT, TRANSREF, ORDTRANSREF, LOGICALREF"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "25",
+                            "TRANSREF":  "3274",
+                            "ORDTRANSREF":  "216",
+                            "SHIPPEDAMOUNT":  "50",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "28",
+                            "TRANSREF":  "3277",
+                            "ORDTRANSREF":  "236",
+                            "SHIPPEDAMOUNT":  "4",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "29",
+                            "TRANSREF":  "3278",
+                            "ORDTRANSREF":  "227",
+                            "SHIPPEDAMOUNT":  "20",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "30",
+                            "TRANSREF":  "3279",
+                            "ORDTRANSREF":  "228",
+                            "SHIPPEDAMOUNT":  "20",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "31",
+                            "TRANSREF":  "3280",
+                            "ORDTRANSREF":  "229",
+                            "SHIPPEDAMOUNT":  "200",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "34",
+                            "TRANSREF":  "3284",
+                            "ORDTRANSREF":  "237",
+                            "SHIPPEDAMOUNT":  "8",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "35",
+                            "TRANSREF":  "3285",
+                            "ORDTRANSREF":  "255",
+                            "SHIPPEDAMOUNT":  "1",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "36",
+                            "TRANSREF":  "3286",
+                            "ORDTRANSREF":  "254",
+                            "SHIPPEDAMOUNT":  "3",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "37",
+                            "TRANSREF":  "3287",
+                            "ORDTRANSREF":  "253",
+                            "SHIPPEDAMOUNT":  "1",
+                            "SHIPPEDRSRVAMT":  "0"
+                        },
+                        {
+                            "LOGICALREF":  "38",
+                            "TRANSREF":  "3288",
+                            "ORDTRANSREF":  "252",
+                            "SHIPPEDAMOUNT":  "2",
+                            "SHIPPEDRSRVAMT":  "0"
+                        }
+                    ]
+}

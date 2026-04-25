@@ -1,0 +1,201 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AMBARTAKIP",
+    "full_name":  "dbo.AMBARTAKIP",
+    "definition":  "CREATE VIEW [dbo].[AMBARTAKIP] AS\r\nSELECT        AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF AS BIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET, CONVERT(NUMERIC(24,8),SUM(MIKTAR)) AS MIKTAR\r\nFROM            (SELECT        AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET, MIKTAR\r\n                          FROM            dbo.AMBARTAKIPIN0 WITH(NOLOCK)\r\n                          UNION ALL\r\n                          SELECT        AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET, MIKTAR\r\n                          FROM            dbo.AMBARTAKIPIN2 WITH(NOLOCK)\r\n                          UNION ALL\r\n                          SELECT        AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET, MIKTAR\r\n                          FROM            dbo.AMBARTAKIPOUT WITH(NOLOCK)\r\n                           ) AS T\r\nGROUP BY AMBAR_KODU, STOK_REF,VARYANT_REF, ANABIRIM_REF, ADRES, TAKIP_NO, DURUM_KODU, PALET,PAKET\r\nHAVING CONVERT(NUMERIC(24,8),SUM(MIKTAR))\u003c\u003e0",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARYANT_REF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_REF",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADRES",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TAKIP_NO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DURUM_KODU",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PALET",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PAKET",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "numeric",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "5256",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "6410",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "YELİZ COŞAR",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "1,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "6483",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "8417",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "2,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "8632",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "14937",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "200,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "10498",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "24496",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "1,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "10499",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "24500",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "1,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "10713",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "25332",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "7,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "11108",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "26833",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "1,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "12999",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "31262",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "10,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "13000",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "31266",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "3,00000000"
+                        },
+                        {
+                            "AMBAR_KODU":  "1",
+                            "STOK_REF":  "13001",
+                            "VARYANT_REF":  "0",
+                            "BIRIM_REF":  "31270",
+                            "ADRES":  "X",
+                            "TAKIP_NO":  "",
+                            "DURUM_KODU":  "X",
+                            "PALET":  "",
+                            "PAKET":  "",
+                            "MIKTAR":  "5,00000000"
+                        }
+                    ]
+}

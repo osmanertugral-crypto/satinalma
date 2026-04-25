@@ -1,0 +1,332 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_EXCHANGE_002",
+    "full_name":  "dbo.LG_EXCHANGE_002",
+    "description":  "",
+    "total_rows":  "365",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CRTYPE",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RATES1",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RATES2",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RATES3",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "RATES4",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EDATE",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GLOBALID",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "APPROVE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "APPROVEDATE",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "EXCHANGE_002_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LREF"
+                    },
+                    {
+                        "index_name":  "EXCHANGE_002_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CRTYPE, DATE_"
+                    },
+                    {
+                        "index_name":  "EXCHANGE_002_I3",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "DATE_, CRTYPE"
+                    },
+                    {
+                        "index_name":  "EXCHANGE_002_I4",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CRTYPE, EDATE, LREF"
+                    },
+                    {
+                        "index_name":  "EXCHANGE_002_I5",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "EDATE, CRTYPE, LREF"
+                    },
+                    {
+                        "index_name":  "EXCHANGE_002_I6",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "0",
+                        "is_primary_key":  "0",
+                        "columns":  "GLOBALID"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LREF":  "1",
+                            "DATE_":  "132514049",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "1.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "2",
+                            "DATE_":  "132514050",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "2.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "3",
+                            "DATE_":  "132514051",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "3.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "4",
+                            "DATE_":  "132514052",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "4.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "5",
+                            "DATE_":  "132514053",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "5.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "6",
+                            "DATE_":  "132514054",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "6.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "7",
+                            "DATE_":  "132514055",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "7.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "8",
+                            "DATE_":  "132514056",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "8.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "9",
+                            "DATE_":  "132514057",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "9.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        },
+                        {
+                            "LREF":  "10",
+                            "DATE_":  "132514058",
+                            "CRTYPE":  "53",
+                            "RATES1":  "1E-06",
+                            "RATES2":  "1E-06",
+                            "RATES3":  "1E-06",
+                            "RATES4":  "1E-06",
+                            "EDATE":  "10.01.2022 00:00:00",
+                            "GLOBALID":  "",
+                            "APPROVE":  "0",
+                            "APPROVEDATE":  "0"
+                        }
+                    ]
+}

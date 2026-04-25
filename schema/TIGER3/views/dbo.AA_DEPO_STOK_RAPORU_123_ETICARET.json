@@ -1,0 +1,133 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_DEPO_STOK_RAPORU_123_ETICARET",
+    "full_name":  "dbo.AA_DEPO_STOK_RAPORU_123_ETICARET",
+    "definition":  "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[AA_DEPO_STOK_RAPORU_123_ETICARET] AS\r\nSELECT       ITM.LOGICALREF AS MLZ_ID, ITM.CODE, ITM.NAME, SUM(ISNULL(STN.ONHAND, 0)) - SUM(ISNULL(STN.ONVEHICLE, 0)) AS MIKTAR, STN.INVENNO AS DEPO,\r\n                             (SELECT        NAME\r\n                               FROM            dbo.L_CAPIWHOUSE\r\n                               WHERE        (STN.INVENNO = NR) AND (FIRMNR = 123)) AS DEPO_ADI\r\nFROM            dbo.LV_123_01_STINVTOT AS STN WITH (nolock) LEFT OUTER JOIN\r\n                         dbo.LG_123_ITEMS AS ITM WITH (nolock) ON STN.STOCKREF = ITM.LOGICALREF\r\nWHERE        (STN.INVENNO \u003c\u003e - 1) AND (STN.DATE_ \u003c= GETDATE()) AND STN.INVENNO=14\r\nGROUP BY STN.INVENNO, STN.STOCKREF, ITM.CODE, ITM.NAME, ITM.LOGICALREF\r\nHAVING        (SUM(STN.ONHAND) \u003e= - 99999999) AND (SUM(STN.ONHAND) \u003c= 99999999)\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MLZ_ID",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPO_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MLZ_ID":  "5238",
+                            "CODE":  "A2021X14",
+                            "NAME":  "KANDİL LAMBA",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5239",
+                            "CODE":  "A2021X15",
+                            "NAME":  "TİTANYUM OCAK",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5225",
+                            "CODE":  "A2021X01",
+                            "NAME":  "190 GR KARTUŞ",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5242",
+                            "CODE":  "A2021X18",
+                            "NAME":  "ÇİFT KATMANLI KUPA KARABİNALI",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5246",
+                            "CODE":  "A2021X22",
+                            "NAME":  "KATLANIR KÜREK",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5230",
+                            "CODE":  "A2021X06",
+                            "NAME":  "KUKSA BARDAK FOX",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5249",
+                            "CODE":  "A2021X25",
+                            "NAME":  "MİNİ TENCERE TAVA SETİ",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5265",
+                            "CODE":  "A2021X41",
+                            "NAME":  "YUMURTA SAKLAMA KUTUSU",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5267",
+                            "CODE":  "A2021X43",
+                            "NAME":  "ATEŞ ÜSTÜ IZGARA ORTA + ÇANTA",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        },
+                        {
+                            "MLZ_ID":  "5226",
+                            "CODE":  "A2021X02",
+                            "NAME":  "EVEREST BENZİNLİ DAĞCI OCAĞI",
+                            "MIKTAR":  "0",
+                            "DEPO":  "14",
+                            "DEPO_ADI":  "E Ticaret"
+                        }
+                    ]
+}

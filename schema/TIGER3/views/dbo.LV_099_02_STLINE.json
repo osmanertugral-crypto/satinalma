@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_099_02_STLINE",
+    "full_name":  "dbo.LV_099_02_STLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_099_02_STLINE] AS\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.INVOICEREF, LGMAIN.STOCKREF, LGMAIN.LINETYPE, LGMAIN.TRCODE, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.INVOICELNNO,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.CODE\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.CODE\n   ELSE \u0027\u0027 END AS CODE,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.DEFINITION_\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.NAME\n   ELSE \u0027\u0027 END AS LINEEXP\nFROM\n     LG_099_02_STLINE LGMAIN WITH(NOLOCK)\n  LEFT OUTER JOIN LG_099_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF\n  LEFT OUTER JOIN LG_099_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF\n  LEFT OUTER JOIN LG_099_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICELNNO",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "1288",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "GLADİATOR BANYOLU",
+                            "LINEEXP":  ""
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "1022",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X384",
+                            "LINEEXP":  "BUZDOLABI İNDEL B-CRUİSE 110"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "1289",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "13",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "G0250",
+                            "LINEEXP":  "YURTDIŞI"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "812",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "20",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X172",
+                            "LINEEXP":  "POLYESTER"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "813",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "15",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X173",
+                            "LINEEXP":  "POLYESTER İNCELTİCİ STREN"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "764",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "10",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X122",
+                            "LINEEXP":  "İLKESTER GIN-313 RAL KODLU -JELKOT 9016 BEYAZ "
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "1288",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "13",
+                            "AMOUNT":  "1",
+                            "PRICE":  "0",
+                            "TOTAL":  "0",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "GLADİATOR BANYOLU",
+                            "LINEEXP":  ""
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "644",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "3",
+                            "PRICE":  "5",
+                            "TOTAL":  "15",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X1",
+                            "LINEEXP":  "1.5 MM KABLO"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "754",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "15",
+                            "PRICE":  "5",
+                            "TOTAL":  "75",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X112",
+                            "LINEEXP":  "FRENLİ MENTEŞE"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "655",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "1",
+                            "AMOUNT":  "5",
+                            "PRICE":  "10",
+                            "TOTAL":  "50",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "2021X12",
+                            "LINEEXP":  "10-16 KELEPÇE"
+                        }
+                    ]
+}

@@ -6,6 +6,7 @@ const { getDb } = require('../db/schema');
 const { normTr } = require('../utils/searchUtils');
 const { authenticate } = require('../middleware/auth');
 const { refreshExcelQueries } = require('../utils/excelRefresh');
+const tiger3 = require('../utils/tiger3');
 
 router.use(authenticate);
 
@@ -103,22 +104,70 @@ function syncFromExcel() {
   return tx();
 }
 
-// POST /api/warehouse/sync — Excel'den veritabanını yenile
-// refreshExcel=true gönderilirse önce SQL sorgularını çalıştırır
+// TIGER3'ten stok verisi çek ve DB'ye yaz
+async function syncFromTIGER3() {
+  const rows = await tiger3.query(`
+    SELECT KOD, TANIM, GEBZE_STOK, E_TICARET_STOK, SHOWROOM_STOK,
+           BIRIM_FIYAT, GEBZE_TUTAR, E_TICARET_TUTAR, SHOWROOM_TUTAR, KART_TIPI
+    FROM AA_KUMULATIF_STOK_RAPORU_123_BURAK_TD
+  `);
+
+  const db = getDb();
+  const tx = db.transaction(() => {
+    db.prepare('DELETE FROM warehouse_stock').run();
+    const stmt = db.prepare(`
+      INSERT INTO warehouse_stock (stok_kodu, stok_adi, gebze_stok, eticaret_stok, showroom_stok,
+        birim_fiyat, gebze_tutar, eticaret_tutar, showroom_tutar, kart_tipi, synced_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+    `);
+    let count = 0;
+    for (const r of rows) {
+      const kod = String(r.KOD || '').trim();
+      if (!kod) continue;
+      stmt.run(
+        kod,
+        String(r.TANIM || '').trim(),
+        Math.round((+r.GEBZE_STOK || 0) * 100) / 100,
+        Math.round((+r.E_TICARET_STOK || 0) * 100) / 100,
+        Math.round((+r.SHOWROOM_STOK || 0) * 100) / 100,
+        Math.round((+r.BIRIM_FIYAT || 0) * 100) / 100,
+        Math.round((+r.GEBZE_TUTAR || 0) * 100) / 100,
+        Math.round((+r.E_TICARET_TUTAR || 0) * 100) / 100,
+        Math.round((+r.SHOWROOM_TUTAR || 0) * 100) / 100,
+        String(r.KART_TIPI || '').trim()
+      );
+      count++;
+    }
+    db.prepare(
+      "INSERT INTO warehouse_sync_log (row_count, status, message) VALUES (?, 'success', ?)"
+    ).run(count, `TIGER3'ten ${count} ürün senkronize edildi`);
+    return count;
+  });
+  return tx();
+}
+
+// POST /api/warehouse/sync — Önce TIGER3, başarısız olursa Excel fallback
 router.post('/sync', async (req, res) => {
   try {
-    if (req.body?.refreshExcel) {
-      console.log('Depo: SQL sorguları yenileniyor...');
-      await refreshExcelQueries(EXCEL_PATH);
-      console.log('Depo: Excel yenilendi, DB senkronizasyonu başlıyor...');
+    let count, source;
+    try {
+      count = await syncFromTIGER3();
+      source = 'tiger3';
+    } catch (tiger3Err) {
+      console.warn('Depo: TIGER3 bağlanamadı, Excel fallback:', tiger3Err.message);
+      if (req.body?.refreshExcel) {
+        await refreshExcelQueries(EXCEL_PATH);
+      }
+      count = syncFromExcel();
+      source = 'excel';
     }
-    const count = syncFromExcel();
     const lastSync = getDb().prepare(
       "SELECT synced_at FROM warehouse_sync_log ORDER BY id DESC LIMIT 1"
     ).get();
     res.json({
       success: true,
       count,
+      source,
       message: `${count} ürün başarıyla senkronize edildi`,
       lastSync: lastSync?.synced_at
     });
@@ -319,3 +368,4 @@ router.get('/kart-tipleri', (req, res) => {
 });
 
 module.exports = router;
+module.exports.syncFromTIGER3 = syncFromTIGER3;

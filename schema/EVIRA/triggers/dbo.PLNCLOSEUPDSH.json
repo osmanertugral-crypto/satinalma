@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "PLNCLOSEUPDSH",
+    "on_table":  "dbo.SIPARISHAREKETLERI",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "UPDATE"
+               ],
+    "definition":  "CREATE TRIGGER [dbo].[PLNCLOSEUPDSH] ON [dbo].[SIPARISHAREKETLERI]\r\nFOR UPDATE\r\nAS\r\nSET NOCOUNT ON\r\n\r\nDECLARE @SD_REF AS INT\r\nDECLARE Dcur CURSOR LOCAL FOR  \r\nSELECT D.SD_REF FROM DELETED D,INSERTED I WHERE I.SD_REF=D.SD_REF AND I.KAPALI=1 AND D.KAPALI=0  GROUP BY D.SD_REF\r\nOPEN Dcur;  \r\nFETCH NEXT FROM Dcur \r\nINTO @SD_REF;\r\nWHILE @@FETCH_STATUS = 0  \r\nBEGIN  \r\n\tUPDATE PLANLAMAHAREKETLERI SET STATUS=1 WHERE STATUS=0 AND SD_REF=@SD_REF\r\nFETCH NEXT FROM Dcur\r\nINTO @SD_REF;\r\nEND  \r\nCLOSE Dcur;  \r\nDEALLOCATE Dcur;"
+}

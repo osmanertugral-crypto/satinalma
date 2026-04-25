@@ -1,0 +1,83 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDATECLCARDRISKNUMS_223_01",
+    "full_name":  "dbo.LG_UPDATECLCARDRISKNUMS_223_01",
+    "created":  "Sep  2 2025 12:49PM",
+    "last_altered":  "Sep  2 2025 12:49PM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@CLREF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@TRCODE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NETTOTAL",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@COEF",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@REPORTRATE",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       },
+                       {
+                           "PARAMETER_NAME":  "@BILLED",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STATUS",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@STATUSDESP",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "smallint",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "5",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@NETTOTALREP",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "float",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "53",
+                           "NUMERIC_SCALE":  ""
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDATECLCARDRISKNUMS_223_01\n       @CLREF      INT,\n       @TRCODE     SMALLINT,\n       @NETTOTAL   FLOAT,\n       @COEF       SMALLINT,\n       @REPORTRATE FLOAT,\n       @BILLED     SMALLINT,\n       @STATUS     SMALLINT,\n       @STATUSDESP SMALLINT,\n       @NETTOTALREP FLOAT  AS\nDECLARE @RISKTYPE    SMALLINT\nDECLARE @DESPRISKINC FLOAT\nDECLARE @DESPRISKINCREP FLOAT\nDECLARE @USEREP      SMALLINT\nDECLARE @CHK         SMALLINT\nDECLARE @EPSILON     FLOAT\nSELECT @EPSILON = 0.0000001\nSELECT  @CHK  = 0\nIF  EXISTS(SELECT LOGICALREF FROM LG_NTLCK_223  WHERE (LOCKSTR = \u0027223-\u0027 +\nLTRIM(CAST(CAST(\u002701\u0027 AS INTEGER) AS VARCHAR)) +\u0027-SERV-1\u0027 ))\n  BEGIN\n       SELECT @CHK = 1\n  END\nIF (@CHK\u003c\u003e1 ) AND (@CLREF \u003c\u003e 0) AND EXISTS(SELECT LOGICALREF FROM LG_223_01_CLRNUMS WHERE (CLCARDREF = @CLREF)) AND (@STATUS=0) AND (@STATUSDESP=0)\n BEGIN\n          SELECT @RISKTYPE = RISKTYPE, @USEREP = USEREPRISK\n         FROM LG_223_01_CLRNUMS\n         WHERE (CLCARDREF = @CLREF)\n         IF (((@TRCODE \u003e= 1) AND (@TRCODE \u003c= 5)) OR (@TRCODE = 26) OR ((@TRCODE \u003e= 30) AND (@TRCODE \u003c= 34)))\n         BEGIN SELECT @DESPRISKINC = -1 * @COEF * @NETTOTAL\n                 IF @REPORTRATE \u003c\u003e 0\n                   SELECT @DESPRISKINCREP = @DESPRISKINC/@REPORTRATE\n                 ELSE SELECT @DESPRISKINCREP = -1 * @COEF * @NETTOTALREP\n           END\n         ELSE IF (((@TRCODE \u003e= 6) AND (@TRCODE \u003c= 10)) OR ((@TRCODE \u003e= 35) AND (@TRCODE \u003c= 39)))\n               BEGIN SELECT @DESPRISKINC = @COEF * @NETTOTAL\n                       IF @REPORTRATE \u003c\u003e 0\n                         SELECT @DESPRISKINCREP = @DESPRISKINC/@REPORTRATE\n                       ELSE SELECT @DESPRISKINCREP = @COEF * @NETTOTALREP\n                 END\n          IF (@BILLED = 1)\n          BEGIN SELECT @DESPRISKINC = 0\n                 SELECT @DESPRISKINCREP = 0\n           END\n         UPDATE LG_223_01_CLRNUMS\n     SET DESPRISKTOTAL = DESPRISKTOTAL + @DESPRISKINC\n          WHERE (CLCARDREF = @CLREF)\n          UPDATE LG_223_01_CLRNUMS\n     SET DESPRISKTOTAL = 0\n          WHERE (CLCARDREF = @CLREF) AND ABS(DESPRISKTOTAL) \u003c @EPSILON\n         IF (@REPORTRATE \u003c\u003e 0) OR (@NETTOTALREP \u003c\u003e 0)\n           UPDATE LG_223_01_CLRNUMS\n           SET REPDESPRISKTOTAL = REPDESPRISKTOTAL + @DESPRISKINCREP\n           WHERE (CLCARDREF = @CLREF)\n          UPDATE LG_223_01_CLRNUMS\n     SET REPDESPRISKTOTAL = 0\n          WHERE (CLCARDREF = @CLREF) AND ABS(REPDESPRISKTOTAL) \u003c @EPSILON\n END\nIF (@CHK\u003c\u003e1 ) AND (@CLREF \u003c\u003e 0) AND EXISTS(SELECT LOGICALREF FROM LG_223_01_CLRNUMS WHERE (CLCARDREF = @CLREF)) AND (@STATUS=4) AND (@STATUSDESP=0)\n BEGIN\n         SELECT @RISKTYPE = RISKTYPE, @USEREP = USEREPRISK\n         FROM LG_223_01_CLRNUMS\n         WHERE (CLCARDREF = @CLREF)\n         IF (@TRCODE = 1)\n         BEGIN SELECT @DESPRISKINC = -1 * @COEF * @NETTOTAL\n                 IF @REPORTRATE \u003c\u003e 0\n                    SELECT @DESPRISKINCREP = @DESPRISKINC/@REPORTRATE\n                 ELSE SELECT @DESPRISKINCREP = -1 * @COEF * @NETTOTALREP\n           END\n         ELSE IF (@TRCODE = 2)\n               BEGIN SELECT @DESPRISKINC = @COEF * @NETTOTAL\n                     IF @REPORTRATE \u003c\u003e 0\n                       SELECT @DESPRISKINCREP = @DESPRISKINC/@REPORTRATE\n                     ELSE  SELECT @DESPRISKINCREP = @COEF * @NETTOTALREP\n                END\n          IF (@BILLED = 1)\n          BEGIN SELECT @DESPRISKINC = 0\n                 SELECT @DESPRISKINCREP = 0\n           END\n         UPDATE LG_223_01_CLRNUMS\n     SET ORDRISKTOTAL = ORDRISKTOTAL + @DESPRISKINC\n          WHERE (CLCARDREF = @CLREF)\n          UPDATE LG_223_01_CLRNUMS\n     SET ORDRISKTOTAL = 0\n          WHERE (CLCARDREF = @CLREF) AND ABS(ORDRISKTOTAL) \u003c @EPSILON\n         IF (@REPORTRATE \u003c\u003e 0) OR (@NETTOTALREP \u003c\u003e 0)\n           UPDATE LG_223_01_CLRNUMS\n           SET REPORDRISKTOTAL = REPORDRISKTOTAL + @DESPRISKINCREP\n           WHERE (CLCARDREF = @CLREF)\n          UPDATE LG_223_01_CLRNUMS\n     SET REPORDRISKTOTAL = 0\n          WHERE (CLCARDREF = @CLREF) AND ABS(REPORDRISKTOTAL) \u003c @EPSILON\nEND\nIF (@CHK\u003c\u003e1 ) AND (@CLREF \u003c\u003e 0) AND EXISTS(SELECT LOGICALREF FROM LG_223_01_CLRNUMS WHERE (CLCARDREF = @CLREF)) AND (@STATUS=1) AND (@STATUSDESP=0)\n BEGIN\n         SELECT @RISKTYPE = RISKTYPE, @USEREP = USEREPRISK\n         FROM LG_223_01_CLRNUMS\n         WHERE (CLCARDREF = @CLREF)\n         IF (@TRCODE = 1)\n         BEGIN SELECT @DESPRISKINC = -1 * @COEF * @NETTOTAL\n                 IF @REPORTRATE \u003c\u003e 0\n                    SELECT @DESPRISKINCREP = @DESPRISKINC/@REPORTRATE\n                 ELSE SELECT @DESPRISKINCREP = -1 * @COEF * @NETTOTALREP\n           END\n         ELSE IF (@TRCODE = 2)\n               BEGIN SELECT @DESPRISKINC = @COEF * @NETTOTAL\n                      IF @REPORTRATE \u003c\u003e 0\n                        SELECT @DESPRISKINCREP = @DESPRISKINC/@REPORTRATE\n                      ELSE SELECT @DESPRISKINCREP = @COEF * @NETTOTALREP\n                END\n          IF (@BILLED = 1)\n          BEGIN SELECT @DESPRISKINC = 0\n                 SELECT @DESPRISKINCREP = 0\n           END\n         UPDATE LG_223_01_CLRNUMS\n     SET ORDRISKTOTALSUGG = ORDRISKTOTALSUGG + @DESPRISKINC\n          WHERE (CLCARDREF = @CLREF)\n          UPDATE LG_223_01_CLRNUMS\n     SET ORDRISKTOTALSUGG = 0\n          WHERE (CLCARDREF = @CLREF) AND ABS(ORDRISKTOTALSUGG) \u003c @EPSILON\n         IF (@REPORTRATE \u003c\u003e 0) OR (@NETTOTALREP \u003c\u003e 0)\n           UPDATE LG_223_01_CLRNUMS\n           SET REPORDRISKTOTALSUGG = REPORDRISKTOTALSUGG + @DESPRISKINCREP\n           WHERE (CLCARDREF = @CLREF)\n          UPDATE LG_223_01_CLRNUMS\n     SET REPORDRISKTOTALSUGG = 0\n          WHERE (CLCARDREF = @CLREF) AND ABS(REPORDRISKTOTALSUGG) \u003c @EPSILON\nEND\nIF (@CHK\u003c\u003e1 ) AND (@CLREF \u003c\u003e 0) AND EXISTS(SELECT LOGICALREF FROM LG_223_01_CLRNUMS WHERE (CLCARDREF = @CLREF)) AND (@STATUS=0) AND (@STATUSDESP=1)\n BEGIN\n         SELECT @RISKTYPE = RISKTYPE, @USEREP = USEREPRISK\n         FROM LG_223_01_CLRNUMS\n         WHERE (CLCARDREF = @CLREF)\n         IF (((@TRCODE \u003e= 1) AND (@TRCODE \u003c= 5)) OR (@TRCODE = 26) OR ((@TRCODE \u003e= 30) AND (@TRCODE \u003c= 34)))\n           BEGIN SELECT @DESPRISKINC = -1 * @COEF * @NETTOTAL\n                   IF @REPORTRATE \u003c\u003e 0\n                      SELECT @DESPRISKINCREP = @DESPRISKINC/@REPORTRATE\n                   ELSE SELECT @DESPRISKINCREP = -1 * @COEF * @NETTOTALREP\n             END\n          ELSE IF (((@TRCODE \u003e= 6) AND (@TRCODE \u003c= 10)) OR ((@TRCODE \u003e= 35) AND (@TRCODE \u003c= 39)))\n                BEGIN SELECT @DESPRISKINC = @COEF * @NETTOTAL\n                       IF @REPORTRATE \u003c\u003e 0\n                        SELECT @DESPRISKINCREP = @DESPRISKINC/@REPORTRATE\n                       ELSE SELECT @DESPRISKINCREP = @COEF * @NETTOTALREP\n                 END\n          IF (@BILLED = 1)\n           BEGIN SELECT @DESPRISKINC = 0\n                  SELECT @DESPRISKINCREP = 0\n            END\n         UPDATE LG_223_01_CLRNUMS\n     SET DESPRISKTOTALSUG = DESPRISKTOTALSUG + @DESPRISKINC\n      WHERE (CLCARDREF = @CLREF)\n          UPDATE LG_223_01_CLRNUMS\n     SET DESPRISKTOTALSUG = 0\n          WHERE (CLCARDREF = @CLREF) AND ABS(DESPRISKTOTALSUG) \u003c @EPSILON\n         IF (@REPORTRATE \u003c\u003e 0) OR (@NETTOTALREP \u003c\u003e 0)\n          UPDATE LG_223_01_CLRNUMS\n          SET REPDESPRISKTOTALSUG = REPDESPRISKTOTALSUG + @DESPRISKINCREP\n          WHERE (CLCARDREF = @CLREF)\n          UPDATE LG_223_01_CLRNUMS\n     SET REPDESPRISKTOTALSUG = 0\n          WHERE (CLCARDREF = @CLREF) AND ABS(REPDESPRISKTOTALSUG) \u003c @EPSILON\nEND\n"
+}

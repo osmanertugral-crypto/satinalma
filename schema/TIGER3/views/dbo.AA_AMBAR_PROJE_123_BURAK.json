@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_AMBAR_PROJE_123_BURAK",
+    "full_name":  "dbo.AA_AMBAR_PROJE_123_BURAK",
+    "definition":  "\r\n\r\n\r\nCREATE VIEW [dbo].[AA_AMBAR_PROJE_123_BURAK] AS\r\nSELECT STFICHE.FICHENO FIS_NO, STFICHE.DATE_ FIS_TARIHI, ITEMS.CODE URUN_KODU, ITEMS.NAME URUN_ADI, PROJECT.CODE PROJE_KODU , PROJECT.NAME PROJE_ADI,STLINE.AMOUNT ADET,  STLINE.OUTCOST BIRIM_FIYAT, STLINE.AMOUNT * STLINE.OUTCOST TOPLAM ,\r\n\r\nSTLINE.SOURCEINDEX CIKIS_AMBARI, STLINE.DESTINDEX GIRIS_AMBARI\r\n\r\nFROM LG_123_01_STLINE STLINE WITH(NOLOCK)\r\n\r\nINNER JOIN LG_123_01_STFICHE STFICHE WITH(NOLOCK) ON STLINE.STFICHEREF = STFICHE.LOGICALREF\r\nINNER JOIN LG_123_ITEMS ITEMS WITH(NOLOCK) ON STLINE.STOCKREF = ITEMS.LOGICALREF\r\nINNER JOIN LG_123_PROJECT PROJECT WITH(NOLOCK) ON STFICHE.PROJECTREF = PROJECT.LOGICALREF\r\n\r\n\r\nWHERE STLINE.TRCODE = 25 \r\nAND STLINE.IOCODE = 3\r\nAND STLINE.CANCELLED = 0\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_TARIHI",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URUN_KODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "URUN_ADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADET",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_FIYAT",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOPLAM",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CIKIS_AMBARI",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GIRIS_AMBARI",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H097",
+                            "URUN_ADI":  "GLADİATOR AYAK GÖVDE BAĞLANTISI NO.4 SAĞ ÖN",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H098",
+                            "URUN_ADI":  "GLADİATOR AYAK GÖVDE BAĞLANTISI NO.3 SAĞ ARKA",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H119",
+                            "URUN_ADI":  "GLADiATOR AYAK SAĞ ARKA NO.3 TRİM",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H120",
+                            "URUN_ADI":  "GLADiATOR AYAK SAĞ ÖN NO.4 TRİM",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H121",
+                            "URUN_ADI":  "GLADiATOR AYAK SOL ARKA NO.1 TRİM",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H122",
+                            "URUN_ADI":  "GLADiATOR AYAK SOL ÖN NO.2 TRİM",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H123",
+                            "URUN_ADI":  "GLADİATOR AYAK GÖVDE BAĞLANTISI NO.2 SOL ÖN ",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H124",
+                            "URUN_ADI":  "GLADİATOR AYAK GÖVDE BAĞLANTISI NO.1 SOL ARKA ",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013075",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "MKTS0099H125",
+                            "URUN_ADI":  "GLADİATOR AYAK GÖVDE BAĞLANTI YAZISI",
+                            "PROJE_KODU":  "G0357",
+                            "PROJE_ADI":  "HAYATTA İYİLİK VAR BANYOSUZ",
+                            "ADET":  "2",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        },
+                        {
+                            "FIS_NO":  "013076",
+                            "FIS_TARIHI":  "9.02.2024 00:00:00",
+                            "URUN_KODU":  "ELTS0099H022",
+                            "URUN_ADI":  "EBERSPAECHER DİJİTAL SAAT HYD HS3",
+                            "PROJE_KODU":  "RXL068",
+                            "PROJE_ADI":  "RESTAR RONİN XL",
+                            "ADET":  "1",
+                            "BIRIM_FIYAT":  "0",
+                            "TOPLAM":  "0",
+                            "CIKIS_AMBARI":  "2",
+                            "GIRIS_AMBARI":  "5"
+                        }
+                    ]
+}

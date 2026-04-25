@@ -1,0 +1,143 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_FRGTYPES",
+    "full_name":  "dbo.L_FRGTYPES",
+    "description":  "",
+    "total_rows":  "10",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "NAME2",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "FRGTYPES_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "FRGTYPES_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "CODE":  "0",
+                            "NAME":  "Taşıma şekli belirtilmedi",
+                            "NAME2":  "Taşıma şekli belirtilmedi. 1) Bu kod, taşıma şekli"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "CODE":  "1",
+                            "NAME":  "Deniz Taşımacılığı",
+                            "NAME2":  "Mal ve / veya şahısların sevki deniz yolu ile yapı"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "CODE":  "2",
+                            "NAME":  "Demiryolu Taşımacılığı",
+                            "NAME2":  "Mal ve / veya şahısların sevki demiryolu yolu ile "
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "CODE":  "3",
+                            "NAME":  "Karayolu Taşımacılığı",
+                            "NAME2":  "Mal ve / veya şahısların sevki karayolu yolu ile y"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "CODE":  "4",
+                            "NAME":  "Hava Taşımacılığı",
+                            "NAME2":  "Mal ve / veya şahısların sevki havayolu ile yapılı"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "CODE":  "5",
+                            "NAME":  "Posta",
+                            "NAME2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "CODE":  "6",
+                            "NAME":  "Çok Araçlı Ulaşım",
+                            "NAME2":  ""
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "CODE":  "7",
+                            "NAME":  "Sabit Taşıma Tesisleri",
+                            "NAME2":  "Malların sevki sabit taşıma tesisleri aracılığı il"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "CODE":  "8",
+                            "NAME":  "İç Su Yolu Taşımacılığı",
+                            "NAME2":  "Mal ve / veya şahısların sevki iç su yolu taşımacı"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "CODE":  "9",
+                            "NAME":  "Taşıma şekli uygulanamaz",
+                            "NAME2":  "Taşıma şekli uygun değildir."
+                        }
+                    ]
+}

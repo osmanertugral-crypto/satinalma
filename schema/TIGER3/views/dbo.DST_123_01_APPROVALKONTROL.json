@@ -1,0 +1,150 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "DST_123_01_APPROVALKONTROL",
+    "full_name":  "dbo.DST_123_01_APPROVALKONTROL",
+    "definition":  "\r\n\r\n\r\n\r\nCREATE VIEW [dbo].[DST_123_01_APPROVALKONTROL] AS\r\n\r\nSELECT       \r\nAPPROVAL.SENDERTITLE AS GFirma, \r\n--CL.DEFINITION_ AS Müşteri, \r\nAPPROVAL.DOCNR AS [Connect E-Fat No], \r\nAPPROVAL.DOCDATE AS [C.E-Fat Tarh], \r\nAPPROVAL.DOCTOTAL AS [C.E-Fat Tutarı] ,\r\n--INVOICE.FICHENO AS [Logo Fatura No],\r\n--INVOICE.DATE_ AS [Logo Fatura Tarihi],\r\n--INVOICE.DOCODE AS [Logo Fatura Belge No],\r\n--INVOICE.NETTOTAL AS [Logo Fatura Tutarı], \r\nCASE APPROVAL.STATUS WHEN \u00270\u0027 THEN \u0027blob\u0027\u0027ta\u0027 WHEN \u00271\u0027 THEN \u0027Onay satirlari olusturulmus\u0027 WHEN \u00272\u0027 THEN \u0027Onay bekliyor\u0027 WHEN \u00273\u0027 THEN \u0027Onaylandi\u0027 WHEN \u00274\u0027 THEN \u0027Paketlendi/Kaydedildi\u0027 WHEN \u00275\u0027 THEN \u0027Onay satirlari olusturulmus\u0027\r\nWHEN \u00276\u0027 THEN \u0027Bankaya iletildi\u0027 WHEN \u00277\u0027 THEN \u0027LDX\u0027\u0027e iletildi\u0027 WHEN \u00278\u0027 THEN \u0027Arsive gönderildi.\u0027 WHEN \u00279\u0027 THEN \u0027Onay Reddi\u0027 WHEN \u002710\u0027 THEN \u0027Doküman Reddi\u0027 END AS STATUS, \r\nCASE APPROVAL.TRCODE WHEN \u00271\u0027 THEN \u0027Satinalma Faturasi\u0027 WHEN \u00273\u0027 THEN \u0027Toptan Satis iade Faturasi\u0027 WHEN \u00274\u0027 THEN \u0027Alinan Hizmet Faturasi\u0027 WHEN \u002713\u0027 THEN \u0027Satinalma Fiyat Farki Faturasi\u0027 WHEN \u002714\u0027 THEN \u0027Satis Fiyat Farki Faturasi\u0027\r\nWHEN \u00278\u0027 THEN \u0027Toptan Satış Faturası\u0027 WHEN \u00279\u0027 THEN \u0027Verilen Hizmet Faturası\u0027 END AS TRCODE, \r\nCASE APPROVAL.PROFILEID WHEN \u00270\u0027 THEN \u0027Temel Fatura\u0027 WHEN \u00271\u0027 THEN \u0027Ticari Fatura\u0027 END AS PROFILEID\r\nFROM          LG_123_01_APPROVAL AS APPROVAL WITH (NOLOCK) \r\n--LEFT OUTER JOIN\r\n                        -- dbo.LG_123_01_INVOICE AS INVOICE WITH (NOLOCK) ON INVOICE.FICHENO = APPROVAL.DOCNR AND INVOICE.TRCODE IN (1, 4, 8, 3, 9, 13, 14) LEFT OUTER JOIN\r\n                         --dbo.LG_123_CLCARD AS CL ON INVOICE.CLIENTREF = CL.LOGICALREF\r\nWHERE        (APPROVAL.TRCODE IN (1, 4, 8, 3, 9, 13, 14)) AND (APPROVAL.DOCDATE BETWEEN \u002720230101\u0027 AND \u002720251231\u0027) AND APPROVAL.RECTYPE=111\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "GFirma",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "Connect E-Fat No",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "C.E-Fat Tarh",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "C.E-Fat Tutarı",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "27",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "30",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROFILEID",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "GFirma":  "ADIGÜZEL BOYA OTOMATİV SERVİS HİZM. SAN. VE TİC. LTD. ŞTİ",
+                            "Connect E-Fat No":  "AFG2023000000553",
+                            "C.E-Fat Tarh":  "10.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "472",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Alinan Hizmet Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "ENSAN ENDÜSTRİ MALZEMELERİ NAKLİYAT   TIC.VE SAN.LTD.STI.",
+                            "Connect E-Fat No":  "ENS2023000001406",
+                            "C.E-Fat Tarh":  "11.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "755,200012207031",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Alinan Hizmet Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "İSMAİL  AKTEN",
+                            "Connect E-Fat No":  "OIE2023000000699",
+                            "C.E-Fat Tarh":  "10.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "8334,33984375",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "Artes Orman Ürünleri San. ve Tic. A.Ş.",
+                            "Connect E-Fat No":  "ARF2023000000988",
+                            "C.E-Fat Tarh":  "10.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "32303,55078125",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "Yurtiçi Kargo Servisi A.Ş.",
+                            "Connect E-Fat No":  "YKB2023000224166",
+                            "C.E-Fat Tarh":  "10.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "511,209991455078",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Alinan Hizmet Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        },
+                        {
+                            "GFirma":  "AYAR TAKOGRAF VE ALARM SİST.ELEKT.MÜH.İNŞ.SAN VE TİC.LTD.ŞTİ",
+                            "Connect E-Fat No":  "AYR2023000002170",
+                            "C.E-Fat Tarh":  "13.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "1535",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Alinan Hizmet Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "AYAR TAKOGRAF VE ALARM SİST.ELEKT.MÜH.İNŞ.SAN VE TİC.LTD.ŞTİ",
+                            "Connect E-Fat No":  "AYR2023000002176",
+                            "C.E-Fat Tarh":  "13.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "1535",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Alinan Hizmet Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "YUVAM KONTEYNER PREFABRİK METAL AHŞAP TUR.İNŞ.SAN VE DIŞ TİC.LTD.ŞTİ",
+                            "Connect E-Fat No":  "YVM2023000000434",
+                            "C.E-Fat Tarh":  "13.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "5310",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Alinan Hizmet Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "KARDELEN GEMİ ELEK.ELEK.İTH.İHR.SAN.VE TİC.LTD.ŞTİ ",
+                            "Connect E-Fat No":  "KRD2023000001688",
+                            "C.E-Fat Tarh":  "10.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "250,75",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Alinan Hizmet Faturasi",
+                            "PROFILEID":  "Temel Fatura"
+                        },
+                        {
+                            "GFirma":  "Termosa Mobil Sistemleri A.Ş.",
+                            "Connect E-Fat No":  "TEF2023000000877",
+                            "C.E-Fat Tarh":  "9.03.2023 00:00:00",
+                            "C.E-Fat Tutarı":  "1550,52001953125",
+                            "STATUS":  "Onay satirlari olusturulmus",
+                            "TRCODE":  "Satinalma Faturasi",
+                            "PROFILEID":  "Ticari Fatura"
+                        }
+                    ]
+}

@@ -1,0 +1,251 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "MARKA",
+    "full_name":  "dbo.MARKA",
+    "description":  "",
+    "total_rows":  "16",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "MARKA_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MARKA_KODU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "MARKA_ADI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "300",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OZEL_KOD",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "YETKI_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "(N\u0027\u0027)",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "IMAGE1",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "IMAGE2",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "image",
+                        "CHARACTER_MAXIMUM_LENGTH":  "2147483647",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "OLUSTURMA_TARIHI",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "GUNCELLEME_TARIHI",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PK__MARKA__FD44C7618961F403",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "MARKA_KODU"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "MARKA_REF":  "1",
+                            "MARKA_KODU":  "0001",
+                            "MARKA_ADI":  "NURGAZ",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "17.05.2023 12:29:15",
+                            "GUNCELLEME_TARIHI":  "17.05.2023 12:29:31"
+                        },
+                        {
+                            "MARKA_REF":  "2",
+                            "MARKA_KODU":  "0002",
+                            "MARKA_ADI":  "CAMPOUT",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "17.05.2023 12:30:22",
+                            "GUNCELLEME_TARIHI":  null
+                        },
+                        {
+                            "MARKA_REF":  "3",
+                            "MARKA_KODU":  "0003",
+                            "MARKA_ADI":  "KAM KNIFE",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "5.06.2023 08:46:51",
+                            "GUNCELLEME_TARIHI":  null
+                        },
+                        {
+                            "MARKA_REF":  "4",
+                            "MARKA_KODU":  "0004",
+                            "MARKA_ADI":  "ALOCS",
+                            "OZEL_KOD":  "OF",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "12.06.2023 11:50:18",
+                            "GUNCELLEME_TARIHI":  null
+                        },
+                        {
+                            "MARKA_REF":  "5",
+                            "MARKA_KODU":  "0005",
+                            "MARKA_ADI":  "ON-OFF KAMP",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "12.06.2023 12:07:49",
+                            "GUNCELLEME_TARIHI":  "12.06.2023 12:09:45"
+                        },
+                        {
+                            "MARKA_REF":  "6",
+                            "MARKA_KODU":  "0006",
+                            "MARKA_ADI":  "TYESO",
+                            "OZEL_KOD":  "OF",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "12.06.2023 15:25:45",
+                            "GUNCELLEME_TARIHI":  null
+                        },
+                        {
+                            "MARKA_REF":  "7",
+                            "MARKA_KODU":  "0007",
+                            "MARKA_ADI":  "URBAN BADGER",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "1.03.2024 14:48:40",
+                            "GUNCELLEME_TARIHI":  null
+                        },
+                        {
+                            "MARKA_REF":  "8",
+                            "MARKA_KODU":  "0008",
+                            "MARKA_ADI":  "WILD LAND",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "19.03.2024 13:34:06",
+                            "GUNCELLEME_TARIHI":  null
+                        },
+                        {
+                            "MARKA_REF":  "9",
+                            "MARKA_KODU":  "0009",
+                            "MARKA_ADI":  "AIRWHEEL",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "26.03.2024 12:57:42",
+                            "GUNCELLEME_TARIHI":  null
+                        },
+                        {
+                            "MARKA_REF":  "10",
+                            "MARKA_KODU":  "0010",
+                            "MARKA_ADI":  "ORCAMP",
+                            "OZEL_KOD":  "",
+                            "YETKI_KODU":  "",
+                            "IMAGE1":  null,
+                            "IMAGE2":  null,
+                            "OLUSTURMA_TARIHI":  "8.10.2024 11:47:04",
+                            "GUNCELLEME_TARIHI":  null
+                        }
+                    ]
+}

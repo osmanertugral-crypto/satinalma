@@ -1,0 +1,166 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "L_PCKCODES",
+    "full_name":  "dbo.L_PCKCODES",
+    "description":  "",
+    "total_rows":  "378",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PCODE",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PDEF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "PDEF2",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "EDICODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "13",
+                        "NUMERIC_PRECISION":  "",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "PCKCODES_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "PCKCODES_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "PCODE"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "1",
+                            "PCODE":  "1A",
+                            "PDEF":  "Davul, çelik",
+                            "PDEF2":  "",
+                            "EDICODE":  "1A"
+                        },
+                        {
+                            "LOGICALREF":  "2",
+                            "PCODE":  "1B",
+                            "PDEF":  "Davul, aliminyum",
+                            "PDEF2":  "",
+                            "EDICODE":  "1B"
+                        },
+                        {
+                            "LOGICALREF":  "3",
+                            "PCODE":  "1D",
+                            "PDEF":  "Davul, kontrplak",
+                            "PDEF2":  "",
+                            "EDICODE":  "1D"
+                        },
+                        {
+                            "LOGICALREF":  "4",
+                            "PCODE":  "1F",
+                            "PDEF":  "Konteyner, esnek",
+                            "PDEF2":  "",
+                            "EDICODE":  "1F"
+                        },
+                        {
+                            "LOGICALREF":  "5",
+                            "PCODE":  "1G",
+                            "PDEF":  "Davul, elyaf",
+                            "PDEF2":  "",
+                            "EDICODE":  "1G"
+                        },
+                        {
+                            "LOGICALREF":  "6",
+                            "PCODE":  "1W",
+                            "PDEF":  "Davul, ahşap",
+                            "PDEF2":  "",
+                            "EDICODE":  "1W"
+                        },
+                        {
+                            "LOGICALREF":  "7",
+                            "PCODE":  "2C",
+                            "PDEF":  "Fıçı, ahşap",
+                            "PDEF2":  "",
+                            "EDICODE":  "2C"
+                        },
+                        {
+                            "LOGICALREF":  "8",
+                            "PCODE":  "3A",
+                            "PDEF":  "Beş galonluk bidon, çelik",
+                            "PDEF2":  "",
+                            "EDICODE":  "3A"
+                        },
+                        {
+                            "LOGICALREF":  "9",
+                            "PCODE":  "3H",
+                            "PDEF":  "Beş galonluk bidon, plastik",
+                            "PDEF2":  "",
+                            "EDICODE":  "3H"
+                        },
+                        {
+                            "LOGICALREF":  "10",
+                            "PCODE":  "43",
+                            "PDEF":  "Torba, çok hacimli (Bag, super bulk)",
+                            "PDEF2":  "",
+                            "EDICODE":  "43"
+                        }
+                    ]
+}

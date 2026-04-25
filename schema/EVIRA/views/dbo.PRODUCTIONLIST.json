@@ -1,0 +1,257 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "PRODUCTIONLIST",
+    "full_name":  "dbo.PRODUCTIONLIST",
+    "definition":  "CREATE VIEW [dbo].[PRODUCTIONLIST] WITH SCHEMABINDING \r\nAS\r\nSELECT        dbo.URETIMBASLIK.UB_REF, dbo.URETIMBASLIK.STATUS, dbo.URETIMBASLIK.YAZDIRMA_TARIHI, dbo.URETIMBASLIK.TARIH, dbo.URETIMBASLIK.SAAT, dbo.URETIMBASLIK.FIS_NO, \r\n                         dbo.URETIMBASLIK.BELGE_NO, dbo.URETIMBASLIK.AMBAR_KODU, dbo.URETIMBASLIK.ACIKLAMA1, dbo.URETIMBASLIK.ACIKLAMA2, dbo.URETIMBASLIK.ACIKLAMA3, dbo.URETIMBASLIK.DURUM_KODU, \r\n                         dbo.URETIMBASLIK.GRUP_KODU, dbo.URETIMBASLIK.YETKI_KODU, dbo.URETIMBASLIK.KULLANICI_REF, dbo.FIRMAKARTI.FIRMA_KODU, dbo.FIRMAKARTI.FIRMA_UNVANI, dbo.URETIMBASLIK.MIKTAR, \r\n                         dbo.URETIMBASLIK.GMIKTAR, dbo.URETIMBASLIK.BASLANGIC_TARIHI, dbo.URETIMBASLIK.BITIS_TARIHI, dbo.URETIMBASLIK.ISTASYON_KODU, dbo.URETIMBASLIK.OZELKOD, \r\n                         dbo.URETIMBASLIK.RECETE_KODU, dbo.URETIMBASLIK.ROTA_KODU, dbo.URETIMBASLIK.AKTIF, dbo.URETIMBASLIK.ONCELIK, dbo.URETIMBASLIK.STOK_REF, dbo.URETIMBASLIK.BIRIM_REF, \r\n                         dbo.URETIMBASLIK.SB_REF, dbo.SIPARISFISLERI.SIPARIS_NO, dbo.STOKKARTI.STOK_KODU, dbo.STOKKARTI.STOK_ADI,dbo.URETIMBASLIK.PROJE_REF ,PR.PROJE_KODU\r\nFROM            dbo.URETIMBASLIK WITH(NOLOCK) LEFT OUTER JOIN\r\n                         dbo.STOKKARTI WITH(NOLOCK) ON dbo.STOKKARTI.STOK_REF = dbo.URETIMBASLIK.STOK_REF LEFT OUTER JOIN\r\n                         dbo.SIPARISFISLERI WITH(NOLOCK) ON dbo.SIPARISFISLERI.SB_REF = dbo.URETIMBASLIK.SB_REF LEFT OUTER JOIN\r\n\t\t\t\t\t\t dbo.PROJE AS PR WITH(NOLOCK) ON PR.PROJE_REF = dbo.URETIMBASLIK.PROJE_REF LEFT OUTER JOIN\r\n                         dbo.FIRMAKARTI WITH(NOLOCK) ON dbo.FIRMAKARTI.FIRMA_REF = dbo.SIPARISFISLERI.FIRMA_REF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "UB_REF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "STATUS",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YAZDIRMA_TARIHI",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SAAT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BELGE_NO",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMBAR_KODU",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIKLAMA1",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "1000",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIKLAMA2",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "1000",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIKLAMA3",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "1000",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DURUM_KODU",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GRUP_KODU",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YETKI_KODU",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "KULLANICI_REF",
+                        "ORDINAL_POSITION":  15,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA_KODU",
+                        "ORDINAL_POSITION":  16,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIRMA_UNVANI",
+                        "ORDINAL_POSITION":  17,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "250",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  18,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "GMIKTAR",
+                        "ORDINAL_POSITION":  19,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BASLANGIC_TARIHI",
+                        "ORDINAL_POSITION":  20,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BITIS_TARIHI",
+                        "ORDINAL_POSITION":  21,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISTASYON_KODU",
+                        "ORDINAL_POSITION":  22,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "OZELKOD",
+                        "ORDINAL_POSITION":  23,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RECETE_KODU",
+                        "ORDINAL_POSITION":  24,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ROTA_KODU",
+                        "ORDINAL_POSITION":  25,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AKTIF",
+                        "ORDINAL_POSITION":  26,
+                        "DATA_TYPE":  "bit",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONCELIK",
+                        "ORDINAL_POSITION":  27,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_REF",
+                        "ORDINAL_POSITION":  28,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BIRIM_REF",
+                        "ORDINAL_POSITION":  29,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SB_REF",
+                        "ORDINAL_POSITION":  30,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SIPARIS_NO",
+                        "ORDINAL_POSITION":  31,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_KODU",
+                        "ORDINAL_POSITION":  32,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "50",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOK_ADI",
+                        "ORDINAL_POSITION":  33,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "400",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_REF",
+                        "ORDINAL_POSITION":  34,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  35,
+                        "DATA_TYPE":  "nvarchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "100",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

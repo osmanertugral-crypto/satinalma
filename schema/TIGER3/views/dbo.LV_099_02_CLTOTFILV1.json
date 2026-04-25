@@ -1,0 +1,82 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_099_02_CLTOTFILV1",
+    "full_name":  "dbo.LV_099_02_CLTOTFILV1",
+    "definition":  "\nCREATE VIEW [DBO].[LV_099_02_CLTOTFILV1] WITH SCHEMABINDING AS\nSELECT TRN.CLIENTREF AS CARDREF\n ,(CASE TRN.TRCODE WHEN 14 THEN 0 ELSE MONTH_ END) AS MONTH_\n ,TRN.YEAR_\n ,TRN.BRANCH AS BRANCH\n ,TRN.DEPARTMENT AS DEPARTMENT\n ,SUM(ISNULL((CASE ISNULL(PAIDINCASH, 0) WHEN 0 THEN AMOUNT * (1 - SIGN) ELSE AMOUNT END),0)) AS DEBIT\n ,SUM(ISNULL((CASE ISNULL(PAIDINCASH, 0) WHEN 0 THEN REPORTNET * (1 - SIGN) ELSE REPORTNET END),0)) AS DEBIT_RC\n ,SUM(ISNULL((CASE ISNULL(PAIDINCASH, 0) WHEN 0 THEN AMOUNT * (SIGN) ELSE AMOUNT END),0)) AS CREDIT\n ,SUM(ISNULL((CASE ISNULL(PAIDINCASH, 0) WHEN 0 THEN REPORTNET * (SIGN) ELSE REPORTNET END),0)) AS CREDIT_RC\n ,COUNT_BIG(*) AS TRN_CNT_BIG\nFROM [dbo].LG_099_02_CLFLINE TRN\nWHERE TRN.STATUS = 0 AND TRN.CANCELLED = 0 AND TRN.TRCODE \u003c\u003e 12\nGROUP BY TRN.CLIENTREF\n ,(CASE TRN.TRCODE WHEN 14 THEN 0 ELSE MONTH_ END)\n ,TRN.YEAR_\n ,TRN.BRANCH\n ,TRN.DEPARTMENT\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CARDREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MONTH_",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "YEAR_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BRANCH",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPARTMENT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT_RC",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT_RC",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRN_CNT_BIG",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

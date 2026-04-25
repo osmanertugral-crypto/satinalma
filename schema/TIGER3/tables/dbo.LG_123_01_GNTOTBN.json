@@ -1,0 +1,212 @@
+﻿{
+    "type":  "table",
+    "schema":  "dbo",
+    "name":  "LG_123_01_GNTOTBN",
+    "full_name":  "dbo.LG_123_01_GNTOTBN",
+    "description":  "",
+    "total_rows":  "132",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "NO",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "YES",
+                        "IS_IDENTITY":  "YES",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CARDREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "10",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTTYP",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DEBIT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "CREDIT",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "53",
+                        "NUMERIC_SCALE":  "",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "BRANCH",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    },
+                    {
+                        "COLUMN_NAME":  "DEPARTMENT",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "NUMERIC_PRECISION":  "5",
+                        "NUMERIC_SCALE":  "0",
+                        "IS_NULLABLE":  "YES",
+                        "COLUMN_DEFAULT":  "",
+                        "IS_PRIMARY_KEY":  "NO",
+                        "IS_IDENTITY":  "NO",
+                        "column_description":  ""
+                    }
+                ],
+    "foreign_keys":  [
+
+                     ],
+    "indexes":  [
+                    {
+                        "index_name":  "I123_01_GNTOTBN_I1",
+                        "type_desc":  "CLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "1",
+                        "columns":  "LOGICALREF"
+                    },
+                    {
+                        "index_name":  "I123_01_GNTOTBN_I2",
+                        "type_desc":  "NONCLUSTERED",
+                        "is_unique":  "1",
+                        "is_primary_key":  "0",
+                        "columns":  "CARDREF, TOTTYP"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "13299",
+                            "CARDREF":  "100",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "44148264,57",
+                            "CREDIT":  "44595555,248",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13300",
+                            "CARDREF":  "101",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "51440,05",
+                            "CREDIT":  "51440,05",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13301",
+                            "CARDREF":  "102",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "502837,50000008",
+                            "CREDIT":  "502681,35011051",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13302",
+                            "CARDREF":  "103",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "17923",
+                            "CREDIT":  "17173,11",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13303",
+                            "CARDREF":  "104",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "51578314,1",
+                            "CREDIT":  "51584067,57",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13304",
+                            "CARDREF":  "106",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "23,19",
+                            "CREDIT":  "23,19000379",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13305",
+                            "CARDREF":  "107",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "3892951,85",
+                            "CREDIT":  "3892946,41",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13306",
+                            "CARDREF":  "108",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "29259,49999685",
+                            "CREDIT":  "29259,49997471",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13307",
+                            "CARDREF":  "110",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "80802,58037401",
+                            "CREDIT":  "80793,64002795",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        },
+                        {
+                            "LOGICALREF":  "13308",
+                            "CARDREF":  "111",
+                            "TOTTYP":  "-1",
+                            "DEBIT":  "224369110,37",
+                            "CREDIT":  "224073526,65",
+                            "BRANCH":  null,
+                            "DEPARTMENT":  null
+                        }
+                    ]
+}

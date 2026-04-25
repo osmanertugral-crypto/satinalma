@@ -1,0 +1,47 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_323_01_MULTIADDTAXLN",
+    "full_name":  "dbo.LV_323_01_MULTIADDTAXLN",
+    "definition":  "CREATE VIEW [dbo].[LV_323_01_MULTIADDTAXLN] AS\nSELECT S.INVOICEREF AS FICHEREF, S.LOGICALREF AS LINEREF, I.ADDTAXREF, ISNULL(S.ADDTAXAMOUNT, 0) AS ADDTAXAMOUNT, ISNULL(E.ADDTAXAMOUNTX, 0) AS ADDTAXAMOUNTX\nFROM LG_323_01_STLINE S\n     LEFT OUTER JOIN LG_323_ITEMS I ON S.STOCKREF = I.LOGICALREF\n     LEFT OUTER JOIN LG_323_01_STLINEEXCH E ON S.LOGICALREF = E.TRANSREF\nWHERE ISNULL(I.MULTIADDTAX, 0) = 0\nAND ISNULL(S.ADDTAXAMOUNT, 0) \u003e 0\nAND ISNULL(I.ADDTAXREF, 0) \u003e 0\nUNION ALL\nSELECT FICHEREF, LINEREF, ADDTAXREF, ADDTAXAMOUNT, ADDTAXAMOUNTX\nFROM LG_323_01_MULTIADDTAXLN",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FICHEREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDTAXREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDTAXAMOUNT",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ADDTAXAMOUNTX",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

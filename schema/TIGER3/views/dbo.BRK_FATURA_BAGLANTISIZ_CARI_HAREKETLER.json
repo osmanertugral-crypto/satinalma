@@ -1,0 +1,75 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_FATURA_BAGLANTISIZ_CARI_HAREKETLER",
+    "full_name":  "dbo.BRK_FATURA_BAGLANTISIZ_CARI_HAREKETLER",
+    "definition":  "CREATE VIEW [dbo].[BRK_FATURA_BAGLANTISIZ_CARI_HAREKETLER] AS\r\n\r\nSELECT\r\nCLFL.LOGICALREF CLFLINE_LOGICALREF,\r\n CASE ((MODULENR*100)+TRCODE)\r\n            WHEN 381 THEN \u0027Satış Siparişi\u0027\r\n            WHEN 382 THEN \u0027Satınalma Siparişi\u0027\r\n            WHEN 431 THEN \u0027Satın Alma Faturası\u0027\r\n            WHEN 432 THEN \u0027Perakende Satış İade Faturası\u0027\r\n            WHEN 433 THEN \u0027Toptan Satış İade Faturası\u0027\r\n            WHEN 434 THEN \u0027Alınan Hizmet Faturası\u0027\r\n            WHEN 435 THEN \u0027Alınan Proforma Faturası\u0027\r\n            WHEN 436 THEN \u0027Alım İade Faturası\u0027\r\n            WHEN 437 THEN \u0027Perakende Satış Faturası\u0027\r\n            WHEN 438 THEN \u0027Toptan Satış Faturası\u0027\r\n            WHEN 439 THEN \u0027Verilen Hizmet Faturası\u0027\r\n            WHEN 440 THEN \u0027Verilen Proforma Faturası\u0027\r\n            WHEN 441 THEN \u0027Verilen Vade Farkı Faturası\u0027\r\n            WHEN 442 THEN \u0027Alınan Vade Farkı Faturası\u0027\r\n            WHEN 443 THEN \u0027Alınan Fiyat Farkı Faturası\u0027\r\n            WHEN 444 THEN \u0027Verilen Fiyat Farkı Faturası\u0027\r\n            WHEN 456 THEN \u0027Müstahsil Makbuzu\u0027\r\n            WHEN 501 THEN \u0027Nakit Tahsilat\u0027\r\n            WHEN 502 THEN \u0027Nakit Ödeme\u0027\r\n            WHEN 503 THEN \u0027Borç Dekontu\u0027\r\n            WHEN 504 THEN \u0027Alacak Dekontu\u0027\r\n            WHEN 505 THEN \u0027Virman İşlemi\u0027\r\n            WHEN 506 THEN \u0027Kur Farkı İşlemi\u0027\r\n            WHEN 512 THEN \u0027Özel İşlem\u0027\r\n            WHEN 514 THEN \u0027Açılış Fişi\u0027\r\n            WHEN 570 THEN \u0027Kredi Kartı Fişi\u0027\r\n            WHEN 661 THEN \u0027Çek Girişi\u0027\r\n            WHEN 662  THEN \u0027Senet Girişi\u0027\r\n            WHEN 663 THEN \u0027Çek Çıkış Cari Hesaba\u0027--CSTRANS.CLACCREF\r\n            WHEN 664 THEN \u0027Senet Çıkış Cari Hesaba\u0027\r\n            WHEN 720 THEN \u0027Gelen Havaleler\u0027\r\n            WHEN 721 THEN \u0027Gönderilen Havaleler\u0027\r\n            WHEN 728 THEN \u0027Banka Alınan Hizmet\u0027\r\n            WHEN 729 THEN \u0027Banka Verilen Hizmet\u0027\r\n            WHEN 1001 THEN \u0027Nakit Tahsilat\u0027\r\n            WHEN 1002 THEN \u0027Nakit Ödeme\u0027\r\n            WHEN 6103 THEN \u0027Borç Dekontu (Çek)\u0027\r\n            WHEN 6104 THEN \u0027Alacak Dekontu (Çek)\u0027\r\n        END [FIS_TURU],\r\n(SELECT C.CODE FROM LG_123_CLCARD C WHERE C.LOGICALREF=CLIENTREF ) CARIKODU,\r\n(SELECT C.DEFINITION_ FROM LG_123_CLCARD C WHERE C.LOGICALREF=CLIENTREF )  CARIADI,\r\nDATE_ TARIH,\r\nTRANNO,\r\nDOCODE BELGENO,\r\nAMOUNT TUTAR FROM LG_123_01_CLFLINE CLFL WHERE MODULENR=4 AND SOURCEFREF NOT IN  (SELECT LOGICALREF FROM LG_123_01_INVOICE)\r\n\r\n\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CLFLINE_LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_TURU",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "29",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARIKODU",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CARIADI",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRANNO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BELGENO",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "33",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TUTAR",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+                        "CLFLINE_LOGICALREF":  "26658",
+                        "FIS_TURU":  "Alınan Hizmet Faturası",
+                        "CARIKODU":  "320.AVİST",
+                        "CARIADI":  "AVİSTA GLOBAL TEKSTİL İNŞAAT TURİZM SANAYİ VE TİCARET A.Ş.",
+                        "TARIH":  "22.02.2024 00:00:00",
+                        "TRANNO":  "001806",
+                        "BELGENO":  "AVI2024000000343",
+                        "TUTAR":  "0"
+                    }
+}

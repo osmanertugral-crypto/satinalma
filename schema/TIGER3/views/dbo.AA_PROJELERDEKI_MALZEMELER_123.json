@@ -1,0 +1,150 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "AA_PROJELERDEKI_MALZEMELER_123",
+    "full_name":  "dbo.AA_PROJELERDEKI_MALZEMELER_123",
+    "definition":  "\r\n\r\nCREATE VIEW [dbo].[AA_PROJELERDEKI_MALZEMELER_123] AS \r\n SELECT \u0027Sarf Fişi\u0027 as FIS_TURU,\r\n FIS.DATE_ AS TARIH,\r\n FIS.FICHENO AS FIS_NO,\r\n (sELECT CODE FROM LG_123_PROJECT WHERE LOGICALREF=SAT.PROJECTREF) AS PROJE_KODU,\r\n MLZ.CODE AS MALZEME_KODU,\r\n MLZ.NAME AS MALZEME_ADI,\r\n SAT.AMOUNT AS MIKTAR\r\n  \r\n  FROM LG_123_01_STLINE SAT\r\n INNER JOIN LG_123_ITEMS MLZ ON MLZ.LOGICALREF=SAT.STOCKREF\r\n INNER JOIN LG_123_01_STFICHE FIS ON FIS.LOGICALREF=SAT.STFICHEREF\r\n\r\n --WHERE FIS.PROJECTREF IN (sELECT PROJECTREF FROM LG_123_01_ORFICHE WHERE TRCODE=1 AND CYPHCODE\u003c\u003e\u0027KAPALI\u0027) AND SAT.TRCODE=12\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "FIS_TURU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "9",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PROJE_KODU",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "101",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZEME_KODU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MALZEME_ADI",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "MIKTAR",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "22.04.2025 00:00:00",
+                            "FIS_NO":  "003623",
+                            "PROJE_KODU":  "X",
+                            "MALZEME_KODU":  "ECTWLD100006",
+                            "MALZEME_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "12.03.2025 00:00:00",
+                            "FIS_NO":  "022034",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100006",
+                            "MALZEME_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "15.03.2025 00:00:00",
+                            "FIS_NO":  "022140",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100006",
+                            "MALZEME_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "19.03.2025 00:00:00",
+                            "FIS_NO":  "022187",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100006",
+                            "MALZEME_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "FIS_NO":  "005242",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100006",
+                            "MALZEME_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "12.03.2025 00:00:00",
+                            "FIS_NO":  "022034",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100006",
+                            "MALZEME_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "15.03.2025 00:00:00",
+                            "FIS_NO":  "022140",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100006",
+                            "MALZEME_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "19.03.2025 00:00:00",
+                            "FIS_NO":  "022187",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100006",
+                            "MALZEME_ADI":  "WILD LAND ROCK CRUISER KATLILABILIR TERMAL KILIF",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "FIS_NO":  "005242",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100008",
+                            "MALZEME_ADI":  "WILD LAND UNIVERSAL TARP",
+                            "MIKTAR":  "1"
+                        },
+                        {
+                            "FIS_TURU":  "Sarf Fişi",
+                            "TARIH":  "31.10.2024 00:00:00",
+                            "FIS_NO":  "007753",
+                            "PROJE_KODU":  null,
+                            "MALZEME_KODU":  "ECTWLD100008",
+                            "MALZEME_ADI":  "WILD LAND UNIVERSAL TARP",
+                            "MIKTAR":  "8"
+                        }
+                    ]
+}

@@ -1,0 +1,110 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_223_01_STINVTOT_V4",
+    "full_name":  "dbo.LV_223_01_STINVTOT_V4",
+    "definition":  "\nCREATE VIEW [DBO].LV_223_01_STINVTOT_V4 WITH SCHEMABINDING\nAS\n  SELECT ITEMREF AS STOCKREF,\n         SOURCEINDEX AS INVENNO,\n         DATE_ AS DATE_,\n         DORDGODATE AS DORDGODATE,\n         DORDRETURNDATE AS DORDRETURNDATE,\n         SUM(ISNULL(SHIPAMOUNT * (DBO.LG_223_01_GETUNITCOEF(UINFO1, UINFO2)), 0))\n            AS DISTRESERVED1,\n         SUM(0)  AS ONVEHICLE1,\n         SUM(ISNULL(-SHIPAMOUNT * (DBO.LG_223_01_GETUNITCOEF(UINFO1, UINFO2)), 0))\n            AS DISTRESERVED2,\n         SUM(ISNULL(SHIPAMOUNT * (DBO.LG_223_01_GETUNITCOEF(UINFO1, UINFO2)), 0))\n            AS ONVEHICLE2,\n         SUM(0) AS DISTRESERVED3,\n         SUM(ISNULL(-REMAMOUNT * (DBO.LG_223_01_GETUNITCOEF(UINFO1, UINFO2)), 0))\n            AS ONVEHICLE3,\n         VARIANTREF AS VARIANTREF,\n         (CASE WHEN LINETYPE IN (4,11) THEN 1 ELSE 0 END) AS TYP,\n         COUNT_BIG(*) AS CNT\n    FROM [DBO].LG_223_01_DISTORDLINE\n   WHERE ITEMREF \u003c\u003e 0 AND LINETYPE NOT IN (2, 3, 7)\nGROUP BY ITEMREF,\n         DATE_,\n         DORDGODATE,\n         DORDRETURNDATE,\n         SOURCEINDEX,\n         VARIANTREF,\n         (CASE WHEN LINETYPE IN (4,11) THEN 1 ELSE 0 END)\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVENNO",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DATE_",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DORDGODATE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DORDRETURNDATE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DISTRESERVED1",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONVEHICLE1",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DISTRESERVED2",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONVEHICLE2",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "DISTRESERVED3",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ONVEHICLE3",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "VARIANTREF",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TYP",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "CNT",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "bigint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  {
+
+                    }
+}

@@ -1,0 +1,35 @@
+﻿{
+    "type":  "procedure",
+    "schema":  "dbo",
+    "name":  "LG_UPDATEMRPITMCHNG_524",
+    "full_name":  "dbo.LG_UPDATEMRPITMCHNG_524",
+    "created":  "Sep  1 2025 11:51AM",
+    "last_altered":  "Sep  1 2025 11:51AM",
+    "parameters":  [
+                       {
+                           "PARAMETER_NAME":  "@itemRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@vrntRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       },
+                       {
+                           "PARAMETER_NAME":  "@parentRef",
+                           "PARAMETER_MODE":  "IN",
+                           "DATA_TYPE":  "int",
+                           "CHARACTER_MAXIMUM_LENGTH":  "",
+                           "NUMERIC_PRECISION":  "10",
+                           "NUMERIC_SCALE":  "0"
+                       }
+                   ],
+    "definition":  "CREATE PROCEDURE LG_UPDATEMRPITMCHNG_524\n       @itemRef   INT,\n       @vrntRef   INT,\n       @parentRef INT\n       AS\nDECLARE @newLogicalRef INT\nDECLARE @CHK           SMALLINT\nDECLARE @MRPVAL        VARCHAR(101)\nDECLARE @FRMNR        SMALLINT\nSELECT  @CHK  = 0\nSELECT  @FRMNR =CAST(\u0027524\u0027 AS SMALLINT)\nSELECT @MRPVAL = VALUE FROM \"TIGER3\"..L_FIRMPARAMS\nWHERE FIRMNR = @FRMNR AND CODE=\u0027PLN_MRPNETCHANGE\u0027\nIF (LTRIM(@MRPVAL) = \u00271\u0027) AND\n   EXISTS(SELECT LOGICALREF FROM LG_NTLCK_524  WHERE (LOCKSTR = \u0027524-\u0027 +\n   LTRIM(CAST(CAST(\u002701\u0027 AS INTEGER) AS VARCHAR)) +\u0027-SERV-1\u0027 ))\n  BEGIN\n       SELECT @CHK = 1\n  END\nIF (@CHK \u003c\u003e 1 ) AND (LTRIM(@MRPVAL) = \u00271\u0027)\n BEGIN\n      IF NOT EXISTS(SELECT LOGICALREF FROM LG_524_MRPITEMCHG\n                    WHERE (ITEMREF = @itemRef) AND (VARIANTREF = @vrntRef) AND (PARITEMREF = @parentRef))\n          BEGIN\n                 --EXECUTE LREF_LG_524_MRPITEMCHG @newLogicalRef OUTPUT\n                 INSERT INTO LG_524_MRPITEMCHG\n                      (ITEMREF, VARIANTREF, PARITEMREF)\n                 VALUES\n                       (@itemRef,@vrntRef,@parentRef)\n          END\n END\n"
+}

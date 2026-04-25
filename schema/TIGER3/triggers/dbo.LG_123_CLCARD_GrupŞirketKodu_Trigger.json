@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "LG_123_CLCARD_GrupŞirketKodu_Trigger",
+    "on_table":  "dbo.LG_123_CLCARD",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "UPDATE"
+               ],
+    "definition":  "CREATE TRIGGER [dbo].[LG_123_CLCARD_GrupŞirketKodu_Trigger] ON [dbo].[LG_123_CLCARD]\r\nAFTER UPDATE\r\nas begin\r\n\r\nDECLARE @LOGICALREF int\r\nDECLARE @CYPHCODE nvarchar(51)\r\n\r\nSELECT @LOGICALREF=I.LOGICALREF,@CYPHCODE=I.CYPHCODE FROM INSERTED I\r\n\r\nIF (@CYPHCODE=\u0027127\u0027)\r\nBEGIN \r\n\tUPDATE LG_123_CLCARD SET CYPHCODE=\u0027\u0027,PARENTCLREF=6 WHERE LOGICALREF=@LOGICALREF\r\nEND\r\nEND\r\n"
+}

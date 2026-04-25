@@ -1,0 +1,12 @@
+﻿{
+    "type":  "trigger",
+    "schema":  "dbo",
+    "name":  "LG_DTLINE_INS_323_01",
+    "on_table":  "dbo.LG_323_01_DISTORDLINE",
+    "is_disabled":  "0",
+    "is_instead_of":  "0",
+    "events":  [
+                   "INSERT"
+               ],
+    "definition":  "CREATE TRIGGER LG_DTLINE_INS_323_01 ON LG_323_01_DISTORDLINE\nFOR INSERT\nAS\nDECLARE @c_CompLine         SMALLINT\nDECLARE @new_ItemRef        INT\nDECLARE @new_VariantRef     INT\nDECLARE @new_OrdLineRef     INT\nDECLARE @new_DOrdDate       DATETIME\nDECLARE @new_ShipAmount     FLOAT\nDECLARE @new_RemAmount      FLOAT\nDECLARE @new_UomRef         INT\nDECLARE @new_SourceIndex    SMALLINT\nDECLARE @new_DOrdStatus     INT\nDECLARE @new_DOrdGoDate     DATETIME\nDECLARE @new_DOrdRetDate    DATETIME\nDECLARE @new_LineType       SMALLINT\nDECLARE @new_uinfo1         FLOAT\nDECLARE @new_uinfo2         FLOAT\nSELECT @c_CompLine  = 7\nSELECT @new_ItemRef = I.ITEMREF,\n       @new_VariantRef = I.VARIANTREF,\n       @new_OrdLineRef = I.ORDLINEREF,\n       @new_DOrdDate = I.DATE_,\n       @new_ShipAmount = I.SHIPAMOUNT,\n       @new_RemAmount = I.REMAMOUNT,\n       @new_UomRef = I.UOMREF,\n       @new_SourceIndex = I.SOURCEINDEX,\n       @new_DOrdStatus = I.DORDSTATUS,\n       @new_DOrdGoDate = I.DORDGODATE,\n       @new_DOrdRetDate = I.DORDRETURNDATE,\n       @new_LineType = I.LINETYPE,\n       @new_uinfo1   = I.UINFO1,\n       @new_uinfo2   = I.UINFO2\nFROM INSERTED I\nIF (@new_LineType \u003c\u003e @c_CompLine)\n EXECUTE LG_DTHANDLENUMBERS_323_01 1, @new_ItemRef,  @new_VariantRef, @new_OrdLineRef, @new_DOrdDate,\n                                   @new_ShipAmount,  @new_RemAmount,  @new_UomRef,\n                                   @new_SourceIndex, @new_DOrdStatus, @new_DOrdGoDate,\n                                   @new_DOrdRetDate, @new_uinfo1, @new_uinfo2"
+}

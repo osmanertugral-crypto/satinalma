@@ -1,0 +1,269 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "BRK_CARI_EKSTRE_ALTERNATIF",
+    "full_name":  "dbo.BRK_CARI_EKSTRE_ALTERNATIF",
+    "definition":  "\r\nCREATE VIEW [dbo].[BRK_CARI_EKSTRE_ALTERNATIF] AS\r\n\r\nSELECT\r\nT.[CARI_HESAP_KODU],T.ACIKLAMA,T.TARIH,T.FIS_NO,T.FIS_TURU,T.BELGE_NO,T.SATIR_ACIKLAMASI,T.BORC,T.ALACAK,\r\n ROUND((SUM(T.Tutar) OVER (ORDER BY NR)),2) AS BAKIYE,\r\nT.ISLEM_DOVIZI,\r\nT.ISLEM_DOVIZ_TUTARI,\r\nT.RD_TUTARI_EUR,\r\n ROUND((SUM(T.RD_TUTARI_EUR) OVER (ORDER BY NR)),2) AS EUR_BAKIYE \r\nFROM (\r\nSELECT  TOP 100 PERCENT\r\nROW_NUMBER() OVER (ORDER BY (SELECT 100)) AS NR,\r\nCLNTC.CODE [CARI_HESAP_KODU],\r\nCLNTC.DEFINITION_ [ACIKLAMA],\r\nCTRNS.DATE_ TARIH,\r\nCTRNS.TRANNO [FIS_NO],\r\n CASE ((CTRNS.MODULENR*100)+CTRNS.TRCODE)\r\n            WHEN 381 THEN \u0027Satış Siparişi\u0027\r\n            WHEN 382 THEN \u0027Satınalma Siparişi\u0027\r\n            WHEN 431 THEN \u0027Satın Alma Faturası\u0027\r\n            WHEN 432 THEN \u0027Perakende Satış İade Faturası\u0027\r\n            WHEN 433 THEN \u0027Toptan Satış İade Faturası\u0027\r\n            WHEN 434 THEN \u0027Alınan Hizmet Faturası\u0027\r\n            WHEN 435 THEN \u0027Alınan Proforma Faturası\u0027\r\n            WHEN 436 THEN \u0027Alım İade Faturası\u0027\r\n            WHEN 437 THEN \u0027Perakende Satış Faturası\u0027\r\n            WHEN 438 THEN \u0027Toptan Satış Faturası\u0027\r\n            WHEN 439 THEN \u0027Verilen Hizmet Faturası\u0027\r\n            WHEN 440 THEN \u0027Verilen Proforma Faturası\u0027\r\n            WHEN 441 THEN \u0027Verilen Vade Farkı Faturası\u0027\r\n            WHEN 442 THEN \u0027Alınan Vade Farkı Faturası\u0027\r\n            WHEN 443 THEN \u0027Alınan Fiyat Farkı Faturası\u0027\r\n            WHEN 444 THEN \u0027Verilen Fiyat Farkı Faturası\u0027\r\n            WHEN 456 THEN \u0027Müstahsil Makbuzu\u0027\r\n            WHEN 501 THEN \u0027Nakit Tahsilat\u0027\r\n            WHEN 502 THEN \u0027Nakit Ödeme\u0027\r\n            WHEN 503 THEN \u0027Borç Dekontu\u0027\r\n            WHEN 504 THEN \u0027Alacak Dekontu\u0027\r\n            WHEN 505 THEN \u0027Virman İşlemi\u0027\r\n            WHEN 506 THEN \u0027Kur Farkı İşlemi\u0027\r\n            WHEN 512 THEN \u0027Özel İşlem\u0027\r\n            WHEN 514 THEN \u0027Açılış Fişi\u0027\r\n            WHEN 570 THEN \u0027Kredi Kartı Fişi\u0027\r\n            WHEN 661 THEN \u0027Çek Girişi\u0027\r\n            WHEN 662  THEN \u0027Senet Girişi\u0027\r\n            WHEN 663 THEN \u0027Çek Çıkış Cari Hesaba\u0027--CSTRANS.CLACCREF\r\n            WHEN 664 THEN \u0027Senet Çıkış Cari Hesaba\u0027\r\n            WHEN 720 THEN \u0027Gelen Havaleler\u0027\r\n            WHEN 721 THEN \u0027Gönderilen Havaleler\u0027\r\n            WHEN 728 THEN \u0027Banka Alınan Hizmet\u0027\r\n            WHEN 729 THEN \u0027Banka Verilen Hizmet\u0027\r\n            WHEN 1001 THEN \u0027Nakit Tahsilat\u0027\r\n            WHEN 1002 THEN \u0027Nakit Ödeme\u0027\r\n            WHEN 6103 THEN \u0027Borç Dekontu (Çek)\u0027\r\n            WHEN 6104 THEN \u0027Alacak Dekontu (Çek)\u0027\r\n        END [FIS_TURU],\r\nCTRNS.DOCODE [BELGE_NO],\r\nCTRNS.LINEEXP [SATIR_ACIKLAMASI],\r\n  \r\nCASE SIGN WHEN 0 THEN  ROUND(AMOUNT,2) ELSE 0 END BORC,\r\nCASE SIGN WHEN 1 THEN  ROUND(-1*AMOUNT,2) ELSE 0 END ALACAK,\r\nCASE SIGN WHEN 0 THEN  ROUND(AMOUNT,2) ELSE  ROUND(-1*AMOUNT,2) END TUTAR,\r\nCASE CTRNS.TRCURR WHEN 0 THEN \u0027TL\u0027  WHEN 160 THEN \u0027TL\u0027  WHEN 1 THEN  \u0027USD\u0027 WHEN 17 THEN  \u0027GBP\u0027 WHEN 20 THEN  \u0027EUR\u0027 END [ISLEM_DOVIZI],\r\nCASE SIGN WHEN 0 THEN  ROUND(CTRNS.TRNET,2) ELSE  ROUND(-1*CTRNS.TRNET,2) END [ISLEM_DOVIZ_TUTARI] ,\r\nCASE SIGN WHEN 0 THEN  ROUND(CTRNS.REPORTNET,2) ELSE  ROUND(-1*CTRNS.REPORTNET,2) END [RD_TUTARI_EUR] \r\nFROM LG_123_01_CLFLINE CTRNS WITH (NOLOCK)\r\n    LEFT OUTER JOIN LG_123_PAYPLANS PAYPL WITH (NOLOCK)\r\n        ON (CTRNS.PAYDEFREF = PAYPL.LOGICALREF)\r\n    LEFT OUTER JOIN LG_123_01_CLFICHE CLFIC WITH (NOLOCK)\r\n        ON (CTRNS.SOURCEFREF = CLFIC.LOGICALREF)\r\n    LEFT OUTER JOIN LG_123_01_INVOICE INVFC WITH (NOLOCK)\r\n        ON (CTRNS.SOURCEFREF = INVFC.LOGICALREF)\r\n    LEFT OUTER JOIN LG_123_01_CSROLL RLFIC WITH (NOLOCK)\r\n        ON (CTRNS.SOURCEFREF = RLFIC.LOGICALREF)\r\n    LEFT OUTER JOIN LG_123_01_EMFICHE GLFIC WITH (NOLOCK)\r\n        ON (CTRNS.ACCFICHEREF = GLFIC.LOGICALREF)\r\n    LEFT OUTER JOIN LG_123_CLCARD CLNTC WITH (NOLOCK)\r\n        ON (CTRNS.CLIENTREF = CLNTC.LOGICALREF)\r\n    LEFT OUTER JOIN LG_123_01_ORFICHE ORFIC WITH (NOLOCK)\r\n        ON (CTRNS.SOURCEFREF = ORFIC.LOGICALREF)\r\n    LEFT OUTER JOIN LG_123_PURCHOFFER POFFER WITH (NOLOCK)\r\n        ON (CTRNS.OFFERREF = POFFER.LOGICALREF) \r\nWHERE   (CTRNS.BRANCH IN ( 0 )) \r\nAND (CTRNS.DEPARTMENT IN ( 0 )) \r\nAND (CTRNS.TRCODE IN ( 31, 32, 33, 34, 36, 37, 38, 39, 43, 44, 56, 1, 2, 3, 4, 5, 6, 12, 14, 41, 42, 45, 46, 70,71, 72, 73, 20, 21, 24, 25, 28, 29, 30, 61, 62, 63, 64, 75, 81, 82 )) \r\n--AND CLNTC.CODE=\u0027{1}\u0027\r\nAND (CTRNS.DATE_ \u003c= CONVERT(DATETIME,  DATEFROMPARTS(YEAR(GETDATE()),12,31), 101)) and CTRNS.CANCELLED=0\r\nORDER BY CTRNS.DATE_,\r\nCASE WHEN CTRNS.TRCODE = 14 AND CTRNS.MODULENR = 5 THEN 0 ELSE 1 END,\r\nCASE WHEN CTRNS.MODULENR = 5 THEN CLFIC.TIME WHEN CTRNS.MODULENR = 4 THEN INVFC.TIME_ ELSE CTRNS.FTIME END,\r\nCLFIC.LOGICALREF \r\n) AS T\r\n",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "CARI_HESAP_KODU",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ACIKLAMA",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "201",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TARIH",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "datetime",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_NO",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "17",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "FIS_TURU",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "29",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BELGE_NO",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "33",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "SATIR_ACIKLAMASI",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "251",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BORC",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ALACAK",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "BAKIYE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_DOVIZI",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "3",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "ISLEM_DOVIZ_TUTARI",
+                        "ORDINAL_POSITION":  12,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "RD_TUTARI_EUR",
+                        "ORDINAL_POSITION":  13,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "EUR_BAKIYE",
+                        "ORDINAL_POSITION":  14,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "CARI_HESAP_KODU":  "320.CLS",
+                            "ACIKLAMA":  "CLS GÜMRÜK MÜŞAVİRLİĞİ LTD.ŞTİ.",
+                            "TARIH":  "11.03.2024 00:00:00",
+                            "FIS_NO":  "001911",
+                            "FIS_TURU":  "Alınan Hizmet Faturası",
+                            "BELGE_NO":  "İth-12  DEKONT 001651",
+                            "SATIR_ACIKLAMASI":  "İTH.12 için  -  Damga Vergisi",
+                            "BORC":  "0",
+                            "ALACAK":  "-281451,78",
+                            "BAKIYE":  "-281451,78",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "-281451,78",
+                            "RD_TUTARI_EUR":  "-9816,53",
+                            "EUR_BAKIYE":  "-9816,53"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "309.TEB4915",
+                            "ACIKLAMA":  "K.K. - TEB                 4915 - 0008",
+                            "TARIH":  "13.03.2024 00:00:00",
+                            "FIS_NO":  "001551",
+                            "FIS_TURU":  "Gönderilen Havaleler",
+                            "BELGE_NO":  "",
+                            "SATIR_ACIKLAMASI":  "Teb Bankası -4590 26** **** 4915  Kredi Kartına Ödemesi",
+                            "BORC":  "30000",
+                            "ALACAK":  "0",
+                            "BAKIYE":  "-251451,78",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "30000",
+                            "RD_TUTARI_EUR":  "1467,93",
+                            "EUR_BAKIYE":  "-8348,6"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "309.TEB4915",
+                            "ACIKLAMA":  "K.K. - TEB                 4915 - 0008",
+                            "TARIH":  "13.03.2024 00:00:00",
+                            "FIS_NO":  "001552",
+                            "FIS_TURU":  "Gönderilen Havaleler",
+                            "BELGE_NO":  "",
+                            "SATIR_ACIKLAMASI":  "Teb Bankası -4590 26** **** 4915  Kredi Kartına Ödemesi",
+                            "BORC":  "10000",
+                            "ALACAK":  "0",
+                            "BAKIYE":  "-241451,78",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "10000",
+                            "RD_TUTARI_EUR":  "489,31",
+                            "EUR_BAKIYE":  "-7859,29"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "320.MUHTE",
+                            "ACIKLAMA":  "MUHTELİF SATICILAR",
+                            "TARIH":  "16.03.2024 00:00:00",
+                            "FIS_NO":  "001912",
+                            "FIS_TURU":  "Alınan Hizmet Faturası",
+                            "BELGE_NO":  "",
+                            "SATIR_ACIKLAMASI":  "HGS TUTAR PLAKA:34HOT24",
+                            "BORC":  "0",
+                            "ALACAK":  "-225",
+                            "BAKIYE":  "-241676,78",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "-225",
+                            "RD_TUTARI_EUR":  "-11,26",
+                            "EUR_BAKIYE":  "-7870,55"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "320.MUHTE",
+                            "ACIKLAMA":  "MUHTELİF SATICILAR",
+                            "TARIH":  "16.03.2024 00:00:00",
+                            "FIS_NO":  "000381",
+                            "FIS_TURU":  "Banka Alınan Hizmet",
+                            "BELGE_NO":  "",
+                            "SATIR_ACIKLAMASI":  "HGS TUTAR PLAKA:34HOT24",
+                            "BORC":  "225",
+                            "ALACAK":  "0",
+                            "BAKIYE":  "-241451,78",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "225",
+                            "RD_TUTARI_EUR":  "11,26",
+                            "EUR_BAKIYE":  "-7859,29"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "320.MUHTE",
+                            "ACIKLAMA":  "MUHTELİF SATICILAR",
+                            "TARIH":  "18.03.2024 00:00:00",
+                            "FIS_NO":  "001913",
+                            "FIS_TURU":  "Alınan Hizmet Faturası",
+                            "BELGE_NO":  "",
+                            "SATIR_ACIKLAMASI":  "ARAÇ OGS HGS - :41 ASL 513 ",
+                            "BORC":  "0",
+                            "ALACAK":  "-225",
+                            "BAKIYE":  "-241676,78",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "-225",
+                            "RD_TUTARI_EUR":  "-11,26",
+                            "EUR_BAKIYE":  "-7870,55"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "320.MUHTE",
+                            "ACIKLAMA":  "MUHTELİF SATICILAR",
+                            "TARIH":  "18.03.2024 00:00:00",
+                            "FIS_NO":  "000382",
+                            "FIS_TURU":  "Banka Alınan Hizmet",
+                            "BELGE_NO":  "",
+                            "SATIR_ACIKLAMASI":  "ARAÇ OGS HGS - :41 ASL 513 ",
+                            "BORC":  "225",
+                            "ALACAK":  "0",
+                            "BAKIYE":  "-241451,78",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "225",
+                            "RD_TUTARI_EUR":  "11,26",
+                            "EUR_BAKIYE":  "-7859,29"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "320.COBIN",
+                            "ACIKLAMA":  "COBİN LOJİSTİK MAKİNA İNŞAAT SAN VE TİC A.Ş",
+                            "TARIH":  "13.03.2024 00:00:00",
+                            "FIS_NO":  "CLE2024000000700",
+                            "FIS_TURU":  "Alınan Hizmet Faturası",
+                            "BELGE_NO":  "İTH-12 FT 700",
+                            "SATIR_ACIKLAMASI":  "YALNIZ \\DÖRTBİNYEDİYÜZDOKSANDOKUZ TL  OTUZ KR",
+                            "BORC":  "0",
+                            "ALACAK":  "-4799,3",
+                            "BAKIYE":  "-246251,08",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "-4799,3",
+                            "RD_TUTARI_EUR":  "-137,25",
+                            "EUR_BAKIYE":  "-7996,54"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "320.ÖMERD",
+                            "ACIKLAMA":  "ÖMER DEMİRBAŞ     [ CARETTA REKLAM AJANSI ]",
+                            "TARIH":  "13.03.2024 00:00:00",
+                            "FIS_NO":  "000524",
+                            "FIS_TURU":  "Satın Alma Faturası",
+                            "BELGE_NO":  "GIB2024000000036",
+                            "SATIR_ACIKLAMASI":  "RONİN XL FOLYO STİCKER UYGULAMA",
+                            "BORC":  "0",
+                            "ALACAK":  "-18690",
+                            "BAKIYE":  "-264941,08",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "-18690",
+                            "RD_TUTARI_EUR":  "-937,55",
+                            "EUR_BAKIYE":  "-8934,09"
+                        },
+                        {
+                            "CARI_HESAP_KODU":  "320.CEMİLT",
+                            "ACIKLAMA":  "CEMİL TURAN",
+                            "TARIH":  "12.03.2024 00:00:00",
+                            "FIS_NO":  "CTF2024000000061",
+                            "FIS_TURU":  "Satın Alma Faturası",
+                            "BELGE_NO":  "CTF2024000000061",
+                            "SATIR_ACIKLAMASI":  "KEMER EMNİYET 3 NOKTA KREM",
+                            "BORC":  "0",
+                            "ALACAK":  "-7200",
+                            "BAKIYE":  "-272141,08",
+                            "ISLEM_DOVIZI":  "TL",
+                            "ISLEM_DOVIZ_TUTARI":  "-7200",
+                            "RD_TUTARI_EUR":  "-206,04",
+                            "EUR_BAKIYE":  "-9140,13"
+                        }
+                    ]
+}

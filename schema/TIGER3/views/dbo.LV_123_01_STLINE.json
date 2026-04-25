@@ -1,0 +1,218 @@
+﻿{
+    "type":  "view",
+    "schema":  "dbo",
+    "name":  "LV_123_01_STLINE",
+    "full_name":  "dbo.LV_123_01_STLINE",
+    "definition":  "CREATE VIEW [dbo].[LV_123_01_STLINE] AS\nSELECT\n      LGMAIN.LOGICALREF, LGMAIN.INVOICEREF, LGMAIN.STOCKREF, LGMAIN.LINETYPE, LGMAIN.TRCODE, LGMAIN.AMOUNT, LGMAIN.PRICE, LGMAIN.TOTAL, LGMAIN.INVOICELNNO,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.CODE\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.CODE\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.CODE\n   ELSE \u0027\u0027 END AS CODE,\n      CASE\n  WHEN LGMAIN.LINETYPE IN (4)   THEN SRVCARD.DEFINITION_\n  WHEN LGMAIN.LINETYPE IN (2,3) THEN DECARDS.DEFINITION_\n  WHEN LGMAIN.LINETYPE NOT IN (2,3,4)   THEN ITEM.NAME\n   ELSE \u0027\u0027 END AS LINEEXP\nFROM\n     LG_123_01_STLINE LGMAIN WITH(NOLOCK)\n  LEFT OUTER JOIN LG_123_ITEMS ITEM WITH(NOLOCK) ON LGMAIN.STOCKREF = ITEM.LOGICALREF\n  LEFT OUTER JOIN LG_123_DECARDS DECARDS WITH(NOLOCK) ON LGMAIN.STOCKREF = DECARDS.LOGICALREF\n  LEFT OUTER JOIN LG_123_SRVCARD SRVCARD WITH(NOLOCK) ON LGMAIN.STOCKREF = SRVCARD.LOGICALREF",
+    "columns":  [
+                    {
+                        "COLUMN_NAME":  "LOGICALREF",
+                        "ORDINAL_POSITION":  1,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "NO"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICEREF",
+                        "ORDINAL_POSITION":  2,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "STOCKREF",
+                        "ORDINAL_POSITION":  3,
+                        "DATA_TYPE":  "int",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINETYPE",
+                        "ORDINAL_POSITION":  4,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TRCODE",
+                        "ORDINAL_POSITION":  5,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "AMOUNT",
+                        "ORDINAL_POSITION":  6,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "PRICE",
+                        "ORDINAL_POSITION":  7,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "TOTAL",
+                        "ORDINAL_POSITION":  8,
+                        "DATA_TYPE":  "float",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "INVOICELNNO",
+                        "ORDINAL_POSITION":  9,
+                        "DATA_TYPE":  "smallint",
+                        "CHARACTER_MAXIMUM_LENGTH":  "",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "CODE",
+                        "ORDINAL_POSITION":  10,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "25",
+                        "IS_NULLABLE":  "YES"
+                    },
+                    {
+                        "COLUMN_NAME":  "LINEEXP",
+                        "ORDINAL_POSITION":  11,
+                        "DATA_TYPE":  "varchar",
+                        "CHARACTER_MAXIMUM_LENGTH":  "51",
+                        "IS_NULLABLE":  "YES"
+                    }
+                ],
+    "sample_data":  [
+                        {
+                            "LOGICALREF":  "84342",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6450",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "1",
+                            "PRICE":  "41",
+                            "TOTAL":  "41",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "ELSF0099H083",
+                            "LINEEXP":  "SİGORTA 16 AH 220 W"
+                        },
+                        {
+                            "LOGICALREF":  "84343",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6451",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "1",
+                            "PRICE":  "13,588",
+                            "TOTAL":  "13,59",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "ELSF0099H084",
+                            "LINEEXP":  "SİGORTA KUTUSU 3/4 KAPAKLI"
+                        },
+                        {
+                            "LOGICALREF":  "84347",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6332",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "1",
+                            "PRICE":  "160",
+                            "TOTAL":  "160",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "ELTS0099H013",
+                            "LINEEXP":  "AYDINLATMA DOKUNMATİK GRİ - BEYAZ IŞIK"
+                        },
+                        {
+                            "LOGICALREF":  "84348",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6351",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "1",
+                            "PRICE":  "411",
+                            "TOTAL":  "411",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "ELTS0099H026",
+                            "LINEEXP":  "GAZ SENSÖRÜ"
+                        },
+                        {
+                            "LOGICALREF":  "84352",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6407",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "1",
+                            "PRICE":  "46,88275",
+                            "TOTAL":  "46,88",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "ELTS0099H036",
+                            "LINEEXP":  "KONNEKTÖR GÜNEŞ PANEL"
+                        },
+                        {
+                            "LOGICALREF":  "84353",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6421",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "15",
+                            "PRICE":  "10,25",
+                            "TOTAL":  "153,75",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "ELTS0099H039",
+                            "LINEEXP":  "LED ŞERİT GÜN IŞIĞI"
+                        },
+                        {
+                            "LOGICALREF":  "84357",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6461",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "3",
+                            "PRICE":  "135",
+                            "TOTAL":  "405",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "ELTS0099H060",
+                            "LINEEXP":  "USB 12V 2Lİ SİYAH"
+                        },
+                        {
+                            "LOGICALREF":  "84358",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "8593",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "2",
+                            "PRICE":  "2135,144",
+                            "TOTAL":  "4270,29",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "ELTS0099H070",
+                            "LINEEXP":  "SOLAR PANEL 205W"
+                        },
+                        {
+                            "LOGICALREF":  "84362",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6580",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "6",
+                            "PRICE":  "11",
+                            "TOTAL":  "66",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "HRXX0099H104",
+                            "LINEEXP":  "MENTEŞE YAPRAK OVAL 6.5CM KROM"
+                        },
+                        {
+                            "LOGICALREF":  "84363",
+                            "INVOICEREF":  "0",
+                            "STOCKREF":  "6582",
+                            "LINETYPE":  "0",
+                            "TRCODE":  "12",
+                            "AMOUNT":  "1",
+                            "PRICE":  "20",
+                            "TOTAL":  "20",
+                            "INVOICELNNO":  "0",
+                            "CODE":  "HRXX0099H106",
+                            "LINEEXP":  "MENTEŞE-PİSTON 60LIK"
+                        }
+                    ]
+}
