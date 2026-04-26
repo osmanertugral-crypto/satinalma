@@ -132,6 +132,7 @@ export const getFinanceCariler = (params) => api.get('/finance/cariler', { param
 export const getFinanceCariDetay = (params) => api.get('/finance/cari-detay', { params });
 export const refreshFinanceExcel = () => api.post('/finance/refresh-excel', {});
 export const getFinanceRefreshStatus = () => api.get('/finance/refresh-status');
+export const getFinanceTiger3Views = () => api.get('/finance/tiger3-views');
 
 // Damage Reports (Kirilan/Bozulan Urun Tutanak)
 export const getDamageReports = (params) => api.get('/damage-reports', { params });

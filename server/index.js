@@ -4,6 +4,17 @@ const cors = require('cors');
 const path = require('path');
 const { initDb } = require('./db/schema');
 
+// Gizli hataları yakala — sunucunun sessizce kapanmasını önler
+process.on('uncaughtException', (err) => {
+  console.error('[FATAL] Yakalanmamış hata:', err.message);
+  console.error(err.stack);
+  process.exit(1);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('[FATAL] İşlenmemiş promise reddi:', reason);
+  process.exit(1);
+});
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -51,6 +62,14 @@ app.use((err, req, res, next) => {
 // Veritabanını başlat ve sunucuyu başlat
 initDb();
 require('./utils/scheduler').start();
-app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
   console.log(`Server çalışıyor: http://localhost:${PORT}`);
+});
+httpServer.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`[HATA] Port ${PORT} zaten kullanımda. Önceki sunucu hâlâ çalışıyor olabilir.`);
+  } else {
+    console.error('[HATA] HTTP sunucu hatası:', err.message);
+  }
+  process.exit(1);
 });

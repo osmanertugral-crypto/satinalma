@@ -32,20 +32,24 @@ function fmtFull(val) {
   return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val);
 }
 
-function KPICard({ title, value, subtitle, icon: Icon, color }) {
+function KPICard({ title, value, subtitle, icon: Icon, color, onClick }) {
   const cm = {
     red: 'from-red-500 to-red-600', green: 'from-emerald-500 to-emerald-600',
     blue: 'from-blue-500 to-blue-600', amber: 'from-amber-500 to-amber-600',
     purple: 'from-purple-500 to-purple-600', slate: 'from-slate-600 to-slate-700',
   };
   return (
-    <div className={`rounded-xl bg-gradient-to-br ${cm[color] || cm.blue} text-white p-5 shadow-lg`}>
+    <div
+      className={`rounded-xl bg-gradient-to-br ${cm[color] || cm.blue} text-white p-5 shadow-lg transition-all ${onClick ? 'cursor-pointer hover:scale-[1.02] hover:shadow-xl active:scale-[0.99]' : ''}`}
+      onClick={onClick}
+    >
       <div className="flex items-center justify-between mb-1">
         <span className="text-[11px] font-semibold uppercase tracking-wider opacity-80">{title}</span>
         {Icon && <Icon size={18} className="opacity-50" />}
       </div>
       <div className="text-2xl font-extrabold mt-1">{value}</div>
       {subtitle && <div className="text-[11px] mt-1 opacity-70">{subtitle}</div>}
+      {onClick && <div className="text-[10px] mt-1.5 opacity-50">Tıkla → Detay</div>}
     </div>
   );
 }
@@ -65,6 +69,100 @@ const TT = ({ active, payload, label }) => {
   );
 };
 
+// ── Döviz bazlı cari drill-down paneli ──
+function CariDrillDown({ doviz, mode, cariler, onSelectCari, onClose }) {
+  const sym = doviz === 'USD' ? '$' : doviz === 'EUR' ? '€' : doviz === 'GBP' ? '£' : '₺';
+  const isFx = doviz !== 'TL';
+  const isBorc = mode === 'borc';
+  const rows = (cariler || [])
+    .filter(r => r.doviz === doviz && (isBorc ? r.bakiye < 0 : r.bakiye > 0))
+    .sort((a, b) => isBorc ? a.bakiye - b.bakiye : b.bakiye - a.bakiye);
+
+  // Döviz toplamları: yabancı para için bakiyeDoviz, TL için bakiye kullan
+  const totalDoviz = rows.reduce((s, r) => s + Math.abs(isFx ? (r.bakiyeDoviz ?? r.bakiye) : r.bakiye), 0);
+  const totalTL    = rows.reduce((s, r) => s + Math.abs(r.bakiye), 0);
+  const vadesiGelenTotalDoviz = rows.reduce((s, r) => s + Math.abs(isFx ? (r.vadesiGelenDoviz ?? r.vadesiGelen ?? 0) : (r.vadesiGelen ?? 0)), 0);
+
+  return (
+    <div className={`rounded-2xl border shadow-md overflow-hidden mt-3 ${isBorc ? 'border-red-200' : 'border-emerald-200'}`}>
+      <div className={`flex items-center justify-between px-5 py-3 border-b ${isBorc ? 'bg-red-50/60 border-red-100' : 'bg-emerald-50/60 border-emerald-100'}`}>
+        <div>
+          <h3 className="font-bold text-gray-800 text-sm">
+            {doviz} {isBorc ? 'Borçlu' : 'Alacaklı'} Cariler
+            <span className="ml-2 text-xs font-normal text-gray-400">({rows.length} cari)</span>
+          </h3>
+          <div className="flex gap-4 mt-0.5 flex-wrap">
+            <span className="text-xs text-gray-500">
+              Toplam:{' '}
+              <span className={`font-bold ${isBorc ? 'text-red-600' : 'text-emerald-600'}`}>
+                {fmtFull(totalDoviz)} {sym}
+              </span>
+              {isFx && <span className="ml-1 text-gray-400">≈ {fmtFull(totalTL)} ₺</span>}
+            </span>
+            {isBorc && vadesiGelenTotalDoviz > 0 && (
+              <span className="text-xs text-gray-500">
+                Vadesi Geçmiş: <span className="font-bold text-amber-600">{fmtFull(vadesiGelenTotalDoviz)} {sym}</span>
+              </span>
+            )}
+          </div>
+        </div>
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none px-2 py-0.5">×</button>
+      </div>
+      {rows.length === 0 ? (
+        <div className="p-6 text-center text-gray-400 text-sm bg-white">Bu kategoride cari bulunamadı</div>
+      ) : (
+        <div className="overflow-x-auto max-h-80 overflow-y-auto bg-white">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50/90 sticky top-0">
+              <tr>
+                <th className="text-left p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Cari Kodu</th>
+                <th className="text-left p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Cari Adı</th>
+                <th className="text-right p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Bakiye ({sym})</th>
+                {isFx && <th className="text-right p-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">TL Karş.</th>}
+                {isBorc && <th className="text-right p-2.5 text-[11px] font-semibold text-amber-600 uppercase tracking-wide">Vadesi Geçmiş ({sym})</th>}
+                <th className="text-right p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">İşlem</th>
+                <th className="w-10"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, i) => {
+                const dovizBakiye = isFx ? Math.abs(r.bakiyeDoviz ?? r.bakiye) : Math.abs(r.bakiye);
+                const vadesiGelenDoviz = isFx ? Math.abs(r.vadesiGelenDoviz ?? r.vadesiGelen ?? 0) : Math.abs(r.vadesiGelen ?? 0);
+                return (
+                  <tr key={i} className={`border-t border-gray-50 cursor-pointer transition ${isBorc ? 'hover:bg-red-50/30' : 'hover:bg-emerald-50/30'}`}
+                    onClick={() => onSelectCari(r.cariKodu)}>
+                    <td className="p-2.5 font-mono text-xs text-gray-400 whitespace-nowrap">{r.cariKodu}</td>
+                    <td className="p-2.5 font-medium text-gray-800 max-w-[200px] truncate" title={r.cariAdi}>{r.cariAdi}</td>
+                    <td className={`p-2.5 text-right font-bold whitespace-nowrap ${isBorc ? 'text-red-600' : 'text-emerald-600'}`}>
+                      {fmtFull(dovizBakiye)} {sym}
+                    </td>
+                    {isFx && (
+                      <td className="p-2.5 text-right text-xs text-gray-400 whitespace-nowrap">
+                        ≈ {fmtFull(Math.abs(r.bakiye))} ₺
+                      </td>
+                    )}
+                    {isBorc && (
+                      <td className="p-2.5 text-right whitespace-nowrap">
+                        {vadesiGelenDoviz > 0
+                          ? <span className="text-amber-600 font-semibold text-xs">{fmtFull(vadesiGelenDoviz)} {sym}</span>
+                          : <span className="text-gray-300 text-xs">—</span>}
+                      </td>
+                    )}
+                    <td className="p-2.5 text-right text-xs text-gray-400">
+                      {(r.faturaSayisi || 0) > 0 ? `${r.faturaSayisi} fatura` : '—'}
+                    </td>
+                    <td className="p-2.5 text-center text-blue-500 text-xs font-bold">→</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Döviz Kuru Bandı ──
 function KurBand() {
   const { data } = useQuery({ queryKey: ['finance-kurlar'], queryFn: () => getFinanceKurlar().then(r => r.data), staleTime: 3600_000 });
@@ -80,13 +178,18 @@ function KurBand() {
 }
 
 // ══════════ TAB 1: GENEL ÖZET ══════════
-function OzetTab({ onSelectCari }) {
+function OzetTab({ onSelectCari, onNavigateTab }) {
   const { data: ozet, isLoading } = useQuery({
     queryKey: ['finance-ozet'], queryFn: () => getFinanceOzet().then(r => r.data),
   });
   const { data: cariler } = useQuery({
     queryKey: ['finance-cariler-all'], queryFn: () => getFinanceCariler({}).then(r => r.data),
   });
+  const [drillDown, setDrillDown] = useState(null); // { doviz, mode }
+
+  function toggleDrill(doviz, mode) {
+    setDrillDown(d => d?.doviz === doviz && d?.mode === mode ? null : { doviz, mode });
+  }
 
   if (isLoading) return <div className="flex items-center justify-center h-64 gap-2 text-gray-500"><RefreshCw className="animate-spin" size={20} /> Yükleniyor...</div>;
   if (!ozet) return null;
@@ -94,11 +197,11 @@ function OzetTab({ onSelectCari }) {
   const b = ozet.borc;
   const a = ozet.alacak;
 
-  // Özet tablosu verisi
+  // Özet tablosu verisi — doviz cinsinden toplamlar
   const ozetTablo = [
-    { doviz: 'TL', borcUretim: b.TL.yurticiUretim.doviz, borcDiger: b.TL.diger.doviz, borcToplam: b.TL.toplam.tl, alacakUretim: a.TL.yurticiUretim.doviz, alacakDiger: a.TL.diger.doviz, alacakToplam: a.TL.toplam.tl },
-    { doviz: 'USD', borcUretim: b.USD.yurticiUretim.doviz, borcDiger: b.USD.diger.doviz, borcToplam: b.USD.yurticiUretim.doviz + b.USD.diger.doviz, alacakUretim: a.USD.yurticiUretim.doviz, alacakDiger: a.USD.diger.doviz, alacakToplam: a.USD.yurticiUretim.doviz + a.USD.diger.doviz },
-    { doviz: 'EUR', borcUretim: b.EUR.yurticiUretim.doviz, borcDiger: b.EUR.diger.doviz, borcToplam: b.EUR.yurticiUretim.doviz + b.EUR.diger.doviz, alacakUretim: a.EUR.yurticiUretim.doviz, alacakDiger: a.EUR.diger.doviz, alacakToplam: a.EUR.yurticiUretim.doviz + a.EUR.diger.doviz },
+    { doviz: 'TL',  borcToplam: b.TL.toplam.doviz,  alacakToplam: a.TL.toplam.doviz  },
+    { doviz: 'USD', borcToplam: b.USD.toplam.doviz, alacakToplam: a.USD.toplam.doviz },
+    { doviz: 'EUR', borcToplam: b.EUR.toplam.doviz, alacakToplam: a.EUR.toplam.doviz },
   ];
 
   // Toplam borçlu ve alacaklı sayısı
@@ -106,8 +209,8 @@ function OzetTab({ onSelectCari }) {
   const alacakliSayisi = cariler ? cariler.filter(c => c.bakiye > 0).length : 0;
 
   // KPI hesapları - TL karşılıkları
-  const toplamBorcTL = Math.abs(b.TL.toplam.tl) + Math.abs(b.USD.toplam.tl || b.USD.yurticiUretim.tl + b.USD.diger.tl) + Math.abs(b.EUR.toplam.tl || b.EUR.yurticiUretim.tl + b.EUR.diger.tl);
-  const toplamAlacakTL = (a.TL.toplam.tl) + (a.USD.toplam.tl || a.USD.yurticiUretim.tl + a.USD.diger.tl) + (a.EUR.toplam.tl || a.EUR.yurticiUretim.tl + a.EUR.diger.tl);
+  const toplamBorcTL    = b.TL.toplam.tl + b.USD.toplam.tl + b.EUR.toplam.tl;
+  const toplamAlacakTL  = a.TL.toplam.tl + a.USD.toplam.tl + a.EUR.toplam.tl;
 
   // Vadesi gelen toplam tutar (TL cinsinden – sütun zaten TL, kur çarpımı YOK)
   // Aynı cari birden fazla satır çıkabileceğinden cariKodu bazında tekilleştir, sadece borçlular
@@ -138,63 +241,86 @@ function OzetTab({ onSelectCari }) {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Toplam Borcumuz (TL karş.)" value={fmtShort(toplamBorcTL) + ' ₺'} subtitle={`${borcluSayisi} cariye borçluyuz`} icon={TrendingDown} color="red" />
-        <KPICard title="Toplam Alacağımız (TL karş.)" value={fmtShort(toplamAlacakTL) + ' ₺'} subtitle={`${alacakliSayisi} cariden alacağımız var`} icon={TrendingUp} color="green" />
-        <KPICard title="Vadesi Gelen Toplam Tutar" value={fmtShort(toplamVadesiGelenTL) + ' ₺'} subtitle={`${vadesiGelenCariSayisi} carinin vadesi gelmiş`} icon={Calendar} color="amber" />
+        <KPICard title="Toplam Borcumuz (TL karş.)" value={fmtShort(toplamBorcTL) + ' ₺'} subtitle={`${borcluSayisi} cariye borçluyuz`} icon={TrendingDown} color="red" onClick={() => onNavigateTab('borc')} />
+        <KPICard title="Toplam Alacağımız (TL karş.)" value={fmtShort(toplamAlacakTL) + ' ₺'} subtitle={`${alacakliSayisi} cariden alacağımız var`} icon={TrendingUp} color="green" onClick={() => onNavigateTab('alacak')} />
+        <KPICard title="Vadesi Gelen Toplam Tutar" value={fmtShort(toplamVadesiGelenTL) + ' ₺'} subtitle={`${vadesiGelenCariSayisi} carinin vadesi gelmiş`} icon={Calendar} color="amber" onClick={() => onNavigateTab('borc')} />
         <KPICard title="Toplam Cari" value={cariler ? cariler.length : '...'} subtitle="320 hesap grubu" icon={FileText} color="blue" />
       </div>
 
       {/* 320 RESTAR ÖZET Tablosu */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-bold text-gray-800">320 RESTAR Borç / Alacak Özet</h3>
+          <span className="text-[11px] text-gray-400">Toplam sütunlarına tıklayarak cariler görüntülenebilir</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-red-50">
-                <th colSpan={5} className="p-2 text-center font-bold text-red-700 text-xs uppercase tracking-wider">BORÇ</th>
-                <th className="bg-gray-100" rowSpan={2}></th>
-                <th colSpan={4} className="p-2 text-center font-bold text-emerald-700 text-xs uppercase tracking-wider bg-emerald-50">ALACAK</th>
-              </tr>
-              <tr className="bg-gray-50 text-xs text-gray-500 uppercase">
-                <th className="p-2 text-left">Döviz</th>
-                <th className="p-2 text-right">Yurtiçi Üretim</th>
-                <th className="p-2 text-right">Diğer</th>
-                <th className="p-2 text-right font-bold">Toplam Borç</th>
-                <th className="p-2 text-right">Net (Borç-Alacak)</th>
-                <th className="p-2 text-left bg-emerald-50">Yurtiçi Üretim</th>
-                <th className="p-2 text-right bg-emerald-50">Diğer</th>
-                <th className="p-2 text-right bg-emerald-50 font-bold">Toplam Alacak</th>
+              <tr className="bg-gray-50 text-xs text-gray-500 uppercase border-b border-gray-200">
+                <th className="p-3 text-left">Döviz</th>
+                <th className="p-3 text-right font-bold text-red-600">Toplam Borç ▾</th>
+                <th className="p-3 text-right">Net Bakiye</th>
+                <th className="p-3 text-right font-bold text-emerald-600">Toplam Alacak ▾</th>
               </tr>
             </thead>
             <tbody>
               {ozetTablo.map((r, i) => {
                 const sym = r.doviz === 'USD' ? '$' : r.doviz === 'EUR' ? '€' : '₺';
-                const net = r.borcToplam + r.alacakToplam;
+                const net = r.borcToplam - r.alacakToplam; // net > 0 = borcumuz, net < 0 = alacağımız
+                const borcActive = drillDown?.doviz === r.doviz && drillDown?.mode === 'borc';
+                const alacakActive = drillDown?.doviz === r.doviz && drillDown?.mode === 'alacak';
                 return (
-                  <tr key={i} className="border-t border-gray-100 hover:bg-gray-50">
-                    <td className="p-3 font-bold text-gray-700">{r.doviz} <span className="text-gray-400 font-normal text-xs">({sym})</span></td>
-                    <td className="p-3 text-right text-red-600 font-medium">{fmtFull(r.borcUretim)}</td>
-                    <td className="p-3 text-right text-red-600 font-medium">{fmtFull(r.borcDiger)}</td>
-                    <td className="p-3 text-right text-red-700 font-bold">{fmtFull(r.borcToplam)}</td>
-                    <td className={`p-3 text-right font-bold ${net < 0 ? 'text-red-700' : 'text-emerald-700'}`}>{fmtFull(net)} {sym}</td>
-                    <td className="bg-gray-100 w-px"></td>
-                    <td className="p-3 text-right text-emerald-600 font-medium bg-emerald-50/30">{fmtFull(r.alacakUretim)}</td>
-                    <td className="p-3 text-right text-emerald-600 font-medium bg-emerald-50/30">{fmtFull(r.alacakDiger)}</td>
-                    <td className="p-3 text-right text-emerald-700 font-bold bg-emerald-50/30">{fmtFull(r.alacakToplam)}</td>
+                  <tr key={i} className="border-t border-gray-100 hover:bg-gray-50/60">
+                    <td className="p-3 font-bold text-gray-700">
+                      {r.doviz}
+                      <span className="ml-1.5 text-gray-400 font-normal text-xs">({sym})</span>
+                    </td>
+                    <td
+                      className={`p-3 text-right font-bold cursor-pointer select-none transition rounded-lg ${borcActive ? 'bg-red-100 text-red-800 shadow-inner' : 'text-red-700 hover:bg-red-50'}`}
+                      onClick={() => toggleDrill(r.doviz, 'borc')}
+                      title={`${r.doviz} borçlu carileri göster`}
+                    >
+                      {fmtFull(r.borcToplam)} {sym}
+                      <span className="ml-1 text-[10px] opacity-60">{borcActive ? '▲' : '▼'}</span>
+                    </td>
+                    <td className={`p-3 text-right font-bold ${net > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
+                      {net > 0 ? '' : '+'}{fmtFull(Math.abs(net))} {sym}
+                      <span className="ml-1 text-[10px] font-normal opacity-50">{net > 0 ? 'borç' : 'alacak'}</span>
+                    </td>
+                    <td
+                      className={`p-3 text-right font-bold cursor-pointer select-none transition rounded-lg ${alacakActive ? 'bg-emerald-100 text-emerald-800 shadow-inner' : 'text-emerald-700 hover:bg-emerald-50'}`}
+                      onClick={() => toggleDrill(r.doviz, 'alacak')}
+                      title={`${r.doviz} alacaklı carileri göster`}
+                    >
+                      {fmtFull(r.alacakToplam)} {sym}
+                      <span className="ml-1 text-[10px] opacity-60">{alacakActive ? '▲' : '▼'}</span>
+                    </td>
                   </tr>
                 );
               })}
               <tr className="border-t-2 border-gray-300 bg-gray-50">
-                <td colSpan={4} className="p-3 text-right font-bold text-gray-700">Genel Toplam (TL karşılığı):</td>
-                <td className={`p-3 text-right text-lg font-extrabold ${ozet.genelToplam < 0 ? 'text-red-700' : 'text-emerald-700'}`}>{fmtFull(ozet.genelToplam)} ₺</td>
-                <td className="bg-gray-100"></td>
-                <td colSpan={3}></td>
+                <td className="p-3 font-bold text-gray-700">Genel Net (TL karş.)</td>
+                <td colSpan={2} className={`p-3 text-right text-lg font-extrabold ${ozet.genelToplam > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
+                  {fmtFull(Math.abs(ozet.genelToplam))} ₺
+                  <span className="ml-1.5 text-xs font-normal opacity-60">{ozet.genelToplam > 0 ? 'net borç' : 'net alacak'}</span>
+                </td>
+                <td></td>
               </tr>
             </tbody>
           </table>
         </div>
+        {/* Drill-down panel */}
+        {drillDown && (
+          <div className="px-4 pb-4">
+            <CariDrillDown
+              doviz={drillDown.doviz}
+              mode={drillDown.mode}
+              cariler={cariler}
+              onSelectCari={onSelectCari}
+              onClose={() => setDrillDown(null)}
+            />
+          </div>
+        )}
       </div>
 
       {/* Grafikler */}
@@ -303,7 +429,12 @@ function CarilerTab({ onSelectCari, mode }) {
     return sortDir === 'asc' ? <ChevronUp size={14} className="text-blue-600" /> : <ChevronDown size={14} className="text-blue-600" />;
   }
 
-  const CK_OPTIONS = ['TÜMÜ', 'YURTİÇİ ÜRETİM STOKLARI', 'DİĞER'];
+  // cariKontrol filtresi: API'dan gelen distinct değerler + TÜMÜ
+  const CK_OPTIONS = useMemo(() => {
+    if (!cariler) return ['TÜMÜ'];
+    const vals = [...new Set(cariler.map(r => r.cariKontrol || '').filter(Boolean))].sort();
+    return ['TÜMÜ', ...vals];
+  }, [cariler]);
   const DVZ_OPTIONS = ['TÜMÜ', 'TL', 'USD', 'EUR'];
 
   return (
@@ -363,7 +494,7 @@ function CarilerTab({ onSelectCari, mode }) {
           {CK_OPTIONS.map(opt => (
             <button key={opt} onClick={() => setCariKontrol(opt)}
               className={`px-3 py-2 rounded-lg text-xs font-semibold transition whitespace-nowrap ${cariKontrol === opt ? 'bg-white shadow text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}>
-              {opt === 'YURTİÇİ ÜRETİM STOKLARI' ? 'Yurtiçi Üretim' : opt === 'DİĞER' ? 'Diğer' : 'Tümü'}
+              {opt === 'TÜMÜ' ? 'Tümü' : opt.length > 15 ? opt.substring(0, 15) + '…' : opt}
             </button>
           ))}
         </div>
@@ -432,7 +563,7 @@ function CarilerTab({ onSelectCari, mode }) {
                         <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold ${r.doviz === 'USD' ? 'bg-green-100 text-green-700' : r.doviz === 'EUR' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>{r.doviz}</span>
                       </td>
                       <td className="p-2.5 text-[11px] text-gray-500 truncate max-w-[120px]" title={r.cariKontrol}>
-                        {r.cariKontrol === 'YURTİÇİ ÜRETİM STOKLARI' ? 'Üretim' : r.cariKontrol === 'DİĞER' ? 'Diğer' : r.cariKontrol}
+                        {r.cariKontrol || '-'}
                       </td>
                       <td className={`p-2.5 text-right whitespace-nowrap font-bold ${isBorc ? 'text-red-600' : 'text-emerald-600'}`}>
                         {fmtFull(Math.abs(r.bakiye))} {sym}
@@ -907,7 +1038,7 @@ export default function FinancePage() {
         ))}
       </div>
 
-      {activeTab === 'ozet' && <OzetTab onSelectCari={handleSelectCari} />}
+      {activeTab === 'ozet' && <OzetTab onSelectCari={handleSelectCari} onNavigateTab={setActiveTab} />}
       {activeTab === 'borc' && <CarilerTab onSelectCari={handleSelectCari} mode="borc" />}
       {activeTab === 'alacak' && <CarilerTab onSelectCari={handleSelectCari} mode="alacak" />}
       {activeTab === 'detay' && selectedCari && <CariDetayTab cariKodu={selectedCari} onBack={handleBack} />}

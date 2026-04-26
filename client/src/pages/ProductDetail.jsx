@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProduct, getPriceTrend, addPrice, getPriceAlerts, createPriceAlert, deletePriceAlert, getSuppliers } from '../api';
 import { Card, Button, Table, Spinner, Modal, Input, Select, Badge } from '../components/UI';
-import { ArrowLeft, Plus, Trash2, Bell } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Bell, ShoppingCart } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 
@@ -93,6 +93,54 @@ export default function ProductDetailPage() {
           </Table>
         </Card>
       </div>
+
+      {/* Son Satınalmalar */}
+      <Card className="p-5">
+        <h2 className="font-semibold text-gray-700 mb-1 flex items-center gap-2">
+          <ShoppingCart size={16} className="text-blue-500" /> Son Satınalmalar
+        </h2>
+        {product.purchaseHistory?.length > 0 ? (
+          <>
+            {/* En son alım özet satırı */}
+            <div className="mb-4 p-3 bg-blue-50 rounded-xl border border-blue-100 flex flex-wrap gap-4 text-sm">
+              <div>
+                <span className="text-gray-500 text-xs uppercase tracking-wide block">Son Tedarikçi</span>
+                <span className="font-bold text-blue-800">{product.purchaseHistory[0].supplier_name || '-'}</span>
+              </div>
+              <div>
+                <span className="text-gray-500 text-xs uppercase tracking-wide block">Tarih</span>
+                <span className="font-semibold text-gray-700">{product.purchaseHistory[0].order_date ? new Date(product.purchaseHistory[0].order_date).toLocaleDateString('tr-TR') : '-'}</span>
+              </div>
+              <div>
+                <span className="text-gray-500 text-xs uppercase tracking-wide block">Birim Fiyat</span>
+                <span className="font-semibold text-gray-700">
+                  {Number(product.purchaseHistory[0].unit_price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {product.purchaseHistory[0].currency}
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-500 text-xs uppercase tracking-wide block">Miktar</span>
+                <span className="font-semibold text-gray-700">{Number(product.purchaseHistory[0].quantity).toLocaleString('tr-TR')} {product.unit}</span>
+              </div>
+            </div>
+            <Table headers={['Tarih', 'Sipariş No', 'Tedarikçi', 'Miktar', 'Birim Fiyat', 'Para Birimi', 'Satır Toplamı', 'Durum']}>
+              {product.purchaseHistory.map((h, i) => (
+                <tr key={i} className="border-b border-gray-100 hover:bg-gray-50">
+                  <td className="px-4 py-2 text-sm text-gray-500 whitespace-nowrap">{h.order_date ? new Date(h.order_date).toLocaleDateString('tr-TR') : '-'}</td>
+                  <td className="px-4 py-2 text-sm font-mono text-gray-600">{h.po_number}</td>
+                  <td className="px-4 py-2 text-sm font-medium text-gray-800">{h.supplier_name || <span className="text-gray-400">-</span>}</td>
+                  <td className="px-4 py-2 text-sm text-right text-gray-700">{Number(h.quantity).toLocaleString('tr-TR')}</td>
+                  <td className="px-4 py-2 text-sm text-right font-semibold text-gray-800">{Number(h.unit_price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</td>
+                  <td className="px-4 py-2 text-sm text-gray-500">{h.currency}</td>
+                  <td className="px-4 py-2 text-sm text-right font-semibold text-gray-800">{Number(h.line_total).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</td>
+                  <td className="px-4 py-2"><Badge color={h.status === 'delivered' ? 'green' : h.status === 'cancelled' ? 'red' : 'blue'}>{h.status}</Badge></td>
+                </tr>
+              ))}
+            </Table>
+          </>
+        ) : (
+          <p className="text-gray-400 text-sm py-4 text-center">Bu ürün için satınalma siparişi kaydı bulunamadı.<br /><span className="text-xs">"Şimdi Güncelle" ile Tiger3'ten sipariş senkronizasyonu gerekebilir.</span></p>
+        )}
+      </Card>
 
       {/* Fiyat Trend Grafiği */}
       <Card className="p-5">

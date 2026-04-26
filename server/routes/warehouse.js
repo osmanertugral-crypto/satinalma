@@ -212,6 +212,8 @@ router.get('/status', (req, res) => {
 router.get('/stock', (req, res) => {
   const db = getDb();
   const { search, kart_tipi, depo, page = 1, limit = 50, sort = 'stok_kodu', order = 'asc' } = req.query;
+  // kart_tipi comma-separated destekler: "KARAVAN,EKİPMAN"
+  const kartTipiArr = kart_tipi ? kart_tipi.split(',').map(s => s.trim()).filter(Boolean) : [];
   const dbCount = db.prepare('SELECT COUNT(*) as c FROM warehouse_stock').get().c;
 
   if (dbCount === 0) {
@@ -220,7 +222,7 @@ router.get('/stock', (req, res) => {
       const ns = normTr(search);
       rows = rows.filter(r => normTr(r.stok_kodu).includes(ns) || normTr(r.stok_adi).includes(ns));
     }
-    if (kart_tipi) rows = rows.filter(r => r.kart_tipi === kart_tipi);
+    if (kartTipiArr.length > 0) rows = rows.filter(r => kartTipiArr.includes(r.kart_tipi));
     if (depo === 'gebze') rows = rows.filter(r => (r.gebze_stok || 0) > 0);
     else if (depo === 'eticaret') rows = rows.filter(r => (r.eticaret_stok || 0) > 0);
     else if (depo === 'showroom') rows = rows.filter(r => (r.showroom_stok || 0) > 0);
@@ -249,9 +251,12 @@ router.get('/stock', (req, res) => {
     params.push(`%${ns}%`, `%${ns}%`);
   }
 
-  if (kart_tipi) {
+  if (kartTipiArr.length === 1) {
     where += ' AND kart_tipi = ?';
-    params.push(kart_tipi);
+    params.push(kartTipiArr[0]);
+  } else if (kartTipiArr.length > 1) {
+    where += ` AND kart_tipi IN (${kartTipiArr.map(() => '?').join(',')})`;
+    params.push(...kartTipiArr);
   }
 
   // Sadece belirli depoda stok olanları göster

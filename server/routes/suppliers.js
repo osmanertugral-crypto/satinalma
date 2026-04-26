@@ -283,11 +283,13 @@ router.get('/stats/charts', (req, res) => {
 
   // Yıllık toplamlar
   const yearTotal = db.prepare(`
-    SELECT 
+    SELECT
       SUM(CASE WHEN po.status != 'cancelled' THEN ${poAmountExpr} ELSE 0 END) as toplam_tutar,
       COUNT(CASE WHEN po.status != 'cancelled' THEN 1 END) as toplam_siparis,
       COUNT(DISTINCT CASE WHEN po.status != 'cancelled' THEN po.supplier_id END) as aktif_tedarikci,
-      COUNT(CASE WHEN po.status NOT IN ('kapanan', 'cancelled') THEN 1 END) as acik_siparis
+      COUNT(CASE WHEN po.status NOT IN ('kapanan', 'delivered', 'bekleyen', 'cancelled') THEN 1 END) as acik_siparis,
+      COUNT(CASE WHEN po.status = 'bekleyen' THEN 1 END) as bekleyen_siparis,
+      COUNT(CASE WHEN po.status IN ('kapanan', 'delivered') THEN 1 END) as kapanan_siparis
     FROM purchase_orders po
     LEFT JOIN (
       SELECT po_id, SUM(quantity * unit_price) as toplam_tutar
@@ -297,10 +299,22 @@ router.get('/stats/charts', (req, res) => {
     WHERE ${timeWhere.replace(/order_date/g, 'po.order_date')}
   `).get(...timeParams);
 
+  // Bu ayki toplam (her zaman gerçek bugün, filtreden bağımsız)
+  const buAy = db.prepare(`
+    SELECT SUM(CASE WHEN po.status != 'cancelled' THEN ${poAmountExpr} ELSE 0 END) as bu_ay_tutar
+    FROM purchase_orders po
+    LEFT JOIN (
+      SELECT po_id, SUM(quantity * unit_price) as toplam_tutar
+      FROM po_items
+      GROUP BY po_id
+    ) po_items_total ON po_items_total.po_id = po.id
+    WHERE strftime('%Y-%m', po.order_date) = strftime('%Y-%m', 'now')
+  `).get();
+
   const sqlMonthly = monthly || [];
   const sqlTopSuppliers = topSuppliers || [];
   const sqlStatusDist = statusDist || [];
-  const sqlYearTotal = yearTotal || { toplam_tutar: 0, toplam_siparis: 0, aktif_tedarikci: 0, acik_siparis: 0 };
+  const sqlYearTotal = yearTotal || { toplam_tutar: 0, toplam_siparis: 0, aktif_tedarikci: 0, acik_siparis: 0, bekleyen_siparis: 0, kapanan_siparis: 0 };
 
   const hasSqlData =
     sqlMonthly.length > 0 ||
@@ -315,7 +329,7 @@ router.get('/stats/charts', (req, res) => {
       topSuppliers: fallback.topSuppliers,
       statusDist: fallback.statusDist,
       filter: { year: filterYear, month: hasMonth ? filterMonth : null },
-      yearTotal: fallback.yearTotal,
+      yearTotal: { bu_ay_tutar: 0, bekleyen_siparis: 0, kapanan_siparis: 0, ...fallback.yearTotal },
     });
   }
 
@@ -324,7 +338,7 @@ router.get('/stats/charts', (req, res) => {
     topSuppliers: sqlTopSuppliers,
     statusDist: sqlStatusDist,
     filter: { year: filterYear, month: hasMonth ? filterMonth : null },
-    yearTotal: sqlYearTotal,
+    yearTotal: { ...sqlYearTotal, bu_ay_tutar: buAy?.bu_ay_tutar || 0 },
   });
 });
 

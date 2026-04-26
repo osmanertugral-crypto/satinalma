@@ -38,7 +38,16 @@ function num(v) { return typeof v === 'number' ? v : 0; }
 
 // TIGER3'ten ekstre verisi çek ve SQLite cache'e yaz
 async function syncFromTIGER3() {
-  const rows = await tiger3.query('SELECT * FROM PRC_CARI_HESAP_EKSTRESI_123_ONR');
+  // Ekstre satırları + CLCARD'dan SPECODE (cari kategori) paralel çek
+  const [rows, clRows] = await Promise.all([
+    tiger3.query('SELECT * FROM PRC_CARI_HESAP_EKSTRESI_123_ONR'),
+    tiger3.query(`
+      SELECT CODE, ISNULL(SPECODE,'') AS SPECODE
+      FROM LG_123_CLCARD
+      WHERE LOGICALREF IN (SELECT DISTINCT CLIENTREF FROM LG_123_01_ORFICHE WHERE TRCODE = 2)
+    `),
+  ]);
+  const specodeMap = new Map(clRows.map(r => [String(r.CODE || '').trim(), String(r.SPECODE || '').trim()]));
 
   const db = getDb();
   const tx = db.transaction(() => {
@@ -67,7 +76,7 @@ async function syncFromTIGER3() {
         String(r.FIS_NO || '').trim(),
         String(r.BELGE_NO || '').trim(),
         String(r.SATIR_ACIKLAMASI || '').trim(),
-        String(r.CARI_TUR || r['CARI TUR'] || '').trim(),
+        specodeMap.get(String(r.CODE || '').trim()) || String(r.CARI_TUR || r['CARI TUR'] || '').trim(),
         +r.LOGICALREF || 0
       );
       count++;
@@ -137,17 +146,34 @@ router.get('/ozet', (req, res) => {
     const count = db.prepare('SELECT COUNT(*) as c FROM finance_ekstre_cache').get().c;
     if (count === 0) return res.json(empty);
 
-    // borc = alacak < 0 (faturalar, borcumuz); alacak = borc > 0 (ödemeler / alacaklar)
+    // Net bakiye per (code, doviz): fatura toplamı - ödeme toplamı
+    // borc = net_tl > 0 (hala borcumuz var), alacak = net_tl < 0 (fazla ödedik)
     const aggRows = db.prepare(`
+      WITH cari_net AS (
+        SELECT
+          code,
+          MAX(cari_tur) AS cari_tur,
+          COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz,
+          SUM(CASE WHEN alacak < 0 THEN ABS(alacak) ELSE 0 END)
+            - SUM(CASE WHEN borc > 0 THEN borc ELSE 0 END) AS net_tl,
+          SUM(CASE WHEN alacak < 0 THEN ABS(islem_doviz_tutari) ELSE 0 END)
+            - SUM(CASE WHEN borc > 0 THEN ABS(islem_doviz_tutari) ELSE 0 END) AS net_doviz
+        FROM finance_ekstre_cache
+        GROUP BY code, COALESCE(NULLIF(islem_dovizi,''), 'TL')
+      )
       SELECT
-        COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz,
+        doviz,
         cari_tur,
-        SUM(CASE WHEN alacak < 0 THEN ABS(alacak) ELSE 0 END) AS borc_tl,
-        SUM(CASE WHEN alacak < 0 THEN ABS(islem_doviz_tutari) ELSE 0 END) AS borc_doviz,
-        SUM(CASE WHEN borc > 0 THEN borc ELSE 0 END) AS alacak_tl,
-        SUM(CASE WHEN borc > 0 THEN islem_doviz_tutari ELSE 0 END) AS alacak_doviz
-      FROM finance_ekstre_cache
-      GROUP BY COALESCE(NULLIF(islem_dovizi,''), 'TL'), cari_tur
+        SUM(CASE WHEN net_tl > 0 THEN net_tl ELSE 0 END) AS borc_tl,
+        SUM(CASE WHEN net_tl > 0 THEN
+              CASE WHEN net_doviz > 0 THEN net_doviz ELSE net_tl END
+            ELSE 0 END) AS borc_doviz,
+        SUM(CASE WHEN net_tl < 0 THEN ABS(net_tl) ELSE 0 END) AS alacak_tl,
+        SUM(CASE WHEN net_tl < 0 THEN
+              CASE WHEN net_doviz < 0 THEN ABS(net_doviz) ELSE ABS(net_tl) END
+            ELSE 0 END) AS alacak_doviz
+      FROM cari_net
+      GROUP BY doviz, cari_tur
     `).all();
 
     function buildSection(doviz) {
@@ -173,12 +199,22 @@ router.get('/ozet', (req, res) => {
         borc: {
           yurticiUretim: makeGroup(uretimRows),
           diger:         makeGroup(digerRows),
-          toplam:        { tl: dRows.reduce((s, r) => s + r.borc_tl, 0) },
+          toplam: {
+            tl:    dRows.reduce((s, r) => s + r.borc_tl, 0),
+            doviz: isTL
+              ? dRows.reduce((s, r) => s + r.borc_tl, 0)
+              : dRows.reduce((s, r) => s + r.borc_doviz, 0),
+          },
         },
         alacak: {
           yurticiUretim: makeAlacakGroup(uretimRows),
           diger:         makeAlacakGroup(digerRows),
-          toplam:        { tl: dRows.reduce((s, r) => s + r.alacak_tl, 0) },
+          toplam: {
+            tl:    dRows.reduce((s, r) => s + r.alacak_tl, 0),
+            doviz: isTL
+              ? dRows.reduce((s, r) => s + r.alacak_tl, 0)
+              : dRows.reduce((s, r) => s + r.alacak_doviz, 0),
+          },
         },
       };
     }
@@ -187,6 +223,7 @@ router.get('/ozet', (req, res) => {
     const usd = buildSection('USD');
     const eur = buildSection('EUR');
 
+    // genelToplam = net ödenmemiş borçlarımız - net fazla ödediklerimiz
     const genelToplam = [tl, usd, eur].reduce((s, sec) => s + sec.borc.toplam.tl - sec.alacak.toplam.tl, 0);
 
     res.json({
@@ -222,11 +259,17 @@ router.get('/cariler', (req, res) => {
         MAX(cari_tur) AS cariKontrol,
         SUM(CASE WHEN borc > 0 THEN borc ELSE 0 END)
           - SUM(CASE WHEN alacak < 0 THEN ABS(alacak) ELSE 0 END) AS bakiye,
+        SUM(CASE WHEN borc > 0 THEN ABS(islem_doviz_tutari) ELSE 0 END)
+          - SUM(CASE WHEN alacak < 0 THEN ABS(islem_doviz_tutari) ELSE 0 END) AS bakiyeDoviz,
         SUM(CASE WHEN alacak < 0 AND duedate IS NOT NULL AND duedate <= ? THEN ABS(alacak) ELSE 0 END) AS vadesiGelen,
-        SUM(CASE WHEN alacak < 0 AND (duedate IS NULL OR duedate > ?) THEN ABS(alacak) ELSE 0 END) AS vadesiGelmeyen
+        SUM(CASE WHEN alacak < 0 AND duedate IS NOT NULL AND duedate <= ? THEN ABS(islem_doviz_tutari) ELSE 0 END) AS vadesiGelenDoviz,
+        SUM(CASE WHEN alacak < 0 AND (duedate IS NULL OR duedate > ?) THEN ABS(alacak) ELSE 0 END) AS vadesiGelmeyen,
+        MAX(CASE WHEN borc > 0 THEN indate END) AS sonOdemeTarih,
+        COUNT(CASE WHEN alacak < 0 THEN 1 END) AS faturaSayisi,
+        COUNT(CASE WHEN borc > 0 THEN 1 END) AS odemeSayisi
       FROM finance_ekstre_cache
       GROUP BY code, COALESCE(NULLIF(islem_dovizi,''), 'TL')
-    `).all(today, today);
+    `).all(today, today, today);
 
     if (cariKontrol && cariKontrol !== 'TÜMÜ')
       rows = rows.filter(r => (r.cariKontrol || '') === cariKontrol);
@@ -382,38 +425,56 @@ router.get('/cari-detay', (req, res) => {
   }
 });
 
-// POST /api/finance/refresh-excel — Önce TIGER3, başarısız olursa Excel
+// POST /api/finance/refresh-excel — TIGER3'ten güncelle
 let refreshState = { status: 'idle', startedAt: null, finishedAt: null, message: null, error: null };
 
 router.post('/refresh-excel', (req, res) => {
   if (refreshState.status === 'running') {
-    return res.json({
-      success: false,
-      running: true,
-      message: 'Yenileme zaten devam ediyor, lütfen bekleyin…',
-      startedAt: refreshState.startedAt,
-    });
+    return res.json({ success: false, running: true, message: 'Yenileme devam ediyor…', startedAt: refreshState.startedAt });
   }
 
   refreshState = { status: 'running', startedAt: new Date().toISOString(), finishedAt: null, message: null, error: null };
 
-  const run = async () => {
+  (async () => {
     try {
       const count = await syncFromTIGER3();
       refreshState = { status: 'done', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: `TIGER3'ten ${count} kayıt alındı`, error: null };
-    } catch (tiger3Err) {
-      console.warn('Finance: TIGER3 bağlanamadı, Excel fallback:', tiger3Err.message);
-      try {
-        await refreshExcelQueries(EXCEL_PATH);
-        refreshState = { status: 'done', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: 'Excel güncellendi (TIGER3 bağlantı hatası)', error: null };
-      } catch (excelErr) {
-        refreshState = { status: 'error', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: null, error: excelErr.message };
-      }
+    } catch (err) {
+      refreshState = { status: 'error', startedAt: refreshState.startedAt, finishedAt: new Date().toISOString(), message: null, error: err.message };
     }
-  };
-  run();
+  })();
 
   res.json({ success: true, running: true, message: 'Güncelleme arka planda başlatıldı…' });
+});
+
+// GET /api/finance/tiger3-views — Tiger3'teki finansal view/SP listesi (keşif amaçlı)
+router.get('/tiger3-views', async (req, res) => {
+  try {
+    const [views, procs] = await Promise.all([
+      tiger3.query(`
+        SELECT TABLE_NAME AS name, TABLE_TYPE AS type
+        FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = 'dbo'
+          AND (TABLE_NAME LIKE '%CARI%' OR TABLE_NAME LIKE '%EKSTRE%'
+               OR TABLE_NAME LIKE '%123%' OR TABLE_NAME LIKE '%BORC%'
+               OR TABLE_NAME LIKE '%ALACAK%' OR TABLE_NAME LIKE '%FINANS%'
+               OR TABLE_NAME LIKE '%BILAN%' OR TABLE_NAME LIKE '%GELIR%')
+        ORDER BY TABLE_TYPE, TABLE_NAME
+      `),
+      tiger3.query(`
+        SELECT ROUTINE_NAME AS name, 'PROCEDURE' AS type
+        FROM INFORMATION_SCHEMA.ROUTINES
+        WHERE ROUTINE_TYPE = 'PROCEDURE'
+          AND (ROUTINE_NAME LIKE '%CARI%' OR ROUTINE_NAME LIKE '%EKSTRE%'
+               OR ROUTINE_NAME LIKE '%123%' OR ROUTINE_NAME LIKE '%BORC%'
+               OR ROUTINE_NAME LIKE '%FINANS%' OR ROUTINE_NAME LIKE '%BILAN%')
+        ORDER BY ROUTINE_NAME
+      `),
+    ]);
+    res.json({ views, procs });
+  } catch (err) {
+    res.status(503).json({ error: 'Tiger3 bağlantı hatası: ' + err.message });
+  }
 });
 
 router.get('/refresh-status', (req, res) => {

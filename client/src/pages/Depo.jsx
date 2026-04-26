@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getWarehouseSummary, getWarehouseStock, getWarehouseKartTipleri, syncWarehouse, getWarehouseStatus, refreshWarehouseExcelAndSync } from '../api';
 import { PageHeader, Card, Button, Badge, Spinner } from '../components/UI';
-import { Warehouse as WarehouseIcon, RefreshCw, Search, ChevronLeft, ChevronRight, ArrowUpDown, CheckCircle, AlertCircle, Clock, Package, X, Filter } from 'lucide-react';
+import { Warehouse as WarehouseIcon, RefreshCw, Search, ChevronLeft, ChevronRight, ArrowUpDown, CheckCircle, AlertCircle, Package } from 'lucide-react';
+import MultiSelectFilter from '../components/MultiSelectFilter';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 function formatTRY(val) {
@@ -33,7 +34,7 @@ export default function DepoPage() {
   const qc = useQueryClient();
   const [selectedDepolar, setSelectedDepolar] = useState(['gebze', 'eticaret', 'showroom']);
   const [search, setSearch] = useState('');
-  const [kartTipiFilter, setKartTipiFilter] = useState('');
+  const [kartTipiFilter, setKartTipiFilter] = useState([]);
   const [depoFilter, setDepoFilter] = useState('');
   const [page, setPage] = useState(1);
   const [sortCol, setSortCol] = useState('stok_kodu');
@@ -47,10 +48,10 @@ export default function DepoPage() {
   });
 
   const { data: stockData, isLoading: stockLoading } = useQuery({
-    queryKey: ['warehouse-stock', search, kartTipiFilter, depoFilter, page, sortCol, sortDir],
+    queryKey: ['warehouse-stock', search, kartTipiFilter.join(','), depoFilter, page, sortCol, sortDir],
     queryFn: () => getWarehouseStock({
       search: search || undefined,
-      kart_tipi: kartTipiFilter || undefined,
+      kart_tipi: kartTipiFilter.length > 0 ? kartTipiFilter.join(',') : undefined,
       depo: depoFilter || undefined,
       page, limit, sort: sortCol, order: sortDir
     }).then(r => r.data),
@@ -97,20 +98,20 @@ export default function DepoPage() {
   // Kart tipi filtresine göre toplamlar
   const filteredTotals = useMemo(() => {
     if (!summary?.totals) return null;
-    if (!kartTipiFilter) return summary.totals;
-    const match = summary.byType?.find(t => t.kart_tipi === kartTipiFilter);
-    if (!match) return summary.totals;
-    return {
-      urun_sayisi: match.urun_sayisi,
-      gebze_adet: match.gebze_adet,
-      eticaret_adet: match.eticaret_adet,
-      showroom_adet: match.showroom_adet,
-      gebze_tutar: match.gebze_tutar,
-      eticaret_tutar: match.eticaret_tutar,
-      showroom_tutar: match.showroom_tutar,
-      toplam_tutar: match.toplam_tutar,
-      toplam_adet: (match.gebze_adet || 0) + (match.eticaret_adet || 0) + (match.showroom_adet || 0),
-    };
+    if (kartTipiFilter.length === 0) return summary.totals;
+    const matches = summary.byType?.filter(t => kartTipiFilter.includes(t.kart_tipi)) || [];
+    if (matches.length === 0) return summary.totals;
+    return matches.reduce((acc, t) => ({
+      urun_sayisi: (acc.urun_sayisi || 0) + (t.urun_sayisi || 0),
+      gebze_adet: (acc.gebze_adet || 0) + (t.gebze_adet || 0),
+      eticaret_adet: (acc.eticaret_adet || 0) + (t.eticaret_adet || 0),
+      showroom_adet: (acc.showroom_adet || 0) + (t.showroom_adet || 0),
+      gebze_tutar: (acc.gebze_tutar || 0) + (t.gebze_tutar || 0),
+      eticaret_tutar: (acc.eticaret_tutar || 0) + (t.eticaret_tutar || 0),
+      showroom_tutar: (acc.showroom_tutar || 0) + (t.showroom_tutar || 0),
+      toplam_tutar: (acc.toplam_tutar || 0) + (t.toplam_tutar || 0),
+      toplam_adet: (acc.toplam_adet || 0) + (t.gebze_adet || 0) + (t.eticaret_adet || 0) + (t.showroom_adet || 0),
+    }), {});
   }, [summary, kartTipiFilter]);
 
   // Seçili depolara göre hesaplanan toplamlar
@@ -202,45 +203,12 @@ export default function DepoPage() {
       {summaryLoading ? <Spinner /> : summary?.totals ? (
         <div className="space-y-6">
           {/* ── KART TİPİ FİLTRESİ ── */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-2">
-              <Filter size={16} className="text-gray-500" />
-              <span className="text-sm font-medium text-gray-600">Kart Tipi:</span>
-            </div>
-            <button
-              onClick={() => { setKartTipiFilter(''); setPage(1); }}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                !kartTipiFilter
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              Tümü
-            </button>
-            {kartTipleri.map(t => (
-              <button
-                key={t}
-                onClick={() => { setKartTipiFilter(kartTipiFilter === t ? '' : t); setPage(1); }}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                  kartTipiFilter === t
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-            {kartTipiFilter && (
-              <button
-                onClick={() => { setKartTipiFilter(''); setPage(1); }}
-                className="flex items-center gap-1 px-2 py-1.5 text-xs text-red-600 hover:text-red-800 hover:bg-red-50 rounded-full transition-all"
-                title="Filtreyi temizle"
-              >
-                <X size={14} />
-                Temizle
-              </button>
-            )}
-          </div>
+          <MultiSelectFilter
+            label="Kart Tipi:"
+            options={kartTipleri}
+            value={kartTipiFilter}
+            onChange={v => { setKartTipiFilter(v); setPage(1); }}
+          />
 
           {/* ── DEPO SEÇİM KARTLARI ── */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -304,7 +272,7 @@ export default function DepoPage() {
                 <p className="text-2xl font-bold text-emerald-700">{formatTRY(computedTotals.tutar)}</p>
               </Card>
               <Card className="p-4 text-center">
-                <p className="text-xs font-medium text-gray-500 mb-1">{kartTipiFilter ? 'Filtre Toplam Maliyet' : 'Genel Toplam Maliyet'}</p>
+                <p className="text-xs font-medium text-gray-500 mb-1">{kartTipiFilter.length > 0 ? 'Filtre Toplam Maliyet' : 'Genel Toplam Maliyet'}</p>
                 <p className="text-2xl font-bold text-gray-800">{formatTRY(filteredTotals.toplam_tutar)}</p>
               </Card>
             </div>
@@ -379,10 +347,10 @@ export default function DepoPage() {
                     if (selectedDepolar.includes('gebze')) toplam += t.gebze_tutar;
                     if (selectedDepolar.includes('eticaret')) toplam += t.eticaret_tutar;
                     if (selectedDepolar.includes('showroom')) toplam += t.showroom_tutar;
-                    const isSelected = kartTipiFilter === t.kart_tipi;
+                    const isSelected = kartTipiFilter.includes(t.kart_tipi);
                     return (
                       <tr key={t.kart_tipi} className={`border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${isSelected ? 'bg-blue-50 ring-1 ring-blue-200' : i % 2 === 0 ? '' : 'bg-gray-50/50'}`}
-                        onClick={() => { setKartTipiFilter(isSelected ? '' : t.kart_tipi); setPage(1); }}
+                        onClick={() => { setKartTipiFilter(isSelected ? kartTipiFilter.filter(x => x !== t.kart_tipi) : [...kartTipiFilter, t.kart_tipi]); setPage(1); }}
                       >
                         <td className="py-2 px-3 font-medium text-gray-800">{t.kart_tipi || 'Belirsiz'}</td>
                         <td className="py-2 px-3 text-right text-gray-600">{formatNum(t.urun_sayisi)}</td>
@@ -441,12 +409,11 @@ export default function DepoPage() {
                     />
                   </div>
                 </div>
-                <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={kartTipiFilter} onChange={e => { setKartTipiFilter(e.target.value); setPage(1); }}
-                >
-                  <option value="">Tüm Kart Tipleri</option>
-                  {kartTipleri.map(t => <option key={t} value={t}>{t}</option>)}
-                </select>
+                <MultiSelectFilter
+                  options={kartTipleri}
+                  value={kartTipiFilter}
+                  onChange={v => { setKartTipiFilter(v); setPage(1); }}
+                />
                 <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={depoFilter} onChange={e => { setDepoFilter(e.target.value); setPage(1); }}
                 >

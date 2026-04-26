@@ -5,6 +5,8 @@ import { PageHeader, Card, Button, Badge, Modal, Input, Select, Textarea, Table,
 import { Plus, Pencil, Trash2, Eye, Search, Tag, ExternalLink, RefreshCw, ArrowUpDown, BarChart3, TrendingUp, Package, AlertTriangle, Calendar, DollarSign, PieChart as PieChartIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import MultiSelectFilter from '../components/MultiSelectFilter';
+import { normSearch } from '../utils/searchUtils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, ComposedChart, Line } from 'recharts';
 
 const EMPTY = { code: '', name: '', category_id: '', unit: 'adet', min_stock_level: 0, description: '' };
@@ -16,7 +18,7 @@ export default function ProductsPage() {
   const canEdit = user?.role !== 'viewer';
 
   const [search, setSearch] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState([]); // seçili normalize edilmiş kategori anahtarları
   const [sortBy, setSortBy] = useState('name'); // name | stock | last_order_date | last_price
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(EMPTY);
@@ -31,9 +33,29 @@ export default function ProductsPage() {
   const YEARS = Array.from({ length: 10 }, (_, i) => String(new Date().getFullYear() - i));
   const COLORS = ['#3b82f6', '#ef4444', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', '#6366f1', '#14b8a6'];
 
+  const { data: categories = [] } = useQuery({ queryKey: ['categories'], queryFn: () => getCategories().then(r => r.data) });
+
+  // Türkçe karakter farklılığından oluşan tekrar kategorileri birleştir
+  const mergedCategories = useMemo(() => {
+    const map = {};
+    for (const cat of categories) {
+      const key = normSearch(cat.name);
+      if (!map[key]) map[key] = { key, name: cat.name, ids: [] };
+      map[key].ids.push(String(cat.id));
+    }
+    return Object.values(map).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+  }, [categories]);
+
+  // Seçili kategori anahtarlarından tüm eşleşen ID'leri topla
+  const categoryIdParam = useMemo(() => {
+    if (categoryFilter.length === 0) return undefined;
+    const ids = categoryFilter.flatMap(key => mergedCategories.find(c => c.key === key)?.ids || []);
+    return ids.length > 0 ? ids.join(',') : undefined;
+  }, [categoryFilter, mergedCategories]);
+
   const { data: rawProducts = [], isLoading } = useQuery({
-    queryKey: ['products', search, categoryFilter],
-    queryFn: () => getProducts({ search: search || undefined, category_id: categoryFilter || undefined }).then(r => r.data)
+    queryKey: ['products', search, categoryIdParam],
+    queryFn: () => getProducts({ search: search || undefined, category_id: categoryIdParam }).then(r => r.data)
   });
 
   const { data: statsData } = useQuery({
@@ -68,8 +90,6 @@ export default function ProductsPage() {
     if (sortBy === 'last_order_date') return (b.last_order_date || '').localeCompare(a.last_order_date || '');
     return (a.name || '').localeCompare(b.name || '', 'tr');
   });
-
-  const { data: categories = [] } = useQuery({ queryKey: ['categories'], queryFn: () => getCategories().then(r => r.data) });
 
   const syncMutation = useMutation({
     mutationFn: syncWarehouse,
@@ -338,11 +358,11 @@ export default function ProductsPage() {
             <input className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Ürün adı veya kodu ara..." value={search} onChange={e => setSearch(e.target.value)} />
           </div>
-          <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}>
-            <option value="">Tüm Kategoriler</option>
-            {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
+          <MultiSelectFilter
+            options={mergedCategories.map(c => ({ value: c.key, label: c.name }))}
+            value={categoryFilter}
+            onChange={setCategoryFilter}
+          />
           <div className="flex items-center gap-2">
             <ArrowUpDown size={14} className="text-gray-400" />
             <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"

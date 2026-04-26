@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getPO, getPOs, getSupplierPanelDetail, getSupplierStats, getSuppliers } from '../api';
 import { PageHeader, Card, Button, Badge, Modal, Table, Spinner, StatCard } from '../components/UI';
-import { Search, Calendar, BarChart3, PieChart as PieChartIcon, TrendingUp, ShoppingCart, Users, DollarSign, FileText } from 'lucide-react';
+import { Search, Calendar, BarChart3, PieChart as PieChartIcon, TrendingUp, ShoppingCart, Users, DollarSign, FileText, Clock, CheckCircle } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, ComposedChart, Line } from 'recharts';
 import { useSearchParams } from 'react-router-dom';
 
@@ -122,7 +122,7 @@ export default function SuppliersOrdersPage() {
     color: STATUS_COLORS[s.status] || '#94a3b8',
   }));
 
-  const yearTotal = statsData?.yearTotal || { toplam_tutar: 0, toplam_siparis: 0, aktif_tedarikci: 0, acik_siparis: 0 };
+  const yearTotal = statsData?.yearTotal || { toplam_tutar: 0, toplam_siparis: 0, aktif_tedarikci: 0, acik_siparis: 0, bekleyen_siparis: 0, kapanan_siparis: 0, bu_ay_tutar: 0 };
   const isLoadingMain = viewMode === 'suppliers' ? suppliersLoading : ordersLoading;
 
   return (
@@ -147,11 +147,12 @@ export default function SuppliersOrdersPage() {
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Toplam Tutar" value={`₺${(yearTotal.toplam_tutar || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`} icon={DollarSign} color="blue" />
-        <StatCard label="Toplam Siparis" value={yearTotal.toplam_siparis || 0} icon={ShoppingCart} color="green" />
-        <StatCard label="Aktif Tedarikci" value={yearTotal.aktif_tedarikci || 0} icon={Users} color="purple" />
-        <StatCard label="Kapanmamis Siparis" value={yearTotal.acik_siparis || 0} icon={FileText} color="orange" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+        <StatCard label="Toplam Sipariş" value={yearTotal.toplam_siparis || 0} icon={ShoppingCart} color="blue" />
+        <StatCard label="Açık Sipariş" value={yearTotal.acik_siparis || 0} icon={FileText} color="orange" />
+        <StatCard label="Bekleyen Sipariş" value={yearTotal.bekleyen_siparis || 0} icon={Clock} color="red" />
+        <StatCard label="Kapanan Sipariş" value={yearTotal.kapanan_siparis || 0} icon={CheckCircle} color="green" />
+        <StatCard label="Bu Ay Tutarı" value={`₺${(yearTotal.bu_ay_tutar || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`} icon={TrendingUp} color="purple" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">

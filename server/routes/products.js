@@ -13,6 +13,23 @@ router.use(authenticate);
 async function syncProductsFromTIGER3() {
   const db = getDb();
 
+  // Türkçe karakter farklılığından oluşan tekrarlı kategorileri temizle (ELEKTRIK vs ELEKTRİK)
+  db.transaction(() => {
+    const allCats = db.prepare('SELECT id, name FROM categories ORDER BY name').all();
+    const seenNorm = new Map(); // normName → canonical id
+    for (const cat of allCats) {
+      const key = normTr(cat.name);
+      if (!seenNorm.has(key)) {
+        seenNorm.set(key, cat.id);
+      } else {
+        const canonicalId = seenNorm.get(key);
+        db.prepare('UPDATE products SET category_id = ? WHERE category_id = ?').run(canonicalId, cat.id);
+        db.prepare('DELETE FROM categories WHERE id = ?').run(cat.id);
+        console.log(`[Products] Kategori birleştirildi: "${cat.name}" → ${canonicalId}`);
+      }
+    }
+  })();
+
   const rows = await tiger3.query(`
     SELECT
       I.CODE,
@@ -24,11 +41,11 @@ async function syncProductsFromTIGER3() {
     ORDER BY I.CODE
   `);
 
-  // Ensure categories exist for all STGRPCODE values
+  // Ensure categories exist for all STGRPCODE values — norm() ile bul, tekrar engelle
   const groups = [...new Set(rows.map(r => r.STGRPCODE).filter(g => g && g.trim()))];
   const catMap = {};
   for (const grp of groups) {
-    let cat = db.prepare('SELECT id FROM categories WHERE name = ?').get(grp);
+    let cat = db.prepare("SELECT id FROM categories WHERE norm(name) = norm(?)").get(grp);
     if (!cat) {
       const catId = uuidv4();
       db.prepare('INSERT INTO categories (id, name) VALUES (?, ?)').run(catId, grp);
@@ -123,7 +140,11 @@ router.get('/', (req, res) => {
     WHERE 1=1`;
   const params = [];
   if (search) { const ns = normTr(search); query += ' AND (norm(p.name) LIKE ? OR norm(p.code) LIKE ?)'; params.push(`%${ns}%`, `%${ns}%`); }
-  if (category_id) { query += ' AND p.category_id = ?'; params.push(category_id); }
+  if (category_id) {
+    const ids = String(category_id).split(',').map(s => s.trim()).filter(Boolean);
+    if (ids.length === 1) { query += ' AND p.category_id = ?'; params.push(ids[0]); }
+    else if (ids.length > 1) { query += ` AND p.category_id IN (${ids.map(() => '?').join(',')})`; params.push(...ids); }
+  }
   if (active !== undefined) { query += ' AND p.active = ?'; params.push(active === 'true' ? 1 : 0); }
   query += ' ORDER BY p.name';
   const rows = db.prepare(query).all(...params);
@@ -236,7 +257,17 @@ router.get('/stats/charts', (req, res) => {
     LIMIT 10
   `).all(String(filterYear));
 
-  res.json({ turnover, categoryDist, monthly, stockSummary, topByAmount, priceChanges });
+  // Türkçe karakter farklılığından kaynaklanan tekrar kategori isimlerini birleştir
+  const catMerged = {};
+  for (const r of categoryDist) {
+    const key = normTr(r.category);
+    if (!catMerged[key]) catMerged[key] = { category: r.category, urun_sayisi: 0, toplam_tutar: 0 };
+    catMerged[key].urun_sayisi += r.urun_sayisi;
+    catMerged[key].toplam_tutar += (r.toplam_tutar || 0);
+  }
+  const mergedCategoryDist = Object.values(catMerged).sort((a, b) => b.toplam_tutar - a.toplam_tutar);
+
+  res.json({ turnover, categoryDist: mergedCategoryDist, monthly, stockSummary, topByAmount, priceChanges });
 });
 
 router.get('/:id', (req, res) => {
@@ -265,7 +296,21 @@ router.get('/:id', (req, res) => {
     WHERE ph.product_id = ? ORDER BY ph.price_date DESC LIMIT 50
   `).all(req.params.id);
 
-  res.json({ ...product, suppliers, prices });
+  const purchaseHistory = db.prepare(`
+    SELECT
+      po.po_number, po.order_date, po.status,
+      COALESCE(s.name, '') AS supplier_name,
+      poi.quantity, poi.unit_price, po.currency,
+      ROUND(poi.quantity * poi.unit_price, 2) AS line_total
+    FROM po_items poi
+    JOIN purchase_orders po ON po.id = poi.po_id
+    LEFT JOIN suppliers s ON s.id = po.supplier_id
+    WHERE poi.product_id = ? AND po.status != 'cancelled'
+    ORDER BY po.order_date DESC, po.created_at DESC
+    LIMIT 30
+  `).all(req.params.id);
+
+  res.json({ ...product, suppliers, prices, purchaseHistory });
 });
 
 router.post('/sync-tiger3', authorize('admin'), async (req, res) => {
