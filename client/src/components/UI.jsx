@@ -41,8 +41,9 @@ export function Badge({ children, color = 'gray' }) {
     yellow: 'bg-yellow-100 text-yellow-700',
     red: 'bg-red-100 text-red-700',
     purple: 'bg-purple-100 text-purple-700',
+    orange: 'bg-orange-100 text-orange-700',
   };
-  return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${colors[color]}`}>{children}</span>;
+  return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${colors[color] || colors.gray}`}>{children}</span>;
 }
 
 export function Input({ label, error, className = '', ...props }) {
@@ -126,6 +127,8 @@ export function StatCard({ label, value, icon: Icon, color = 'blue' }) {
     orange: 'bg-orange-50 text-orange-600',
     red: 'bg-red-50 text-red-600',
     purple: 'bg-purple-50 text-purple-600',
+    yellow: 'bg-yellow-50 text-yellow-600',
+    orange: 'bg-orange-50 text-orange-600',
   };
   return (
     <Card className="p-5">

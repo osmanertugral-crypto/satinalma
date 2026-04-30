@@ -5,7 +5,7 @@ import {
   getSchedulerSettings, updateSchedulerSettings, syncNow, getSyncStatus,
   getEviraDbConnection, updateEviraDbConnection, testEviraConnection,
 } from '../api';
-import { PageHeader, Card, Button, Spinner } from '../components/UI';
+import { PageHeader, Card, Button } from '../components/UI';
 import { CheckCircle, XCircle, RefreshCw, Database, Clock, Play } from 'lucide-react';
 
 function formatDate(iso) {
@@ -168,7 +168,7 @@ export default function SettingsPage() {
     onSuccess: () => { setTimeout(() => refetchSync(), 1500); },
   });
 
-  if (isLoading) return <div className="flex justify-center py-20"><Spinner /></div>;
+  if (isLoading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent" /></div>;
 
   const isRunning = syncStatus?.isRunning || syncNowMut.isPending;
 
@@ -213,7 +213,7 @@ export default function SettingsPage() {
         <div className="min-h-[2rem] mt-3">
           {testing && (
             <span className="flex items-center gap-1.5 text-sm text-gray-500">
-              <Spinner /><span>Test ediliyor…</span>
+              <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-gray-400 border-t-transparent shrink-0" /><span>Test ediliyor…</span>
             </span>
           )}
           {!testing && testResult && (
@@ -277,7 +277,7 @@ export default function SettingsPage() {
 
         <div className="min-h-[2rem] mt-3">
           {eviraTestPending && (
-            <span className="flex items-center gap-1.5 text-sm text-gray-500"><Spinner /><span>Test ediliyor…</span></span>
+            <span className="flex items-center gap-1.5 text-sm text-gray-500"><div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-gray-400 border-t-transparent shrink-0" /><span>Test ediliyor…</span></span>
           )}
           {!eviraTestPending && eviraTestResult && (
             <div className={`flex items-start gap-1.5 text-sm rounded px-2 py-1.5 ${eviraTestResult.success ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
@@ -359,9 +359,11 @@ export default function SettingsPage() {
           <Button
             onClick={() => syncNowMut.mutate()}
             disabled={isRunning}
-            className="flex items-center gap-1.5 shrink-0 text-sm"
+            className="flex items-center justify-center gap-1.5 shrink-0 text-sm w-36"
           >
-            {isRunning ? <><Spinner /><span>Güncelleniyor…</span></> : <><RefreshCw size={13} />Şimdi Güncelle</>}
+            {isRunning
+              ? <><div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-white border-t-transparent shrink-0" /><span>Güncelleniyor…</span></>
+              : <><RefreshCw size={13} /><span>Şimdi Güncelle</span></>}
           </Button>
         </div>
 

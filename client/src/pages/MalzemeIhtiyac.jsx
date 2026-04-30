@@ -83,6 +83,7 @@ export default function MalzemeIhtiyac() {
       qc.invalidateQueries({ queryKey: ['malzeme-uretim'] });
       qc.invalidateQueries({ queryKey: ['malzeme-maliyet'] });
       qc.invalidateQueries({ queryKey: ['malzeme-satinalma'] });
+      qc.invalidateQueries({ queryKey: ['malzeme-projeler'] });
     },
   });
 

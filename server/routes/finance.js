@@ -24,6 +24,21 @@ function formatDate(d) {
   if (!(d instanceof Date) || isNaN(d)) return null;
   return d.toISOString().split('T')[0];
 }
+// mssql sürücüsü tarihleri JS Date objesi döndürür; String() → "Fri Jan 27" (yıl yok!)
+// Yerel tarih getter'larıyla YYYY-MM-DD formatına çevir
+function toSQLiteDate(v) {
+  if (!v) return null;
+  if (v instanceof Date) {
+    if (isNaN(v)) return null;
+    const y = v.getFullYear();
+    const m = String(v.getMonth() + 1).padStart(2, '0');
+    const d = String(v.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  const s = String(v).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.substring(0, 10);
+  return null;
+}
 function readSheet(wb, name) {
   const ws = wb.Sheets[name];
   if (!ws) return [];
@@ -67,8 +82,8 @@ async function syncFromTIGER3() {
         +r.SIGN || 0,
         +r.BORC || 0,
         +r.ALACAK || 0,
-        r.INDATE ? String(r.INDATE).substring(0, 10) : null,
-        r.DUEDATE ? String(r.DUEDATE).substring(0, 10) : null,
+        toSQLiteDate(r.INDATE),
+        toSQLiteDate(r.DUEDATE),
         +r.VADESURESI || 0,
         String(r.ISLEM_DOVIZI || '').trim(),
         +r.ISLEM_DOVIZ_TUTARI || 0,
@@ -264,12 +279,93 @@ router.get('/cariler', (req, res) => {
         SUM(CASE WHEN alacak < 0 AND duedate IS NOT NULL AND duedate <= ? THEN ABS(alacak) ELSE 0 END) AS vadesiGelen,
         SUM(CASE WHEN alacak < 0 AND duedate IS NOT NULL AND duedate <= ? THEN ABS(islem_doviz_tutari) ELSE 0 END) AS vadesiGelenDoviz,
         SUM(CASE WHEN alacak < 0 AND (duedate IS NULL OR duedate > ?) THEN ABS(alacak) ELSE 0 END) AS vadesiGelmeyen,
-        MAX(CASE WHEN borc > 0 THEN indate END) AS sonOdemeTarih,
         COUNT(CASE WHEN alacak < 0 THEN 1 END) AS faturaSayisi,
-        COUNT(CASE WHEN borc > 0 THEN 1 END) AS odemeSayisi
+        COUNT(CASE WHEN borc > 0 THEN 1 END) AS odemeSayisi,
+        substr(MAX(CASE WHEN alacak < 0 THEN indate END), 1, 7) AS sonFaturaDonem
       FROM finance_ekstre_cache
       GROUP BY code, COALESCE(NULLIF(islem_dovizi,''), 'TL')
     `).all(today, today, today);
+
+    // Son ödeme tutarı
+    const sonOdemeRaw = db.prepare(`
+      SELECT code, COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz, indate, borc
+      FROM finance_ekstre_cache WHERE borc > 0
+      ORDER BY indate DESC
+    `).all();
+    const sonOdemeMap = new Map();
+    for (const r of sonOdemeRaw) {
+      const key = r.code + '||' + r.doviz;
+      if (!sonOdemeMap.has(key)) sonOdemeMap.set(key, { sonOdemeTutar: r.borc, sonOdemeTarih: r.indate });
+    }
+
+    // FIFO: en eski fatura önce ödenir; kalan en eski faturanın vade tarihinden gün hesabı
+    const allExtre = db.prepare(`
+      SELECT code, COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz,
+             indate, duedate, borc, alacak, islem_doviz_tutari
+      FROM finance_ekstre_cache
+      ORDER BY code, islem_dovizi, indate ASC
+    `).all();
+
+    const fifoGrouped = new Map();
+    for (const r of allExtre) {
+      const key = r.code + '||' + r.doviz;
+      if (!fifoGrouped.has(key)) fifoGrouped.set(key, { faturalar: [], toplamOdeme: 0 });
+      const g = fifoGrouped.get(key);
+      if (r.alacak < 0) g.faturalar.push(r);
+      if (r.borc > 0) g.toplamOdeme += r.borc;
+    }
+
+    const todayDate = new Date();
+    const todayDateStr = todayDate.toISOString().split('T')[0];
+    const fifoResult = new Map();
+    for (const [key, g] of fifoGrouped) {
+      let odemePotu = g.toplamOdeme;
+      let enEski = null;
+      let vadesiGelenFifo = 0;   // sadece vadesi geçmiş + kalan borçlu kısım
+      let vadesiGelenFifoDoviz = 0;
+
+      for (const f of g.faturalar) {
+        const tutar = Math.abs(f.alacak);
+        let kalanF;
+        if (odemePotu >= tutar) {
+          odemePotu -= tutar;
+          kalanF = 0;
+        } else if (odemePotu > 0) {
+          kalanF = tutar - odemePotu;
+          odemePotu = 0;
+          if (!enEski) enEski = f;
+        } else {
+          kalanF = tutar;
+          if (!enEski) enEski = f;
+        }
+        // Vadesi geçmiş VE hâlâ borçlu olan kısım
+        // null duedate = vade girilmemiş = anında vadeli sayılır
+        if (kalanF > 0 && (!f.duedate || f.duedate <= todayDateStr)) {
+          vadesiGelenFifo += kalanF;
+          vadesiGelenFifoDoviz += Math.abs(f.islem_doviz_tutari || 0) > 0
+            ? Math.abs(f.islem_doviz_tutari || 0) * (kalanF / tutar)
+            : kalanF;
+        }
+      }
+
+      if (enEski || vadesiGelenFifo > 0) {
+        const refDate = enEski ? (enEski.duedate || enEski.indate) : null;
+        const days = refDate
+          ? Math.max(0, Math.floor((todayDate - new Date(refDate)) / 86400_000))
+          : 0;
+        fifoResult.set(key, {
+          enUzakGun: days,
+          enUzakFaturaTutar: enEski ? Math.abs(enEski.alacak) : 0,
+          vadesiGelen: vadesiGelenFifo,
+          vadesiGelenDoviz: vadesiGelenFifoDoviz,
+        });
+      }
+    }
+
+    rows = rows.map(r => {
+      const key = r.cariKodu + '||' + r.doviz;
+      return { ...r, ...(sonOdemeMap.get(key) || {}), ...(fifoResult.get(key) || {}) };
+    });
 
     if (cariKontrol && cariKontrol !== 'TÜMÜ')
       rows = rows.filter(r => (r.cariKontrol || '') === cariKontrol);
@@ -354,15 +450,23 @@ router.get('/cari-detay', (req, res) => {
     const sonBirYilOdemeler = odemeler.filter(o => o.tarih && o.tarih >= birYilStr);
     const sonBirYilFaturalar = faturalar.filter(f => f.tarih && f.tarih >= birYilStr);
 
-    // Ortalama ödeme vadesi (faturalarda vadesuresi)
+    // Vade süresi: firma anlaşması = en sık görülen vadesuresi (mod)
     const vadeSureleri = faturalar.filter(f => f.vadeSuresi > 0);
-    const ortVade = vadeSureleri.length > 0
-      ? Math.round(vadeSureleri.reduce((s, f) => s + f.vadeSuresi, 0) / vadeSureleri.length)
-      : 0;
+    let ortVade = 0;
+    let ortOdemeGun = 0;
+    if (vadeSureleri.length > 0) {
+      const vadeCount = {};
+      vadeSureleri.forEach(f => { vadeCount[f.vadeSuresi] = (vadeCount[f.vadeSuresi] || 0) + 1; });
+      ortVade = parseInt(Object.keys(vadeCount).reduce((a, b) => vadeCount[a] >= vadeCount[b] ? a : b));
+      ortOdemeGun = Math.round(vadeSureleri.reduce((s, f) => s + f.vadeSuresi, 0) / vadeSureleri.length);
+    }
 
     // Son ödeme bilgisi
     const sonOdemeler = odemeler.filter(o => o.tarih).sort((a, b) => b.tarih.localeCompare(a.tarih));
     const sonOdeme = sonOdemeler[0] || null;
+    const sonOdemeGunOnce = sonOdeme?.tarih
+      ? Math.floor((Date.now() - new Date(sonOdeme.tarih).getTime()) / 86400_000)
+      : null;
 
     // Aylık özet (son 24 ay)
     const aylik = {};
@@ -383,11 +487,26 @@ router.get('/cari-detay', (req, res) => {
       ? Math.round(sonBirYilAylik.reduce((s, a) => s + a.odeme, 0) / sonBirYilAylik.length)
       : 0;
 
-    // Ödenmemiş gün hesabı: en eski ödenmemiş faturanın tarihi
+    // Ödenmemiş gün hesabı: en eski ödenmemiş faturanın vade tarihinden (vade geçtikten sonraki gün)
     const enEskiOdenmemis = faturaDetay.find(f => f.durum !== 'odendi');
-    const odenmeGunSayisi = enEskiOdenmemis?.tarih
-      ? Math.floor((Date.now() - new Date(enEskiOdenmemis.tarih).getTime()) / 86400_000)
+    const odenmeGunSayisi = enEskiOdenmemis
+      ? (() => {
+          const refDate = enEskiOdenmemis.vadeTarihi || enEskiOdenmemis.tarih;
+          return refDate ? Math.max(0, Math.floor((Date.now() - new Date(refDate).getTime()) / 86400_000)) : 0;
+        })()
       : 0;
+
+    // Vadesi geçen borç:
+    //  - Anlaşma yok (ortVade=0): tüm kalan borç vadesi geçmiş sayılır
+    //  - Anlaşma var: vadeTarihi <= bugün VEYA null (vade girilmemiş = anında ödenmeli)
+    const todayStr = new Date().toISOString().split('T')[0];
+    const vadesiGelenBorc = ortVade === 0
+      ? faturaDetay
+          .filter(f => f.durum !== 'odendi')
+          .reduce((s, f) => s + (f.kalanBorc || 0), 0)
+      : faturaDetay
+          .filter(f => f.durum !== 'odendi' && (!f.vadeTarihi || f.vadeTarihi <= todayStr))
+          .reduce((s, f) => s + (f.kalanBorc || 0), 0);
 
     res.json({
       cariKodu: code,
@@ -395,9 +514,12 @@ router.get('/cari-detay', (req, res) => {
       toplamFatura,
       toplamOdeme,
       kalanBorc,
+      vadesiGelenBorc,
       ortVade,
+      ortOdemeGun,
       odenmeGunSayisi,
       sonOdeme: sonOdeme ? { tarih: sonOdeme.tarih, tutar: sonOdeme.borc, doviz: sonOdeme.doviz } : null,
+      sonOdemeGunOnce,
       sonBirYilOzet: {
         toplamFatura: sonBirYilFaturalar.reduce((s, f) => s + f.tutar, 0),
         toplamOdeme: sonBirYilOdemeler.reduce((s, o) => s + o.borc, 0),

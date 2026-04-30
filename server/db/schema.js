@@ -539,6 +539,7 @@ function initDb() {
   `);
   try { database.exec('CREATE INDEX IF NOT EXISTS idx_esc_stok ON evira_stock_cache(stok_kodu)'); } catch(e) {}
   try { database.exec('CREATE INDEX IF NOT EXISTS idx_esc_ambar ON evira_stock_cache(ambar_kodu)'); } catch(e) {}
+  try { database.exec('ALTER TABLE evira_stock_cache ADD COLUMN son_hareket TEXT'); } catch(e) {}
 
   // TIGER3 bağlantı ve zamanlayıcı ayarları
   database.exec(`
@@ -579,6 +580,43 @@ function initDb() {
   try { database.exec('ALTER TABLE suppliers ADD COLUMN external_code TEXT'); } catch(e) {}
   // rating sütununu suppliers tablosuna ekle (varsa atla)
   try { database.exec('ALTER TABLE suppliers ADD COLUMN rating INTEGER DEFAULT 0'); } catch(e) {}
+
+  // purchase_orders.status CHECK constraint'ini genişlet:
+  // Eski kısıt sadece ('draft','sent','confirmed','delivered','cancelled') izin veriyordu,
+  // Tiger3 sync ve receive-items için 'açık','bekleyen','kapanan' de gerekli.
+  try {
+    const def = database.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='purchase_orders'").get();
+    if (def && def.sql && def.sql.includes("CHECK (status IN ('draft','sent','confirmed','delivered','cancelled'))")) {
+      database.exec(`
+        PRAGMA foreign_keys = OFF;
+        CREATE TABLE purchase_orders_new (
+          id TEXT PRIMARY KEY,
+          po_number TEXT UNIQUE NOT NULL,
+          supplier_id TEXT NOT NULL REFERENCES suppliers(id),
+          status TEXT NOT NULL DEFAULT 'draft',
+          order_date TEXT NOT NULL,
+          expected_date TEXT,
+          delivery_date TEXT,
+          currency TEXT NOT NULL DEFAULT 'TRY',
+          total_amount REAL DEFAULT 0,
+          notes TEXT,
+          created_by TEXT REFERENCES users(id),
+          created_at TEXT NOT NULL DEFAULT (datetime('now')),
+          updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+        INSERT INTO purchase_orders_new SELECT * FROM purchase_orders;
+        DROP TABLE purchase_orders;
+        ALTER TABLE purchase_orders_new RENAME TO purchase_orders;
+        PRAGMA foreign_keys = ON;
+      `);
+      console.log('[Migration] purchase_orders.status CHECK constraint kaldırıldı.');
+    }
+  } catch(e) { console.warn('[Migration] purchase_orders migration atlandı:', e.message); }
+
+  // po_items.received_quantity sütununu ekle (varsa atla)
+  try { database.exec('ALTER TABLE po_items ADD COLUMN received_quantity REAL DEFAULT 0'); } catch(e) {}
+  // po_items.received_date sütununu ekle (varsa atla)
+  try { database.exec('ALTER TABLE po_items ADD COLUMN received_date TEXT'); } catch(e) {}
 
   console.log('Veritabanı başlatıldı.');
 }

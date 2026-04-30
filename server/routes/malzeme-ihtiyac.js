@@ -254,25 +254,37 @@ router.get('/satinalma', (req, res) => {
     let data;
 
     if (!projeler) {
-      // Proje seçilmemişse: Excel'in önceden hesapladığı SATINALMA sütununu kullan
-      // SATINALMA sütunu = alınması gereken miktar (tüm stok düşümleri yapılmış)
+      // Proje seçilmemişse: tüm projelerin MIKTAR ve CIKISLAR toplamını hesapla,
+      // sonra global stok değerlerini bir kez düş (proje seçiliyken yapılanla aynı formül)
+      const ihtiyacMap = {};
+      for (const row of uretimRows) {
+        const altKod = row['ALT_KOD'];
+        if (!altKod) continue;
+        if (!ihtiyacMap[altKod]) ihtiyacMap[altKod] = { toplam_miktar: 0, projelere_cikislar: 0 };
+        ihtiyacMap[altKod].toplam_miktar += Number(row['MIKTAR']) || 0;
+        ihtiyacMap[altKod].projelere_cikislar += Number(row['PROJELERE_ÇIKIŞLAR_YENI']) || 0;
+      }
+
       data = Object.entries(globalStok).map(([alt_kod, g]) => {
-        const gercekSatinalma = g.satinalma_col;
+        const item = ihtiyacMap[alt_kod] || { toplam_miktar: 0, projelere_cikislar: 0 };
+        const gercekSatinalma = item.toplam_miktar - item.projelere_cikislar
+          - (g.depo_stok || 0) - (g.acik_siparisler || 0);
+        const birimFiyat = g.birim_fiyat || 0;
 
         return {
           alt_kod,
           alt_adi: g.alt_adi,
           son_satinalma_cari: g.son_satinalma_cari,
-          toplam_ihtiyac: 0,
-          projelere_cikislar: 0,
+          toplam_ihtiyac: item.toplam_miktar,
+          projelere_cikislar: item.projelere_cikislar,
           depo_stok: g.depo_stok,
           uretim_depo: g.uretim_depo,
           acik_siparisler: g.acik_siparisler,
           toplam_satinalma: Math.max(0, gercekSatinalma),
-          birim_fiyat: g.birim_fiyat,
-          toplam_maliyet: Math.max(0, gercekSatinalma) * g.birim_fiyat,
+          birim_fiyat: birimFiyat,
+          toplam_maliyet: Math.max(0, gercekSatinalma) * birimFiyat,
           gercek_satinalma: gercekSatinalma,
-          alinmasi_gereken_tutar: Math.max(0, gercekSatinalma) * g.birim_fiyat,
+          alinmasi_gereken_tutar: Math.max(0, gercekSatinalma) * birimFiyat,
         };
       });
     } else {

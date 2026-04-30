@@ -10,7 +10,7 @@ router.use(authenticate);
 router.get('/inventory', (req, res) => {
   const db = getDb();
   const rows = db.prepare(`
-    SELECT ambar_kodu, ambar_adi, stok_kodu, stok_adi, birim, miktar
+    SELECT ambar_kodu, ambar_adi, stok_kodu, stok_adi, birim, miktar, son_hareket
     FROM evira_stock_cache
     ORDER BY ambar_adi, stok_adi
   `).all();
@@ -36,23 +36,40 @@ router.get('/inventory', (req, res) => {
 router.post('/sync', authorize('admin', 'user'), async (req, res) => {
   const db = getDb();
   try {
-    const rows = await evira.query(`
-      SELECT AMBAR_KODU, AMBAR_ADI, STOK_KODU, STOK_ADI, BIRIM, MIKTAR
-      FROM dbo.DEPO_STOK_RAPORU_TUM_DEPOLAR
-      WHERE MIKTAR > 0
-    `);
+    // Önce view'da SON_HAREKET_TARIHI var mı dene; yoksa olmadan çek
+    let rows;
+    let hasHareket = true;
+    try {
+      rows = await evira.query(`
+        SELECT AMBAR_KODU, AMBAR_ADI, STOK_KODU, STOK_ADI, BIRIM, MIKTAR,
+          CONVERT(VARCHAR(10), SON_HAREKET_TARIHI, 120) AS SON_HAREKET_TARIHI
+        FROM dbo.DEPO_STOK_RAPORU_TUM_DEPOLAR
+        WHERE MIKTAR > 0
+      `);
+    } catch (_) {
+      hasHareket = false;
+      rows = await evira.query(`
+        SELECT AMBAR_KODU, AMBAR_ADI, STOK_KODU, STOK_ADI, BIRIM, MIKTAR
+        FROM dbo.DEPO_STOK_RAPORU_TUM_DEPOLAR
+        WHERE MIKTAR > 0
+      `);
+    }
 
     const insert = db.prepare(`
-      INSERT INTO evira_stock_cache (ambar_kodu, ambar_adi, stok_kodu, stok_adi, birim, miktar)
-      VALUES (@AMBAR_KODU, @AMBAR_ADI, @STOK_KODU, @STOK_ADI, @BIRIM, @MIKTAR)
+      INSERT INTO evira_stock_cache (ambar_kodu, ambar_adi, stok_kodu, stok_adi, birim, miktar, son_hareket)
+      VALUES (@AMBAR_KODU, @AMBAR_ADI, @STOK_KODU, @STOK_ADI, @BIRIM, @MIKTAR, @SON_HAREKET_TARIHI)
     `);
 
     db.prepare('DELETE FROM evira_stock_cache').run();
-    db.transaction(rs => { for (const r of rs) insert.run(r); })(rows);
+    db.transaction(rs => {
+      for (const r of rs) {
+        insert.run({ ...r, SON_HAREKET_TARIHI: hasHareket ? (r.SON_HAREKET_TARIHI || null) : null });
+      }
+    })(rows);
 
     db.prepare(
       `INSERT INTO evira_sync_log (row_count, status, message) VALUES (?, 'success', ?)`
-    ).run(rows.length, `${rows.length} satır güncellendi`);
+    ).run(rows.length, `${rows.length} satır güncellendi${hasHareket ? ' (son hareket dahil)' : ''}`);
 
     res.json({ success: true, count: rows.length, message: `${rows.length} satır yüklendi` });
   } catch (err) {
@@ -101,8 +118,19 @@ router.put('/connection', authorize('admin'), (req, res) => {
 
 // POST /api/evira/test-connection
 router.post('/test-connection', authorize('admin'), async (req, res) => {
+  const db = getDb();
   const { server, database, user, password, port } = req.body || {};
-  const custom = server ? { server, database, user, password, port: parseInt(port || '1433', 10) } : null;
+  let custom = null;
+  if (server) {
+    const storedPw = db.prepare('SELECT value FROM db_settings WHERE key = ?').get('evira_password');
+    custom = {
+      server,
+      database,
+      user,
+      password: password || storedPw?.value || 'Aa123456',
+      port: parseInt(port || '1433', 10),
+    };
+  }
   const result = await evira.testConnection(custom);
   if (custom && result.success) evira.resetPool();
   res.json(result);

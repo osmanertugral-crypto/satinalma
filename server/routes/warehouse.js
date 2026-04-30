@@ -227,7 +227,7 @@ router.get('/stock', (req, res) => {
     else if (depo === 'eticaret') rows = rows.filter(r => (r.eticaret_stok || 0) > 0);
     else if (depo === 'showroom') rows = rows.filter(r => (r.showroom_stok || 0) > 0);
 
-    const allowedSort = ['stok_kodu', 'stok_adi', 'gebze_stok', 'eticaret_stok', 'showroom_stok', 'birim_fiyat', 'gebze_tutar', 'eticaret_tutar', 'showroom_tutar', 'kart_tipi'];
+    const allowedSort = ['stok_kodu', 'stok_adi', 'gebze_stok', 'eticaret_stok', 'showroom_stok', 'birim_fiyat', 'gebze_tutar', 'eticaret_tutar', 'showroom_tutar', 'kart_tipi', 'son_hareket'];
     const sortCol = allowedSort.includes(sort) ? sort : 'stok_kodu';
     const sortDir = order === 'desc' ? -1 : 1;
     rows.sort((a, b) => {
@@ -236,6 +236,13 @@ router.get('/stock', (req, res) => {
       if (typeof av === 'number' || typeof bv === 'number') return (Number(av || 0) - Number(bv || 0)) * sortDir;
       return String(av || '').localeCompare(String(bv || ''), 'tr') * sortDir;
     });
+
+    // evira son_hareket merge
+    try {
+      const eviraRows = db.prepare('SELECT stok_kodu, MAX(son_hareket) as son_hareket FROM evira_stock_cache GROUP BY stok_kodu').all();
+      const eviraMap = new Map(eviraRows.map(r => [r.stok_kodu, r.son_hareket]));
+      rows.forEach(r => { r.son_hareket = eviraMap.get(r.stok_kodu) || null; });
+    } catch (_) {}
 
     const total = rows.length;
     const offset = (Math.max(1, +page) - 1) * +limit;
@@ -247,36 +254,45 @@ router.get('/stock', (req, res) => {
 
   if (search) {
     const ns = normTr(search);
-    where += ' AND (norm(stok_kodu) LIKE ? OR norm(stok_adi) LIKE ?)';
+    where += ' AND (norm(w.stok_kodu) LIKE ? OR norm(w.stok_adi) LIKE ?)';
     params.push(`%${ns}%`, `%${ns}%`);
   }
 
   if (kartTipiArr.length === 1) {
-    where += ' AND kart_tipi = ?';
+    where += ' AND w.kart_tipi = ?';
     params.push(kartTipiArr[0]);
   } else if (kartTipiArr.length > 1) {
-    where += ` AND kart_tipi IN (${kartTipiArr.map(() => '?').join(',')})`;
+    where += ` AND w.kart_tipi IN (${kartTipiArr.map(() => '?').join(',')})`;
     params.push(...kartTipiArr);
   }
 
   // Sadece belirli depoda stok olanları göster
-  if (depo === 'gebze') where += ' AND gebze_stok > 0';
-  else if (depo === 'eticaret') where += ' AND eticaret_stok > 0';
-  else if (depo === 'showroom') where += ' AND showroom_stok > 0';
+  if (depo === 'gebze') where += ' AND w.gebze_stok > 0';
+  else if (depo === 'eticaret') where += ' AND w.eticaret_stok > 0';
+  else if (depo === 'showroom') where += ' AND w.showroom_stok > 0';
 
   // Toplam sayı
-  const totalRow = db.prepare(`SELECT COUNT(*) as c FROM warehouse_stock WHERE ${where}`).get(...params);
+  const totalRow = db.prepare(`SELECT COUNT(*) as c FROM warehouse_stock w WHERE ${where}`).get(...params);
   const total = totalRow.c;
 
-  // Allowlist sort
-  const allowedSort = ['stok_kodu', 'stok_adi', 'gebze_stok', 'eticaret_stok', 'showroom_stok', 'birim_fiyat', 'gebze_tutar', 'eticaret_tutar', 'showroom_tutar', 'kart_tipi'];
+  // Allowlist sort — son_hareket subquery alias ile sort edilir
+  const allowedSort = ['stok_kodu', 'stok_adi', 'gebze_stok', 'eticaret_stok', 'showroom_stok', 'birim_fiyat', 'gebze_tutar', 'eticaret_tutar', 'showroom_tutar', 'kart_tipi', 'son_hareket'];
   const sortCol = allowedSort.includes(sort) ? sort : 'stok_kodu';
+  const sortColExpr = sortCol === 'son_hareket' ? 'son_hareket' : `w.${sortCol}`;
   const sortDir = order === 'desc' ? 'DESC' : 'ASC';
 
   const offset = (Math.max(1, +page) - 1) * +limit;
-  const rows = db.prepare(
-    `SELECT * FROM warehouse_stock WHERE ${where} ORDER BY ${sortCol} ${sortDir} LIMIT ? OFFSET ?`
-  ).all(...params, +limit, offset);
+  const rows = db.prepare(`
+    SELECT w.*, e.son_hareket
+    FROM warehouse_stock w
+    LEFT JOIN (
+      SELECT stok_kodu, MAX(son_hareket) AS son_hareket
+      FROM evira_stock_cache
+      GROUP BY stok_kodu
+    ) e ON w.stok_kodu = e.stok_kodu
+    WHERE ${where}
+    ORDER BY ${sortColExpr} ${sortDir} LIMIT ? OFFSET ?
+  `).all(...params, +limit, offset);
 
   res.json({ rows, total, page: +page, limit: +limit });
 });

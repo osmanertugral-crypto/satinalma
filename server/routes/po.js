@@ -12,56 +12,132 @@ router.use(authenticate);
 async function syncPurchaseOrdersFromTIGER3() {
   const db = getDb();
 
-  // Tiger3'ten sipariş başlıkları ve kalemleri paralel çek
-  const [orders, lines] = await Promise.all([
-    tiger3.query(`
-      SELECT
-        F.FICHENO                             AS FICHENO,
-        CONVERT(VARCHAR(10), F.DATE_, 120)    AS ORDER_DATE,
-        C.CODE                                AS SUPPLIER_CODE,
-        ISNULL(F.NETTOTAL, 0)                 AS TOTAL_AMOUNT,
-        CASE ISNULL(F.TRCURR, 0)
-          WHEN 1 THEN 'USD' WHEN 2 THEN 'EUR' ELSE 'TRY'
-        END                                   AS CURRENCY,
-        CASE
-          WHEN F.CANCELLED = 1 THEN 'cancelled'
-          WHEN F.STATUS = 1    THEN 'delivered'
-          ELSE 'sent'
-        END                                   AS STATUS
-      FROM LG_123_01_ORFICHE F
-      JOIN LG_123_CLCARD C ON C.LOGICALREF = F.CLIENTREF
-      WHERE F.TRCODE = 2
-    `),
-    tiger3.query(`
-      SELECT
-        F.FICHENO                             AS FICHENO,
-        S.CODE                                AS STOK_KODU,
-        ISNULL(L.AMOUNT, 0)                   AS QUANTITY,
-        ISNULL(L.PRICE, 0)                    AS UNIT_PRICE,
-        ISNULL(L.SHIPPEDAMOUNT, 0)            AS RECEIVED_QUANTITY
-      FROM LG_123_01_ORFLINE L
-      JOIN LG_123_01_ORFICHE F ON F.LOGICALREF = L.ORDFICHEREF
-      JOIN LG_123_ITEMS       S ON S.LOGICALREF = L.STOCKREF
-      WHERE L.TRCODE = 2
-        AND L.CANCELLED = 0
-        AND L.LINETYPE = 0
-        AND L.AMOUNT > 0
-    `),
-  ]);
+  // Excel'deki "AA_SIPARIS_SATINALMA_RAPORU_YENI_123" kaynağıyla aynı veriyi
+  // doğrudan Tiger3 tablolarından çek; TALINAN/BEKLEYEN ile gerçek durum hesabı yapılır.
+  const lines = await tiger3.query(`
+    SELECT
+      YEAR(F.DATE_)                                    AS YIL,
+      MONTH(F.DATE_)                                   AS AY,
+      CONVERT(VARCHAR(10), F.DATE_, 120)               AS TARIH,
+      F.FICHENO                                        AS FISNO,
+      C.CODE                                           AS CARI_KODU,
+      ISNULL(C.DEFINITION_, '')                        AS CARI_UNVANI,
+      S.CODE                                           AS STOK_KODU,
+      ISNULL(S.NAME, '')                               AS STOK_ADI,
+      ISNULL(S.STGRPCODE, '')                          AS STOK_GRUP,
+      ISNULL(L.AMOUNT, 0)                              AS MIKTAR,
+      ISNULL(L.SHIPPEDAMOUNT, 0)                       AS TALINAN,
+      ISNULL(L.AMOUNT - L.SHIPPEDAMOUNT, 0)            AS BEKLEYEN,
+      ISNULL(L.PRICE, 0)                               AS FIYAT,
+      ISNULL(L.TOTAL, 0)                               AS TUTAR,
+      F.CANCELLED                                      AS SIPARIS_IPTAL,
+      CASE ISNULL(F.TRCURR, 0)
+        WHEN 1 THEN 'USD' WHEN 2 THEN 'EUR' ELSE 'TRY'
+      END                                              AS DOVIZ
+    FROM LG_123_01_ORFICHE F
+    JOIN LG_123_CLCARD      C ON C.LOGICALREF = F.CLIENTREF
+    JOIN LG_123_01_ORFLINE  L ON L.ORDFICHEREF = F.LOGICALREF
+    JOIN LG_123_ITEMS        S ON S.LOGICALREF = L.STOCKREF
+    WHERE F.TRCODE = 2
+      AND L.LINETYPE = 0
+      AND L.AMOUNT > 0
+    ORDER BY F.DATE_ DESC, F.FICHENO
+  `);
 
-  // Tiger3 kaynaklı eski verileri temizle (manuel PO-YYYY-NNNN formatı korunur)
+  // ── Sipariş başlıklarını satırlardan derle ──────────────────────────────────
+  const orderMap = new Map(); // FISNO → { meta, lines[] }
+  for (const r of lines) {
+    if (!orderMap.has(r.FISNO)) {
+      orderMap.set(r.FISNO, {
+        fisno: r.FISNO,
+        tarih: r.TARIH,
+        cari_kodu: r.CARI_KODU,
+        cari_unvani: r.CARI_UNVANI,
+        doviz: r.DOVIZ,
+        iptal: r.SIPARIS_IPTAL,
+        lines: [],
+        totalTutar: 0,
+        totalMiktar: 0,
+        totalTalinan: 0,
+        totalBekleyen: 0,
+      });
+    }
+    const ord = orderMap.get(r.FISNO);
+    ord.lines.push(r);
+    ord.totalTutar    += Number(r.TUTAR    || 0);
+    ord.totalMiktar   += Number(r.MIKTAR   || 0);
+    ord.totalTalinan  += Number(r.TALINAN  || 0);
+    ord.totalBekleyen += Number(r.BEKLEYEN || 0);
+  }
+
+  // ── Durum hesaplama ─────────────────────────────────────────────────────────
+  function calcStatus(ord) {
+    if (ord.iptal === 1 || ord.iptal === true) return 'cancelled';
+    if (ord.totalBekleyen <= 0 && ord.totalTalinan > 0) return 'kapanan';
+    if (ord.totalTalinan > 0 && ord.totalBekleyen > 0) return 'bekleyen';
+    return 'açık';
+  }
+
+  // ── Tiger3 kaynaklı eski verileri temizle (manuel PO-YYYY-NNNN korunur) ──────
   db.prepare("DELETE FROM po_items WHERE po_id IN (SELECT id FROM purchase_orders WHERE po_number NOT LIKE 'PO-%')").run();
   db.prepare("DELETE FROM purchase_orders WHERE po_number NOT LIKE 'PO-%'").run();
 
-  // Tedarikçi ve ürün arama haritaları
+  // ── Tedarikçileri otomatik upsert et ────────────────────────────────────────
+  // Tiger3'te olan ama local DB'de olmayan tedarikçiler de otomatik eklenir
+  const checkSupplier  = db.prepare('SELECT id FROM suppliers WHERE external_code = ?');
+  const insertSupplier = db.prepare(`
+    INSERT INTO suppliers (id, name, external_code, active, created_at, updated_at)
+    VALUES (?, ?, ?, 1, datetime('now'), datetime('now'))
+  `);
+  const updateSupplier = db.prepare(`
+    UPDATE suppliers SET name = ?, updated_at = datetime('now') WHERE external_code = ?
+  `);
+
+  const uniqueSuppliers = new Map(
+    [...orderMap.values()].map(o => [o.cari_kodu, o.cari_unvani])
+  );
+  db.transaction(() => {
+    for (const [code, name] of uniqueSuppliers) {
+      if (!code) continue;
+      const existing = checkSupplier.get(code);
+      if (existing) {
+        updateSupplier.run(name, code);
+      } else {
+        insertSupplier.run(uuidv4(), name, code);
+      }
+    }
+  })();
+
   const supplierMap = new Map(
     db.prepare('SELECT id, external_code FROM suppliers WHERE external_code IS NOT NULL').all()
       .map(r => [r.external_code, r.id])
   );
+
+  // ── Ürünleri otomatik upsert et ─────────────────────────────────────────────
+  const upsertProduct = db.prepare(`
+    INSERT INTO products (id, code, name, unit, created_at, updated_at)
+    VALUES (?, ?, ?, ?, datetime('now'), datetime('now'))
+    ON CONFLICT(code) DO UPDATE
+      SET name       = excluded.name,
+          unit       = CASE WHEN excluded.unit != '' THEN excluded.unit ELSE products.unit END,
+          updated_at = excluded.updated_at
+  `);
+
+  const uniqueProducts = new Map(
+    lines.map(r => [r.STOK_KODU, { name: r.STOK_ADI }])
+  );
+  db.transaction(() => {
+    for (const [code, info] of uniqueProducts) {
+      if (!code) continue;
+      upsertProduct.run(uuidv4(), code, info.name || code, 'adet');
+    }
+  })();
+
   const productMap = new Map(
     db.prepare('SELECT id, code FROM products').all().map(r => [r.code, r.id])
   );
 
+  // ── Sipariş ve kalemleri kaydet ─────────────────────────────────────────────
   const insertPo = db.prepare(`
     INSERT INTO purchase_orders (id, po_number, supplier_id, order_date, currency, total_amount, status)
     VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -71,35 +147,32 @@ async function syncPurchaseOrdersFromTIGER3() {
     VALUES (?, ?, ?, ?, ?, ?)
   `);
 
-  // Sipariş başlıklarını ekle, FICHENO → po UUID haritası oluştur
-  let poInserted = 0, poSkipped = 0;
+  let poInserted = 0, poSkipped = 0, itemInserted = 0, itemSkipped = 0;
   const poIdMap = new Map();
 
-  db.transaction((rows) => {
-    for (const r of rows) {
-      const supplierId = supplierMap.get(r.SUPPLIER_CODE);
+  db.transaction(() => {
+    for (const [fisno, ord] of orderMap) {
+      const supplierId = supplierMap.get(ord.cari_kodu);
       if (!supplierId) { poSkipped++; continue; }
       const poId = uuidv4();
-      insertPo.run(poId, r.FICHENO, supplierId, r.ORDER_DATE, r.CURRENCY, r.TOTAL_AMOUNT, r.STATUS);
-      poIdMap.set(r.FICHENO, poId);
+      insertPo.run(poId, fisno, supplierId, ord.tarih, ord.doviz, ord.totalTutar, calcStatus(ord));
+      poIdMap.set(fisno, poId);
       poInserted++;
     }
-  })(orders);
+  })();
 
-  // Sipariş kalemlerini ekle
-  let itemInserted = 0, itemSkipped = 0;
-  db.transaction((rows) => {
-    for (const r of rows) {
-      const poId = poIdMap.get(r.FICHENO);
+  db.transaction(() => {
+    for (const r of lines) {
+      const poId = poIdMap.get(r.FISNO);
       if (!poId) { itemSkipped++; continue; }
       const productId = productMap.get(r.STOK_KODU);
       if (!productId) { itemSkipped++; continue; }
-      insertItem.run(uuidv4(), poId, productId, r.QUANTITY, r.UNIT_PRICE, r.RECEIVED_QUANTITY);
+      insertItem.run(uuidv4(), poId, productId, r.MIKTAR, r.FIYAT, r.TALINAN);
       itemInserted++;
     }
-  })(lines);
+  })();
 
-  console.log(`[PO] Tiger3 sync: ${poInserted} sipariş, ${poSkipped} atlandı, ${itemInserted} kalem, ${itemSkipped} kalem atlandı`);
+  console.log(`[PO] Tiger3 sync: ${poInserted} sipariş (${poSkipped} atlandı) | ${itemInserted} kalem (${itemSkipped} atlandı)`);
   return { poInserted, poSkipped, itemInserted, itemSkipped };
 }
 

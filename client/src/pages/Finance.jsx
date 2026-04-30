@@ -14,6 +14,23 @@ import {
 } from 'lucide-react';
 
 // ── Helpers ──
+const TR_AYLAR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+function fmtTarih(dateStr) {
+  if (!dateStr) return '-';
+  try {
+    const parts = String(dateStr).split('-');
+    if (parts.length === 3) {
+      const d = parseInt(parts[2], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const y = parseInt(parts[0], 10);
+      if (!isNaN(d) && !isNaN(m) && !isNaN(y) && m >= 0 && m < 12)
+        return `${d} ${TR_AYLAR[m]} ${y}`;
+    }
+    const dt = new Date(dateStr);
+    if (!isNaN(dt)) return `${dt.getDate()} ${TR_AYLAR[dt.getMonth()]} ${dt.getFullYear()}`;
+  } catch (_) {}
+  return dateStr;
+}
 function fmt(val, doviz) {
   if (val == null || isNaN(val)) return '-';
   const sym = doviz === 'USD' ? '$' : doviz === 'EUR' ? '€' : '₺';
@@ -32,7 +49,38 @@ function fmtFull(val) {
   return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val);
 }
 
-function KPICard({ title, value, subtitle, icon: Icon, color, onClick }) {
+function KPICard({ title, value, subtitle, icon: Icon, color, onClick, pastel }) {
+  if (pastel) {
+    const bg = {
+      red: 'bg-red-50 border-red-200', green: 'bg-emerald-50 border-emerald-200',
+      blue: 'bg-blue-50 border-blue-200', amber: 'bg-amber-50 border-amber-200',
+      purple: 'bg-purple-50 border-purple-200', slate: 'bg-slate-50 border-slate-200',
+      rose: 'bg-rose-50 border-rose-200',
+    };
+    const tc = {
+      red: 'text-red-700', green: 'text-emerald-700', blue: 'text-blue-700',
+      amber: 'text-amber-700', purple: 'text-purple-700', slate: 'text-slate-700',
+      rose: 'text-rose-700',
+    };
+    const ic = {
+      red: 'text-red-400', green: 'text-emerald-400', blue: 'text-blue-400',
+      amber: 'text-amber-400', purple: 'text-purple-400', slate: 'text-slate-400',
+      rose: 'text-rose-400',
+    };
+    return (
+      <div
+        className={`rounded-xl border p-2.5 shadow-sm ${bg[color] || bg.slate} transition-all ${onClick ? 'cursor-pointer hover:shadow-md active:scale-[0.99]' : ''}`}
+        onClick={onClick}
+      >
+        <div className="flex items-center justify-between mb-0.5">
+          <span className="text-[9px] font-semibold uppercase tracking-wider text-gray-500">{title}</span>
+          {Icon && <Icon size={12} className={ic[color] || ic.slate} />}
+        </div>
+        <div className={`text-base font-extrabold leading-tight ${tc[color] || tc.slate}`}>{value}</div>
+        {subtitle && <div className="text-[9px] mt-0.5 text-gray-400 leading-tight">{subtitle}</div>}
+      </div>
+    );
+  }
   const cm = {
     red: 'from-red-500 to-red-600', green: 'from-emerald-500 to-emerald-600',
     blue: 'from-blue-500 to-blue-600', amber: 'from-amber-500 to-amber-600',
@@ -71,17 +119,42 @@ const TT = ({ active, payload, label }) => {
 
 // ── Döviz bazlı cari drill-down paneli ──
 function CariDrillDown({ doviz, mode, cariler, onSelectCari, onClose }) {
+  const [sortKey, setSortKey] = useState('enUzakGun');
+  const [sortDir, setSortDir] = useState('desc');
+
   const sym = doviz === 'USD' ? '$' : doviz === 'EUR' ? '€' : doviz === 'GBP' ? '£' : '₺';
   const isFx = doviz !== 'TL';
   const isBorc = mode === 'borc';
-  const rows = (cariler || [])
-    .filter(r => r.doviz === doviz && (isBorc ? r.bakiye < 0 : r.bakiye > 0))
-    .sort((a, b) => isBorc ? a.bakiye - b.bakiye : b.bakiye - a.bakiye);
 
-  // Döviz toplamları: yabancı para için bakiyeDoviz, TL için bakiye kullan
+  const rows = useMemo(() => {
+    const base = (cariler || []).filter(r => r.doviz === doviz && (isBorc ? r.bakiye < 0 : r.bakiye > 0));
+    return [...base].sort((a, b) => {
+      const dir = sortDir === 'asc' ? 1 : -1;
+      if (sortKey === 'enUzakGun') return dir * ((a.enUzakGun ?? -1) - (b.enUzakGun ?? -1));
+      if (sortKey === 'bakiye') return dir * (Math.abs(isFx ? (a.bakiyeDoviz ?? a.bakiye) : a.bakiye) - Math.abs(isFx ? (b.bakiyeDoviz ?? b.bakiye) : b.bakiye));
+      if (sortKey === 'vadesiGelen') return dir * ((a.vadesiGelen ?? 0) - (b.vadesiGelen ?? 0));
+      if (sortKey === 'cariAdi') return dir * (a.cariAdi || '').localeCompare(b.cariAdi || '', 'tr');
+      if (sortKey === 'sonOdemeTutar') return dir * ((a.sonOdemeTutar ?? 0) - (b.sonOdemeTutar ?? 0));
+      return 0;
+    });
+  }, [cariler, doviz, isBorc, isFx, sortKey, sortDir]);
+
+  function toggleSort(key) {
+    if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+    else { setSortKey(key); setSortDir('desc'); }
+  }
+
+  function SortIco({ col }) {
+    if (sortKey !== col) return <span className="text-gray-300 ml-0.5 text-[10px]">↕</span>;
+    return <span className="text-blue-400 ml-0.5 text-[10px]">{sortDir === 'asc' ? '↑' : '↓'}</span>;
+  }
+
   const totalDoviz = rows.reduce((s, r) => s + Math.abs(isFx ? (r.bakiyeDoviz ?? r.bakiye) : r.bakiye), 0);
   const totalTL    = rows.reduce((s, r) => s + Math.abs(r.bakiye), 0);
   const vadesiGelenTotalDoviz = rows.reduce((s, r) => s + Math.abs(isFx ? (r.vadesiGelenDoviz ?? r.vadesiGelen ?? 0) : (r.vadesiGelen ?? 0)), 0);
+
+  const thSort = 'p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide cursor-pointer select-none hover:text-gray-700 whitespace-nowrap';
+  const thPlain = 'p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap';
 
   return (
     <div className={`rounded-2xl border shadow-md overflow-hidden mt-3 ${isBorc ? 'border-red-200' : 'border-emerald-200'}`}>
@@ -111,28 +184,50 @@ function CariDrillDown({ doviz, mode, cariler, onSelectCari, onClose }) {
       {rows.length === 0 ? (
         <div className="p-6 text-center text-gray-400 text-sm bg-white">Bu kategoride cari bulunamadı</div>
       ) : (
-        <div className="overflow-x-auto max-h-80 overflow-y-auto bg-white">
+        <div className="overflow-x-auto overflow-y-auto bg-white" style={{ maxHeight: '72vh' }}>
           <table className="w-full text-sm">
-            <thead className="bg-gray-50/90 sticky top-0">
+            <thead className="bg-gray-50/90 sticky top-0 z-10">
               <tr>
-                <th className="text-left p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Cari Kodu</th>
-                <th className="text-left p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Cari Adı</th>
-                <th className="text-right p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Bakiye ({sym})</th>
-                {isFx && <th className="text-right p-2.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">TL Karş.</th>}
-                {isBorc && <th className="text-right p-2.5 text-[11px] font-semibold text-amber-600 uppercase tracking-wide">Vadesi Geçmiş ({sym})</th>}
-                <th className="text-right p-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">İşlem</th>
-                <th className="w-10"></th>
+                <th className="text-left p-2.5 text-[11px] font-semibold text-gray-400 w-8">#</th>
+                <th className={`text-left ${thPlain}`}>Cari Kodu</th>
+                <th className={`text-left ${thSort}`} onClick={() => toggleSort('cariAdi')}>
+                  Cari Adı <SortIco col="cariAdi" />
+                </th>
+                <th className={`text-right ${thSort}`} onClick={() => toggleSort('bakiye')}>
+                  Bakiye ({sym}) <SortIco col="bakiye" />
+                </th>
+                {isFx && <th className={`text-right ${thPlain} text-gray-400`}>TL Karş.</th>}
+                {isBorc && <>
+                  <th className={`text-right ${thSort} text-amber-600 hover:text-amber-700`} onClick={() => toggleSort('vadesiGelen')}>
+                    Vadesi Geçmiş ({sym}) <SortIco col="vadesiGelen" />
+                  </th>
+                  <th className={`text-right ${thSort} text-red-500 hover:text-red-700`} onClick={() => toggleSort('enUzakGun')}>
+                    Ödenmemiş Gün <SortIco col="enUzakGun" />
+                  </th>
+                  <th className={`text-left ${thPlain}`}>Son Fatura Dönemi</th>
+                  <th className={`text-right ${thPlain}`}>En Uzak Fatura Tutarı</th>
+                  <th className={`text-right ${thSort}`} onClick={() => toggleSort('sonOdemeTutar')}>
+                    Son Ödeme <SortIco col="sonOdemeTutar" />
+                  </th>
+                </>}
+                <th className={`text-right ${thPlain}`}>Fatura</th>
+                <th className="w-8"></th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r, i) => {
                 const dovizBakiye = isFx ? Math.abs(r.bakiyeDoviz ?? r.bakiye) : Math.abs(r.bakiye);
                 const vadesiGelenDoviz = isFx ? Math.abs(r.vadesiGelenDoviz ?? r.vadesiGelen ?? 0) : Math.abs(r.vadesiGelen ?? 0);
+                const gun = r.enUzakGun;
+                const gunColor = gun > 180 ? 'bg-red-100 text-red-700' : gun > 90 ? 'bg-orange-100 text-orange-700' : gun > 30 ? 'bg-amber-100 text-amber-700' : 'bg-yellow-50 text-yellow-700';
                 return (
-                  <tr key={i} className={`border-t border-gray-50 cursor-pointer transition ${isBorc ? 'hover:bg-red-50/30' : 'hover:bg-emerald-50/30'}`}
-                    onClick={() => onSelectCari(r.cariKodu)}>
+                  <tr key={i}
+                    className={`border-t border-gray-50 cursor-pointer transition ${isBorc ? 'hover:bg-red-50/30' : 'hover:bg-emerald-50/30'}`}
+                    onClick={() => onSelectCari(r.cariKodu)}
+                  >
+                    <td className="p-2.5 text-[11px] text-gray-300 text-center">{i + 1}</td>
                     <td className="p-2.5 font-mono text-xs text-gray-400 whitespace-nowrap">{r.cariKodu}</td>
-                    <td className="p-2.5 font-medium text-gray-800 max-w-[200px] truncate" title={r.cariAdi}>{r.cariAdi}</td>
+                    <td className="p-2.5 font-medium text-gray-800 max-w-[220px] truncate" title={r.cariAdi}>{r.cariAdi}</td>
                     <td className={`p-2.5 text-right font-bold whitespace-nowrap ${isBorc ? 'text-red-600' : 'text-emerald-600'}`}>
                       {fmtFull(dovizBakiye)} {sym}
                     </td>
@@ -141,14 +236,35 @@ function CariDrillDown({ doviz, mode, cariler, onSelectCari, onClose }) {
                         ≈ {fmtFull(Math.abs(r.bakiye))} ₺
                       </td>
                     )}
-                    {isBorc && (
+                    {isBorc && <>
                       <td className="p-2.5 text-right whitespace-nowrap">
                         {vadesiGelenDoviz > 0
                           ? <span className="text-amber-600 font-semibold text-xs">{fmtFull(vadesiGelenDoviz)} {sym}</span>
                           : <span className="text-gray-300 text-xs">—</span>}
                       </td>
-                    )}
-                    <td className="p-2.5 text-right text-xs text-gray-400">
+                      <td className="p-2.5 text-right whitespace-nowrap">
+                        {gun != null && gun > 0
+                          ? <span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-bold ${gunColor}`}>{gun} gün</span>
+                          : <span className="text-gray-300 text-xs">—</span>}
+                      </td>
+                      <td className="p-2.5 whitespace-nowrap">
+                        {r.sonFaturaDonem
+                          ? <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-[11px] text-gray-700">{r.sonFaturaDonem}</span>
+                          : <span className="text-gray-300 text-xs">—</span>}
+                      </td>
+                      <td className="p-2.5 text-right whitespace-nowrap text-xs text-gray-600">
+                        {r.enUzakFaturaTutar ? fmtFull(r.enUzakFaturaTutar) + ' ' + sym : <span className="text-gray-300">—</span>}
+                      </td>
+                      <td className="p-2.5 text-right whitespace-nowrap">
+                        {r.sonOdemeTutar ? (
+                          <div>
+                            <div className="font-semibold text-emerald-600 text-xs">{fmtFull(r.sonOdemeTutar)} {sym}</div>
+                            {r.sonOdemeTarih && <div className="text-[10px] text-gray-400">{fmtTarih(r.sonOdemeTarih)}</div>}
+                          </div>
+                        ) : <span className="text-gray-300 text-xs">—</span>}
+                      </td>
+                    </>}
+                    <td className="p-2.5 text-right text-xs text-gray-400 whitespace-nowrap">
                       {(r.faturaSayisi || 0) > 0 ? `${r.faturaSayisi} fatura` : '—'}
                     </td>
                     <td className="p-2.5 text-center text-blue-500 text-xs font-bold">→</td>
@@ -185,6 +301,11 @@ function OzetTab({ onSelectCari, onNavigateTab }) {
   const { data: cariler } = useQuery({
     queryKey: ['finance-cariler-all'], queryFn: () => getFinanceCariler({}).then(r => r.data),
   });
+  const { data: kurlar } = useQuery({
+    queryKey: ['finance-kurlar'],
+    queryFn: () => getFinanceKurlar().then(r => r.data),
+    staleTime: 3600_000,
+  });
   const [drillDown, setDrillDown] = useState(null); // { doviz, mode }
 
   function toggleDrill(doviz, mode) {
@@ -196,6 +317,12 @@ function OzetTab({ onSelectCari, onNavigateTab }) {
 
   const b = ozet.borc;
   const a = ozet.alacak;
+
+  // Borç TL karşılıkları (güncel kurla)
+  const borcTL_TL  = b.TL.toplam.doviz;
+  const borcTL_USD = b.USD.toplam.doviz * (kurlar?.usd || 0);
+  const borcTL_EUR = b.EUR.toplam.doviz * (kurlar?.eur || 0);
+  const toplamBorcTL_kur = borcTL_TL + borcTL_USD + borcTL_EUR;
 
   // Özet tablosu verisi — doviz cinsinden toplamlar
   const ozetTablo = [
@@ -240,33 +367,34 @@ function OzetTab({ onSelectCari, onNavigateTab }) {
   return (
     <div className="space-y-6">
       {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Toplam Borcumuz (TL karş.)" value={fmtShort(toplamBorcTL) + ' ₺'} subtitle={`${borcluSayisi} cariye borçluyuz`} icon={TrendingDown} color="red" onClick={() => onNavigateTab('borc')} />
-        <KPICard title="Toplam Alacağımız (TL karş.)" value={fmtShort(toplamAlacakTL) + ' ₺'} subtitle={`${alacakliSayisi} cariden alacağımız var`} icon={TrendingUp} color="green" onClick={() => onNavigateTab('alacak')} />
-        <KPICard title="Vadesi Gelen Toplam Tutar" value={fmtShort(toplamVadesiGelenTL) + ' ₺'} subtitle={`${vadesiGelenCariSayisi} carinin vadesi gelmiş`} icon={Calendar} color="amber" onClick={() => onNavigateTab('borc')} />
-        <KPICard title="Toplam Cari" value={cariler ? cariler.length : '...'} subtitle="320 hesap grubu" icon={FileText} color="blue" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <KPICard pastel title="Toplam Borcumuz (TL karş.)" value={fmtShort(toplamBorcTL) + ' ₺'} subtitle={`${borcluSayisi} cariye borçluyuz`} icon={TrendingDown} color="red" onClick={() => onNavigateTab('borc')} />
+        <KPICard pastel title="Toplam Alacağımız (TL karş.)" value={fmtShort(toplamAlacakTL) + ' ₺'} subtitle={`${alacakliSayisi} cariden alacağımız var`} icon={TrendingUp} color="green" onClick={() => onNavigateTab('alacak')} />
+        <KPICard pastel title="Vadesi Gelen Toplam Tutar" value={fmtShort(toplamVadesiGelenTL) + ' ₺'} subtitle={`${vadesiGelenCariSayisi} carinin vadesi gelmiş`} icon={Calendar} color="amber" onClick={() => onNavigateTab('borc')} />
+        <KPICard pastel title="Toplam Cari" value={cariler ? cariler.length : '...'} subtitle="320 hesap grubu" icon={FileText} color="blue" />
       </div>
 
       {/* 320 RESTAR ÖZET Tablosu */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-bold text-gray-800">320 RESTAR Borç / Alacak Özet</h3>
-          <span className="text-[11px] text-gray-400">Toplam sütunlarına tıklayarak cariler görüntülenebilir</span>
+          <span className="text-[11px] text-gray-400">Borç / Alacak sütunlarına tıklayarak cariler görüntülenebilir</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-gray-50 text-xs text-gray-500 uppercase border-b border-gray-200">
-                <th className="p-3 text-left">Döviz</th>
+                <th className="p-3 text-left">Para Birimi</th>
                 <th className="p-3 text-right font-bold text-red-600">Toplam Borç ▾</th>
-                <th className="p-3 text-right">Net Bakiye</th>
+                <th className="p-3 text-right text-gray-400">TL Karşılığı</th>
                 <th className="p-3 text-right font-bold text-emerald-600">Toplam Alacak ▾</th>
               </tr>
             </thead>
             <tbody>
               {ozetTablo.map((r, i) => {
                 const sym = r.doviz === 'USD' ? '$' : r.doviz === 'EUR' ? '€' : '₺';
-                const net = r.borcToplam - r.alacakToplam; // net > 0 = borcumuz, net < 0 = alacağımız
+                const kur = r.doviz === 'USD' ? (kurlar?.usd || 0) : r.doviz === 'EUR' ? (kurlar?.eur || 0) : 1;
+                const borcTLKarsilik = r.borcToplam * kur;
                 const borcActive = drillDown?.doviz === r.doviz && drillDown?.mode === 'borc';
                 const alacakActive = drillDown?.doviz === r.doviz && drillDown?.mode === 'alacak';
                 return (
@@ -274,6 +402,9 @@ function OzetTab({ onSelectCari, onNavigateTab }) {
                     <td className="p-3 font-bold text-gray-700">
                       {r.doviz}
                       <span className="ml-1.5 text-gray-400 font-normal text-xs">({sym})</span>
+                      {r.doviz !== 'TL' && kur > 0 && (
+                        <span className="ml-2 text-[10px] text-gray-300">kur: {kur.toFixed(4)}</span>
+                      )}
                     </td>
                     <td
                       className={`p-3 text-right font-bold cursor-pointer select-none transition rounded-lg ${borcActive ? 'bg-red-100 text-red-800 shadow-inner' : 'text-red-700 hover:bg-red-50'}`}
@@ -283,9 +414,12 @@ function OzetTab({ onSelectCari, onNavigateTab }) {
                       {fmtFull(r.borcToplam)} {sym}
                       <span className="ml-1 text-[10px] opacity-60">{borcActive ? '▲' : '▼'}</span>
                     </td>
-                    <td className={`p-3 text-right font-bold ${net > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
-                      {net > 0 ? '' : '+'}{fmtFull(Math.abs(net))} {sym}
-                      <span className="ml-1 text-[10px] font-normal opacity-50">{net > 0 ? 'borç' : 'alacak'}</span>
+                    <td className="p-3 text-right text-xs text-gray-400 whitespace-nowrap">
+                      {r.doviz !== 'TL'
+                        ? kur > 0
+                          ? <span>≈ {fmtFull(borcTLKarsilik)} <span className="text-gray-300">₺</span></span>
+                          : <span className="text-gray-300">kur bekleniyor</span>
+                        : '—'}
                     </td>
                     <td
                       className={`p-3 text-right font-bold cursor-pointer select-none transition rounded-lg ${alacakActive ? 'bg-emerald-100 text-emerald-800 shadow-inner' : 'text-emerald-700 hover:bg-emerald-50'}`}
@@ -298,11 +432,21 @@ function OzetTab({ onSelectCari, onNavigateTab }) {
                   </tr>
                 );
               })}
-              <tr className="border-t-2 border-gray-300 bg-gray-50">
-                <td className="p-3 font-bold text-gray-700">Genel Net (TL karş.)</td>
-                <td colSpan={2} className={`p-3 text-right text-lg font-extrabold ${ozet.genelToplam > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
-                  {fmtFull(Math.abs(ozet.genelToplam))} ₺
-                  <span className="ml-1.5 text-xs font-normal opacity-60">{ozet.genelToplam > 0 ? 'net borç' : 'net alacak'}</span>
+              {/* Toplam TL Borç — güncel kurdan çevrilmiş */}
+              <tr className="border-t-2 border-red-200 bg-red-50/70">
+                <td className="p-3 font-bold text-red-800 text-sm">
+                  Toplam TL Borç
+                  <div className="text-[10px] font-normal text-red-400 mt-0.5">Güncel kurdan hesaplanmış</div>
+                </td>
+                <td className="p-3 text-right text-xl font-extrabold text-red-700 whitespace-nowrap">
+                  {fmtFull(toplamBorcTL_kur)} ₺
+                </td>
+                <td className="p-3 text-right">
+                  <div className="text-[10px] text-red-400 leading-relaxed whitespace-nowrap">
+                    {borcTL_TL > 0 && <div>TL: {fmtFull(borcTL_TL)} ₺</div>}
+                    {borcTL_USD > 0 && kurlar?.usd && <div>USD × {kurlar.usd.toFixed(4)}: {fmtFull(borcTL_USD)} ₺</div>}
+                    {borcTL_EUR > 0 && kurlar?.eur && <div>EUR × {kurlar.eur.toFixed(4)}: {fmtFull(borcTL_EUR)} ₺</div>}
+                  </div>
                 </td>
                 <td></td>
               </tr>
@@ -399,14 +543,15 @@ function CarilerTab({ onSelectCari, mode }) {
     return arr;
   }, [cariler, search, sortField, sortDir, mode]);
 
-  // Döviz bazlı toplamlar (tüm filtreler devre dışı — tüm cariler üzerinden hesapla)
+  // Döviz bazlı toplamlar — USD/EUR için bakiyeDoviz (native para) kullanılır,
+  // yoksa TL karşılığı kullanılır; tlGenel'de kur çarpımı yapılır (çift çevrim önlenir)
   const dovizToplam = useMemo(() => {
     if (!cariler) return { TL: 0, USD: 0, EUR: 0 };
     const isBorc = mode === 'borc';
     const rows = cariler.filter(r => isBorc ? r.bakiye < 0 : r.bakiye > 0);
-    const TL = rows.filter(r => r.doviz === 'TL').reduce((s, r) => s + Math.abs(r.bakiye), 0);
-    const USD = rows.filter(r => r.doviz === 'USD').reduce((s, r) => s + Math.abs(r.bakiye), 0);
-    const EUR = rows.filter(r => r.doviz === 'EUR').reduce((s, r) => s + Math.abs(r.bakiye), 0);
+    const TL  = rows.filter(r => r.doviz === 'TL').reduce((s, r) => s + Math.abs(r.bakiye), 0);
+    const USD = rows.filter(r => r.doviz === 'USD').reduce((s, r) => s + Math.abs(r.bakiyeDoviz ?? r.bakiye), 0);
+    const EUR = rows.filter(r => r.doviz === 'EUR').reduce((s, r) => s + Math.abs(r.bakiyeDoviz ?? r.bakiye), 0);
     return { TL, USD, EUR };
   }, [cariler, mode]);
 
@@ -536,10 +681,10 @@ function CarilerTab({ onSelectCari, mode }) {
                     { f: null, l: 'Tür', a: 'left' },
                     { f: 'bakiye', l: 'Bakiye (Döviz)', a: 'right' },
                     { f: null, l: 'Durum', a: 'center' },
-                    { f: 'ortGun', l: 'Ort. Gün', a: 'right' },
-                    { f: 'enUzakGun', l: 'En Uzak', a: 'right' },
-                    { f: null, l: 'Son Ödeme', a: 'left' },
-                    { f: 'sonOdemeTutar', l: 'Son Ödeme Tutarı', a: 'right' },
+                    { f: 'enUzakGun', l: 'Ödenmemiş Gün', a: 'right' },
+                    { f: null, l: 'En Uzak Fatura', a: 'right' },
+                    { f: null, l: 'Son Fatura Dönemi', a: 'left' },
+                    { f: 'sonOdemeTutar', l: 'Son Ödeme', a: 'right' },
                     { f: null, l: '', a: 'center' },
                   ].map((c, i) => (
                     <th key={i}
@@ -573,18 +718,30 @@ function CarilerTab({ onSelectCari, mode }) {
                           {r.durumu || (isBorc ? 'BORÇ' : 'ALACAK')}
                         </span>
                       </td>
-                      <td className="p-2.5 text-right">
-                        {r.ortGun != null ? (
-                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold ${Math.abs(r.ortGun) > 90 ? 'bg-red-100 text-red-700' : Math.abs(r.ortGun) > 30 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'}`}>
-                            {Math.abs(r.ortGun)}g
+                      <td className="p-2.5 text-right whitespace-nowrap">
+                        {r.enUzakGun != null && r.enUzakGun > 0 ? (
+                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold
+                            ${r.enUzakGun > 180 ? 'bg-red-100 text-red-700' : r.enUzakGun > 90 ? 'bg-orange-100 text-orange-700' : r.enUzakGun > 30 ? 'bg-amber-100 text-amber-700' : 'bg-yellow-50 text-yellow-700'}`}>
+                            {r.enUzakGun} gün
                           </span>
-                        ) : '-'}
+                        ) : <span className="text-gray-300 text-xs">—</span>}
                       </td>
-                      <td className="p-2.5 text-right text-xs text-gray-500">
-                        {r.enUzakGun != null ? <span>{Math.abs(r.enUzakGun)}g</span> : '-'}
+                      <td className="p-2.5 text-right text-xs whitespace-nowrap text-gray-600">
+                        {r.enUzakFaturaTutar ? fmtFull(r.enUzakFaturaTutar) : <span className="text-gray-300">—</span>}
                       </td>
-                      <td className="p-2.5 text-xs text-gray-500 whitespace-nowrap">{r.sonOdemeTarih || '-'}</td>
-                      <td className="p-2.5 text-right text-xs whitespace-nowrap text-gray-600 font-medium">{r.sonOdemeTutar ? fmtFull(r.sonOdemeTutar) : '-'}</td>
+                      <td className="p-2.5 text-xs whitespace-nowrap">
+                        {r.sonFaturaDonem
+                          ? <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-[11px] text-gray-700">{r.sonFaturaDonem}</span>
+                          : <span className="text-gray-300">—</span>}
+                      </td>
+                      <td className="p-2.5 text-right whitespace-nowrap">
+                        {r.sonOdemeTutar ? (
+                          <div>
+                            <div className="text-xs font-semibold text-emerald-600">{fmtFull(r.sonOdemeTutar)}</div>
+                            {r.sonOdemeTarih && <div className="text-[10px] text-gray-400">{fmtTarih(r.sonOdemeTarih)}</div>}
+                          </div>
+                        ) : <span className="text-gray-300 text-xs">—</span>}
+                      </td>
                       <td className="p-2.5 text-center"><span className="text-blue-600 text-xs font-semibold">→</span></td>
                     </tr>
                   );
@@ -690,19 +847,50 @@ function CariDetayTab({ cariKodu, onBack }) {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-6 gap-3">
-        <KPICard title="Toplam Fatura" value={fmtShort(data.toplamFatura) + ' ₺'} subtitle={`${data.faturalar.length} fatura`} icon={FileText} color="red" />
-        <KPICard title="Toplam Ödeme" value={fmtShort(data.toplamOdeme) + ' ₺'} subtitle={`${data.odemeler.length} ödeme`} icon={CreditCard} color="green" />
-        <KPICard title="Kalan Borç" value={fmtShort(data.kalanBorc) + ' ₺'}
-          subtitle={data.kalanBorc > 0 ? 'Hala borçluyuz' : 'Borç yok'}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+        <KPICard pastel title="Toplam Fatura" value={fmtShort(data.toplamFatura) + ' ₺'} subtitle={`${data.faturalar.length} fatura`} icon={FileText} color="red" />
+        <KPICard pastel title="Toplam Ödeme" value={fmtShort(data.toplamOdeme) + ' ₺'} subtitle={`${data.odemeler.length} ödeme`} icon={CreditCard} color="green" />
+        <KPICard pastel title="Toplam Borç" value={fmtShort(data.kalanBorc) + ' ₺'}
+          subtitle={data.kalanBorc > 0 ? 'Ödenmeyen tüm faturalar' : 'Borç yok'}
           icon={AlertTriangle} color={data.kalanBorc > 0 ? 'amber' : 'green'} />
-        <KPICard title="Vade Süresi" value={data.ortVade + ' gün'} subtitle="Ortalama fatura vadesi" icon={Calendar} color="purple" />
-        <KPICard title="Ödenmemiş Gün" value={data.odenmeGunSayisi + ' gün'}
-          subtitle="En eski ödenmemiş fatura"
+        {/* Vadesi gelen borç — anlaşma yoksa tüm borç, henüz gelmemişse toplam borç göster */}
+        {(() => {
+          const noAgreement = !data.ortVade || data.ortVade === 0;
+          const vg = noAgreement ? (data.kalanBorc ?? 0) : (data.vadesiGelenBorc ?? 0);
+          const hasDebt = vg > 0;
+          const notYetDue = !noAgreement && vg === 0 && (data.kalanBorc ?? 0) > 0;
+          const displayVal = notYetDue ? (data.kalanBorc ?? 0) : vg;
+          return (
+            <div className={`rounded-xl border p-3 shadow-sm transition-all ${notYetDue ? 'bg-blue-50 border-blue-200' : hasDebt ? 'bg-rose-50 border-rose-200' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="flex items-center justify-between mb-0.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">Vadesi Gelen Borç</span>
+                <AlertTriangle size={13} className={notYetDue ? 'text-blue-400' : hasDebt ? 'text-rose-400' : 'text-slate-400'} />
+              </div>
+              <div className={`text-lg font-extrabold leading-tight ${notYetDue ? 'text-blue-600' : hasDebt ? 'text-rose-700' : 'text-slate-600'}`}>
+                {fmtShort(displayVal)} ₺
+              </div>
+              <div className="text-[10px] mt-0.5 leading-tight text-gray-500">
+                {noAgreement
+                  ? 'Anlaşma yok · tüm borç'
+                  : notYetDue
+                    ? 'Vadesi henüz gelmedi'
+                    : `Toplam: ${fmtShort(data.kalanBorc)} ₺`}
+              </div>
+            </div>
+          );
+        })()}
+        <KPICard pastel title="Vade Süresi"
+          value={(data.ortVade > 0 ? data.ortVade : 0) + ' gün'}
+          subtitle={data.ortVade > 0 ? 'Firma anlaşması' : (data.ortOdemeGun > 0 ? `Ort. ${data.ortOdemeGun} gün` : 'Veri yok')}
+          icon={Calendar} color="purple" />
+        <KPICard pastel title="Vadesi Geçen Gün" value={data.odenmeGunSayisi + ' gün'}
+          subtitle="Vade tarihinden bu yana"
           icon={Clock} color={data.odenmeGunSayisi > 90 ? 'red' : 'slate'} />
-        <KPICard title="Son Ödeme"
-          value={data.sonOdeme ? fmtFull(data.sonOdeme.tutar) + ' ₺' : '-'}
-          subtitle={data.sonOdeme ? data.sonOdeme.tarih : 'Ödeme yok'}
+        <KPICard pastel title="Son Ödeme"
+          value={data.sonOdeme ? fmtShort(data.sonOdeme.tutar) + ' ₺' : '-'}
+          subtitle={data.sonOdeme
+            ? `${fmtTarih(data.sonOdeme.tarih)}${data.sonOdemeGunOnce != null ? ` · ${data.sonOdemeGunOnce} gün önce` : ''}`
+            : 'Ödeme yok'}
           icon={TrendingUp} color="blue" />
       </div>
 
@@ -841,8 +1029,8 @@ function CariDetayTab({ cariKodu, onBack }) {
                       {durumLabel[f.durum]}
                     </span>
                   </td>
-                  <td className="p-2.5 whitespace-nowrap text-gray-600">{f.tarih || '-'}</td>
-                  <td className="p-2.5 whitespace-nowrap text-gray-500">{f.vadeTarihi || '-'}</td>
+                  <td className="p-2.5 whitespace-nowrap text-gray-600">{fmtTarih(f.tarih)}</td>
+                  <td className="p-2.5 whitespace-nowrap text-gray-500">{fmtTarih(f.vadeTarihi)}</td>
                   <td className="p-2.5 text-right text-gray-500">{f.vadeSuresi || '-'}</td>
                   <td className="p-2.5 font-mono whitespace-nowrap text-gray-500">{f.belgeNo || f.fisNo || '-'}</td>
                   <td className="p-2.5 text-gray-500 truncate max-w-[150px]" title={f.tip}>{f.tip}</td>

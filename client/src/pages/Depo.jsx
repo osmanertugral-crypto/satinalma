@@ -16,6 +16,25 @@ function formatNum(val) {
   return new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(val);
 }
 
+function gecenGun(sonHareket) {
+  if (!sonHareket) return null;
+  const d = new Date(sonHareket);
+  if (isNaN(d)) return null;
+  return Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function GunBadge({ gun }) {
+  if (gun == null) return <span className="text-gray-300 text-xs">—</span>;
+  const cls = gun > 365
+    ? 'bg-red-100 text-red-700'
+    : gun > 180
+    ? 'bg-orange-100 text-orange-700'
+    : gun > 90
+    ? 'bg-amber-100 text-amber-700'
+    : 'bg-emerald-100 text-emerald-700';
+  return <span className={`inline-flex px-1.5 py-0.5 rounded text-[11px] font-semibold ${cls}`}>{gun} gün</span>;
+}
+
 const DEPO_COLORS = {
   gebze: '#1E40AF',
   eticaret: '#059669',
@@ -436,6 +455,8 @@ export default function DepoPage() {
                           { key: 'stok_kodu', label: 'Stok Kodu', align: 'left' },
                           { key: 'stok_adi', label: 'Stok Adı', align: 'left' },
                           { key: 'kart_tipi', label: 'Tip', align: 'left' },
+                          { key: 'son_hareket', label: 'Son Hareket', align: 'left' },
+                          { key: 'gecen_gun', label: 'Geçen Gün', align: 'right', sortKey: 'son_hareket' },
                           { key: 'gebze_stok', label: 'Gebze', align: 'right', color: 'text-blue-600' },
                           { key: 'eticaret_stok', label: 'E-Ticaret', align: 'right', color: 'text-emerald-600' },
                           { key: 'showroom_stok', label: 'Showroom', align: 'right', color: 'text-amber-600' },
@@ -447,11 +468,11 @@ export default function DepoPage() {
                           <th
                             key={col.key}
                             className={`${col.align === 'right' ? 'text-right' : 'text-left'} py-2.5 px-3 font-medium cursor-pointer hover:bg-gray-100 ${col.color || 'text-gray-500'}`}
-                            onClick={() => handleSort(col.key)}
+                            onClick={() => handleSort(col.sortKey || col.key)}
                           >
                             <span className="inline-flex items-center gap-1">
                               {col.label}
-                              {sortCol === col.key && <ArrowUpDown size={12} className="text-blue-500" />}
+                              {sortCol === (col.sortKey || col.key) && <ArrowUpDown size={12} className="text-blue-500" />}
                             </span>
                           </th>
                         ))}
@@ -465,6 +486,12 @@ export default function DepoPage() {
                             <td className="py-2 px-3 font-mono text-xs text-gray-500">{row.stok_kodu}</td>
                             <td className="py-2 px-3 text-gray-800 max-w-[220px] truncate" title={row.stok_adi}>{row.stok_adi}</td>
                             <td className="py-2 px-3"><Badge color="gray">{row.kart_tipi}</Badge></td>
+                            <td className="py-2 px-3 text-xs text-gray-500 whitespace-nowrap">
+                              {row.son_hareket ? row.son_hareket : <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="py-2 px-3 text-right whitespace-nowrap">
+                              <GunBadge gun={gecenGun(row.son_hareket)} />
+                            </td>
                             <td className="py-2 px-3 text-right font-medium text-blue-700">{row.gebze_stok > 0 ? formatNum(row.gebze_stok) : '—'}</td>
                             <td className="py-2 px-3 text-right font-medium text-emerald-700">{row.eticaret_stok > 0 ? formatNum(row.eticaret_stok) : '—'}</td>
                             <td className="py-2 px-3 text-right font-medium text-amber-700">{row.showroom_stok > 0 ? formatNum(row.showroom_stok) : '—'}</td>
@@ -476,7 +503,7 @@ export default function DepoPage() {
                         );
                       })}
                       {(!stockData?.rows || stockData.rows.length === 0) && (
-                        <tr><td colSpan={10} className="py-8 text-center text-gray-400">Sonuç bulunamadı</td></tr>
+                        <tr><td colSpan={12} className="py-8 text-center text-gray-400">Sonuç bulunamadı</td></tr>
                       )}
                     </tbody>
                   </table>

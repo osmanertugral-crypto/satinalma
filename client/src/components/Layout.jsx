@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Users, Package, FileText,
-  TrendingUp, Warehouse, LogOut,
+  TrendingUp, LogOut,
   Menu, X, ListChecks, LineChart, Container, ClipboardList, Wallet, BarChart2, Settings
 } from 'lucide-react';
 
@@ -12,7 +12,6 @@ const navItems = [
   { to: '/finance', icon: Wallet, label: 'Finans', key: 'finance' },
   { to: '/suppliers', icon: Users, label: 'Siparişler ve Tedarikçiler', key: 'suppliers' },
   { to: '/products', icon: Package, label: 'Ürünler', key: 'products' },
-  { to: '/inventory', icon: Warehouse, label: 'Envanter', key: 'inventory' },
   { to: '/depo', icon: Container, label: 'Depo Stok', key: 'depo' },
   { to: '/malzeme-ihtiyac', icon: ClipboardList, label: 'Malzeme İhtiyaç', key: 'malzeme-ihtiyac' },
   { to: '/price-analysis', icon: LineChart, label: 'Fiyat Analizi', key: 'price-analysis' },
