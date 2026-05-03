@@ -549,7 +549,29 @@ router.get('/dashboard', (req, res) => {
     JOIN suppliers s ON s.id=po.supplier_id
     WHERE ${periodOrderDateWhere}
     ORDER BY po.created_at DESC
-    LIMIT 5
+    LIMIT 20
+  `).all();
+
+  let longWaitingPo = db.prepare(`
+    SELECT po.id, po.po_number, po.status, po.total_amount, po.order_date, s.name as supplier_name,
+      CAST(julianday('now') - julianday(po.order_date) AS INTEGER) as bekleme_gun
+    FROM purchase_orders po
+    JOIN suppliers s ON s.id=po.supplier_id
+    WHERE po.status IN ('sent','açık','draft')
+      AND po.order_date IS NOT NULL
+      AND strftime('%Y', po.order_date) = '2026'
+      AND julianday('now') - julianday(po.order_date) > 7
+    ORDER BY bekleme_gun DESC
+    LIMIT 30
+  `).all();
+
+  let pendingPo = db.prepare(`
+    SELECT po.id, po.po_number, po.status, po.total_amount, po.order_date, s.name as supplier_name
+    FROM purchase_orders po
+    JOIN suppliers s ON s.id=po.supplier_id
+    WHERE po.status IN ('sent','açık','draft')
+    ORDER BY po.order_date DESC
+    LIMIT 30
   `).all();
 
   // Kritik stok — min_stock_level > 0 olan envanterde eşiğe yakın veya altında olanlar
@@ -818,8 +840,30 @@ router.get('/dashboard', (req, res) => {
 
     recentPo = [...allPo]
       .sort((a, b) => String(b.order_date || '').localeCompare(String(a.order_date || '')))
-      .slice(0, 5)
+      .slice(0, 20)
       .map(({ waitingQty, totalQty, ...rest }) => rest);
+
+    const _now = Date.now();
+    longWaitingPo = allPo
+      .filter(po => {
+        if (!po.order_date) return false;
+        if (!String(po.order_date).startsWith('2026')) return false;
+        const days = Math.floor((_now - new Date(po.order_date).getTime()) / 86400000);
+        return days > 7 && (po.waitingQty || 0) > 0;
+      })
+      .map(({ waitingQty, totalQty, ...rest }) => ({
+        ...rest,
+        status: 'bekleyen',
+        bekleme_gun: Math.floor((_now - new Date(rest.order_date).getTime()) / 86400000),
+      }))
+      .sort((a, b) => b.bekleme_gun - a.bekleme_gun)
+      .slice(0, 30);
+
+    pendingPo = allPo
+      .filter(po => (po.waitingQty || 0) > 0)
+      .sort((a, b) => String(b.order_date || '').localeCompare(String(a.order_date || '')))
+      .map(({ waitingQty, totalQty, ...rest }) => ({ ...rest, status: 'bekleyen' }))
+      .slice(0, 30);
 
     const endDate = allPo.reduce((acc, p) => {
       const d = p.order_date ? new Date(p.order_date) : null;
@@ -890,6 +934,47 @@ router.get('/dashboard', (req, res) => {
   };
   let projectMonthlyTrend = [];
 
+  let openProjectCount = 0;
+  let malzemeEksikToplam = 0;
+
+  try {
+    const hasMalzemeCache = db.prepare("SELECT COUNT(*) as c FROM malzeme_ihtiyac_cache").get().c;
+    if (hasMalzemeCache > 0) {
+      openProjectCount = db.prepare(`
+        SELECT COUNT(DISTINCT proje_kodu) as c FROM malzeme_ihtiyac_cache
+        WHERE proje_kodu IS NOT NULL AND proje_kodu != ''
+      `).get().c || 0;
+      // Satinalma rotasının "tüm projeler" hesabıyla birebir aynı:
+      // depo_stok = SADECE elde_kalan (uretim_depo formüle dahil değil)
+      // birim_fiyat = Number() doğrudan (regex yok)
+      const malzemeRows = db.prepare(
+        'SELECT alt_kod, miktar, projelere_cikislar, elde_kalan, acik_satinalma_siparisleri, birim_fiyatlar FROM malzeme_ihtiyac_cache'
+      ).all();
+      const globalStok = {};
+      const ihtiyacMap = {};
+      for (const row of malzemeRows) {
+        const altKod = row.alt_kod;
+        if (!altKod) continue;
+        if (!globalStok[altKod]) {
+          globalStok[altKod] = {
+            birim_fiyat: Number(row.birim_fiyatlar) || 0,
+            elde_kalan: Number(row.elde_kalan) || 0,
+            acik_siparisler: Number(row.acik_satinalma_siparisleri) || 0,
+          };
+        }
+        if (!ihtiyacMap[altKod]) ihtiyacMap[altKod] = { toplam_miktar: 0, projelere_cikislar: 0 };
+        ihtiyacMap[altKod].toplam_miktar += Number(row.miktar) || 0;
+        ihtiyacMap[altKod].projelere_cikislar += Number(row.projelere_cikislar) || 0;
+      }
+      malzemeEksikToplam = Object.entries(ihtiyacMap).reduce((sum, [altKod, item]) => {
+        const g = globalStok[altKod] || {};
+        const eksik = item.toplam_miktar - item.projelere_cikislar
+          - (g.elde_kalan || 0) - (g.acik_siparisler || 0);
+        return eksik > 0 ? sum + eksik * (g.birim_fiyat || 0) : sum;
+      }, 0);
+    }
+  } catch (e) { /* cache yoksa 0 */ }
+
   if (hasProjectsTable) {
     projectSummary = db.prepare(`
       SELECT
@@ -932,6 +1017,8 @@ router.get('/dashboard', (req, res) => {
     monthSummary,
     monthlyPurchaseTrend,
     recentPo,
+    longWaitingPo,
+    pendingPo,
     triggeredAlerts,
     criticalStock,
     topPriceIncreases: topPriceIncreasesSliced,
@@ -943,6 +1030,8 @@ router.get('/dashboard', (req, res) => {
     openOrders,
     projectSummary,
     projectMonthlyTrend,
+    openProjectCount,
+    malzemeEksikToplam,
   });
 });
 
@@ -1234,6 +1323,124 @@ router.get('/product-price-analysis', (req, res) => {
     });
 
   res.json({ summary, availableYears, data });
+});
+
+// GET /api/reports/product-purchase-summary?year=&month=&search=
+// Yıl/ay filtresine göre ürün başına satınalma özeti
+router.get('/product-purchase-summary', (req, res) => {
+  const { year, month, search } = req.query;
+  const selectedYear = year ? Number(year) : null;
+  const selectedMonth = month ? Number(month) : null;
+
+  let rows = getPurchaseRows();
+
+  if (selectedYear) rows = rows.filter(r => r.date && r.date.getFullYear() === selectedYear);
+  if (selectedMonth && selectedMonth >= 1 && selectedMonth <= 12) {
+    rows = rows.filter(r => r.date && (r.date.getMonth() + 1) === selectedMonth);
+  }
+  if (search) {
+    const ns = normTr(search);
+    rows = rows.filter(r => normTr(`${r.code} ${r.name}`).includes(ns));
+  }
+
+  const productMap = new Map();
+  for (const r of rows) {
+    if (!productMap.has(r.code)) productMap.set(r.code, { code: r.code, name: r.name, purchases: [] });
+    productMap.get(r.code).purchases.push(r);
+  }
+
+  const products = [];
+  for (const [code, p] of productMap) {
+    const sorted = [...p.purchases].sort((a, b) => a.date - b.date);
+    const first = sorted[0];
+    const last = sorted[sorted.length - 1];
+    const totalQty = sorted.reduce((s, r) => s + (r.qty || 0), 0);
+    const prices = sorted.map(r => r.price).filter(v => v != null && v > 0);
+    const avgPrice = prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : null;
+    const suppliers = new Set(sorted.map(r => r.supplier).filter(Boolean));
+    const overallChange = first?.price && last?.price && first.price > 0
+      ? Math.round(((last.price - first.price) / first.price) * 10000) / 100 : null;
+
+    products.push({
+      code,
+      name: p.name,
+      purchaseCount: sorted.length,
+      totalQty: Math.round(totalQty * 100) / 100,
+      firstDate: first?.date?.toISOString().slice(0, 10),
+      firstPrice: first?.price,
+      lastDate: last?.date?.toISOString().slice(0, 10),
+      lastPrice: last?.price,
+      avgPrice: avgPrice == null ? null : Math.round(avgPrice * 100) / 100,
+      supplierCount: suppliers.size,
+      overallChange,
+    });
+  }
+
+  products.sort((a, b) => String(a.name || a.code).localeCompare(String(b.name || b.code), 'tr'));
+  res.json({ products, total: products.length });
+});
+
+// GET /api/reports/product-purchase-detail/:code
+// Bir ürünün tüm alım geçmişi (filtre yok, tüm zamanlar)
+router.get('/product-purchase-detail/:code', (req, res) => {
+  const code = decodeURIComponent(req.params.code);
+  const db = getDb();
+
+  const dbCount = db.prepare('SELECT COUNT(*) AS c FROM tiger_purchase_history').get().c;
+  let purchases = [];
+  let returns = [];
+
+  if (dbCount > 0) {
+    const allRows = db.prepare(`
+      SELECT tarih as date_str, malzeme_adi as name, tedarikci as supplier,
+        miktar as qty, birim_fiyat as price, net_tutar as amount,
+        COALESCE(NULLIF(fatura_tutar, 0), net_tutar) as invoiceAmount,
+        para_birimi as currency, iade
+      FROM tiger_purchase_history
+      WHERE malzeme_kodu = ? AND tarih IS NOT NULL
+      ORDER BY tarih ASC
+    `).all(code);
+    purchases = allRows.filter(r => !r.iade).map(r => ({ ...r, date: r.date_str }));
+    returns = allRows.filter(r => r.iade).map(r => ({ ...r, date: r.date_str }));
+  } else {
+    const allExcel = getPurchaseRows();
+    purchases = allExcel.filter(r => r.code === code).map(r => ({
+      date: r.date.toISOString().slice(0, 10),
+      name: r.name,
+      supplier: r.supplier,
+      qty: r.qty,
+      price: r.price,
+      amount: r.amount,
+      invoiceAmount: r.invoiceAmount,
+      currency: r.currency,
+      iade: 0,
+    }));
+  }
+
+  const withChanges = purchases.map((p, i) => {
+    const prev = i > 0 ? purchases[i - 1] : null;
+    const changePct = prev && prev.price > 0 && p.price != null
+      ? Math.round(((p.price - prev.price) / prev.price) * 10000) / 100 : null;
+    return { ...p, changePct };
+  });
+
+  const suppliersSet = new Set(purchases.map(p => p.supplier).filter(Boolean));
+  const totalQty = purchases.reduce((s, p) => s + (p.qty || 0), 0);
+  const returnQty = returns.reduce((s, p) => s + (p.qty || 0), 0);
+  const productName = purchases[0]?.name || code;
+
+  res.json({
+    code,
+    name: productName,
+    purchases: withChanges,
+    returns: returns.sort((a, b) => String(a.date).localeCompare(String(b.date))),
+    totalPurchaseCount: purchases.length,
+    totalQty: Math.round(totalQty * 100) / 100,
+    returnCount: returns.length,
+    returnQty: Math.round(returnQty * 100) / 100,
+    supplierCount: suppliersSet.size,
+    suppliers: [...suppliersSet],
+  });
 });
 
 // POST /api/reports/sync/purchase-history

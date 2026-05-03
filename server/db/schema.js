@@ -240,13 +240,18 @@ function initDb() {
       non_stock_item_name TEXT,
       quantity REAL NOT NULL DEFAULT 0,
       unit TEXT NOT NULL DEFAULT 'adet',
-      project_id TEXT REFERENCES projects(id),
+      project_id TEXT,
       project_code TEXT,
       project_name TEXT,
       usage_location TEXT,
       details TEXT,
       procurement_email TEXT,
-      status TEXT NOT NULL DEFAULT 'waiting_manager' CHECK (status IN ('draft','waiting_manager','waiting_gm','approved','rejected')),
+      status TEXT NOT NULL DEFAULT 'waiting_manager',
+      forwarded_to TEXT,
+      forwarded_note TEXT,
+      clarification_question TEXT,
+      clarification_answer TEXT,
+      assigned_to TEXT,
       manager_approved_by TEXT REFERENCES users(id),
       manager_approved_at TEXT,
       gm_approved_by TEXT REFERENCES users(id),
@@ -254,6 +259,33 @@ function initDb() {
       procurement_notified_at TEXT,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS request_logs (
+      id TEXT PRIMARY KEY,
+      request_id TEXT NOT NULL,
+      user_id TEXT,
+      user_name TEXT,
+      action TEXT NOT NULL,
+      from_status TEXT,
+      to_status TEXT,
+      note TEXT,
+      forwarded_to TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS request_tasks (
+      id TEXT PRIMARY KEY,
+      request_id TEXT NOT NULL,
+      request_number TEXT,
+      assigned_to TEXT,
+      assigned_to_name TEXT,
+      assigned_by TEXT,
+      assigned_by_name TEXT,
+      assigned_at TEXT NOT NULL DEFAULT (datetime('now')),
+      due_date TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      note TEXT,
+      completed_at TEXT,
+      completed_note TEXT
     );
   `);
 
@@ -617,6 +649,104 @@ function initDb() {
   try { database.exec('ALTER TABLE po_items ADD COLUMN received_quantity REAL DEFAULT 0'); } catch(e) {}
   // po_items.received_date sütununu ekle (varsa atla)
   try { database.exec('ALTER TABLE po_items ADD COLUMN received_date TEXT'); } catch(e) {}
+
+  // department_requests: REFERENCES projects kaldır + yeni sütunlar + status CHECK genişlet
+  try {
+    const drDef = database.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='department_requests'").get();
+    const needsMigration = drDef && drDef.sql && (
+      drDef.sql.includes('REFERENCES projects(id)') ||
+      drDef.sql.includes("CHECK (status IN ('draft','waiting_manager','waiting_gm','approved','rejected'))") ||
+      !drDef.sql.includes('forwarded_to')
+    );
+    if (needsMigration) {
+      database.exec(`
+        PRAGMA foreign_keys = OFF;
+        CREATE TABLE department_requests_new (
+          id TEXT PRIMARY KEY,
+          request_number TEXT UNIQUE NOT NULL,
+          created_by TEXT NOT NULL REFERENCES users(id),
+          department TEXT NOT NULL,
+          item_type TEXT NOT NULL CHECK (item_type IN ('stoklu','stok-disi')),
+          product_id TEXT REFERENCES products(id),
+          product_code TEXT,
+          product_name TEXT,
+          non_stock_item_name TEXT,
+          quantity REAL NOT NULL DEFAULT 0,
+          unit TEXT NOT NULL DEFAULT 'adet',
+          project_id TEXT,
+          project_code TEXT,
+          project_name TEXT,
+          usage_location TEXT,
+          details TEXT,
+          procurement_email TEXT,
+          status TEXT NOT NULL DEFAULT 'waiting_manager',
+          forwarded_to TEXT,
+          forwarded_note TEXT,
+          clarification_question TEXT,
+          clarification_answer TEXT,
+          assigned_to TEXT,
+          manager_approved_by TEXT REFERENCES users(id),
+          manager_approved_at TEXT,
+          gm_approved_by TEXT REFERENCES users(id),
+          gm_approved_at TEXT,
+          procurement_notified_at TEXT,
+          created_at TEXT NOT NULL DEFAULT (datetime('now')),
+          updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+        INSERT INTO department_requests_new
+          SELECT id, request_number, created_by, department, item_type, product_id, product_code,
+                 product_name, non_stock_item_name, quantity, unit, project_id, project_code,
+                 project_name, usage_location, details, procurement_email, status,
+                 NULL, NULL, NULL, NULL, NULL,
+                 manager_approved_by, manager_approved_at, gm_approved_by, gm_approved_at,
+                 procurement_notified_at, created_at, updated_at
+          FROM department_requests;
+        DROP TABLE department_requests;
+        ALTER TABLE department_requests_new RENAME TO department_requests;
+        PRAGMA foreign_keys = ON;
+      `);
+      console.log('[Migration] department_requests yeni sütunlar eklendi, status CHECK kaldırıldı.');
+    }
+  } catch(e) { console.warn('[Migration] department_requests migration atlandı:', e.message); }
+
+  // request_logs tablosu (denetim izi)
+  try {
+    database.exec(`
+      CREATE TABLE IF NOT EXISTS request_logs (
+        id TEXT PRIMARY KEY,
+        request_id TEXT NOT NULL,
+        user_id TEXT,
+        user_name TEXT,
+        action TEXT NOT NULL,
+        from_status TEXT,
+        to_status TEXT,
+        note TEXT,
+        forwarded_to TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )
+    `);
+  } catch(e) { console.warn('[Migration] request_logs atlandı:', e.message); }
+
+  // request_tasks tablosu (satın alma görev takibi)
+  try {
+    database.exec(`
+      CREATE TABLE IF NOT EXISTS request_tasks (
+        id TEXT PRIMARY KEY,
+        request_id TEXT NOT NULL,
+        request_number TEXT,
+        assigned_to TEXT,
+        assigned_to_name TEXT,
+        assigned_by TEXT,
+        assigned_by_name TEXT,
+        assigned_at TEXT NOT NULL DEFAULT (datetime('now')),
+        due_date TEXT,
+        status TEXT NOT NULL DEFAULT 'pending',
+        note TEXT,
+        completed_at TEXT,
+        completed_note TEXT
+      )
+    `);
+  } catch(e) { console.warn('[Migration] request_tasks atlandı:', e.message); }
 
   console.log('Veritabanı başlatıldı.');
 }

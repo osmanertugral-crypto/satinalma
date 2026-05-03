@@ -4,17 +4,16 @@ import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Users, Package, FileText,
   TrendingUp, LogOut,
-  Menu, X, ListChecks, LineChart, Container, ClipboardList, Wallet, BarChart2, Settings
+  Menu, X, ListChecks, Container, ClipboardList, Wallet, BarChart2, Settings
 } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', key: 'dashboard' },
   { to: '/finance', icon: Wallet, label: 'Finans', key: 'finance' },
   { to: '/suppliers', icon: Users, label: 'Siparişler ve Tedarikçiler', key: 'suppliers' },
-  { to: '/products', icon: Package, label: 'Ürünler', key: 'products' },
+  { to: '/products', icon: Package, label: 'Ürünler ve Fiyat Analizi', key: 'products' },
   { to: '/depo', icon: Container, label: 'Depo Stok', key: 'depo' },
   { to: '/malzeme-ihtiyac', icon: ClipboardList, label: 'Malzeme İhtiyaç', key: 'malzeme-ihtiyac' },
-  { to: '/price-analysis', icon: LineChart, label: 'Fiyat Analizi', key: 'price-analysis' },
   { to: '/projeler', icon: TrendingUp, label: 'Projeler', key: 'projects' },
   { to: '/department-requests', icon: ClipboardList, label: 'Departman Talepleri', key: 'department-requests' },
   { to: '/hasar-tutanaklari', icon: FileText, label: 'Hasar Tutanakları', key: 'damage-reports' },

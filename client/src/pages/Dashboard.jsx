@@ -1,19 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getDashboard } from '../api';
+import { getDashboard, getMalzemeProjeModelOzet } from '../api';
 import { PageHeader, Card, StatCard, Badge, Spinner, Modal, Table, Button } from '../components/UI';
-import { Users, Package, ShoppingCart, FileText, Warehouse, AlertTriangle, TrendingUp, TrendingDown, Settings, CheckCircle, BarChart2, Wallet, Container, Activity, CalendarRange, Clock3, Building2, ArrowUpRight, ArrowDownRight, Download } from 'lucide-react';
+import { Users, Package, ShoppingCart, FileText, Warehouse, AlertTriangle, TrendingUp, TrendingDown, Settings, CheckCircle, BarChart2, Wallet, Container, Activity, CalendarRange, Clock3, Building2, ArrowUpRight, ArrowDownRight, Download, Car, Layers } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
-const STATUS_LABELS = { draft: 'Taslak', sent: 'Gönderildi', confirmed: 'Onaylandı', delivered: 'Teslim Alındı', cancelled: 'İptal' };
-const STATUS_COLOR = { draft: 'gray', sent: 'blue', confirmed: 'green', delivered: 'purple', cancelled: 'red' };
-const PERIOD_OPTIONS = [
-  { value: 1, label: '1 Ay' },
-  { value: 3, label: '3 Ay' },
-  { value: 6, label: '6 Ay' },
-  { value: 12, label: '12 Ay' },
-];
+const STATUS_LABELS = { draft: 'Taslak', sent: 'Gönderildi', confirmed: 'Onaylandı', delivered: 'Teslim Alındı', cancelled: 'İptal', açık: 'Açık', bekleyen: 'Bekleyen', kapanan: 'Kapandı' };
+const STATUS_COLOR = { draft: 'gray', sent: 'yellow', confirmed: 'green', delivered: 'green', cancelled: 'red', açık: 'yellow', bekleyen: 'yellow', kapanan: 'gray' };
 
 function fmtNum(v) {
   if (v == null || isNaN(v)) return '-';
@@ -76,6 +70,24 @@ function ExportButton({ onClick }) {
   );
 }
 
+// ─── Gladiator karavan siluet ikonu ──────────────────────────────────────────
+const GladiatorIcon = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    {/* Karavan/motorhome gövdesi — yandan silüet */}
+    <path d="M1 6h17l4 4.5V15H1V6z" />
+    {/* Ön tampon / step */}
+    <rect x="20" y="14" width="2.5" height="1.5" rx="0.3" />
+    {/* Arka tampon */}
+    <rect x="1" y="14" width="2" height="1.5" rx="0.3" />
+    {/* Tekerlekler */}
+    <circle cx="6" cy="17.5" r="2.8" />
+    <circle cx="18.5" cy="17.5" r="2.8" />
+    {/* Jant iç halkası (beyaz kontur etkisi) */}
+    <circle cx="6" cy="17.5" r="1.2" fill="white" fillOpacity="0.35" />
+    <circle cx="18.5" cy="17.5" r="1.2" fill="white" fillOpacity="0.35" />
+  </svg>
+);
+
 // ─── Widget tanımları ─────────────────────────────────────────────────────────
 const WIDGET_DEFS = [
   { id: 'kritik-stok',   label: 'Kritik Stok', icon: Warehouse,   desc: 'Min. stok altındaki ürünler' },
@@ -92,11 +104,10 @@ const DEFAULT_RIGHT = 'kritik-stok';
 const LS_KEY = 'dashboard_widgets';
 const DASHBOARD_PREFS_KEY = 'dashboard_preferences_v1';
 const DEFAULT_DASHBOARD_PREFS = {
-  statSuppliers: true,
-  statProducts: true,
-  statActivePo: true,
+  statAcikProjeler: true,
+  statAcikSiparisler: true,
   statLowStock: true,
-  statOpenOrders: true,
+  statMalzemeEksik: true,
   sectionActionSummary: true,
   sectionPoStatus: true,
   sectionTopSuppliers: true,
@@ -456,7 +467,7 @@ function ActionSummaryCard({ data, navigate }) {
               <CalendarRange size={18} className="text-blue-500" />
               <h2 className="font-semibold text-gray-700">Aylık Özet ve Aksiyonlar</h2>
             </div>
-            <p className="text-xs text-gray-500">Son 6 aya göre satınalma hareketi</p>
+            <p className="text-xs text-gray-500">Bu aya ait satınalma hareketi</p>
           </div>
           <div className="flex items-center gap-2">
             <ExportButton onClick={handleExport} />
@@ -588,79 +599,34 @@ function SupplierPerformanceCard({ data, navigate }) {
   );
 }
 
-function POStatusCard({ data, navigate }) {
-  const rows = ['draft', 'sent', 'confirmed', 'delivered'].map(status => {
-    const row = data?.poByStatus?.find(item => item.status === status);
-    return {
-      status,
-      label: STATUS_LABELS[status],
-      count: row?.count || 0,
-      total: row?.total || 0,
-    };
-  });
-  const maxCount = Math.max(...rows.map(row => row.count), 1);
-  const totalCount = rows.reduce((sum, row) => sum + row.count, 0);
-  const chartData = rows.map(row => ({ name: row.label, count: row.count }));
-  function handleExport() {
-    exportCsv(
-      `dashboard-po-durumlari-${data?.period || 6}ay.csv`,
-      ['Durum', 'Kayit Sayisi', 'Yuzde', 'Toplam Tutar'],
-      rows.map(row => [row.label, row.count, totalCount ? Number(((row.count / totalCount) * 100).toFixed(2)) : 0, row.total])
-    );
-  }
-
+function SonSiparislerCard({ data, navigate }) {
+  const orders = data?.recentPo || [];
   return (
-    <Card className="p-5">
-      <div className="flex items-center justify-between gap-2 mb-4">
-        <div className="flex items-center gap-2">
-          <BarChart2 size={18} className="text-orange-500" />
-          <h2 className="font-semibold text-gray-700">PO Durum Dağılımı</h2>
-        </div>
-        <ExportButton onClick={handleExport} />
+    <Card className="p-4 flex flex-col h-full">
+      <div className="flex items-center gap-2 mb-3">
+        <ShoppingCart size={16} className="text-blue-500" />
+        <h2 className="font-semibold text-gray-700 text-sm">Son Açılan Siparişler</h2>
+        <span className="ml-auto text-[10px] text-gray-400 bg-gray-100 rounded px-1.5 py-0.5">{orders.length} kayıt</span>
       </div>
-
-      <div className="rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 p-3 mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-medium text-orange-700">Durumlara göre sipariş yoğunluğu</p>
-          <span className="text-xs text-orange-600">Toplam {fmtNum(totalCount)} kayıt</span>
-        </div>
-        <div className="h-28">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9a3412' }} />
-              <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9a3412' }} />
-              <Tooltip formatter={value => [`${fmtNum(value)} kayıt`, 'Adet']} contentStyle={{ fontSize: 11, borderRadius: 12 }} />
-              <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                {chartData.map((_, idx) => (
-                  <Cell key={idx} fill={[ '#f59e0b', '#fb923c', '#f97316', '#ea580c' ][idx % 4]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        {rows.map(row => (
+      <div className="space-y-1.5 overflow-y-auto flex-1" style={{ maxHeight: 480 }}>
+        {orders.length === 0 && <p className="text-xs text-gray-400 text-center py-4">Sipariş bulunamadı.</p>}
+        {orders.map((po, i) => (
           <button
-            key={row.status}
+            key={po.po_number || i}
             onClick={() => navigate('/po')}
-            className="w-full text-left rounded-xl border border-gray-200 px-3 py-3 hover:bg-gray-50 transition-colors"
+            className="w-full text-left rounded-lg border border-gray-100 px-2.5 py-2 hover:bg-blue-50/60 transition-colors"
           >
-            <div className="flex items-center justify-between gap-3 mb-2">
-              <div className="flex items-center gap-2">
-                <Badge color={STATUS_COLOR[row.status]}>{row.label}</Badge>
-                <span className="text-sm text-gray-500">{fmtNum(row.count)} kayıt</span>
-              </div>
-              <span className="text-xs font-medium text-gray-600">%{totalCount ? fmtNum((row.count / totalCount) * 100) : 0}</span>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] font-mono text-blue-700 font-medium truncate">{po.po_number}</span>
+              <Badge color={STATUS_COLOR[po.status] || 'gray'}>{STATUS_LABELS[po.status] || po.status}</Badge>
             </div>
-            <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-orange-400 transition-all"
-                style={{ width: `${Math.max((row.count / maxCount) * 100, row.count ? 10 : 0)}%` }}
-              />
+            <div className="flex items-center justify-between gap-2 mt-0.5">
+              <span className="text-[10px] text-gray-500 truncate">{po.supplier_name}</span>
+              <span className="text-[10px] text-gray-400 shrink-0">{fmtDate(po.order_date)}</span>
             </div>
-            <div className="mt-2 text-xs text-gray-500">Toplam tutar: {fmtCur(row.total)}</div>
+            {po.total_amount > 0 && (
+              <div className="text-[10px] text-gray-400 mt-0.5">{fmtCur(po.total_amount)}</div>
+            )}
           </button>
         ))}
       </div>
@@ -668,55 +634,176 @@ function POStatusCard({ data, navigate }) {
   );
 }
 
-function TopSuppliersCard({ data, navigate }) {
-  const items = data?.topSuppliers || [];
-  const maxTotal = Math.max(...items.map(item => Number(item.total_amount) || 0), 1);
-  function handleExport() {
-    exportCsv(
-      `dashboard-top-tedarikciler-${data?.period || 6}ay.csv`,
-      ['Sira', 'Tedarikci', 'PO Sayisi', 'Toplam Tutar', 'Son Siparis'],
-      items.map((item, index) => [index + 1, item.name, item.po_count, item.total_amount, item.last_order_date])
-    );
-  }
+function UzunBekleyenlerCard({ data, navigate }) {
+  const orders = data?.longWaitingPo || [];
+  return (
+    <Card className="p-4 flex flex-col">
+      <div className="flex items-center gap-2 mb-3">
+        <Clock3 size={16} className="text-red-500" />
+        <h2 className="font-semibold text-gray-700 text-sm">7 Günden Fazla Bekleyen</h2>
+        {orders.length > 0 && (
+          <span className="ml-auto text-[10px] font-semibold text-red-500 bg-red-50 rounded px-1.5 py-0.5">{orders.length} sipariş</span>
+        )}
+      </div>
+      <div className="space-y-1.5 overflow-y-auto" style={{ maxHeight: 210 }}>
+        {orders.length === 0 && <p className="text-xs text-gray-400 text-center py-4">7 günden uzun bekleyen sipariş yok.</p>}
+        {orders.map((po, i) => (
+          <button
+            key={po.po_number || i}
+            onClick={() => navigate(po.id ? `/po/${po.id}` : '/po')}
+            className="w-full text-left rounded-lg border border-red-100 bg-red-50/30 px-2.5 py-1.5 hover:bg-red-50 transition-colors"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] font-mono text-red-700 font-medium truncate">{po.po_number}</span>
+              <span className="text-[10px] font-bold text-red-600 shrink-0">{po.bekleme_gun} gün</span>
+            </div>
+            <div className="flex items-center justify-between gap-1 mt-0.5">
+              <span className="text-[10px] text-gray-500 truncate">{po.supplier_name}</span>
+              <Badge color={STATUS_COLOR[po.status] || 'gray'}>{STATUS_LABELS[po.status] || po.status}</Badge>
+            </div>
+          </button>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+function BekleyenSiparislerCard({ data, navigate }) {
+  const orders = data?.pendingPo || [];
+  return (
+    <Card className="p-4 flex flex-col">
+      <div className="flex items-center gap-2 mb-3">
+        <AlertTriangle size={16} className="text-amber-500" />
+        <h2 className="font-semibold text-gray-700 text-sm">Bekleyen Siparişler</h2>
+        {orders.length > 0 && (
+          <span className="ml-auto text-[10px] font-semibold text-amber-600 bg-amber-50 rounded px-1.5 py-0.5">{orders.length} sipariş</span>
+        )}
+      </div>
+      <div className="space-y-1.5 overflow-y-auto" style={{ maxHeight: 210 }}>
+        {orders.length === 0 && <p className="text-xs text-gray-400 text-center py-4">Bekleyen sipariş yok.</p>}
+        {orders.map((po, i) => (
+          <button
+            key={po.po_number || i}
+            onClick={() => navigate('/po')}
+            className="w-full text-left rounded-lg border border-amber-100 bg-amber-50/30 px-2.5 py-1.5 hover:bg-amber-50 transition-colors"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] font-mono text-amber-700 font-medium truncate">{po.po_number}</span>
+              <Badge color={STATUS_COLOR[po.status] || 'gray'}>{STATUS_LABELS[po.status] || po.status}</Badge>
+            </div>
+            <div className="flex items-center justify-between gap-1 mt-0.5">
+              <span className="text-[10px] text-gray-500 truncate">{po.supplier_name}</span>
+              <span className="text-[10px] text-gray-400 shrink-0">{fmtDate(po.order_date)}</span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+// Araç modeli renk paleti (KARAVAN_ADI'nın ilk 1-3 harfine göre)
+const MODEL_COLORS = [
+  '#1E40AF','#065F46','#92400E','#4C1D95','#991B1B','#0369A1',
+  '#065F46','#713F12','#1D4ED8','#047857','#7C3AED','#BE185D',
+];
+function modelColor(name, idx) {
+  return MODEL_COLORS[idx % MODEL_COLORS.length];
+}
+
+function ProjeModelOzetiCard({ navigate }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ['malzeme-proje-model-ozet'],
+    queryFn: () => getMalzemeProjeModelOzet().then(r => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const models = data?.models || [];
 
   return (
-    <Card className="p-5">
-      <div className="flex items-center justify-between gap-2 mb-4">
-        <div className="flex items-center gap-2">
-          <Building2 size={18} className="text-indigo-500" />
-          <h2 className="font-semibold text-gray-700">En Çok Sipariş Verilen Tedarikçiler</h2>
-        </div>
-        <ExportButton onClick={handleExport} />
+    <Card className="p-5 flex flex-col">
+      <div className="flex items-center gap-2 mb-4">
+        <Car size={18} className="text-blue-500" />
+        <h2 className="font-semibold text-gray-700">Araç Modeli — Malzeme & Proje Özeti</h2>
+        <span className="ml-auto text-xs text-gray-400 bg-gray-100 rounded px-2 py-0.5">Malzeme İhtiyaç</span>
       </div>
 
-      {!items.length && <p className="text-sm text-gray-400 py-6 text-center">Henüz tedarikçi sipariş verisi yok.</p>}
+      {isLoading && (
+        <div className="flex items-center justify-center py-8 gap-2 text-gray-400 text-sm">
+          <Spinner size="sm" /> Yükleniyor...
+        </div>
+      )}
 
-      <div className="space-y-3">
-        {items.map((item, index) => {
-          const width = Math.max(((Number(item.total_amount) || 0) / maxTotal) * 100, 10);
+      {!isLoading && models.length === 0 && (
+        <p className="text-sm text-gray-400 py-6 text-center">Malzeme İhtiyaç verisi bulunamadı.</p>
+      )}
+
+      <div className="space-y-3 overflow-y-auto" style={{ maxHeight: 560 }}>
+        {models.map((model, idx) => {
+          const color = modelColor(model.karavan_adi, idx);
+          const projeler = model.projeler || [];
+          const hasPending = model.toplam_eksik > 0;
+          const projelerParam = model.proje_kodlari.join(',');
+
           return (
-            <button
-              key={item.id}
-              onClick={() => navigate(`/suppliers/${item.id}`)}
-              className="w-full rounded-xl border border-gray-200 px-3 py-3 text-left hover:bg-gray-50 transition-colors"
+            <div
+              key={model.karavan_adi}
+              className="rounded-xl border border-gray-100 overflow-hidden"
             >
-              <div className="flex items-center justify-between gap-3 mb-2">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700">{index + 1}</span>
-                    <p className="text-sm font-medium text-gray-800 truncate">{item.name}</p>
+              {/* Model başlık + ürün kodları */}
+              <button
+                onClick={() => navigate(`/malzeme-ihtiyac?projeler=${encodeURIComponent(projelerParam)}&tab=satinalma&filter=eksik`)}
+                className="w-full text-left px-3 py-2.5 hover:bg-blue-50/60 transition-colors"
+                style={{ backgroundColor: color + '12' }}
+              >
+                <div className="flex items-start gap-2">
+                  <div
+                    className="shrink-0 rounded-md px-2 py-0.5 text-white text-xs font-bold font-mono leading-none mt-0.5"
+                    style={{ backgroundColor: color }}
+                  >
+                    {model.karavan_adi}
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">Son sipariş: {item.last_order_date || '-'}</p>
+                  <div className="flex-1 min-w-0 flex items-center">
+                    {hasPending ? (
+                      <span className="text-[11px] text-red-500 font-semibold">
+                        ⚠ {Math.round(model.toplam_eksik)} adet eksik
+                      </span>
+                    ) : (
+                      <span className="text-[11px] text-green-600 font-medium">Tamam</span>
+                    )}
+                  </div>
                 </div>
-                <div className="text-right shrink-0">
-                  <p className="text-sm font-semibold text-gray-800">{fmtCur(item.total_amount)}</p>
-                  <p className="text-xs text-gray-500">{fmtNum(item.po_count)} PO</p>
+              </button>
+
+              {/* Proje / müşteri satırları */}
+              {projeler.length > 0 && (
+                <div className="divide-y divide-gray-50">
+                  {projeler.map(proje => (
+                    <button
+                      key={proje.proje_kodu}
+                      onClick={() => navigate(`/malzeme-ihtiyac?projeler=${encodeURIComponent(proje.proje_kodu)}&tab=satinalma&filter=eksik`)}
+                      className="w-full text-left px-3 py-1.5 flex items-center justify-between gap-2 hover:bg-blue-50 transition-colors bg-white"
+                    >
+                      <div className="min-w-0">
+                        <span className="text-[11px] font-mono text-blue-700 font-medium">{proje.proje_kodu}</span>
+                        {proje.musteri_adi && (
+                          <span className="ml-1.5 text-[10px] text-gray-500 truncate">{proje.musteri_adi}</span>
+                        )}
+                      </div>
+                      {proje.eksik_adet > 0 ? (
+                        <span className="shrink-0 text-[10px] font-semibold text-red-500 bg-red-50 rounded px-1.5 py-0.5">
+                          {Math.round(proje.eksik_adet)} eksik
+                        </span>
+                      ) : (
+                        <span className="shrink-0 text-[10px] text-green-600 bg-green-50 rounded px-1.5 py-0.5">
+                          Tamam
+                        </span>
+                      )}
+                    </button>
+                  ))}
                 </div>
-              </div>
-              <div className="h-2 rounded-full bg-indigo-50 overflow-hidden">
-                <div className="h-full rounded-full bg-gradient-to-r from-indigo-400 to-sky-400" style={{ width: `${width}%` }} />
-              </div>
-            </button>
+              )}
+            </div>
           );
         })}
       </div>
@@ -854,19 +941,17 @@ function Widget({ id, data, navigate, onChangePicker }) {
 // ─── Ana Sayfa ───────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const [period, setPeriod] = useState(6);
   const [showPrefsModal, setShowPrefsModal] = useState(false);
   const [showOpenOrders, setShowOpenOrders] = useState(false);
   const [openOrdersSearch, setOpenOrdersSearch] = useState('');
   const [openOrdersFrom, setOpenOrdersFrom] = useState('');
   const [openOrdersTo, setOpenOrdersTo] = useState('');
-  const { data, isLoading } = useQuery({ queryKey: ['dashboard', period], queryFn: () => getDashboard({ period }).then(r => r.data) });
+  const { data, isLoading } = useQuery({ queryKey: ['dashboard'], queryFn: () => getDashboard({ period: 1 }).then(r => r.data) });
   const [widgets, setWidgets] = useState(loadWidgets);
   const [widgetsDraft, setWidgetsDraft] = useState(loadWidgets);
   const [prefs, setPrefs] = useState(loadDashboardPrefs);
   const [prefsDraft, setPrefsDraft] = useState(loadDashboardPrefs);
   const [picker, setPicker] = useState(null); // 'left' | 'right'
-  const selectedPeriod = PERIOD_OPTIONS.find(option => option.value === period);
   const filteredOpenOrders = useMemo(() => {
     const rows = data?.openOrders || [];
     const s = openOrdersSearch.trim().toLowerCase();
@@ -919,48 +1004,30 @@ export default function DashboardPage() {
     <div className="p-6">
       <PageHeader
         title="Dashboard"
-        subtitle={`Genel ozet ve uyarilar • Secili donem: ${selectedPeriod?.label || '6 Ay'}`}
+        subtitle="Genel ozet ve uyarilar • Mevcut ay"
         action={(
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white p-1 shadow-sm overflow-x-auto">
-              {PERIOD_OPTIONS.map(option => (
-                <button
-                  key={option.value}
-                  onClick={() => setPeriod(option.value)}
-                  className={`whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium transition-colors ${period === option.value ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={openPrefsModal}
-              className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              title="Dashboard ayarlari"
-            >
-              <Settings size={16} />
-              Dashboard Ayarlari
-            </button>
-          </div>
+          <button
+            onClick={openPrefsModal}
+            className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            title="Dashboard ayarlari"
+          >
+            <Settings size={16} />
+            Dashboard Ayarlari
+          </button>
         )}
       />
 
       {/* İstatistikler */}
-      {(prefs.statSuppliers || prefs.statProducts || prefs.statActivePo || prefs.statLowStock || prefs.statOpenOrders) && (
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-          {prefs.statSuppliers && (
-            <button onClick={() => navigate('/suppliers')} className="text-left" title="Tedarikciler sayfasina git">
-              <StatCard label="Tedarikçiler" value={data.totalSuppliers} icon={Users} color="blue" />
+      {(prefs.statAcikProjeler || prefs.statAcikSiparisler || prefs.statLowStock || prefs.statMalzemeEksik) && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {prefs.statAcikProjeler && (
+            <button onClick={() => navigate('/malzeme-ihtiyac')} className="text-left" title="Malzeme Ihtiyac sayfasina git">
+              <StatCard label="Açık İş Emri" value={Number(data.openProjectCount || 0)} icon={GladiatorIcon} color="blue" />
             </button>
           )}
-          {prefs.statProducts && (
-            <button onClick={() => navigate('/products')} className="text-left" title="Urunler sayfasina git">
-              <StatCard label="Ürünler" value={data.totalProducts} icon={Package} color="green" />
-            </button>
-          )}
-          {prefs.statActivePo && (
-            <button onClick={() => navigate('/po')} className="text-left" title="PO sayfasina git">
-              <StatCard label="Aktif PO" value={data.activePo} icon={ShoppingCart} color="orange" />
+          {prefs.statAcikSiparisler && (
+            <button onClick={() => navigate('/po')} className="text-left" title="Siparisler sayfasina git">
+              <StatCard label="Açık Sipariş" value={Number(data?.openOrderSummary?.count || 0)} icon={ShoppingCart} color="orange" />
             </button>
           )}
           {prefs.statLowStock && (
@@ -968,17 +1035,15 @@ export default function DashboardPage() {
               <StatCard label="Kritik Stok" value={data.lowStock} icon={Warehouse} color="red" />
             </button>
           )}
-          {prefs.statOpenOrders && (
-            <button
-              onClick={() => setShowOpenOrders(true)}
-              className="text-left"
-              title="Acik siparisleri gor"
-            >
+          {prefs.statMalzemeEksik && (
+            <button onClick={() => navigate('/malzeme-ihtiyac')} className="text-left" title="Malzeme ihtiyac sayfasina git">
               <StatCard
-                label="Acik Siparis"
-                value={Number(data?.openOrderSummary?.count || 0)}
-                icon={FileText}
-                color="yellow"
+                label="Eksik Malzeme Tutarı"
+                value={data.malzemeEksikToplam > 0
+                  ? Number(data.malzemeEksikToplam).toLocaleString('tr-TR', { maximumFractionDigits: 0 }) + ' ₺'
+                  : '-'}
+                icon={TrendingUp}
+                color="purple"
               />
             </button>
           )}
@@ -988,18 +1053,26 @@ export default function DashboardPage() {
       {(prefs.sectionActionSummary || prefs.sectionPoStatus || prefs.sectionTopSuppliers) && (
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6">
           {prefs.sectionActionSummary && (
-            <div className="xl:col-span-4">
+            <div className="xl:col-span-3">
               <ActionSummaryCard data={data} navigate={navigate} />
             </div>
           )}
           {prefs.sectionPoStatus && (
-            <div className="xl:col-span-4">
-              <POStatusCard data={data} navigate={navigate} />
+            <div className="xl:col-span-6 flex flex-col xl:flex-row gap-4">
+              {/* Sol: büyük sipariş listesi */}
+              <div className="flex-1 min-w-0">
+                <SonSiparislerCard data={data} navigate={navigate} />
+              </div>
+              {/* Sağ: 2 satır */}
+              <div className="flex flex-col gap-4 xl:w-64 shrink-0">
+                <UzunBekleyenlerCard data={data} navigate={navigate} />
+                <BekleyenSiparislerCard data={data} navigate={navigate} />
+              </div>
             </div>
           )}
           {prefs.sectionTopSuppliers && (
-            <div className="xl:col-span-4">
-              <TopSuppliersCard data={data} navigate={navigate} />
+            <div className="xl:col-span-3">
+              <ProjeModelOzetiCard navigate={navigate} />
             </div>
           )}
         </div>
@@ -1044,11 +1117,10 @@ export default function DashboardPage() {
           <div>
             <h3 className="text-sm font-semibold text-gray-700 mb-2">Ust Kartlar</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.statSuppliers} onChange={e => updatePref('statSuppliers', e.target.checked)} /> Tedarikçiler</label>
-              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.statProducts} onChange={e => updatePref('statProducts', e.target.checked)} /> Ürünler</label>
-              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.statActivePo} onChange={e => updatePref('statActivePo', e.target.checked)} /> Aktif PO</label>
+              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.statAcikProjeler} onChange={e => updatePref('statAcikProjeler', e.target.checked)} /> Açık İş Emri Sayısı</label>
+              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.statAcikSiparisler} onChange={e => updatePref('statAcikSiparisler', e.target.checked)} /> Açık Sipariş Adedi</label>
               <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.statLowStock} onChange={e => updatePref('statLowStock', e.target.checked)} /> Kritik Stok</label>
-              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.statOpenOrders} onChange={e => updatePref('statOpenOrders', e.target.checked)} /> Açık Sipariş</label>
+              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.statMalzemeEksik} onChange={e => updatePref('statMalzemeEksik', e.target.checked)} /> Eksik Malzeme Tutarı</label>
             </div>
           </div>
 
@@ -1056,8 +1128,8 @@ export default function DashboardPage() {
             <h3 className="text-sm font-semibold text-gray-700 mb-2">Ana Bölümler</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
               <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.sectionActionSummary} onChange={e => updatePref('sectionActionSummary', e.target.checked)} /> Aylık Özet ve Aksiyonlar</label>
-              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.sectionPoStatus} onChange={e => updatePref('sectionPoStatus', e.target.checked)} /> PO Durum Dağılımı</label>
-              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.sectionTopSuppliers} onChange={e => updatePref('sectionTopSuppliers', e.target.checked)} /> En Çok Sipariş Verilen Tedarikçiler</label>
+              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.sectionPoStatus} onChange={e => updatePref('sectionPoStatus', e.target.checked)} /> Siparişler (Son / Bekleyen / Uzun Bekleyen)</label>
+              <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.sectionTopSuppliers} onChange={e => updatePref('sectionTopSuppliers', e.target.checked)} /> Araç Modeli — Proje Özeti</label>
               <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.sectionSupplierPerformance} onChange={e => updatePref('sectionSupplierPerformance', e.target.checked)} /> Tedarikçi Performansı</label>
               <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.sectionRecentActivity} onChange={e => updatePref('sectionRecentActivity', e.target.checked)} /> Son Hareketler</label>
               <label className="flex items-center gap-2"><input type="checkbox" checked={prefsDraft.sectionWidgets} onChange={e => updatePref('sectionWidgets', e.target.checked)} /> Widget Alanı</label>

@@ -7,7 +7,7 @@ import LoginPage from './pages/Login';
 import DashboardPage from './pages/Dashboard';
 import SuppliersOrdersPage from './pages/SuppliersOrders';
 import SupplierDetailPage from './pages/SupplierDetail';
-import ProductsPage from './pages/Products';
+import ProductsAndPriceAnalysisPage from './pages/ProductsAndPriceAnalysis';
 import ProductDetailPage from './pages/ProductDetail';
 import PricesPage from './pages/Prices';
 import POPage from './pages/PO';
@@ -17,7 +17,7 @@ import RFQDetailPage from './pages/RFQDetail';
 import InventoryPage from './pages/Inventory';
 import DocumentsPage from './pages/Documents';
 import ReportsPage from './pages/Reports';
-import PriceAnalysisPage from './pages/PriceAnalysis';
+// PriceAnalysis is now merged into ProductsAndPriceAnalysis
 import DepoPage from './pages/Depo';
 import AdminUsersPage from './pages/AdminUsers';
 import OutlookTasksPage from './pages/OutlookTasks';
@@ -58,7 +58,7 @@ function App() {
               <Route index element={<DashboardPage />} />
               <Route path="suppliers" element={<SuppliersOrdersPage />} />
               <Route path="suppliers/:id" element={<SupplierDetailPage />} />
-              <Route path="products" element={<ProductsPage />} />
+              <Route path="products" element={<ProductsAndPriceAnalysisPage />} />
               <Route path="products/:id" element={<ProductDetailPage />} />
               <Route path="prices" element={<PricesPage />} />
               <Route path="po" element={<POPage />} />
@@ -71,7 +71,7 @@ function App() {
               <Route path="finance" element={<FinancePage />} />
               <Route path="documents" element={<DocumentsPage />} />
               <Route path="outlook-tasks" element={<OutlookTasksPage />} />
-              <Route path="price-analysis" element={<PriceAnalysisPage />} />
+              <Route path="price-analysis" element={<Navigate to="/products" replace />} />
               <Route path="hasar-tutanaklari" element={<DamageReportsPage />} />
               <Route path="projeler" element={<ProjectsPage />} />
               <Route path="projeler/:id" element={<ProjectDetailPage />} />

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getFinanceKurlar, getFinanceOzet, getFinanceCariler, getFinanceCariDetay, refreshFinanceExcel, getFinanceRefreshStatus } from '../api';
+import { getFinanceKurlar, getFinanceOzet, getFinanceCariler, getFinanceCariDetay, refreshFinanceExcel, getFinanceRefreshStatus, downloadCariExtresiBD, sendCariExtresiByMail } from '../api';
 import { normSearch } from '../utils/searchUtils';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -10,7 +10,7 @@ import {
   TrendingDown, TrendingUp, Clock, ArrowUpDown,
   ChevronDown, ChevronUp, Search, ArrowLeft, RefreshCw,
   DollarSign, AlertTriangle, FileText, CreditCard, Calendar,
-  Copy, CheckSquare, Square, X, ClipboardCheck
+  Copy, CheckSquare, Square, X, ClipboardCheck, Download, Mail, MoreVertical
 } from 'lucide-react';
 
 // ── Helpers ──
@@ -763,9 +763,35 @@ function CariDetayTab({ cariKodu, onBack }) {
     enabled: !!cariKodu,
   });
 
-  const [faturaFilter, setFaturaFilter] = useState('odenmedi'); // all, odenmedi, kismi, odendi
+  const [faturaFilter, setFaturaFilter] = useState('odenmedi');
   const [secilenIdx, setSecilenIdx] = useState(new Set());
   const [kopyalandiBilgi, setKopyalandiBilgi] = useState(false);
+  const [showMenuId, setShowMenuId] = useState(null);
+
+  const pdfMut = useMutation({
+    mutationFn: () => downloadCariExtresiBD(cariKodu),
+    onSuccess: (blob) => {
+      const url = window.URL.createObjectURL(blob.data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Ekstre_${cariKodu}_${new Date().toISOString().split('T')[0]}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      setShowMenuId(null);
+    },
+    onError: (err) => alert('PDF indirme hatası: ' + (err?.response?.data?.error || err.message)),
+  });
+
+  const mailMut = useMutation({
+    mutationFn: () => sendCariExtresiByMail(cariKodu),
+    onSuccess: () => {
+      setShowMenuId(null);
+      alert('Outlook açıldı — PDF ek olarak hazırlandı. Alıcıyı girin ve gönderin.');
+    },
+    onError: (err) => alert('Outlook açma hatası: ' + (err?.response?.data?.error || err.message)),
+  });
 
   if (isLoading) return <div className="flex items-center justify-center h-64 gap-2 text-gray-500"><RefreshCw className="animate-spin" size={20} /> Yükleniyor...</div>;
   if (!data) return null;
@@ -838,13 +864,52 @@ function CariDetayTab({ cariKodu, onBack }) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 rounded-xl hover:bg-gray-200 transition"><ArrowLeft size={22} /></button>
-        <div>
-          <h2 className="text-2xl font-extrabold text-gray-800">{data.cariAdi}</h2>
-          <span className="text-sm text-gray-400 font-mono">{data.cariKodu}</span>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <button onClick={onBack} className="p-2 rounded-xl hover:bg-gray-200 transition"><ArrowLeft size={22} /></button>
+          <div>
+            <h2 className="text-2xl font-extrabold text-gray-800">{data.cariAdi}</h2>
+            <span className="text-sm text-gray-400 font-mono">{data.cariKodu}</span>
+          </div>
+        </div>
+        
+        {/* Ekstre Menüsü */}
+        <div className="relative">
+          <button
+            onClick={() => setShowMenuId(showMenuId === 'ekstre' ? null : 'ekstre')}
+            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200 font-medium text-sm"
+            title="Ekstresini PDF veya Mail olarak al"
+          >
+            <FileText size={16} />
+            Ekstre
+            <ChevronDown size={14} className={`transition ${showMenuId === 'ekstre' ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {showMenuId === 'ekstre' && (
+            <div className="absolute right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-50 min-w-[200px]">
+              <button
+                onClick={() => pdfMut.mutate()}
+                disabled={pdfMut.isPending}
+                className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 text-blue-600 font-medium transition text-sm border-b border-gray-100 disabled:opacity-50"
+              >
+                <Download size={16} />
+                PDF İndir
+                {pdfMut.isPending && <RefreshCw size={14} className="animate-spin ml-auto" />}
+              </button>
+              <button
+                onClick={() => mailMut.mutate()}
+                disabled={mailMut.isPending}
+                className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 text-blue-600 font-medium transition text-sm disabled:opacity-50"
+              >
+                <Mail size={16} />
+                Outlook ile Gönder
+                {mailMut.isPending && <RefreshCw size={14} className="animate-spin ml-auto" />}
+              </button>
+            </div>
+          )}
         </div>
       </div>
+
 
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">

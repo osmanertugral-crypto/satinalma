@@ -86,6 +86,8 @@ export const getDocumentDownloadUrl = (id) => `/api/documents/${id}/download`;
 export const getDashboard = (params) => api.get('/reports/dashboard', { params });
 export const getMonthlySummary = () => api.get('/reports/monthly-summary');
 export const getProductPriceAnalysis = (params) => api.get('/reports/product-price-analysis', { params });
+export const getProductPurchaseSummary = (params) => api.get('/reports/product-purchase-summary', { params });
+export const getProductPurchaseDetail = (code) => api.get(`/reports/product-purchase-detail/${encodeURIComponent(code)}`);
 
 // Warehouse (Depo)
 export const getWarehouseSummary = () => api.get('/warehouse/summary');
@@ -109,11 +111,17 @@ export const getMalzemeProjeMaliyet = () => api.get('/malzeme-ihtiyac/proje-mali
 export const getMalzemeSatinalma = (proje) => api.get('/malzeme-ihtiyac/satinalma', { params: { proje } });
 export const getAllMalzemeProjects = () => api.get('/malzeme-ihtiyac/all-projects');
 export const downloadTedarikciPdf = (data) => api.post('/malzeme-ihtiyac/tedarikci-pdf', data, { responseType: 'blob' });
+export const getMalzemeProjeModelOzet = () => api.get('/malzeme-ihtiyac/proje-model-ozet');
+export const getIsEmirleri = () => api.get('/malzeme-ihtiyac/is-emirleri');
 
 // Department Requests
 export const getDepartmentRequests = (params) => api.get('/department-requests', { params });
 export const createDepartmentRequest = (data) => api.post('/department-requests', data);
 export const updateDepartmentRequestStatus = (id, data) => api.patch(`/department-requests/${id}/status`, data);
+export const getDepartmentRequestLogs = (id) => api.get(`/department-requests/${id}/logs`);
+export const getDepartmentTasks = (params) => api.get('/department-requests/tasks', { params });
+export const updateDepartmentTask = (id, data) => api.patch(`/department-requests/tasks/${id}`, data);
+export const getDepartmentStats = () => api.get('/department-requests/stats');
 
 // Import
 export const importPurchaseReport = (file) => {
@@ -133,6 +141,8 @@ export const getFinanceCariDetay = (params) => api.get('/finance/cari-detay', { 
 export const refreshFinanceExcel = () => api.post('/finance/refresh-excel', {});
 export const getFinanceRefreshStatus = () => api.get('/finance/refresh-status');
 export const getFinanceTiger3Views = () => api.get('/finance/tiger3-views');
+export const downloadCariExtresiBD = (code) => api.post('/finance/ekstresini-pdf-indir', { code }, { responseType: 'blob' });
+export const sendCariExtresiByMail = (code) => api.post('/finance/ekstresini-mail-gonder', { code });
 
 // Damage Reports (Kirilan/Bozulan Urun Tutanak)
 export const getDamageReports = (params) => api.get('/damage-reports', { params });

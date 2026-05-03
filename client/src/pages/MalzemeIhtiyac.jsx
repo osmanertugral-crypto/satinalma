@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { PageHeader, Card, Button, Spinner, Badge, StatCard, Select, Input, Modal } from '../components/UI';
 import { RefreshCw, Package, ShoppingCart, TrendingUp, Search, Filter, Download, AlertTriangle, CheckCircle, ArrowUpDown, List, Users, ChevronDown, ChevronRight, Mail, FileDown, Plus, Minus, Printer, ExternalLink, CheckSquare, Square, CreditCard, Info, X, Warehouse } from 'lucide-react';
 import * as XLSX from 'xlsx';
@@ -32,13 +33,17 @@ function formatNumber(val) {
 
 export default function MalzemeIhtiyac() {
   const qc = useQueryClient();
-  const [activeTab, setActiveTab] = useState('uretim');
-  const [selectedProjeler, setSelectedProjeler] = useState([]);
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') || 'uretim');
+  const [selectedProjeler, setSelectedProjeler] = useState(() => {
+    const p = searchParams.get('projeler');
+    return p ? p.split(',').filter(Boolean) : [];
+  });
   const [search, setSearch] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: null, dir: 'asc' });
   const [satinalmaSearch, setSatinalmaSearch] = useState('');
   const [satinalmaSortConfig, setSatinalmaSortConfig] = useState({ key: null, dir: 'asc' });
-  const [satinalmaFilter, setSatinalmaFilter] = useState('all'); // all, eksik, yeterli
+  const [satinalmaFilter, setSatinalmaFilter] = useState(() => searchParams.get('filter') || 'all'); // all, eksik, yeterli
   const [satinalmaView, setSatinalmaView] = useState('liste'); // liste, tedarikci
   const [expandedTedarikci, setExpandedTedarikci] = useState(new Set());
   const [siparisModal, setSiparisModal] = useState(null); // { cari, action: 'pdf'|'mail', urunler: [{...row, adet}] }

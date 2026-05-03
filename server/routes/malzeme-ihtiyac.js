@@ -354,6 +354,74 @@ router.get('/satinalma', (req, res) => {
   }
 });
 
+// GET /api/malzeme-ihtiyac/proje-model-ozet
+// KARAVAN_ADI bazlı gruplama; her modelin ALT_KOD listesi + proje/müşteri özeti
+router.get('/proje-model-ozet', (req, res) => {
+  try {
+    const rows = getUretimRows();
+    const db = getDb();
+
+    // project_offers'dan müşteri adları (proje_kodu → institution)
+    const projectMap = {};
+    try {
+      db.prepare('SELECT project_name, institution FROM project_offers WHERE project_name IS NOT NULL').all()
+        .forEach(p => { if (p.project_name) projectMap[p.project_name.trim()] = p.institution || ''; });
+    } catch (e) { /* project_offers yoksa atla */ }
+
+    const modelMap = new Map();
+
+    for (const r of rows) {
+      const karavanAdi = String(r['KARAVAN_ADI'] || '').trim();
+      const altKod     = String(r['ALT_KOD']     || '').trim();
+      const projeKodu  = String(r['PROJE_KODU']  || '').trim();
+      const satinalma  = +r['SATINALMA'] || 0;
+      if (!karavanAdi) continue;
+
+      if (!modelMap.has(karavanAdi)) {
+        modelMap.set(karavanAdi, {
+          karavan_adi: karavanAdi,
+          alt_kodlar: new Set(),
+          projeMap: new Map(),
+        });
+      }
+      const m = modelMap.get(karavanAdi);
+      if (altKod) m.alt_kodlar.add(altKod);
+      if (projeKodu) {
+        if (!m.projeMap.has(projeKodu)) {
+          m.projeMap.set(projeKodu, {
+            proje_kodu: projeKodu,
+            musteri_adi: projectMap[projeKodu] || '',
+            eksik_adet: 0,
+          });
+        }
+        if (satinalma > 0) m.projeMap.get(projeKodu).eksik_adet += satinalma;
+      }
+    }
+
+    const models = [...modelMap.values()]
+      .map(m => {
+        const projeler = [...m.projeMap.values()]
+          .filter(p => p.proje_kodu)
+          .sort((a, b) => b.eksik_adet - a.eksik_adet);
+        const toplam_eksik = projeler.reduce((s, p) => s + p.eksik_adet, 0);
+        return {
+          karavan_adi:   m.karavan_adi,
+          alt_kodlar:    [...m.alt_kodlar].sort(),
+          projeler,
+          proje_kodlari: projeler.map(p => p.proje_kodu),
+          toplam_eksik,
+        };
+      })
+      .filter(m => m.alt_kodlar.length > 0)
+      .sort((a, b) => b.toplam_eksik - a.toplam_eksik || a.karavan_adi.localeCompare(b.karavan_adi, 'tr'));
+
+    res.json({ models, toplam_model: models.length });
+  } catch (err) {
+    console.error('Proje model ozet error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Tüm projeleri getir (Cache/Excel + Database)
 router.get('/all-projects', (req, res) => {
   try {
@@ -404,6 +472,27 @@ router.get('/all-projects', (req, res) => {
       error: err.message,
       note: 'Proje listesi alınamadı. Excel ve Database kontrol edin.'
     });
+  }
+});
+
+// Açık iş emirleri (proje kodları) — departman talep formu için
+router.get('/is-emirleri', (req, res) => {
+  try {
+    const db = getDb();
+    let kodlar = [];
+    try {
+      kodlar = db.prepare(
+        `SELECT DISTINCT proje_kodu FROM malzeme_ihtiyac_cache WHERE proje_kodu IS NOT NULL AND proje_kodu != '' ORDER BY proje_kodu`
+      ).all().map(r => r.proje_kodu);
+    } catch (e) {
+      // cache boşsa Excel'den dene
+      const rows = getUretimRows();
+      kodlar = [...new Set(rows.map(r => String(r['PROJE_KODU'] || '')).filter(Boolean))].sort();
+    }
+    res.json({ is_emirleri: kodlar, toplam: kodlar.length });
+  } catch (err) {
+    console.error('Is emirleri error:', err);
+    res.status(500).json({ error: err.message, is_emirleri: [] });
   }
 });
 

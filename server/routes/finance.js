@@ -603,5 +603,199 @@ router.get('/refresh-status', (req, res) => {
   res.json(refreshState);
 });
 
+// ═══════════════════════════════════════════
+// POST /api/finance/ekstresini-pdf-indir
+// Cari ekstresini PDF olarak indir
+// ═══════════════════════════════════════════
+router.post('/ekstresini-pdf-indir', (req, res) => {
+  try {
+    const { code } = req.body;
+    if (!code) return res.status(400).json({ error: 'code gerekli' });
+
+    const allRows = getEkstreRows(code);
+    if (allRows.length === 0) return res.status(404).json({ error: 'Cari bulunamadı' });
+
+    const cariAdi = allRows[0]?.['DEFINITION_'] || code;
+    const PDFDocument = require('pdfkit');
+    const doc = new PDFDocument({ bufferPages: true, margin: 40 });
+
+    const buffers = [];
+    doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', () => {
+      const pdfData = Buffer.concat(buffers);
+      res.contentType('application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="Ekstre_${code}_${new Date().toISOString().split('T')[0]}.pdf"`);
+      res.send(pdfData);
+    });
+
+    // Başlık
+    doc.fontSize(20).font('Helvetica-Bold').text(`CARI HESAP EKSTRESİ`, { align: 'center' });
+    doc.fontSize(12).font('Helvetica').text(`Tarih: ${new Date().toLocaleDateString('tr-TR')}`, { align: 'center' });
+    doc.moveDown(0.5);
+
+    // Cari bilgileri
+    doc.fontSize(11).font('Helvetica-Bold').text(`Cari Kodu: ${code}`);
+    doc.fontSize(11).font('Helvetica').text(`Cari Adı: ${cariAdi}`);
+    doc.moveDown(0.5);
+
+    // Tablo başlığı
+    const cols = { tarih: 50, belgeNo: 60, doviz: 40, tutar: 80, tip: 50, aciklama: 180 };
+    let y = doc.y;
+    const drawHeader = () => {
+      doc.rect(40, y, 810, 25).stroke();
+      doc.fontSize(9).font('Helvetica-Bold');
+      doc.text('Tarih', 50, y + 5, { width: cols.tarih });
+      doc.text('Belge No', 50 + cols.tarih, y + 5, { width: cols.belgeNo });
+      doc.text('Döviz', 50 + cols.tarih + cols.belgeNo, y + 5, { width: cols.doviz });
+      doc.text('Tutar', 50 + cols.tarih + cols.belgeNo + cols.doviz, y + 5, { width: cols.tutar, align: 'right' });
+      doc.text('Tip', 50 + cols.tarih + cols.belgeNo + cols.doviz + cols.tutar, y + 5, { width: cols.tip });
+      doc.text('Açıklama', 50 + cols.tarih + cols.belgeNo + cols.doviz + cols.tutar + cols.tip, y + 5, { width: cols.aciklama });
+      y += 30;
+    };
+
+    drawHeader();
+    doc.fontSize(9).font('Helvetica');
+
+    // İşlemler
+    allRows.forEach((r, idx) => {
+      const tarih = formatDate(r.INDATE) || '-';
+      const belgeNo = r.BELGE_NO || r.FIS_NO || '-';
+      const doviz = r.ISLEM_DOVIZI || 'TL';
+      const tutar = (r.BORC > 0 ? r.BORC : Math.abs(r.ALACAK)).toFixed(2);
+      const tip = r.ALACAK < 0 ? 'Fatura' : 'Ödeme';
+      const aciklama = (r.SATIR_ACIKLAMASI || '').substring(0, 50);
+
+      const lineHeight = 18;
+      if (y + lineHeight > 750) {
+        doc.addPage();
+        y = 40;
+        drawHeader();
+      }
+
+      doc.text(tarih, 50, y, { width: cols.tarih });
+      doc.text(belgeNo, 50 + cols.tarih, y, { width: cols.belgeNo });
+      doc.text(doviz, 50 + cols.tarih + cols.belgeNo, y, { width: cols.doviz });
+      doc.text(tutar, 50 + cols.tarih + cols.belgeNo + cols.doviz, y, { width: cols.tutar, align: 'right' });
+      doc.text(tip, 50 + cols.tarih + cols.belgeNo + cols.doviz + cols.tutar, y, { width: cols.tip });
+      doc.text(aciklama, 50 + cols.tarih + cols.belgeNo + cols.doviz + cols.tutar + cols.tip, y, { width: cols.aciklama });
+
+      y += lineHeight;
+    });
+
+    doc.end();
+  } catch (err) {
+    console.error('PDF oluşturma hatası:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ═══════════════════════════════════════════
+// POST /api/finance/ekstresini-mail-gonder
+// PDF oluştur → Outlook'u ek ile aç (kendi mailinden gönder)
+// ═══════════════════════════════════════════
+router.post('/ekstresini-mail-gonder', (req, res) => {
+  try {
+    const { code } = req.body;
+    if (!code) return res.status(400).json({ error: 'code gerekli' });
+
+    const allRows = getEkstreRows(code);
+    if (allRows.length === 0) return res.status(404).json({ error: 'Cari bulunamadı' });
+
+    const cariAdi = allRows[0]?.['DEFINITION_'] || code;
+
+    const PDFDocument = require('pdfkit');
+    const os = require('os');
+    const fs = require('fs');
+    const { exec } = require('child_process');
+
+    const doc = new PDFDocument({ bufferPages: true, margin: 40 });
+    const buffers = [];
+    doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', () => {
+      const pdfData = Buffer.concat(buffers);
+      const dateStr = new Date().toISOString().split('T')[0];
+      const safeCode = String(code).replace(/[^A-Za-z0-9_\-]/g, '_');
+      const pdfPath = path.join(os.tmpdir(), `Ekstre_${safeCode}_${dateStr}.pdf`);
+      fs.writeFileSync(pdfPath, pdfData);
+
+      const subject = `Cari Hesap Ekstresi - ${code} (${cariAdi})`;
+      const bodyText = `Sayın İlgili,\n\nEkte ${cariAdi} firmasına ait ${dateStr} tarihli cari hesap ekstresi bulunmaktadır.\n\nSaygılarımızla`;
+
+      // Tırnak içinde sorun çıkartabilecek karakterleri temizle
+      const safeSub = subject.replace(/'/g, ' ');
+      const safeBody = bodyText.replace(/'/g, ' ');
+      const safePdfPath = pdfPath.replace(/\\/g, '\\');
+
+      const psScript = [
+        `$o = New-Object -ComObject Outlook.Application`,
+        `$m = $o.CreateItem(0)`,
+        `$m.Subject = '${safeSub}'`,
+        `$m.Body = '${safeBody}'`,
+        `$m.Attachments.Add('${safePdfPath}')`,
+        `$m.Display()`,
+      ].join('\r\n');
+
+      const psPath = path.join(os.tmpdir(), `outlook_${Date.now()}.ps1`);
+      fs.writeFileSync(psPath, psScript, 'utf8');
+
+      exec(`powershell.exe -ExecutionPolicy Bypass -NonInteractive -File "${psPath}"`, { timeout: 15000 }, (err) => {
+        setTimeout(() => { try { fs.unlinkSync(psPath); } catch {} }, 20000);
+        if (err) {
+          console.error('Outlook açma hatası:', err);
+          return res.status(500).json({ error: 'Outlook açılamadı: ' + err.message });
+        }
+        res.json({ success: true, message: 'Outlook açıldı, PDF ek olarak hazırlandı' });
+      });
+    });
+
+    // PDF içeriği oluştur
+    doc.fontSize(20).font('Helvetica-Bold').text('CARI HESAP EKSTRESI', { align: 'center' });
+    doc.fontSize(12).font('Helvetica').text(`Tarih: ${new Date().toLocaleDateString('tr-TR')}`, { align: 'center' });
+    doc.moveDown(0.5);
+    doc.fontSize(11).font('Helvetica-Bold').text(`Cari Kodu: ${code}`);
+    doc.fontSize(11).font('Helvetica').text(`Cari Adi: ${cariAdi}`);
+    doc.moveDown(0.5);
+
+    const cols = { tarih: 50, belgeNo: 60, doviz: 40, tutar: 80, tip: 50, aciklama: 180 };
+    let y = doc.y;
+    const drawHeader = () => {
+      doc.rect(40, y, 810, 25).stroke();
+      doc.fontSize(9).font('Helvetica-Bold');
+      doc.text('Tarih', 50, y + 5, { width: cols.tarih });
+      doc.text('Belge No', 50 + cols.tarih, y + 5, { width: cols.belgeNo });
+      doc.text('Doviz', 50 + cols.tarih + cols.belgeNo, y + 5, { width: cols.doviz });
+      doc.text('Tutar', 50 + cols.tarih + cols.belgeNo + cols.doviz, y + 5, { width: cols.tutar, align: 'right' });
+      doc.text('Tip', 50 + cols.tarih + cols.belgeNo + cols.doviz + cols.tutar, y + 5, { width: cols.tip });
+      doc.text('Aciklama', 50 + cols.tarih + cols.belgeNo + cols.doviz + cols.tutar + cols.tip, y + 5, { width: cols.aciklama });
+      y += 30;
+    };
+    drawHeader();
+    doc.fontSize(9).font('Helvetica');
+
+    allRows.forEach((r) => {
+      const tarih = formatDate(r.INDATE) || '-';
+      const belgeNo = r.BELGE_NO || r.FIS_NO || '-';
+      const doviz = r.ISLEM_DOVIZI || 'TL';
+      const tutar = (r.BORC > 0 ? r.BORC : Math.abs(r.ALACAK)).toFixed(2);
+      const tip = r.ALACAK < 0 ? 'Fatura' : 'Odeme';
+      const aciklama = (r.SATIR_ACIKLAMASI || '').substring(0, 50);
+      const lineHeight = 18;
+      if (y + lineHeight > 750) { doc.addPage(); y = 40; drawHeader(); }
+      doc.text(tarih, 50, y, { width: cols.tarih });
+      doc.text(belgeNo, 50 + cols.tarih, y, { width: cols.belgeNo });
+      doc.text(doviz, 50 + cols.tarih + cols.belgeNo, y, { width: cols.doviz });
+      doc.text(tutar, 50 + cols.tarih + cols.belgeNo + cols.doviz, y, { width: cols.tutar, align: 'right' });
+      doc.text(tip, 50 + cols.tarih + cols.belgeNo + cols.doviz + cols.tutar, y, { width: cols.tip });
+      doc.text(aciklama, 50 + cols.tarih + cols.belgeNo + cols.doviz + cols.tutar + cols.tip, y, { width: cols.aciklama });
+      y += lineHeight;
+    });
+
+    doc.end();
+  } catch (err) {
+    console.error('Outlook mail hatasi:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
 module.exports.syncFromTIGER3 = syncFromTIGER3;
