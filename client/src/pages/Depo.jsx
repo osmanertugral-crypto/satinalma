@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getWarehouseSummary, getWarehouseStock, getWarehouseKartTipleri, syncWarehouse, getWarehouseStatus, refreshWarehouseExcelAndSync, getWarehouseDetail, syncWarehouseAciklama } from '../api';
+import { getWarehouseSummary, getWarehouseStock, getWarehouseKartTipleri, syncWarehouse, getWarehouseStatus, refreshWarehouseExcelAndSync, getWarehouseDetail, syncWarehouseEvira } from '../api';
 import { PageHeader, Card, Button, Badge, Spinner } from '../components/UI';
 import { Warehouse as WarehouseIcon, RefreshCw, Search, ChevronLeft, ChevronRight, ArrowUpDown, CheckCircle, AlertCircle, Package, X, ImageOff, ArrowDownCircle, ArrowUpCircle, ArrowLeftRight } from 'lucide-react';
 import MultiSelectFilter from '../components/MultiSelectFilter';
@@ -235,8 +235,8 @@ export default function DepoPage() {
     }
   });
 
-  const aciklamaMut = useMutation({
-    mutationFn: syncWarehouseAciklama,
+  const eviraRefreshMut = useMutation({
+    mutationFn: syncWarehouseEvira,
     onSuccess: () => qc.invalidateQueries({ queryKey: ['warehouse-stock'] })
   });
 
@@ -320,13 +320,13 @@ export default function DepoPage() {
         action={
           <div className="flex items-center gap-2">
             <Button
-              onClick={() => aciklamaMut.mutate()}
-              disabled={aciklamaMut.isPending}
+              onClick={() => eviraRefreshMut.mutate()}
+              disabled={eviraRefreshMut.isPending}
               className="bg-violet-600 hover:bg-violet-700"
-              title="Tüm ürünlerin Açıklama 2 bilgisini EVIRA'dan çeker"
+              title="Açıklama 2, son hareket tarihi ve yeri EVIRA'dan çekilir"
             >
-              <RefreshCw size={16} className={aciklamaMut.isPending ? 'animate-spin' : ''} />
-              {aciklamaMut.isPending ? 'Çekiliyor…' : 'Açıklama 2 Yenile'}
+              <RefreshCw size={16} className={eviraRefreshMut.isPending ? 'animate-spin' : ''} />
+              {eviraRefreshMut.isPending ? 'EVIRA çekiliyor…' : 'EVIRA Yenile'}
             </Button>
             <Button
               onClick={() => sqlRefreshMut.mutate()}
@@ -348,16 +348,16 @@ export default function DepoPage() {
       />
 
       {/* Sync sonucu */}
-      {aciklamaMut.isSuccess && (
+      {eviraRefreshMut.isSuccess && (
         <div className="mb-4 bg-violet-50 border border-violet-200 rounded-xl p-3 flex items-center gap-2">
           <CheckCircle size={18} className="text-violet-500" />
-          <span className="text-sm text-violet-700">{aciklamaMut.data?.data?.message}</span>
+          <span className="text-sm text-violet-700">{eviraRefreshMut.data?.data?.message}</span>
         </div>
       )}
-      {aciklamaMut.isError && (
+      {eviraRefreshMut.isError && (
         <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2">
           <AlertCircle size={18} className="text-red-500" />
-          <span className="text-sm text-red-700">{aciklamaMut.error?.response?.data?.error || 'Hata oluştu'}</span>
+          <span className="text-sm text-red-700">{eviraRefreshMut.error?.response?.data?.error || 'Hata oluştu'}</span>
         </div>
       )}
       {(syncMut.isSuccess || sqlRefreshMut.isSuccess) && (
@@ -611,6 +611,7 @@ export default function DepoPage() {
                           { key: 'aciklama2', label: 'Açıklama 2', align: 'left' },
                           { key: 'kart_tipi', label: 'Tip', align: 'left' },
                           { key: 'son_hareket', label: 'Son Hareket', align: 'left' },
+                          { key: 'son_hareket_yer', label: 'Son Yer', align: 'left' },
                           { key: 'gecen_gun', label: 'Geçen Gün', align: 'right', sortKey: 'son_hareket' },
                           { key: 'gebze_stok', label: 'Gebze', align: 'right', color: 'text-blue-600' },
                           { key: 'eticaret_stok', label: 'E-Ticaret', align: 'right', color: 'text-emerald-600' },
@@ -648,6 +649,12 @@ export default function DepoPage() {
                             <td className="py-2 px-3"><Badge color="gray">{row.kart_tipi}</Badge></td>
                             <td className="py-2 px-3 text-xs text-gray-500 whitespace-nowrap">
                               {row.son_hareket ? row.son_hareket : <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="py-2 px-3 text-xs whitespace-nowrap">
+                              {row.son_hareket_yer
+                                ? <span className={`font-medium ${/^[A-Z]{2}\d/.test(row.son_hareket_yer) ? 'text-indigo-600' : 'text-gray-600'}`}>{row.son_hareket_yer}</span>
+                                : <span className="text-gray-300">—</span>
+                              }
                             </td>
                             <td className="py-2 px-3 text-right whitespace-nowrap">
                               <GunBadge gun={gecenGun(row.son_hareket)} />

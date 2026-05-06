@@ -97,7 +97,7 @@ export const getWarehouseStatus = () => api.get('/warehouse/status');
 export const syncWarehouse = () => api.post('/warehouse/sync', {});
 export const refreshWarehouseExcelAndSync = () => api.post('/warehouse/sync', { refreshExcel: true }, { timeout: 300_000 });
 export const getWarehouseDetail = (stok_kodu) => api.get(`/warehouse/detail/${encodeURIComponent(stok_kodu)}`);
-export const syncWarehouseAciklama = () => api.post('/warehouse/sync-aciklama', {});
+export const syncWarehouseEvira = () => api.post('/warehouse/sync-evira', {}, { timeout: 300_000 });
 
 // Outlook Tasks
 export const getOutlookStatus = () => api.get('/outlook/status');

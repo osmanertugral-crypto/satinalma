@@ -438,6 +438,8 @@ function initDb() {
   // stok_kodu tekil index (varsa atla)
   try { database.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_warehouse_stok_kodu ON warehouse_stock(stok_kodu)'); } catch(e) {}
   try { database.exec('ALTER TABLE warehouse_stock ADD COLUMN aciklama2 TEXT'); } catch(e) {}
+  try { database.exec('ALTER TABLE warehouse_stock ADD COLUMN son_hareket TEXT'); } catch(e) {}
+  try { database.exec('ALTER TABLE warehouse_stock ADD COLUMN son_hareket_yer TEXT'); } catch(e) {}
 
   // Malzeme ihtiyaç cache tablosu
   database.exec(`

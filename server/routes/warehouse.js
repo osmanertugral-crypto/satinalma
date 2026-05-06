@@ -146,22 +146,47 @@ async function syncFromTIGER3() {
   });
   const count = tx();
 
-  // EVIRA'dan STOK_ADI2 (Açıklama 2) çek ve warehouse_stock'u güncelle
+  // EVIRA'dan STOK_ADI2 + son hareket bilgilerini çek
   try {
-    const acRows = await evira.query(`
-      SELECT STOK_KODU, STOK_ADI2 FROM STOKKARTI WHERE STOK_ADI2 IS NOT NULL AND STOK_ADI2 <> ''
+    const [acRows, hareketRows] = await Promise.all([
+      evira.query(`SELECT STOK_KODU, STOK_ADI2 FROM STOKKARTI WHERE STOK_ADI2 IS NOT NULL AND STOK_ADI2 <> ''`),
+      evira.query(`
+        SELECT STOK_KODU, TARIH, PROJE_KODU, AMBAR_ADI FROM (
+          SELECT
+            SK.STOK_KODU,
+            CONVERT(VARCHAR(10), SF.TARIH, 120)                                                          AS TARIH,
+            ISNULL((SELECT P.PROJE_KODU FROM PROJE P WHERE P.PROJE_REF = SF.PROJE_REF), '')             AS PROJE_KODU,
+            ISNULL((SELECT A.AMBAR_ADI  FROM AMBAR  A WHERE A.AMBAR_KODU = SH.AMBAR_KODU), SH.AMBAR_KODU) AS AMBAR_ADI,
+            ROW_NUMBER() OVER (PARTITION BY SK.STOK_KODU ORDER BY SF.TARIH DESC, SF.FIS_NO DESC)        AS RN
+          FROM STOKKARTI SK
+          JOIN STOKHAREKETLERI SH ON SH.STOK_REF = SK.STOK_REF
+          JOIN STOKFISLERI     SF ON SF.FB_REF    = SH.FB_REF
+        ) T WHERE RN = 1
+      `)
+    ]);
+    const acMap  = new Map(acRows.map(r => [String(r.STOK_KODU||'').trim(), String(r.STOK_ADI2||'').trim()]));
+    const harMap = new Map(hareketRows.map(r => [String(r.STOK_KODU||'').trim(), {
+      tarih: String(r.TARIH||'').trim(),
+      yer:   (String(r.PROJE_KODU||'').trim() || String(r.AMBAR_ADI||'').trim()) || null
+    }]));
+    const updateStmt = db.prepare(`
+      UPDATE warehouse_stock
+      SET aciklama2 = COALESCE(?, aciklama2),
+          son_hareket = COALESCE(?, son_hareket),
+          son_hareket_yer = COALESCE(?, son_hareket_yer)
+      WHERE stok_kodu = ?
     `);
-    const updateStmt = db.prepare('UPDATE warehouse_stock SET aciklama2 = ? WHERE stok_kodu = ?');
+    const allKodlar = new Set([...acMap.keys(), ...harMap.keys()]);
     const batchTx = db.transaction(() => {
-      for (const r of acRows) {
-        const kod = String(r.STOK_KODU || '').trim();
+      for (const kod of allKodlar) {
         if (!kod) continue;
-        updateStmt.run(String(r.STOK_ADI2 || '').trim(), kod);
+        const har = harMap.get(kod) || {};
+        updateStmt.run(acMap.get(kod)||null, har.tarih||null, har.yer||null, kod);
       }
     });
     batchTx();
   } catch (e) {
-    console.warn('Depo sync: STOK_ADI2 çekilemedi:', e.message);
+    console.warn('Depo sync: EVIRA verileri çekilemedi:', e.message);
   }
 
   return count;
@@ -304,13 +329,8 @@ router.get('/stock', (req, res) => {
 
   const offset = (Math.max(1, +page) - 1) * +limit;
   const rows = db.prepare(`
-    SELECT w.*, e.son_hareket
+    SELECT w.*
     FROM warehouse_stock w
-    LEFT JOIN (
-      SELECT stok_kodu, MAX(son_hareket) AS son_hareket
-      FROM evira_stock_cache
-      GROUP BY stok_kodu
-    ) e ON w.stok_kodu = e.stok_kodu
     WHERE ${where}
     ORDER BY ${sortColExpr} ${sortDir} LIMIT ? OFFSET ?
   `).all(...params, +limit, offset);
@@ -396,26 +416,74 @@ router.get('/summary', (req, res) => {
   res.json({ totals, byType, lastSync: lastSync?.synced_at || null });
 });
 
-// POST /api/warehouse/sync-aciklama — Sadece STOK_ADI2 (Açıklama 2) güncelle, full sync gerektirmez
-router.post('/sync-aciklama', async (req, res) => {
+// POST /api/warehouse/sync-evira — STOK_ADI2 + son hareket (tarih, proje/ambar) güncelle
+router.post('/sync-evira', async (req, res) => {
   try {
     const db = getDb();
-    const acRows = await evira.query(`
-      SELECT STOK_KODU, STOK_ADI2 FROM STOKKARTI WHERE STOK_ADI2 IS NOT NULL AND STOK_ADI2 <> ''
+
+    // 1) STOK_ADI2 (Açıklama 2)
+    const [acRows, hareketRows] = await Promise.all([
+      evira.query(`SELECT STOK_KODU, STOK_ADI2 FROM STOKKARTI WHERE STOK_ADI2 IS NOT NULL AND STOK_ADI2 <> ''`),
+      evira.query(`
+        SELECT STOK_KODU, TARIH, PROJE_KODU, AMBAR_ADI FROM (
+          SELECT
+            SK.STOK_KODU,
+            CONVERT(VARCHAR(10), SF.TARIH, 120)                                                        AS TARIH,
+            ISNULL((SELECT P.PROJE_KODU FROM PROJE P WHERE P.PROJE_REF = SF.PROJE_REF), '')           AS PROJE_KODU,
+            ISNULL((SELECT A.AMBAR_ADI  FROM AMBAR  A WHERE A.AMBAR_KODU = SH.AMBAR_KODU), SH.AMBAR_KODU) AS AMBAR_ADI,
+            ROW_NUMBER() OVER (PARTITION BY SK.STOK_KODU ORDER BY SF.TARIH DESC, SF.FIS_NO DESC)      AS RN
+          FROM STOKKARTI SK
+          JOIN STOKHAREKETLERI SH ON SH.STOK_REF = SK.STOK_REF
+          JOIN STOKFISLERI     SF ON SF.FB_REF    = SH.FB_REF
+        ) T WHERE RN = 1
+      `)
+    ]);
+
+    const updateStmt = db.prepare(`
+      UPDATE warehouse_stock
+      SET aciklama2 = COALESCE(?, aciklama2),
+          son_hareket = COALESCE(?, son_hareket),
+          son_hareket_yer = COALESCE(?, son_hareket_yer)
+      WHERE stok_kodu = ?
     `);
-    const updateStmt = db.prepare('UPDATE warehouse_stock SET aciklama2 = ? WHERE stok_kodu = ?');
+
+    // İndeksle
+    const acMap = new Map();
+    for (const r of acRows) {
+      const v = String(r.STOK_ADI2 || '').trim();
+      if (v) acMap.set(String(r.STOK_KODU || '').trim(), v);
+    }
+    const harMap = new Map();
+    for (const r of hareketRows) {
+      const proje = String(r.PROJE_KODU || '').trim();
+      const ambar = String(r.AMBAR_ADI  || '').trim();
+      harMap.set(String(r.STOK_KODU || '').trim(), {
+        tarih: String(r.TARIH || '').trim(),
+        yer:   proje || ambar || null,
+      });
+    }
+
+    const allKodlar = new Set([...acMap.keys(), ...harMap.keys()]);
     const tx = db.transaction(() => {
       let count = 0;
-      for (const r of acRows) {
-        const kod = String(r.STOK_KODU || '').trim();
+      for (const kod of allKodlar) {
         if (!kod) continue;
-        const result = updateStmt.run(String(r.STOK_ADI2 || '').trim(), kod);
+        const ac  = acMap.get(kod)  || null;
+        const har = harMap.get(kod) || {};
+        const result = updateStmt.run(ac, har.tarih || null, har.yer || null, kod);
         if (result.changes > 0) count++;
       }
       return count;
     });
+
     const updated = tx();
-    res.json({ success: true, updated, total: acRows.length, message: `${updated} ürünün Açıklama 2 bilgisi güncellendi` });
+    res.json({
+      success: true,
+      updated,
+      aciklama_count: acMap.size,
+      hareket_count:  harMap.size,
+      message: `${updated} ürün güncellendi (${acMap.size} açıklama, ${harMap.size} son hareket)`
+    });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -467,22 +535,21 @@ router.get('/detail/:stok_kodu', async (req, res) => {
     console.warn('Depo detail: STOK_ADI2 sorgusu başarısız:', e.message);
   }
 
-  // RESIM — STOKRES tablosundan çek (image tipi → Buffer → base64)
+  // RESIM — Tiger3 LG_123_FIRMDOC tablosundan çek (INFOTYP=20 → ürün resimleri)
   try {
-    const resimRows = await evira.query(
-      `SELECT TOP 1 SR.STOK_IMAGE
-       FROM STOKRES SR
-       JOIN STOKKARTI SK ON SK.STOK_REF = SR.STOK_REF
-       WHERE SK.STOK_KODU = @kod AND SR.STOK_IMAGE IS NOT NULL
-       ORDER BY SR.NR`,
-      { kod: { type: evira.sql.NVarChar(50), value: stok_kodu } }
+    const resimRows = await tiger3.query(
+      `SELECT TOP 1 FD.LDATA
+       FROM LG_123_FIRMDOC FD
+       JOIN LG_123_ITEMS I ON I.LOGICALREF = FD.INFOREF
+       WHERE FD.INFOTYP = 20 AND FD.LDATA IS NOT NULL AND I.CODE = @kod
+       ORDER BY FD.DOCNR`,
+      { kod: { type: tiger3.sql.VarChar(50), value: stok_kodu } }
     );
-    if (resimRows.length > 0 && resimRows[0].STOK_IMAGE) {
-      const buf = resimRows[0].STOK_IMAGE;
+    if (resimRows.length > 0 && resimRows[0].LDATA) {
+      const buf = resimRows[0].LDATA;
       if (Buffer.isBuffer(buf) && buf.length > 0) {
         resimBase64 = buf.toString('base64');
-        // Magic byte ile MIME tipi belirle
-        const b0 = buf[0], b1 = buf[1], b2 = buf[2];
+        const b0 = buf[0], b1 = buf[1];
         if (b0 === 0xFF && b1 === 0xD8) resimMime = 'image/jpeg';
         else if (b0 === 0x89 && b1 === 0x50) resimMime = 'image/png';
         else if (b0 === 0x42 && b1 === 0x4D) resimMime = 'image/bmp';
@@ -492,7 +559,7 @@ router.get('/detail/:stok_kodu', async (req, res) => {
     }
   } catch (e) {
     errors.push('resim: ' + e.message);
-    console.warn('Depo detail: STOKRES sorgusu başarısız:', e.message);
+    console.warn('Depo detail: LG_123_FIRMDOC sorgusu başarısız:', e.message);
   }
 
   // HAREKETLERİ — STOK_KODU ile filtrele
