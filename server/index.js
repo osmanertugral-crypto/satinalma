@@ -44,6 +44,7 @@ app.use('/api/projects', require('./routes/projects'));
 app.use('/api/ciro', require('./routes/ciro'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/evira', require('./routes/evira'));
+app.use('/api/hareketler', require('./routes/hareketler'));
 
 // Üretim modunda React build'ini sun
 if (process.env.NODE_ENV === 'production') {

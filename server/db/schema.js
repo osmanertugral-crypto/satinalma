@@ -301,6 +301,23 @@ function initDb() {
     console.log('Varsayılan admin oluşturuldu: admin@satinalma.com / admin123');
   }
 
+  // Sabit kullanıcılar (eğer yoksa oluştur)
+  const seedUsers = [
+    { name: 'Pınar Kamcı',  email: 'pinar.kamci@restar.com.tr',  password: 'Pk12345' },
+    { name: 'Ümit Gafor',   email: 'umit.gafur@restar.com.tr',   password: 'Ug12345' },
+    { name: 'Uğur Aydın',   email: 'ugur.aydin@restar.com.tr',   password: 'Ua12345' },
+  ];
+  for (const u of seedUsers) {
+    const ex = database.prepare('SELECT id FROM users WHERE email = ?').get(u.email);
+    if (!ex) {
+      const hash = bcrypt.hashSync(u.password, 10);
+      database.prepare(
+        'INSERT INTO users (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)'
+      ).run(uuidv4(), u.name, u.email, hash, 'user');
+      console.log(`Kullanıcı oluşturuldu: ${u.email}`);
+    }
+  }
+
   // Sonradan eklenen sütunlar (idempotent)
   try { database.exec('ALTER TABLE suppliers ADD COLUMN external_code TEXT'); } catch(e) {}
   try { database.exec('ALTER TABLE users ADD COLUMN allowed_pages TEXT DEFAULT NULL'); } catch(e) {}
@@ -420,6 +437,7 @@ function initDb() {
 
   // stok_kodu tekil index (varsa atla)
   try { database.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_warehouse_stok_kodu ON warehouse_stock(stok_kodu)'); } catch(e) {}
+  try { database.exec('ALTER TABLE warehouse_stock ADD COLUMN aciklama2 TEXT'); } catch(e) {}
 
   // Malzeme ihtiyaç cache tablosu
   database.exec(`

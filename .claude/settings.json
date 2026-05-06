@@ -1,6 +1,7 @@
 {
   "permissions": {
     "allow": [
+      "Bash(git fetch *)",
       "Bash(netstat -ano)",
       "Bash(taskkill /PID 47320 /F)",
       "PowerShell(Stop-Process -Id 47320 -Force)"

@@ -7,6 +7,7 @@ const { normTr } = require('../utils/searchUtils');
 const { authenticate } = require('../middleware/auth');
 const { refreshExcelQueries } = require('../utils/excelRefresh');
 const tiger3 = require('../utils/tiger3');
+const evira = require('../utils/evira');
 
 router.use(authenticate);
 
@@ -143,7 +144,27 @@ async function syncFromTIGER3() {
     ).run(count, `TIGER3'ten ${count} ürün senkronize edildi`);
     return count;
   });
-  return tx();
+  const count = tx();
+
+  // EVIRA'dan STOK_ADI2 (Açıklama 2) çek ve warehouse_stock'u güncelle
+  try {
+    const acRows = await evira.query(`
+      SELECT STOK_KODU, STOK_ADI2 FROM STOKKARTI WHERE STOK_ADI2 IS NOT NULL AND STOK_ADI2 <> ''
+    `);
+    const updateStmt = db.prepare('UPDATE warehouse_stock SET aciklama2 = ? WHERE stok_kodu = ?');
+    const batchTx = db.transaction(() => {
+      for (const r of acRows) {
+        const kod = String(r.STOK_KODU || '').trim();
+        if (!kod) continue;
+        updateStmt.run(String(r.STOK_ADI2 || '').trim(), kod);
+      }
+    });
+    batchTx();
+  } catch (e) {
+    console.warn('Depo sync: STOK_ADI2 çekilemedi:', e.message);
+  }
+
+  return count;
 }
 
 // POST /api/warehouse/sync — Önce TIGER3, başarısız olursa Excel fallback
@@ -375,6 +396,31 @@ router.get('/summary', (req, res) => {
   res.json({ totals, byType, lastSync: lastSync?.synced_at || null });
 });
 
+// POST /api/warehouse/sync-aciklama — Sadece STOK_ADI2 (Açıklama 2) güncelle, full sync gerektirmez
+router.post('/sync-aciklama', async (req, res) => {
+  try {
+    const db = getDb();
+    const acRows = await evira.query(`
+      SELECT STOK_KODU, STOK_ADI2 FROM STOKKARTI WHERE STOK_ADI2 IS NOT NULL AND STOK_ADI2 <> ''
+    `);
+    const updateStmt = db.prepare('UPDATE warehouse_stock SET aciklama2 = ? WHERE stok_kodu = ?');
+    const tx = db.transaction(() => {
+      let count = 0;
+      for (const r of acRows) {
+        const kod = String(r.STOK_KODU || '').trim();
+        if (!kod) continue;
+        const result = updateStmt.run(String(r.STOK_ADI2 || '').trim(), kod);
+        if (result.changes > 0) count++;
+      }
+      return count;
+    });
+    const updated = tx();
+    res.json({ success: true, updated, total: acRows.length, message: `${updated} ürünün Açıklama 2 bilgisi güncellendi` });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // GET /api/warehouse/kart-tipleri — Benzersiz kart tipleri
 router.get('/kart-tipleri', (req, res) => {
   const db = getDb();
@@ -386,6 +432,96 @@ router.get('/kart-tipleri', (req, res) => {
   }
   const types = db.prepare("SELECT DISTINCT kart_tipi FROM warehouse_stock WHERE kart_tipi IS NOT NULL AND kart_tipi != '' ORDER BY kart_tipi").all();
   res.json(types.map(t => t.kart_tipi));
+});
+
+// GET /api/warehouse/detail/:stok_kodu — Ürün detay (resim + aciklama2 + hareketler)
+router.get('/detail/:stok_kodu', async (req, res) => {
+  const { stok_kodu } = req.params;
+  if (!stok_kodu) return res.status(400).json({ error: 'stok_kodu gerekli' });
+
+  const db = getDb();
+  const local = db.prepare('SELECT aciklama2 FROM warehouse_stock WHERE stok_kodu = ?').get(stok_kodu);
+
+  let aciklama2 = local?.aciklama2 || null;
+  let resimBase64 = null;
+  let resimMime = 'image/jpeg';
+  let hareketler = [];
+  const errors = [];
+
+  // STOK_ADI2 (Açıklama 2) + MARKA — STOK_KODU ile sorgula
+  try {
+    const acRows = await evira.query(
+      `SELECT TOP 1 SK.STOK_ADI2, ISNULL(M.MARKA_ADI, '') AS MARKA_ADI
+       FROM STOKKARTI SK
+       LEFT JOIN MARKA M ON M.MARKA_REF = SK.MARKA_REF
+       WHERE SK.STOK_KODU = @kod`,
+      { kod: { type: evira.sql.NVarChar(50), value: stok_kodu } }
+    );
+    if (acRows.length > 0) {
+      const stokAdi2 = String(acRows[0].STOK_ADI2 || '').trim();
+      const marka    = String(acRows[0].MARKA_ADI  || '').trim();
+      aciklama2 = [marka, stokAdi2].filter(Boolean).join(' — ') || aciklama2;
+    }
+  } catch (e) {
+    errors.push('aciklama2: ' + e.message);
+    console.warn('Depo detail: STOK_ADI2 sorgusu başarısız:', e.message);
+  }
+
+  // RESIM — STOKRES tablosundan çek (image tipi → Buffer → base64)
+  try {
+    const resimRows = await evira.query(
+      `SELECT TOP 1 SR.STOK_IMAGE
+       FROM STOKRES SR
+       JOIN STOKKARTI SK ON SK.STOK_REF = SR.STOK_REF
+       WHERE SK.STOK_KODU = @kod AND SR.STOK_IMAGE IS NOT NULL
+       ORDER BY SR.NR`,
+      { kod: { type: evira.sql.NVarChar(50), value: stok_kodu } }
+    );
+    if (resimRows.length > 0 && resimRows[0].STOK_IMAGE) {
+      const buf = resimRows[0].STOK_IMAGE;
+      if (Buffer.isBuffer(buf) && buf.length > 0) {
+        resimBase64 = buf.toString('base64');
+        // Magic byte ile MIME tipi belirle
+        const b0 = buf[0], b1 = buf[1], b2 = buf[2];
+        if (b0 === 0xFF && b1 === 0xD8) resimMime = 'image/jpeg';
+        else if (b0 === 0x89 && b1 === 0x50) resimMime = 'image/png';
+        else if (b0 === 0x42 && b1 === 0x4D) resimMime = 'image/bmp';
+        else if (b0 === 0x47 && b1 === 0x49) resimMime = 'image/gif';
+        else resimMime = 'image/jpeg';
+      }
+    }
+  } catch (e) {
+    errors.push('resim: ' + e.message);
+    console.warn('Depo detail: STOKRES sorgusu başarısız:', e.message);
+  }
+
+  // HAREKETLERİ — STOK_KODU ile filtrele
+  try {
+    hareketler = await evira.query(
+      `SELECT TOP 100
+        CONVERT(VARCHAR(10), SF.TARIH, 120) AS TARIH,
+        SF.FIS_NO,
+        ISNULL((SELECT A.AMBAR_KODU+' '+A.AMBAR_ADI FROM AMBAR A WHERE A.AMBAR_KODU=SH.AMBAR_KODU), SH.AMBAR_KODU) AS AMBAR,
+        ISNULL((SELECT A.AMBAR_KODU+' '+A.AMBAR_ADI FROM AMBAR A WHERE A.AMBAR_KODU=SH.HEDEF_AMBAR), SH.HEDEF_AMBAR) AS HEDEF_AMBAR,
+        ISNULL((SELECT FT.FIS_ADI FROM FISTURLERI FT WHERE FT.FIS_TURU=SF.FIS_TURU), SF.FIS_TURU) AS FIS_TURU,
+        CASE SF.FIS_GCD WHEN '0' THEN 'GİRİŞ' WHEN '1' THEN 'ÇIKIŞ' WHEN '2' THEN 'TRANSFER' ELSE '?' END AS ISLEM,
+        SUM(SH.MIKTAR) AS MIKTAR,
+        ISNULL((SELECT SB.BIRIM FROM STOKBIRIM SB WHERE SB.BIRIM_REF=SH.ANABIRIM_REF), '') AS BIRIM
+      FROM STOKKARTI SK
+      JOIN STOKHAREKETLERI SH ON SH.STOK_REF = SK.STOK_REF
+      JOIN STOKFISLERI SF ON SF.FB_REF = SH.FB_REF
+      WHERE SK.STOK_KODU = @kod
+      GROUP BY SF.TARIH, SF.FIS_NO, SH.AMBAR_KODU, SH.HEDEF_AMBAR, SF.FIS_TURU, SF.FIS_GCD,
+               SH.ANABIRIM_REF, SF.KULLANICI_REF, SH.TAKIP_NO, SH.STOK_REF, SF.SAAT, SF.SB_REF, SH.SB_REF, SF.BELGE_NO
+      ORDER BY SF.TARIH DESC, SF.FIS_NO DESC`,
+      { kod: { type: evira.sql.NVarChar(50), value: stok_kodu } }
+    );
+  } catch (e) {
+    errors.push('hareketler: ' + e.message);
+    console.warn('Depo detail: hareketler sorgusu başarısız:', e.message);
+  }
+
+  res.json({ aciklama2, resimBase64, resimMime, hareketler, errors });
 });
 
 module.exports = router;

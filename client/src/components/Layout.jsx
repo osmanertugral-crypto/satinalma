@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Users, Package, FileText,
   TrendingUp, LogOut,
-  Menu, X, ListChecks, Container, ClipboardList, Wallet, BarChart2, Settings
+  Menu, X, ListChecks, Container, ClipboardList, Wallet, BarChart2, Settings, ArrowLeftRight
 } from 'lucide-react';
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
   { to: '/malzeme-ihtiyac', icon: ClipboardList, label: 'Malzeme İhtiyaç', key: 'malzeme-ihtiyac' },
   { to: '/projeler', icon: TrendingUp, label: 'Projeler', key: 'projects' },
   { to: '/department-requests', icon: ClipboardList, label: 'Departman Talepleri', key: 'department-requests' },
+  { to: '/hareketler', icon: ArrowLeftRight, label: 'Hareketler', key: 'hareketler' },
   { to: '/hasar-tutanaklari', icon: FileText, label: 'Hasar Tutanakları', key: 'damage-reports' },
   { to: '/ciro-raporu', icon: BarChart2, label: 'Ciro Raporu', key: 'ciro-raporu' },
   { to: '/outlook-tasks', icon: ListChecks, label: 'Outlook Yapılacaklar', key: 'outlook-tasks' },

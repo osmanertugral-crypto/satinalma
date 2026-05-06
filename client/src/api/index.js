@@ -96,6 +96,8 @@ export const getWarehouseKartTipleri = () => api.get('/warehouse/kart-tipleri');
 export const getWarehouseStatus = () => api.get('/warehouse/status');
 export const syncWarehouse = () => api.post('/warehouse/sync', {});
 export const refreshWarehouseExcelAndSync = () => api.post('/warehouse/sync', { refreshExcel: true }, { timeout: 300_000 });
+export const getWarehouseDetail = (stok_kodu) => api.get(`/warehouse/detail/${encodeURIComponent(stok_kodu)}`);
+export const syncWarehouseAciklama = () => api.post('/warehouse/sync-aciklama', {});
 
 // Outlook Tasks
 export const getOutlookStatus = () => api.get('/outlook/status');
