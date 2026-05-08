@@ -15,7 +15,14 @@
       "Bash(curl -s http://localhost:5173/orders)",
       "Bash(curl -s \"http://localhost:5173/src/pages/SuppliersOrders.jsx?import\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/api/auth/me)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Read(//c/Vs Code Proje/**)",
+      "PowerShell(Get-ChildItem \"c:\\\\Vs Code Proje\\\\Satınalma\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem \"c:\\\\Vs Code Proje\\\\Satınalma\\\\server\" | ForEach-Object { $_.Name })",
+      "PowerShell(git -C \"c:\\\\Vs Code Proje\\\\Sat�nalma\" remote -v)",
+      "PowerShell(git -C \"c:\\\\Vs Code Proje\\\\Sat�nalma\" status)",
+      "PowerShell(\\(Get-Item \"c:\\\\Vs Code Proje\\\\Satınalma\\\\server\\\\satinalma.db\"\\).Length / 1MB)",
+      "PowerShell(\\(Get-Item \"c:\\\\Vs Code Proje\\\\Satınalma\\\\Tabloalarım\\\\SATINALMA RAPORU - PİVOT - 15.04.2025.xlsx\"\\).Length / 1MB)"
     ]
   }
 }
