@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft, CheckSquare, Download, FileDown, FileText, Plus, Save, Square, Trash2, Upload,
 } from 'lucide-react';
 import {
   applySvcMargin, changeSvcStatus, createSvcItem, deleteSvcFile, deleteSvcItem,
-  deleteSvcProject, downloadSvcTeklifPdf, getSvcFileDownloadUrl, getSvcProject,
-  updateSvcItem, updateSvcProject, uploadSvcFile,
+  deleteSvcProject, downloadSvcProformaPdf, downloadSvcTeklifPdf, getSvcFileDownloadUrl, getSvcProject,
+  submitConsultantOffer, updateSvcItem, updateSvcProject, uploadSvcFile,
 } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { Badge, Button, Card, Input, Modal, Select, Spinner, Textarea } from '../components/UI';
@@ -301,6 +301,7 @@ function ActualRow({ item, canEdit, onSave }) {
 export default function SvcDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const qc = useQueryClient();
 
@@ -311,7 +312,15 @@ export default function SvcDetailPage() {
   const canOffer = ['manager', 'management', 'readonly'].includes(svcRole);
   const canEdit = svcRole !== 'none' && !isReadonly;
 
-  const [tab, setTab] = useState(() => isConsultant ? 'costing' : 'general');
+  // Tekliflerim sayfasından açıldığında consultant mode
+  const consultantMode = isConsultant && location.pathname.startsWith('/tekliflerim/');
+  const backPath = consultantMode ? '/tekliflerim' : '/svc-takip';
+
+  const [tab, setTab] = useState(() => consultantMode ? 'general' : isConsultant ? 'costing' : 'general');
+  const [consultantOfferPrice, setConsultantOfferPrice] = useState('');
+  const [consultantChecked, setConsultantChecked] = useState({});
+  const [consultantFields, setConsultantFields] = useState({ nihai_musteri: '', is_turu: '', teklif_tarihi: '', validity_date: '', offer_notes: [] });
+  const [noteInput, setNoteInput] = useState('');
   const [genEditing, setGenEditing] = useState(false);
   const [genForm, setGenForm] = useState(null);
   const [itemModal, setItemModal] = useState(false);
@@ -392,8 +401,51 @@ export default function SvcDetailPage() {
 
   const deleteProjMut = useMutation({
     mutationFn: () => deleteSvcProject(id),
-    onSuccess: () => navigate('/svc-takip'),
+    onSuccess: () => navigate(backPath),
   });
+
+  const consultantOfferMut = useMutation({
+    mutationFn: (payload) => submitConsultantOffer(id, payload),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['svc-detail', id] }); qc.invalidateQueries({ queryKey: ['tekliflerim'] }); },
+    onError: e => alert(e?.response?.data?.error || 'Teklif gönderilemedi'),
+  });
+
+  const proformaPdfMut = useMutation({
+    mutationFn: () => downloadSvcProformaPdf(id),
+    onSuccess: (res) => {
+      const url = window.URL.createObjectURL(res.data);
+      const a = document.createElement('a');
+      const safeName = (project?.project_name || 'Proforma').replace(/[^a-zA-Z0-9\s-]/g, '').trim();
+      a.href = url; a.download = `RESTAR_SVC_Proforma_${safeName}.pdf`;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); window.URL.revokeObjectURL(url);
+    },
+    onError: e => alert(e?.response?.data?.error || 'PDF indirilemedi'),
+  });
+
+  useEffect(() => {
+    if (items.length > 0 && Object.keys(consultantChecked).length === 0) {
+      const init = {};
+      items.forEach(it => { init[it.id] = it.include_in_offer !== 0; });
+      setConsultantChecked(init);
+    }
+  }, [items]);
+
+  useEffect(() => {
+    if (project && consultantMode) {
+      let parsedNotes = [];
+      try { parsedNotes = JSON.parse(project.offer_notes || '[]'); } catch {}
+      if (!Array.isArray(parsedNotes)) parsedNotes = [];
+      setConsultantOfferPrice(String(project.offer_price_tl || ''));
+      setConsultantFields({
+        nihai_musteri: project.nihai_musteri || '',
+        is_turu: project.is_turu || '',
+        teklif_tarihi: project.teklif_tarihi || '',
+        validity_date: project.validity_date || '',
+        offer_notes: parsedNotes,
+      });
+    }
+  }, [project?.id, consultantMode]);
 
   function saveItem() {
     const qty = Number(itemForm.quantity || 1);
@@ -418,7 +470,12 @@ export default function SvcDetailPage() {
 
   const st = SVC_STATUS[project.status] || { label: project.status, color: 'gray' };
 
-  const TABS = [
+  const TABS = consultantMode ? [
+    { key: 'general',          label: 'Genel Bilgiler' },
+    { key: 'consultant_offer', label: `Teklif & Satış (${items.length})` },
+    { key: 'files',            label: `Dosyalar (${files.length})` },
+    { key: 'history',          label: `Tarihçe (${logs.length})` },
+  ] : [
     ...(!isConsultant ? [{ key: 'general', label: 'Genel Bilgiler' }] : []),
     { key: 'costing', label: `Maliyetlendirme (${items.length})` },
     ...(canPrice ? [{ key: 'actuals', label: 'Gerçekleşen' }] : []),
@@ -436,7 +493,7 @@ export default function SvcDetailPage() {
       <div className="flex items-start gap-4 flex-wrap">
         <button
           type="button"
-          onClick={() => navigate('/svc-takip')}
+          onClick={() => navigate(backPath)}
           className="shrink-0 w-28 h-20 flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-all"
         >
           <ArrowLeft size={22} />
@@ -507,7 +564,7 @@ export default function SvcDetailPage() {
       )}
 
       {/* ── GENEL BİLGİLER ──────────────────────────────────────────────────── */}
-      {tab === 'general' && !isConsultant && (
+      {tab === 'general' && (!isConsultant || consultantMode) && (
         <Card className="p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-gray-700">Proje Bilgileri</h2>
@@ -942,8 +999,210 @@ export default function SvcDetailPage() {
         );
       })()}
 
+      {/* ── CONSULTANT TEKLİF & SATIŞ ───────────────────────────────────────── */}
+      {tab === 'consultant_offer' && consultantMode && (() => {
+        const selectedItems = items.filter(it => consultantChecked[it.id] !== false);
+        const selectedCount = selectedItems.length;
+
+        const NOTE_PRESETS = [
+          'Verilen fiyatlara KDV dahil değildir.',
+          'Sticker fiyatları dahil değildir.',
+          'Nakliye ve kurulum ayrıca fiyatlandırılacaktır.',
+          'Teklifimiz 30 gün geçerlidir.',
+          'Mallar teslim tarihinde hazır olacaktır.',
+        ];
+
+        function cfSet(key, val) { setConsultantFields(prev => ({ ...prev, [key]: val })); }
+        function addNote(text) {
+          if (!text.trim()) return;
+          cfSet('offer_notes', [...consultantFields.offer_notes, text.trim()]);
+          setNoteInput('');
+        }
+        function removeNote(i) { cfSet('offer_notes', consultantFields.offer_notes.filter((_, idx) => idx !== i)); }
+
+        const saveOffer = () => {
+          if (!consultantOfferPrice || Number(consultantOfferPrice) <= 0) {
+            alert('Lütfen teklif fiyatı girin.');
+            return;
+          }
+          const include_in_offer = {};
+          items.forEach(it => { include_in_offer[it.id] = consultantChecked[it.id] !== false; });
+          consultantOfferMut.mutate({
+            offer_price_tl: Number(consultantOfferPrice),
+            include_in_offer,
+            ...consultantFields,
+          });
+        };
+
+        return (
+          <div className="space-y-4">
+            {/* Teklif bilgileri */}
+            <Card className="p-5">
+              <h2 className="font-semibold text-gray-700 mb-4">Teklif Bilgileri</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1.5">Nihai Müşteri</label>
+                  <input type="text" value={consultantFields.nihai_musteri}
+                    onChange={e => cfSet('nihai_musteri', e.target.value)}
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    placeholder="Nihai müşteri adı..." />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1.5">İş Türü</label>
+                  <input type="text" value={consultantFields.is_turu}
+                    onChange={e => cfSet('is_turu', e.target.value)}
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    placeholder="Proje / Toplu alım / ..." />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1.5">Teklif Tarihi</label>
+                  <input type="date" value={consultantFields.teklif_tarihi}
+                    onChange={e => cfSet('teklif_tarihi', e.target.value)}
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1.5">Geçerlilik Tarihi</label>
+                  <input type="date" value={consultantFields.validity_date}
+                    onChange={e => cfSet('validity_date', e.target.value)}
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+              </div>
+            </Card>
+
+            {/* Kalemler */}
+            <Card>
+              <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                <h2 className="font-semibold text-gray-700">Teklif Kalemleri</h2>
+                <div className="flex items-center gap-3">
+                  <button type="button" onClick={() => { const a = {}; items.forEach(it => { a[it.id] = true; }); setConsultantChecked(a); }}
+                    className="text-xs text-blue-600 hover:underline">Tümünü Seç</button>
+                  <span className="text-gray-300">|</span>
+                  <button type="button" onClick={() => { const a = {}; items.forEach(it => { a[it.id] = false; }); setConsultantChecked(a); }}
+                    className="text-xs text-gray-500 hover:underline">Hiçbirini Seçme</button>
+                  <span className="text-xs text-gray-400">{selectedCount}/{items.length} seçili</span>
+                  <button type="button" onClick={() => { setItemForm(EMPTY_ITEM); setItemModal(true); }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors">
+                    <Plus size={13} /> Kalem Ekle
+                  </button>
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 uppercase tracking-wide">
+                      <th className="px-3 py-2 text-center w-10">Dahil</th>
+                      <th className="px-3 py-2 text-left">Kategori</th>
+                      <th className="px-3 py-2 text-left">Ürün</th>
+                      <th className="px-3 py-2 text-left">Marka</th>
+                      <th className="px-3 py-2 text-left">Açıklama</th>
+                      <th className="px-3 py-2 text-center">Miktar</th>
+                      <th className="px-3 py-2 text-left">Birim</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items.length === 0 ? (
+                      <tr><td colSpan={7} className="px-3 py-8 text-center text-gray-400">Henüz kalem yok</td></tr>
+                    ) : items.map((it, i) => {
+                      const included = consultantChecked[it.id] !== false;
+                      return (
+                        <tr key={it.id}
+                          onClick={() => setConsultantChecked(prev => ({ ...prev, [it.id]: !included }))}
+                          className={`cursor-pointer border-b border-gray-50 transition-colors ${included ? 'hover:bg-blue-50/40' : 'opacity-50 bg-gray-50/50 hover:bg-gray-100/50'} ${i % 2 === 1 && included ? 'bg-gray-50/30' : ''}`}>
+                          <td className="px-3 py-2.5 text-center">
+                            <div className={`w-5 h-5 rounded border-2 flex items-center justify-center mx-auto ${included ? 'bg-blue-600 border-blue-600' : 'border-gray-300 bg-white'}`}>
+                              {included && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                            </div>
+                          </td>
+                          <td className="px-3 py-2.5 text-xs text-gray-500">{it.category || '—'}</td>
+                          <td className="px-3 py-2.5 font-medium text-gray-800">{it.product_name || '—'}</td>
+                          <td className="px-3 py-2.5 text-xs text-gray-500">{it.brand || '—'}</td>
+                          <td className="px-3 py-2.5 text-xs text-gray-500 max-w-[180px] truncate">{it.description || '—'}</td>
+                          <td className="px-3 py-2.5 text-center text-gray-700">{it.quantity || 1}</td>
+                          <td className="px-3 py-2.5 text-xs text-gray-500">{it.unit || 'adet'}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+
+            {/* Notlar */}
+            <Card className="p-5">
+              <h2 className="font-semibold text-gray-700 mb-3">Notlar</h2>
+              {/* Hazır notlar */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                {NOTE_PRESETS.filter(p => !consultantFields.offer_notes.includes(p)).map(p => (
+                  <button key={p} type="button" onClick={() => addNote(p)}
+                    className="px-3 py-1.5 text-xs border border-dashed border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+                    + {p}
+                  </button>
+                ))}
+              </div>
+              {/* Eklenen notlar */}
+              {consultantFields.offer_notes.length > 0 && (
+                <ul className="space-y-1.5 mb-3">
+                  {consultantFields.offer_notes.map((n, i) => (
+                    <li key={i} className="flex items-start gap-2 p-2.5 bg-blue-50 border border-blue-100 rounded-lg">
+                      <span className="text-blue-400 mt-0.5 text-xs">•</span>
+                      <span className="flex-1 text-sm text-gray-700">{n}</span>
+                      <button type="button" onClick={() => removeNote(i)} className="text-red-400 hover:text-red-600 shrink-0">
+                        <Trash2 size={13} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {/* Özel not ekle */}
+              <div className="flex gap-2">
+                <input type="text" value={noteInput} onChange={e => setNoteInput(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addNote(noteInput); } }}
+                  placeholder="Diğer / Özel not ekle..."
+                  className="flex-1 border border-gray-300 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                <button type="button" onClick={() => addNote(noteInput)}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition-colors">
+                  Ekle
+                </button>
+              </div>
+            </Card>
+
+            {/* Teklif fiyatı girişi */}
+            <Card className="p-5">
+              <h2 className="font-semibold text-gray-700 mb-4">Teklif Fiyatım</h2>
+              <div className="flex items-end gap-4 flex-wrap">
+                <div className="flex-1 min-w-[200px]">
+                  <label className="block text-xs font-medium text-gray-600 mb-1.5">Teklifim (₺)</label>
+                  <input
+                    type="number"
+                    value={consultantOfferPrice}
+                    onChange={e => setConsultantOfferPrice(e.target.value)}
+                    placeholder="0,00"
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+                <Button onClick={saveOffer} disabled={consultantOfferMut.isPending || !consultantOfferPrice}>
+                  <Save size={14} />
+                  {consultantOfferMut.isPending ? 'Kaydediliyor...' : 'Teklifi Kaydet'}
+                </Button>
+                <Button variant="secondary" onClick={() => proformaPdfMut.mutate()} disabled={proformaPdfMut.isPending}>
+                  <Download size={14} />
+                  {proformaPdfMut.isPending ? 'Hazırlanıyor...' : 'Proforma PDF'}
+                </Button>
+              </div>
+
+              {consultantOfferMut.isSuccess && (
+                <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2">
+                  <CheckSquare size={16} className="text-emerald-600 shrink-0" />
+                  <span className="text-emerald-700 text-sm font-semibold">Teklifiniz kaydedildi ve yönetime iletildi.</span>
+                </div>
+              )}
+            </Card>
+          </div>
+        );
+      })()}
+
       {/* ── DOSYALAR ────────────────────────────────────────────────────────── */}
-      {tab === 'files' && !isConsultant && (
+      {tab === 'files' && (!isConsultant || consultantMode) && (
         <Card>
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <h2 className="font-semibold text-gray-700">Dosyalar</h2>
@@ -997,7 +1256,7 @@ export default function SvcDetailPage() {
       )}
 
       {/* ── TARİHÇE ─────────────────────────────────────────────────────────── */}
-      {tab === 'history' && !isConsultant && (
+      {tab === 'history' && (!isConsultant || consultantMode) && (
         <Card>
           <div className="p-4 border-b border-gray-100">
             <h2 className="font-semibold text-gray-700">Durum Tarihçesi</h2>

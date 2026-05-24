@@ -919,6 +919,12 @@ function initDb() {
 
   // svc_projects: division sütunu (SVC / Retech)
   try { database.exec("ALTER TABLE svc_projects ADD COLUMN division TEXT DEFAULT 'SVC'"); } catch(e) {}
+  // svc_projects: proforma teklif alanları
+  try { database.exec("ALTER TABLE svc_projects ADD COLUMN nihai_musteri TEXT DEFAULT ''"); } catch(e) {}
+  try { database.exec("ALTER TABLE svc_projects ADD COLUMN is_turu TEXT DEFAULT ''"); } catch(e) {}
+  try { database.exec("ALTER TABLE svc_projects ADD COLUMN validity_date TEXT DEFAULT ''"); } catch(e) {}
+  try { database.exec("ALTER TABLE svc_projects ADD COLUMN offer_notes TEXT DEFAULT '[]'"); } catch(e) {}
+  try { database.exec("ALTER TABLE svc_projects ADD COLUMN teklif_tarihi TEXT DEFAULT ''"); } catch(e) {}
 
   // Ali Kardeş satış danışmanı (yoksa oluştur)
   try {

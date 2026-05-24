@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { getRates } from '../api';
 import {
   LayoutDashboard, Users, Package, FileText,
-  TrendingUp, LogOut,
+  TrendingUp, LogOut, Briefcase,
   Menu, X, Container, ClipboardList, Wallet, BarChart2, Settings, ArrowLeftRight,
   ShoppingCart, ChevronDown, AlertTriangle, FlaskConical, Wrench
 } from 'lucide-react';
@@ -51,11 +51,19 @@ const navGroups = [
       { to: '/ciro-raporu', icon: BarChart2, label: 'Ciro Raporu', key: 'ciro-raporu' },
     ],
   },
+  {
+    label: 'SVC Takip',
+    key: 'svc',
+    icon: TrendingUp,
+    items: [
+      { to: '/svc-takip', icon: TrendingUp, label: 'SVC Takip', key: 'svc-takip' },
+      { to: '/tekliflerim', icon: Briefcase, label: 'Tekliflerim', key: 'tekliflerim' },
+    ],
+  },
 ];
 
 const extraItems = [
   { to: '/department-requests', icon: ClipboardList, label: 'Departman Talepleri', key: 'department-requests' },
-  { to: '/svc-takip', icon: TrendingUp, label: 'SVC Takip', key: 'svc-takip' },
   { to: '/hasar-tutanaklari', icon: FileText, label: 'Hasar Tutanakları', key: 'damage-reports' },
 ];
 
@@ -125,7 +133,7 @@ export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [openGroups, setOpenGroups] = useState({ 'satin-alma': true, 'stok-analiz': true, 'finans': true });
+  const [openGroups, setOpenGroups] = useState({ 'satin-alma': true, 'stok-analiz': true, 'finans': true, 'svc': true });
 
   function handleLogout() { logout(); navigate('/login'); }
   function toggleGroup(key) { setOpenGroups(prev => ({ ...prev, [key]: !prev[key] })); }

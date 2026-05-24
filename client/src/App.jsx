@@ -26,6 +26,7 @@ import FinancePage from './pages/Finance';
 import DamageReportsPage from './pages/DamageReports';
 import SvcTakipPage from './pages/SvcTakip';
 import SvcDetailPage from './pages/SvcDetail';
+import TekliflerimPage from './pages/Tekliflerim';
 import CiroRaporuPage from './pages/CiroRaporu';
 import DepartmentRequestsPage from './pages/DepartmentRequests';
 import SettingsPage from './pages/Settings';
@@ -79,6 +80,8 @@ function App() {
               <Route path="hasar-tutanaklari" element={<DamageReportsPage />} />
               <Route path="svc-takip" element={<SvcTakipPage />} />
               <Route path="svc-takip/:id" element={<SvcDetailPage />} />
+              <Route path="tekliflerim" element={<TekliflerimPage />} />
+              <Route path="tekliflerim/:id" element={<SvcDetailPage />} />
               <Route path="ciro-raporu" element={<CiroRaporuPage />} />
               <Route path="department-requests" element={<DepartmentRequestsPage />} />
               <Route path="hareketler" element={<HareketlerPage />} />

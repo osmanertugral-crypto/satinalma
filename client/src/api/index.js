@@ -183,6 +183,8 @@ export const importSvcFromExcel = (formData) => api.post('/svc/import', formData
 export const getSvcCoverUrl = (id) => `/api/svc/${id}/cover`;
 export const getSvcTeklifPdfUrl = (id) => `/api/svc/${id}/teklif-pdf`;
 export const downloadSvcTeklifPdf = (id) => api.get(`/svc/${id}/teklif-pdf`, { responseType: 'blob' });
+export const submitConsultantOffer = (id, data) => api.patch(`/svc/${id}/consultant-offer`, data);
+export const downloadSvcProformaPdf = (id) => api.get(`/svc/${id}/proforma-pdf`, { responseType: 'blob' });
 export const uploadSvcCover = (id, formData) => api.post(`/svc/${id}/cover`, formData, {
   headers: { 'Content-Type': 'multipart/form-data' },
 });

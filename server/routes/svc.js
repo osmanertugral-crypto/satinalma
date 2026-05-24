@@ -396,9 +396,9 @@ router.patch('/:id', (req, res) => {
   const vals = [];
 
   // Herkes düzenleyebilir
-  const publicText = ['project_name', 'institution', 'description', 'vehicle', 'superstructure', 'country', 'division', 'consultant_name', 'notes_consultant'];
+  const publicText = ['project_name', 'institution', 'description', 'vehicle', 'superstructure', 'country', 'division', 'consultant_name', 'notes_consultant', 'nihai_musteri', 'is_turu', 'offer_notes'];
   const publicNum = ['quantity'];
-  const publicDate = ['created_date', 'offer_due_date'];
+  const publicDate = ['created_date', 'offer_due_date', 'validity_date', 'teklif_tarihi'];
 
   // Satın alma ve üzeri
   const purchaseText = ['notes_purchase', 'notes_manager'];
@@ -707,6 +707,353 @@ router.patch('/:id/margin', (req, res) => {
   res.json({ success: true, margin_rate: rate, sale_price_tl: salePrice, offer_price_tl: confirm ? offerPrice : Number(project.offer_price_tl || 0) });
 });
 
+// ─── PATCH /:id/consultant-offer ── danışman teklif fiyatı gönder ─────────────
+router.patch('/:id/consultant-offer', (req, res) => {
+  const db = getDb();
+  const svcRole = getSvcRole(db, req.user.id, req.user.role);
+  if (svcRole !== 'consultant') return res.status(403).json({ error: 'Sadece danışmanlar kullanabilir.' });
+
+  const project = db.prepare('SELECT * FROM svc_projects WHERE id = ? AND consultant_id = ?').get(req.params.id, req.user.id);
+  if (!project) return res.status(404).json({ error: 'Proje bulunamadı veya yetkiniz yok.' });
+
+  const { offer_price_tl, include_in_offer, nihai_musteri, is_turu, teklif_tarihi, validity_date, offer_notes } = req.body || {};
+  const offerPrice = Number(offer_price_tl || 0);
+
+  if (include_in_offer && typeof include_in_offer === 'object') {
+    const upd = db.prepare('UPDATE svc_project_items SET include_in_offer = ? WHERE id = ? AND project_id = ?');
+    for (const [itemId, val] of Object.entries(include_in_offer)) {
+      upd.run(val ? 1 : 0, Number(itemId), req.params.id);
+    }
+  }
+
+  const notesJson = Array.isArray(offer_notes) ? JSON.stringify(offer_notes) : (offer_notes || '[]');
+
+  db.prepare(`UPDATE svc_projects SET
+    offer_price_tl = ?,
+    nihai_musteri  = ?,
+    is_turu        = ?,
+    teklif_tarihi  = ?,
+    validity_date  = ?,
+    offer_notes    = ?,
+    updated_at     = datetime('now')
+    WHERE id = ?`)
+    .run(offerPrice, nihai_musteri || '', is_turu || '', teklif_tarihi || '', validity_date || '', notesJson, req.params.id);
+
+  const priceLabel = offerPrice.toLocaleString('tr-TR', { maximumFractionDigits: 0 });
+  addLog(db, req.params.id, req.user.id, req.user.name,
+    `Danışman teklifini iletti: ${priceLabel} ₺`,
+    project.status, project.status, ''
+  );
+
+  res.json({ success: true, offer_price_tl: offerPrice });
+});
+
+// ─── Proforma/Teklif PDF yardımcı ── her iki endpoint ortak şablon ────────────
+function buildSvcPdf(doc, project, items, { showPrices, teklifNo, teklifTarihi, gecerlilikTarihi, R, RB }) {
+  const NAVY   = '#1A3A5C';
+  const BLUE   = '#1A8FD8';
+  const WHITE  = '#FFFFFF';
+  const DARK   = '#1E293B';
+  const MUTED  = '#64748B';
+  const LIGHT  = '#F8FAFC';
+  const BORDER = '#E2E8F0';
+  const ROW_ALT = '#F1F5F9';
+  const W = 595; const M = 40; const CW = W - M * 2;
+
+  const offerTotal = Number(project.offer_price_tl) || 0;
+  const costTotal  = Number(project.cost_total_tl)  || 0;
+  const scaleFactor = costTotal > 0 && offerTotal > 0 ? offerTotal / costTotal : 1;
+
+  function fmtTL(v) {
+    return (Number(v)||0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
+  }
+  function trunc(text, max) {
+    const s = String(text||''); return s.length > max ? s.slice(0, max-1)+'…' : s;
+  }
+
+  // Notlar (offer_notes JSON dizisi)
+  let notes = [];
+  try { notes = JSON.parse(project.offer_notes || '[]'); } catch {}
+  if (!Array.isArray(notes)) notes = [];
+
+  // ── HEADER ────────────────────────────────────────────────────────────────
+  doc.rect(0, 0, W, 110).fill(NAVY);
+  doc.rect(0, 108, W, 3).fill(BLUE);
+
+  const logoPath = path.join(__dirname, '../../client/public/RESTAR.png');
+  if (fs.existsSync(logoPath)) {
+    try { doc.image(logoPath, M, 16, { height: 44, fit: [160, 44] }); } catch {}
+  }
+
+  doc.font(RB).fontSize(22).fillColor(WHITE).text('TEKLİF', 0, 20, { align: 'right', width: W - M });
+  doc.font(R).fontSize(8).fillColor('#94A3B8')
+    .text(`No: ${teklifNo}`, 0, 50, { align: 'right', width: W - M })
+    .text(`Tarih: ${teklifTarihi}`, 0, 63, { align: 'right', width: W - M })
+    .text(`Geçerlilik: ${gecerlilikTarihi}`, 0, 76, { align: 'right', width: W - M });
+
+  let y = 122;
+
+  // ── MÜŞTERİ & TEKLİF BİLGİLERİ ──────────────────────────────────────────
+  // Sol: Müşteri Bilgileri
+  const bW = (CW - 8) / 2;
+  function infoBlock(x, title, rows) {
+    doc.rect(x, y, bW, 84).fill(LIGHT).stroke(BORDER);
+    doc.rect(x, y, 3, 84).fill(BLUE);
+    doc.font(RB).fontSize(7).fillColor(BLUE).text(title, x + 10, y + 9);
+    let ly = y + 22;
+    rows.forEach(([lbl, val]) => {
+      if (!val && val !== 0) return;
+      doc.font(RB).fontSize(7.5).fillColor(MUTED).text(lbl + ':', x + 10, ly, { width: bW - 20 });
+      doc.font(R).fontSize(8.5).fillColor(DARK).text(String(val), x + 10, ly + 10, { width: bW - 20 });
+      ly += 22;
+    });
+  }
+
+  infoBlock(M, 'MÜŞTERİ BİLGİLERİ', [
+    ['Kurum / Firma', project.institution || '—'],
+    ['Nihai Müşteri', project.nihai_musteri || null],
+    ['İş Türü',       project.is_turu      || null],
+  ]);
+  infoBlock(M + bW + 8, 'TEKLİF BİLGİLERİ', [
+    ['Teklif No',  teklifNo],
+    ['Proje',      trunc(project.project_name || '—', 40)],
+    ['Danışman',   project.consultant_name || null],
+  ]);
+
+  y += 96;
+
+  // ── SELAMLAnma metni ─────────────────────────────────────────────────────
+  doc.font(R).fontSize(9).fillColor(DARK)
+    .text(`Sayın ${project.institution || 'Yetkili'},`, M, y, { width: CW });
+  y += 13;
+  doc.font(R).fontSize(9).fillColor(MUTED)
+    .text('Talebiniz doğrultusunda aşağıdaki ürün/hizmetlere ait teklifimizi bilgilerinize sunarız.', M, y, { width: CW });
+  y += 18;
+
+  // ── TEKLİF ÜRÜNLERİ TABLOSU ──────────────────────────────────────────────
+  doc.font(RB).fontSize(9).fillColor(NAVY).text('TEKLİF ÜRÜNLERİ', M, y);
+  y += 14;
+
+  // Sütun genişlikleri
+  const nW  = 24;
+  const qW  = 36;
+  const unW = 32;
+  const bpW = showPrices ? 70 : 0;
+  const tpW = showPrices ? 72 : 0;
+  const urW = CW - nW - qW - unW - bpW - tpW - 12;
+
+  // Tablo başlığı
+  doc.rect(M, y, CW, 20).fill(NAVY);
+  let hx = M + 6; const hy = y + 6;
+  function th(text, w, align = 'left') {
+    doc.font(RB).fontSize(7.5).fillColor(WHITE).text(text, hx, hy, { width: w, align, lineBreak: false });
+    hx += w + 2;
+  }
+  th('Sıra', nW, 'center');
+  th('Ürün Adı / Açıklama', urW);
+  th('Miktar', qW, 'center');
+  th('Birim', unW, 'center');
+  if (showPrices) { th('Birim Fiyat', bpW, 'right'); th('Toplam', tpW, 'right'); }
+  y += 20;
+
+  // Satırlar
+  const ROW_H = 22;
+  let grandTotal = 0;
+  items.forEach((it, i) => {
+    if (y + ROW_H > 780) {
+      // Yeni sayfa — mini header
+      doc.addPage({ size: 'A4', margin: 0 });
+      doc.rect(0, 0, W, 28).fill(NAVY);
+      doc.rect(0, 26, W, 2).fill(BLUE);
+      doc.font(RB).fontSize(10).fillColor(WHITE).text('RESTAR', M, 8);
+      doc.font(R).fontSize(8).fillColor('#94A3B8').text(`TEKLİF · ${teklifNo}`, 0, 10, { align: 'right', width: W - M });
+      y = 38;
+      // Başlık tekrar
+      doc.rect(M, y, CW, 20).fill(NAVY);
+      hx = M + 6;
+      const hy2 = y + 6;
+      const th2 = (text, w, align = 'left') => {
+        doc.font(RB).fontSize(7.5).fillColor(WHITE).text(text, hx, hy2, { width: w, align, lineBreak: false });
+        hx += w + 2;
+      };
+      th2('Sıra', nW, 'center'); th2('Ürün Adı / Açıklama', urW);
+      th2('Miktar', qW, 'center'); th2('Birim', unW, 'center');
+      if (showPrices) { th2('Birim Fiyat', bpW, 'right'); th2('Toplam', tpW, 'right'); }
+      y += 20;
+    }
+
+    const rowBg = i % 2 === 0 ? WHITE : ROW_ALT;
+    doc.rect(M, y, CW, ROW_H).fill(rowBg);
+    doc.rect(M, y + ROW_H - 0.5, CW, 0.5).fill(BORDER);
+
+    let rx = M + 6; const ry = y + 7;
+    function td(text, w, align = 'left', color = DARK, bold = false) {
+      doc.font(bold ? RB : R).fontSize(8).fillColor(color)
+        .text(String(text || ''), rx, ry, { width: w, align, lineBreak: false });
+      rx += w + 2;
+    }
+
+    const unitOffer  = showPrices ? Number(it.unit_price  || 0) * scaleFactor : 0;
+    const totalOffer = showPrices ? Number(it.total_price || 0) * scaleFactor : 0;
+    if (showPrices) grandTotal += totalOffer;
+
+    const label = [it.product_name, it.brand, it.description].filter(Boolean).join(' — ');
+    td(i + 1, nW, 'center', MUTED);
+    td(trunc(label || '—', 55), urW, 'left', DARK, true);
+    td(it.quantity || 1, qW, 'center', DARK);
+    td(it.unit || 'adet', unW, 'center', MUTED);
+    if (showPrices) {
+      td(unitOffer > 0 ? fmtTL(unitOffer) : '', bpW, 'right', DARK);
+      td(totalOffer > 0 ? fmtTL(totalOffer) : '', tpW, 'right', DARK, true);
+    }
+    y += ROW_H;
+  });
+
+  // Boş durum
+  if (items.length === 0) {
+    doc.rect(M, y, CW, 32).fill(LIGHT);
+    doc.font(R).fontSize(9).fillColor(MUTED).text('Teklif kalemi bulunmamaktadır.', M, y + 10, { width: CW, align: 'center' });
+    y += 32;
+  }
+
+  y += 8;
+
+  // ── GENEL TOPLAM ──────────────────────────────────────────────────────────
+  if (showPrices || offerTotal > 0) {
+    const totalVal = showPrices ? grandTotal : offerTotal;
+    const totalVat = totalVal * 0.20;
+    // KDV hariç satır
+    doc.rect(M, y, CW, 22).fill(LIGHT).stroke(BORDER);
+    doc.font(R).fontSize(9).fillColor(MUTED).text('Ara Toplam (KDV Hariç):', M + 8, y + 6, { width: CW - 100 });
+    doc.font(R).fontSize(9).fillColor(DARK).text(fmtTL(totalVal), 0, y + 6, { align: 'right', width: W - M - 4 });
+    y += 22;
+    doc.rect(M, y, CW, 22).fill(LIGHT).stroke(BORDER);
+    doc.font(R).fontSize(9).fillColor(MUTED).text('KDV (%20):', M + 8, y + 6, { width: CW - 100 });
+    doc.font(R).fontSize(9).fillColor(DARK).text(fmtTL(totalVat), 0, y + 6, { align: 'right', width: W - M - 4 });
+    y += 22;
+    doc.rect(M, y, CW, 28).fill(NAVY);
+    doc.font(RB).fontSize(11).fillColor(WHITE).text('GENEL TOPLAM:', M + 8, y + 8, { width: CW - 100 });
+    doc.font(RB).fontSize(12).fillColor('#93C5FD').text(fmtTL(totalVal + totalVat), 0, y + 7, { align: 'right', width: W - M - 4 });
+    y += 36;
+  }
+
+  // ── NOTLAR ────────────────────────────────────────────────────────────────
+  if (notes.length > 0) {
+    y += 6;
+    if (y + 14 + notes.length * 14 > 795) {
+      doc.addPage({ size: 'A4', margin: 0 });
+      doc.rect(0, 0, W, 28).fill(NAVY);
+      doc.rect(0, 26, W, 2).fill(BLUE);
+      y = 38;
+    }
+    doc.font(RB).fontSize(9).fillColor(NAVY).text('NOTLAR', M, y);
+    y += 14;
+    notes.forEach(note => {
+      doc.font(R).fontSize(8.5).fillColor(DARK).text(`•  ${note}`, M + 6, y, { width: CW - 10 });
+      y += 14;
+    });
+  }
+
+  // ── SAYFA 2: SATIŞ KOŞULLARI ──────────────────────────────────────────────
+  doc.addPage({ size: 'A4', margin: 0 });
+  doc.rect(0, 0, W, 110).fill(NAVY);
+  doc.rect(0, 108, W, 3).fill(BLUE);
+  if (fs.existsSync(logoPath)) {
+    try { doc.image(logoPath, M, 16, { height: 44, fit: [160, 44] }); } catch {}
+  }
+  doc.font(RB).fontSize(16).fillColor(WHITE).text('SATIŞ KOŞULLARI', 0, 30, { align: 'right', width: W - M });
+  doc.font(R).fontSize(8.5).fillColor('#94A3B8').text(teklifNo, 0, 55, { align: 'right', width: W - M });
+
+  let sy = 124;
+  const conditions = [
+    ['1. GEÇERLİLİK SÜRESİ', `Bu teklif ${teklifTarihi} tarihinden itibaren ${gecerlilikTarihi} tarihine kadar geçerlidir.`],
+    ['2. FİYATLAR', 'Belirtilen fiyatlar KDV hariç olup geçerli yasal oran üzerinden KDV ayrıca uygulanacaktır. Tüm fiyatlar Türk Lirası (₺) cinsindendir.'],
+    ['3. ÖDEME KOŞULLARI', 'Ödeme koşulları sipariş onayı sırasında taraflarca mutabık kalınan şekilde belirlenecektir.'],
+    ['4. TESLİMAT', 'Teslimat süresi ve koşulları sipariş onayının ardından ayrıca taraflarca mutabık kalınacaktır.'],
+    ['5. GARANTİ', 'Ürün ve hizmetlere ait garanti koşulları ilgili teknik şartname ve sözleşmede belirtilecektir.'],
+    ['6. KAPSAM', 'Bu teklif yalnızca belirtilen ürün ve hizmetleri kapsamakta olup kapsam dışı talepler ayrıca fiyatlandırılacaktır.'],
+    ['7. YETKİ VE İMZA', 'Bu teklif yetkili imza ile geçerli olup aksi belirtilmedikçe resmi sözleşme niteliği taşımamaktadır.'],
+  ];
+
+  conditions.forEach(([title, text]) => {
+    if (sy > 750) return;
+    doc.font(RB).fontSize(8.5).fillColor(NAVY).text(title, M, sy, { width: CW });
+    sy += 14;
+    doc.font(R).fontSize(8.5).fillColor(MUTED).text(text, M + 8, sy, { width: CW - 8 });
+    sy += doc.heightOfString(text, { width: CW - 8, fontSize: 8.5 }) + 14;
+  });
+
+  // Alt bilgi — şirket adı + teklif kodu
+  const footerY2 = 800;
+  doc.rect(0, footerY2, W, 42).fill(NAVY);
+  doc.rect(0, footerY2, W, 3).fill(BLUE);
+  doc.font(RB).fontSize(11).fillColor(WHITE).text('RESTAR Automotive A.Ş.', M, footerY2 + 9);
+  doc.font(R).fontSize(7.5).fillColor('#94A3B8').text('restarglobal.com', M, footerY2 + 24);
+  doc.font(RB).fontSize(8).fillColor(BLUE).text(teklifNo, 0, footerY2 + 9, { align: 'right', width: W - M });
+  doc.font(R).fontSize(7.5).fillColor('#94A3B8').text(teklifTarihi, 0, footerY2 + 24, { align: 'right', width: W - M });
+}
+
+// ─── GET /:id/proforma-pdf ── danışman proforma teklif PDF'i ──────────────────
+router.get('/:id/proforma-pdf', (req, res) => {
+  try {
+    const db = getDb();
+    const svcRole = getSvcRole(db, req.user.id, req.user.role);
+    const isConsultant = svcRole === 'consultant';
+    if (!isConsultant && !canSeeOffer(svcRole)) return res.status(403).json({ error: 'Yetersiz yetki.' });
+
+    const project = isConsultant
+      ? db.prepare('SELECT * FROM svc_projects WHERE id = ? AND consultant_id = ?').get(req.params.id, req.user.id)
+      : db.prepare('SELECT * FROM svc_projects WHERE id = ?').get(req.params.id);
+    if (!project) return res.status(404).json({ error: 'Proje bulunamadı.' });
+
+    const items = db.prepare(
+      'SELECT * FROM svc_project_items WHERE project_id = ? AND (include_in_offer IS NULL OR include_in_offer = 1) ORDER BY sort_order'
+    ).all(req.params.id);
+
+    const FONT_REG  = 'C:\\Windows\\Fonts\\arial.ttf';
+    const FONT_BOLD = 'C:\\Windows\\Fonts\\arialbd.ttf';
+    const hasFont   = fs.existsSync(FONT_REG) && fs.existsSync(FONT_BOLD);
+
+    const safeName = (project.project_name || 'Proforma').replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ\s-]/g, '').trim();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition',
+      `attachment; filename*=UTF-8''${encodeURIComponent(`RESTAR_SVC_Proforma_${safeName}.pdf`)}`);
+
+    const doc = new PDFDocument({ size: 'A4', margin: 0, info: {
+      Title: `Proforma Teklif - ${project.project_name || project.id}`,
+      Author: 'RESTAR Special Vehicle Conversions',
+    }});
+    doc.pipe(res);
+
+    if (hasFont) { doc.registerFont('R', FONT_REG); doc.registerFont('RB', FONT_BOLD); }
+    const FONT_R  = hasFont ? 'R'  : 'Helvetica';
+    const FONT_RB = hasFont ? 'RB' : 'Helvetica-Bold';
+
+    const year      = new Date().getFullYear();
+    const teklifNo  = `PRF-${year}-${String(project.id).slice(0, 8).toUpperCase()}`;
+    const today     = project.teklif_tarihi
+      ? new Date(project.teklif_tarihi).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+      : new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const validity  = project.validity_date
+      ? new Date(project.validity_date).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+      : (() => { const d = new Date(); d.setDate(d.getDate() + 30); return d.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' }); })();
+
+    buildSvcPdf(doc, project, items, {
+      showPrices: false,
+      teklifNo,
+      teklifTarihi: today,
+      gecerlilikTarihi: validity,
+      R: FONT_R,
+      RB: FONT_RB,
+    });
+
+    doc.end();
+  } catch (err) {
+    console.error('[proforma-pdf]', err);
+    if (!res.headersSent) res.status(500).json({ error: 'PDF oluşturulamadı.' });
+  }
+});
+
 // ─── POST /import ── Excel'den proje oluştur ─────────────────────────────────
 router.post('/import', importUpload.fields([
   { name: 'excel', maxCount: 1 },
@@ -880,7 +1227,7 @@ router.post('/:id/cover', importUpload.single('cover'), async (req, res) => {
   res.json({ success: true, cover_image: coverName });
 });
 
-// ─── GET /:id/teklif-pdf ── kurumsal teklif formu ────────────────────────────
+// ─── GET /:id/teklif-pdf ── kurumsal teklif formu (aynı Proforma şablonu) ────
 router.get('/:id/teklif-pdf', (req, res) => {
   try {
   const db  = getDb();
@@ -894,7 +1241,6 @@ router.get('/:id/teklif-pdf', (req, res) => {
     'SELECT * FROM svc_project_items WHERE project_id = ? AND (include_in_offer IS NULL OR include_in_offer = 1) ORDER BY sort_order'
   ).all(req.params.id);
 
-  // ── Fontlar (Türkçe karakter desteği) ──────────────────────────────────────
   const FONT_REG  = 'C:\\Windows\\Fonts\\arial.ttf';
   const FONT_BOLD = 'C:\\Windows\\Fonts\\arialbd.ttf';
   const hasFont   = fs.existsSync(FONT_REG) && fs.existsSync(FONT_BOLD);
@@ -910,252 +1256,29 @@ router.get('/:id/teklif-pdf', (req, res) => {
   }});
   doc.pipe(res);
 
-  if (hasFont) {
-    doc.registerFont('R',  FONT_REG);
-    doc.registerFont('RB', FONT_BOLD);
-  }
-  const R  = hasFont ? 'R'  : 'Helvetica';
-  const RB = hasFont ? 'RB' : 'Helvetica-Bold';
+  if (hasFont) { doc.registerFont('R', FONT_REG); doc.registerFont('RB', FONT_BOLD); }
+  const FONT_R  = hasFont ? 'R'  : 'Helvetica';
+  const FONT_RB = hasFont ? 'RB' : 'Helvetica-Bold';
 
-  // ── Renkler (Restar kurumsal kimlik) ───────────────────────────────────────
-  const NAVY   = '#0D1B2A';
-  const ORANGE = '#E85004';
-  const WHITE  = '#FFFFFF';
-  const LIGHT  = '#F8FAFC';
-  const BORDER = '#E2E8F0';
-  const DARK   = '#1E293B';
-  const MUTED  = '#64748B';
-  const ROW_ALT = '#F1F5F9';
+  const year     = new Date().getFullYear();
+  const teklifNo = `TKF-${year}-${String(project.id).slice(0, 8).toUpperCase()}`;
+  const today    = project.teklif_tarihi
+    ? new Date(project.teklif_tarihi).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    : new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const validity = project.validity_date
+    ? new Date(project.validity_date).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    : (() => { const d = new Date(); d.setDate(d.getDate() + 30); return d.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' }); })();
 
-  // ── Sayfa ve fiyat değerleri ───────────────────────────────────────────────
-  const W  = 595;
-  const M  = 36;
-  const CW = W - M * 2;
+  const offerTotal = Number(project.offer_price_tl) || 0;
 
-  const costTotal   = Number(project.cost_total_tl)  || 0;
-  const offerTotal  = Number(project.offer_price_tl) || 0;
-  const marginRate  = Number(project.margin_rate)    || 0;
-  const scaleFactor = costTotal > 0 && offerTotal > 0
-    ? offerTotal / costTotal
-    : 1 + marginRate / 100;
-  const showPrices = offerTotal > 0;
-
-  const year      = new Date().getFullYear();
-  const teklifNo  = `TKF-${year}-${String(project.id).slice(0, 8).toUpperCase()}`;
-  const today     = new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  const validity  = (() => {
-    const d = new Date(); d.setDate(d.getDate() + 30);
-    return d.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  })();
-
-  // ── Yardımcı formatlar ─────────────────────────────────────────────────────
-  function fmtTL(v) {
-    const n = Number(v) || 0;
-    return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
-  }
-  function trunc(text, max) {
-    const s = String(text || '');
-    return s.length > max ? s.slice(0, max - 1) + '…' : s;
-  }
-
-  // ── HEADER ─────────────────────────────────────────────────────────────────
-  doc.rect(0, 0, W, 118).fill(NAVY);
-  doc.rect(0, 115, W, 3).fill(ORANGE);
-
-  // SVC rozeti
-  doc.roundedRect(M, 24, 48, 26, 3).fill(ORANGE);
-  doc.font(RB).fontSize(14).fillColor(WHITE).text('SVC', M, 30, { width: 48, align: 'center' });
-
-  // RESTAR yazısı
-  doc.font(RB).fontSize(26).fillColor(WHITE).text('RESTAR', M + 58, 18);
-  doc.font(R).fontSize(9).fillColor('#9AABB8').text('Special Vehicle Conversions', M + 60, 50);
-  doc.font(R).fontSize(8).fillColor(ORANGE).text('restarglobal.com', M + 60, 63);
-
-  // Sağda TEKLİF başlığı
-  doc.font(RB).fontSize(38).fillColor(WHITE).text('TEKLİF', W - M - 190, 18, { width: 190, align: 'right' });
-  doc.font(R).fontSize(9).fillColor('#9AABB8').text(`No: ${teklifNo}`, W - M - 190, 64, { width: 190, align: 'right' });
-  doc.font(R).fontSize(9).fillColor('#9AABB8').text(`Tarih: ${today}`, W - M - 190, 78, { width: 190, align: 'right' });
-
-  let y = 128;
-
-  // ── BİLGİ KARTLARI ─────────────────────────────────────────────────────────
-  const bW = (CW - 8) / 3;
-
-  function infoBox(x, label, title, lines) {
-    doc.rect(x, y, bW, 68).fill(LIGHT);
-    doc.rect(x, y, bW, 68).stroke(BORDER);
-    doc.rect(x, y, 3, 68).fill(ORANGE);
-    doc.font(RB).fontSize(7).fillColor(ORANGE).text(label, x + 8, y + 9);
-    doc.font(RB).fontSize(9).fillColor(DARK).text(trunc(title, 32), x + 8, y + 20, { width: bW - 16 });
-    let ly = y + 34;
-    lines.forEach(l => {
-      if (l) { doc.font(R).fontSize(8).fillColor(MUTED).text(trunc(l, 38), x + 8, ly, { width: bW - 16 }); ly += 13; }
-    });
-  }
-
-  infoBox(M,               'TEKLİFİ HAZIRLAYAN', 'RESTAR Automotive A.Ş.',
-    ['Satın Alma Departmanı', 'restarglobal.com']);
-  infoBox(M + bW + 4,      'MÜŞTERİ',           project.institution || '—',
-    [project.consultant_name ? `Danışman: ${project.consultant_name}` : null, project.country || null]);
-  infoBox(M + (bW + 4) * 2,'KONU',              project.project_name || '—',
-    [project.vehicle ? `Araç: ${project.vehicle}` : null,
-     project.quantity > 1 ? `Adet: ${project.quantity}` : null,
-     project.offer_due_date ? `Teklif Tarihi: ${project.offer_due_date}` : null]);
-
-  y += 78;
-
-  // ── ÜRÜNLER TABLOSU ────────────────────────────────────────────────────────
-  // Bölüm başlığı
-  doc.font(RB).fontSize(9).fillColor(DARK).text('TEKLİF KAPSAMI', M, y + 4);
-  doc.rect(M, y + 17, CW, 2).fill(ORANGE);
-  y += 26;
-
-  // Sütun genişlikleri
-  const nW  = 18;
-  const ktW = 58;
-  let   urW, mkW = 52, spW, qW = 28, unW = 26;
-  const bpW = showPrices ? 60 : 0;
-  const tpW = showPrices ? 60 : 0;
-  const fixd = nW + ktW + mkW + qW + unW + bpW + tpW;
-  const flex = CW - fixd - 10;
-  urW = Math.round(flex * 0.46);
-  spW = flex - urW;
-
-  // Tablo başlığı satırı
-  doc.rect(M, y, CW, 20).fill(NAVY);
-  const hy = y + 6;
-  let hx = M + 6;
-  function th(text, w, align = 'left') {
-    doc.font(RB).fontSize(7).fillColor(WHITE).text(text, hx, hy, { width: w, align, lineBreak: false });
-    hx += w + 3;
-  }
-  th('#',               nW,  'center');
-  th('KATEGORİ',        ktW);
-  th('ÜRÜN / HİZMET',   urW);
-  th('MARKA',           mkW);
-  th('TEKNİK ÖZELLİK',  spW);
-  th('ADET',            qW,  'right');
-  th('BRM',             unW, 'center');
-  if (showPrices) { th('BİRİM FİYAT', bpW, 'right'); th('TOPLAM', tpW, 'right'); }
-  y += 20;
-
-  // Satırlar
-  const ROW_H = 20;
-  items.forEach((item, idx) => {
-    // Sayfa sonu kontrolü
-    if (y + ROW_H > 790) {
-      doc.addPage({ size: 'A4', margin: 0 });
-      y = 40;
-      // Mini header tekrar
-      doc.rect(0, 0, W, 30).fill(NAVY);
-      doc.rect(0, 27, W, 2).fill(ORANGE);
-      doc.font(RB).fontSize(10).fillColor(WHITE).text('RESTAR', M, 8);
-      doc.font(R).fontSize(8).fillColor(ORANGE).text('TEKLİF', W - M - 80, 8, { width: 80, align: 'right' });
-      y = 40;
-      // Sütun başlığını tekrar yaz
-      doc.rect(M, y, CW, 20).fill(NAVY);
-      hx = M + 6;
-      const hy2 = y + 6;
-      function th2(text, w, align = 'left') {
-        doc.font(RB).fontSize(7).fillColor(WHITE).text(text, hx, hy2, { width: w, align, lineBreak: false }); hx += w + 3;
-      }
-      th2('#', nW, 'center'); th2('KATEGORİ', ktW); th2('ÜRÜN / HİZMET', urW); th2('MARKA', mkW);
-      th2('TEKNİK ÖZELLİK', spW); th2('ADET', qW, 'right'); th2('BRM', unW, 'center');
-      if (showPrices) { th2('BİRİM FİYAT', bpW, 'right'); th2('TOPLAM', tpW, 'right'); }
-      y += 20;
-    }
-
-    const bg = idx % 2 === 0 ? WHITE : ROW_ALT;
-    doc.rect(M, y, CW, ROW_H).fill(bg);
-    doc.rect(M, y + ROW_H - 0.5, CW, 0.5).fill(BORDER);
-
-    const ry = y + 6;
-    let rx = M + 6;
-    function td(text, w, align = 'left', color = DARK, bold = false) {
-      doc.font(bold ? RB : R).fontSize(7.5).fillColor(color)
-        .text(trunc(String(text || ''), Math.floor(w / 4.5)), rx, ry, { width: w, align, lineBreak: false });
-      rx += w + 3;
-    }
-
-    const unitOffer  = showPrices ? Number(item.unit_price  || 0) * scaleFactor : 0;
-    const totalOffer = showPrices ? Number(item.total_price || 0) * scaleFactor : 0;
-
-    td(idx + 1,             nW,  'center', MUTED);
-    td(item.category || '', ktW, 'left',   MUTED);
-    td(item.product_name || '', urW, 'left', DARK, true);
-    td(item.brand || '',    mkW, 'left',   MUTED);
-    td(item.tech_spec || item.description || '', spW, 'left', MUTED);
-    td(item.quantity,       qW,  'right',  DARK);
-    td(item.unit || 'adet', unW, 'center', MUTED);
-    if (showPrices) {
-      td(unitOffer  > 0 ? fmtTL(unitOffer)  : '—', bpW, 'right', DARK);
-      td(totalOffer > 0 ? fmtTL(totalOffer) : '—', tpW, 'right', DARK, true);
-    }
-    y += ROW_H;
+  buildSvcPdf(doc, project, items, {
+    showPrices: offerTotal > 0,
+    teklifNo,
+    teklifTarihi: today,
+    gecerlilikTarihi: validity,
+    R: FONT_R,
+    RB: FONT_RB,
   });
-
-  y += 12;
-
-  // ── ÖZET ──────────────────────────────────────────────────────────────────
-  if (showPrices) {
-    const sx = W - M - 210;
-    const sw = 210;
-
-    function summaryRow(label, value, bold = false, highlight = false) {
-      if (highlight) {
-        doc.rect(sx - 6, y - 3, sw + 6, 26).fill(NAVY);
-        doc.font(RB).fontSize(10).fillColor(WHITE).text(label, sx, y + 3, { width: 115, align: 'left' });
-        doc.font(RB).fontSize(11).fillColor(ORANGE).text(value, sx + 118, y + 2, { width: sw - 118, align: 'right' });
-      } else {
-        doc.font(bold ? RB : R).fontSize(9).fillColor(bold ? DARK : MUTED)
-          .text(label, sx, y, { width: 115, align: 'left' });
-        doc.font(bold ? RB : R).fontSize(9).fillColor(bold ? DARK : MUTED)
-          .text(value, sx + 118, y, { width: sw - 118, align: 'right' });
-      }
-      y += highlight ? 30 : 18;
-    }
-
-    summaryRow('KDV Hariç Toplam:', fmtTL(offerTotal));
-    summaryRow('KDV (%20):',        fmtTL(offerTotal * 0.20));
-    doc.rect(sx - 6, y - 6, sw + 6, 1).fill(BORDER);
-    y += 4;
-    summaryRow('GENEL TOPLAM:', fmtTL(offerTotal * 1.20), true, true);
-  }
-
-  y += 10;
-
-  // ── KOŞULLAR ──────────────────────────────────────────────────────────────
-  if (y < 680) {
-    doc.rect(M, y, CW, 1).fill(BORDER);
-    y += 10;
-    doc.font(RB).fontSize(8).fillColor(ORANGE).text('TEKLİF KOŞULLARI', M, y);
-    y += 13;
-    const terms = [
-      `Geçerlilik: Bu teklif ${today} tarihinden itibaren 30 gün geçerlidir (Son: ${validity}).`,
-      'Fiyatlar KDV hariç olup, geçerli oran üzerinden KDV ayrıca uygulanacaktır.',
-      'Teslimat süresi sipariş onayının ardından taraflarca mutabık kalınan şekilde belirlenecektir.',
-      'Teklif kapsamındaki malzeme ve hizmetler şartname gerekliliklerini karşılayacak şekilde tedarik edilecektir.',
-    ];
-    if (project.notes_consultant) terms.push(project.notes_consultant);
-    terms.forEach(t => {
-      doc.font(R).fontSize(7.5).fillColor(MUTED).text(`• ${t}`, M, y, { width: CW });
-      y += 12;
-    });
-  }
-
-  // ── FOOTER ────────────────────────────────────────────────────────────────
-  const FY = 800;
-  doc.rect(0, FY, W, 3).fill(ORANGE);
-  doc.rect(0, FY + 3, W, 39).fill(NAVY);
-
-  doc.font(RB).fontSize(11).fillColor(WHITE).text('RESTAR', M, FY + 10);
-  doc.font(R).fontSize(7.5).fillColor('#9AABB8')
-    .text('Restar Automotive A.Ş.  |  restarglobal.com', M, FY + 25);
-
-  doc.font(RB).fontSize(8).fillColor(ORANGE)
-    .text('Special Vehicle Conversions', W - M - 200, FY + 10, { width: 200, align: 'right' });
-  doc.font(R).fontSize(7.5).fillColor('#9AABB8')
-    .text(`Teklif No: ${teklifNo}  |  ${today}`, W - M - 200, FY + 25, { width: 200, align: 'right' });
 
   doc.end();
   } catch (err) {
