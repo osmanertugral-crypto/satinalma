@@ -269,6 +269,93 @@ function readCiroExcel(force = false) {
   return result;
 }
 
+// ── Zengin dashboard verisi ─────────────────────────────────────────────────
+router.get('/dashboard', async (req, res) => {
+  const db = getDb();
+  try {
+    const force = req.query.force === 'true';
+    if (force) {
+      try { await syncFromTIGER3(); } catch (e) { console.warn('Tiger3 bağlanamadı:', e.message); }
+    }
+
+    const count = db.prepare('SELECT COUNT(*) as c FROM ciro_cache').get().c;
+    if (count === 0) return res.json({ empty: true });
+
+    const monthlyTotals = db.prepare(`
+      SELECT firma, yil, ay,
+        ROUND(SUM(tutar),2) as toplam_tl,
+        ROUND(SUM(tutar_eur),2) as toplam_eur,
+        ROUND(SUM(tutar_usd),2) as toplam_usd,
+        SUM(miktar) as toplam_miktar
+      FROM ciro_cache
+      WHERE yil IS NOT NULL AND ay IS NOT NULL
+      GROUP BY firma, yil, ay
+      ORDER BY yil, ay
+    `).all();
+
+    const maxYil = db.prepare('SELECT MAX(yil) as y FROM ciro_cache').get().y;
+
+    const topCariler = db.prepare(`
+      SELECT firma, cari_adi,
+        ROUND(SUM(tutar),2) as toplam,
+        ROUND(SUM(tutar_eur),2) as toplam_eur,
+        COUNT(DISTINCT fatura_no) as fatura_sayisi
+      FROM ciro_cache
+      WHERE yil = ? AND cari_adi != ''
+      GROUP BY firma, cari_adi
+      ORDER BY toplam DESC
+      LIMIT 30
+    `).all(maxYil);
+
+    const topUrunler = db.prepare(`
+      SELECT firma, stok_adi,
+        ROUND(SUM(tutar),2) as toplam,
+        ROUND(SUM(tutar_eur),2) as toplam_eur,
+        SUM(miktar) as miktar
+      FROM ciro_cache
+      WHERE yil = ? AND stok_adi != ''
+      GROUP BY firma, stok_adi
+      ORDER BY toplam DESC
+      LIMIT 30
+    `).all(maxYil);
+
+    const kategoriler = db.prepare(`
+      SELECT firma, tur, yil,
+        ROUND(SUM(tutar),2) as toplam,
+        ROUND(SUM(tutar_eur),2) as toplam_eur
+      FROM ciro_cache
+      WHERE tur != '' AND yil IS NOT NULL
+      GROUP BY firma, tur, yil
+      ORDER BY yil DESC, toplam DESC
+    `).all();
+
+    const yilToplam = db.prepare(`
+      SELECT firma, yil,
+        ROUND(SUM(tutar),2) as toplam_tl,
+        ROUND(SUM(tutar_eur),2) as toplam_eur,
+        ROUND(SUM(tutar_usd),2) as toplam_usd,
+        SUM(miktar) as toplam_miktar,
+        COUNT(DISTINCT fatura_no) as fatura_sayisi,
+        COUNT(DISTINCT cari_adi) as cari_sayisi
+      FROM ciro_cache
+      WHERE yil IS NOT NULL
+      GROUP BY firma, yil
+      ORDER BY yil
+    `).all();
+
+    const lastSync = db.prepare('SELECT synced_at FROM ciro_cache ORDER BY id DESC LIMIT 1').get();
+
+    res.json({
+      monthlyTotals, topCariler, topUrunler,
+      kategoriler, yilToplam, maxYil,
+      lastUpdated: lastSync?.synced_at || null,
+    });
+  } catch (err) {
+    console.error('Ciro dashboard hatası:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/raporu', async (req, res) => {
   try {
     const force = req.query.force === 'true';

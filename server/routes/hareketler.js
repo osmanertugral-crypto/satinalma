@@ -2,19 +2,20 @@ const express = require('express');
 const { authenticate } = require('../middleware/auth');
 const evira = require('../utils/evira');
 const { sql } = require('../utils/evira');
+const { getDb } = require('../db/schema');
 
 const router = express.Router();
 router.use(authenticate);
 
 function buildWhere(params, baslangic, bitis, islem_tipi, stok) {
-  const now = new Date();
-  const startDate = baslangic || new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-  const endDate   = bitis     || now.toISOString().split('T')[0];
+  let where = 'WHERE 1=1';
 
-  params.startDate = { type: sql.Date, value: new Date(startDate) };
-  params.endDate   = { type: sql.Date, value: new Date(endDate) };
-
-  let where = 'WHERE CAST(SF.TARIH AS DATE) >= @startDate AND CAST(SF.TARIH AS DATE) <= @endDate';
+  // Tarih filtresi isteğe bağlı — ikisi de gönderilmişse uygula
+  if (baslangic && bitis) {
+    params.startDate = { type: sql.Date, value: new Date(baslangic) };
+    params.endDate   = { type: sql.Date, value: new Date(bitis) };
+    where += ' AND CAST(SF.TARIH AS DATE) >= @startDate AND CAST(SF.TARIH AS DATE) <= @endDate';
+  }
 
   if (islem_tipi && islem_tipi !== 'TUMU') {
     const gcdMap = { GIRIS: '0', CIKIS: '1', TRANSFER: '2' };
@@ -58,6 +59,8 @@ router.get('/', async (req, res) => {
         SK.STOK_ADI,
         SUM(SH.MIKTAR) AS MIKTAR,
         ISNULL((SELECT SB.BIRIM FROM STOKBIRIM SB WHERE SB.BIRIM_REF=SH.ANABIRIM_REF), '') AS BIRIM,
+        0 AS TOPLAM_TUTAR,
+        0 AS BIRIM_FIYAT,
         ISNULL((SELECT K.KULLANICI_ADI+' - '+K.ADI_SOYADI FROM KULLANICI K WHERE K.KULLANICI_REF=SF.KULLANICI_REF), '') AS KULLANICI,
         SH.TAKIP_NO
       FROM STOKKARTI SK
@@ -117,6 +120,44 @@ router.get('/distinct', async (req, res) => {
 
     const values = rows.map(r => r.VAL).filter(v => v !== '');
     res.json({ values });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/hareketler/verilmeyenler?proje_kodu=A,B,C
+// BOM'dan henüz çıkış yapılmamış kalemleri döner (malzeme_ihtiyac_cache)
+router.get('/verilmeyenler', (req, res) => {
+  try {
+    const db = getDb();
+    const { proje_kodu } = req.query;
+
+    let rows;
+    if (proje_kodu && proje_kodu.trim()) {
+      const kodlar = proje_kodu.split(',').map(s => s.trim()).filter(Boolean);
+      const ph = kodlar.map(() => '?').join(',');
+      rows = db.prepare(`
+        SELECT proje_kodu AS PROJE_KODU, alt_kod AS STOK_KODU, alt_adi AS STOK_ADI,
+               miktar AS MIKTAR_GEREKLI, projelere_cikislar AS VERILEN,
+               (miktar - projelere_cikislar) AS KALAN,
+               birim AS BIRIM, birim_fiyatlar AS BIRIM_FIYAT
+        FROM malzeme_ihtiyac_cache
+        WHERE proje_kodu IN (${ph}) AND miktar > projelere_cikislar
+        ORDER BY proje_kodu, alt_adi
+      `).all(...kodlar);
+    } else {
+      rows = db.prepare(`
+        SELECT proje_kodu AS PROJE_KODU, alt_kod AS STOK_KODU, alt_adi AS STOK_ADI,
+               miktar AS MIKTAR_GEREKLI, projelere_cikislar AS VERILEN,
+               (miktar - projelere_cikislar) AS KALAN,
+               birim AS BIRIM, birim_fiyatlar AS BIRIM_FIYAT
+        FROM malzeme_ihtiyac_cache
+        WHERE miktar > projelere_cikislar
+        ORDER BY proje_kodu, alt_adi
+      `).all();
+    }
+
+    res.json({ rows, count: rows.length });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

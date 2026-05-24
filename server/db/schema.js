@@ -324,6 +324,8 @@ function initDb() {
   try { database.exec('ALTER TABLE suppliers ADD COLUMN rating INTEGER DEFAULT NULL'); } catch(e) {}
   try { database.exec('ALTER TABLE po_items ADD COLUMN received_quantity REAL DEFAULT 0'); } catch(e) {}
   try { database.exec('ALTER TABLE po_items ADD COLUMN received_date TEXT'); } catch(e) {}
+  try { database.exec('ALTER TABLE purchase_orders ADD COLUMN exchange_rate REAL DEFAULT 1'); } catch(e) {}
+  try { database.exec('ALTER TABLE purchase_orders ADD COLUMN reference_currency TEXT DEFAULT NULL'); } catch(e) {}
   try { database.exec('ALTER TABLE project_offers ADD COLUMN color TEXT'); } catch(e) {}
   try { database.exec('ALTER TABLE project_offers ADD COLUMN customer_note TEXT'); } catch(e) {}
   try { database.exec('ALTER TABLE project_offers ADD COLUMN purchase_note TEXT'); } catch(e) {}
@@ -593,6 +595,145 @@ function initDb() {
   try { database.exec('CREATE INDEX IF NOT EXISTS idx_esc_ambar ON evira_stock_cache(ambar_kodu)'); } catch(e) {}
   try { database.exec('ALTER TABLE evira_stock_cache ADD COLUMN son_hareket TEXT'); } catch(e) {}
 
+  // Kritik stok - manuel işaretleme tablosu
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS kritik_stok_isaretli (
+      stok_kodu TEXT PRIMARY KEY,
+      kritik_esik_manuel REAL,
+      uyari_esik_manuel REAL,
+      hedef_stok REAL,
+      aciklama TEXT,
+      isaretleyen_id TEXT,
+      isaretleme_tarihi TEXT NOT NULL DEFAULT (datetime('now')),
+      guncelleme_tarihi TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+
+  // Üretim operasyonları
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS operasyon_items (
+      id TEXT PRIMARY KEY,
+      product TEXT NOT NULL DEFAULT '',
+      product_package TEXT NOT NULL DEFAULT '',
+      operation TEXT NOT NULL DEFAULT '',
+      duration REAL DEFAULT 0,
+      duration_unit TEXT DEFAULT 'minute',
+      material TEXT DEFAULT '',
+      material_code TEXT DEFAULT '',
+      material_name TEXT DEFAULT '',
+      is_important TEXT DEFAULT 'No',
+      quantity REAL DEFAULT 0,
+      unit TEXT DEFAULT 'adet',
+      production_quantity REAL DEFAULT 0,
+      production_quantity_unit TEXT DEFAULT 'adet',
+      color TEXT DEFAULT '',
+      concept TEXT DEFAULT '',
+      half_product TEXT DEFAULT '',
+      is_important_material TEXT DEFAULT 'No',
+      equipments TEXT DEFAULT '',
+      standard_features TEXT DEFAULT '',
+      half_products TEXT DEFAULT '',
+      role TEXT DEFAULT '',
+      relevant_staff TEXT DEFAULT '',
+      total_staff INTEGER DEFAULT 0,
+      notes TEXT DEFAULT '',
+      source TEXT DEFAULT 'excel',
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+  try { database.exec('CREATE INDEX IF NOT EXISTS idx_op_product ON operasyon_items(product)'); } catch(e) {}
+  try { database.exec('CREATE INDEX IF NOT EXISTS idx_op_pkg ON operasyon_items(product_package)'); } catch(e) {}
+  try { database.exec('CREATE INDEX IF NOT EXISTS idx_op_op ON operasyon_items(operation)'); } catch(e) {}
+
+  // SVC Takip tabloları
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS svc_projects (
+      id TEXT PRIMARY KEY,
+      project_name TEXT NOT NULL DEFAULT '',
+      institution TEXT DEFAULT '',
+      description TEXT DEFAULT '',
+      vehicle TEXT DEFAULT '',
+      superstructure TEXT DEFAULT '',
+      quantity REAL DEFAULT 1,
+      country TEXT DEFAULT 'Yurtiçi',
+      consultant_id TEXT REFERENCES users(id),
+      consultant_name TEXT DEFAULT '',
+      created_by TEXT REFERENCES users(id),
+      usd_rate REAL DEFAULT 0,
+      eur_rate REAL DEFAULT 0,
+      created_date TEXT,
+      offer_due_date TEXT,
+      offer_sent_date TEXT,
+      decision_date TEXT,
+      cost_total_tl REAL DEFAULT 0,
+      sale_price_tl REAL DEFAULT 0,
+      offer_price_tl REAL DEFAULT 0,
+      margin_rate REAL DEFAULT 0,
+      realized_cost_tl REAL DEFAULT 0,
+      realized_revenue_tl REAL DEFAULT 0,
+      notes_consultant TEXT DEFAULT '',
+      notes_purchase TEXT DEFAULT '',
+      notes_management TEXT DEFAULT '',
+      result_note TEXT DEFAULT '',
+      cover_image TEXT,
+      status TEXT NOT NULL DEFAULT 'draft',
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS svc_project_items (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL REFERENCES svc_projects(id) ON DELETE CASCADE,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      category TEXT DEFAULT '',
+      product_name TEXT DEFAULT '',
+      description TEXT DEFAULT '',
+      brand TEXT DEFAULT '',
+      size_info TEXT DEFAULT '',
+      unit TEXT DEFAULT 'adet',
+      quantity REAL DEFAULT 1,
+      tech_spec TEXT DEFAULT '',
+      purchase_note TEXT DEFAULT '',
+      termin TEXT DEFAULT '',
+      unit_price REAL DEFAULT 0,
+      total_price REAL DEFAULT 0,
+      actual_unit_price REAL DEFAULT 0,
+      actual_total_price REAL DEFAULT 0,
+      actual_approved INTEGER DEFAULT 0,
+      actual_note TEXT DEFAULT '',
+      include_in_offer INTEGER DEFAULT 1,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS svc_project_files (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL REFERENCES svc_projects(id) ON DELETE CASCADE,
+      filename TEXT NOT NULL,
+      original_name TEXT NOT NULL,
+      file_type TEXT DEFAULT 'other',
+      mimetype TEXT,
+      size INTEGER DEFAULT 0,
+      uploaded_by TEXT REFERENCES users(id),
+      uploaded_by_name TEXT DEFAULT '',
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS svc_project_logs (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL REFERENCES svc_projects(id) ON DELETE CASCADE,
+      user_id TEXT REFERENCES users(id),
+      user_name TEXT DEFAULT '',
+      action TEXT NOT NULL,
+      old_status TEXT DEFAULT '',
+      new_status TEXT DEFAULT '',
+      note TEXT DEFAULT '',
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+  try { database.exec("ALTER TABLE users ADD COLUMN svc_role TEXT DEFAULT 'none'"); } catch(e) {}
+
   // TIGER3 bağlantı ve zamanlayıcı ayarları
   database.exec(`
     CREATE TABLE IF NOT EXISTS db_settings (
@@ -628,6 +769,8 @@ function initDb() {
 
   // allowed_pages sütununu users tablosuna ekle (varsa atla)
   try { database.exec('ALTER TABLE users ADD COLUMN allowed_pages TEXT'); } catch(e) {}
+  // extra_permissions sütununu users tablosuna ekle (varsa atla)
+  try { database.exec('ALTER TABLE users ADD COLUMN extra_permissions TEXT DEFAULT NULL'); } catch(e) {}
   // external_code sütununu suppliers tablosuna ekle (varsa atla)
   try { database.exec('ALTER TABLE suppliers ADD COLUMN external_code TEXT'); } catch(e) {}
   // rating sütununu suppliers tablosuna ekle (varsa atla)
@@ -767,6 +910,30 @@ function initDb() {
       )
     `);
   } catch(e) { console.warn('[Migration] request_tasks atlandı:', e.message); }
+
+  // tiger_price_analysis.stok_grup Türkçe karakter normalizasyonu — tek seferlik
+  try {
+    const { normalizeTigerGruplar } = require('../routes/reports');
+    normalizeTigerGruplar(database);
+  } catch(e) { /* reports henüz yüklenmediyse atla, sonraki sync'te düzelir */ }
+
+  // svc_projects: division sütunu (SVC / Retech)
+  try { database.exec("ALTER TABLE svc_projects ADD COLUMN division TEXT DEFAULT 'SVC'"); } catch(e) {}
+
+  // Ali Kardeş satış danışmanı (yoksa oluştur)
+  try {
+    const aliEx = database.prepare("SELECT id FROM users WHERE email = ?").get('ali.kardes@restar.com.tr');
+    if (!aliEx) {
+      const aliHash = bcrypt.hashSync('Ali123!', 10);
+      database.prepare(
+        "INSERT INTO users (id, name, email, password, role, active, svc_role) VALUES (?, 'Ali Kardeş', 'ali.kardes@restar.com.tr', ?, 'user', 1, 'consultant')"
+      ).run(uuidv4(), aliHash);
+      console.log('Ali Kardeş danışmanı oluşturuldu.');
+    } else if (!database.prepare("SELECT svc_role FROM users WHERE email = ?").get('ali.kardes@restar.com.tr')?.svc_role ||
+               database.prepare("SELECT svc_role FROM users WHERE email = ?").get('ali.kardes@restar.com.tr')?.svc_role === 'none') {
+      database.prepare("UPDATE users SET svc_role = 'consultant' WHERE email = ?").run('ali.kardes@restar.com.tr');
+    }
+  } catch(e) { console.warn('[Migration] Ali Kardeş eklenemedi:', e.message); }
 
   console.log('Veritabanı başlatıldı.');
 }

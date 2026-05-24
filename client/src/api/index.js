@@ -88,6 +88,8 @@ export const getMonthlySummary = () => api.get('/reports/monthly-summary');
 export const getProductPriceAnalysis = (params) => api.get('/reports/product-price-analysis', { params });
 export const getProductPurchaseSummary = (params) => api.get('/reports/product-purchase-summary', { params });
 export const getProductPurchaseDetail = (code) => api.get(`/reports/product-purchase-detail/${encodeURIComponent(code)}`);
+export const getCriticalStock = (params) => api.get('/reports/critical-stock', { params });
+export const getAbcAnalysis = () => api.get('/reports/abc-analysis');
 
 // Warehouse (Depo)
 export const getWarehouseSummary = () => api.get('/warehouse/summary');
@@ -157,26 +159,57 @@ export const importDamageReports = (file) => {
   }).then(r => r.data);
 };
 
-// Projects (Teklif/Tender)
-export const getProjects = (params) => api.get('/projects', { params });
-export const getProjectDetail = (id) => api.get(`/projects/${id}`);
-export const updateProject = (id, data) => api.patch(`/projects/${id}`, data);
-export const deleteProject = (id) => api.delete(`/projects/${id}`);
-export const createProjectItem = (id, data) => api.post(`/projects/${id}/items`, data);
-export const updateProjectItem = (id, itemId, data) => api.patch(`/projects/${id}/items/${itemId}`, data);
-export const deleteProjectItem = (id, itemId) => api.delete(`/projects/${id}/items/${itemId}`);
-export const importProjects = (file) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  return api.post('/projects/import', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-    timeout: 120000,
-  }).then(r => r.data);
-};
+// SVC Takip
+export const getSvcProjects = (params) => api.get('/svc', { params });
+export const createSvcProject = (data) => api.post('/svc', data);
+export const getSvcProject = (id) => api.get(`/svc/${id}`);
+export const updateSvcProject = (id, data) => api.patch(`/svc/${id}`, data);
+export const changeSvcStatus = (id, data) => api.patch(`/svc/${id}/status`, data);
+export const deleteSvcProject = (id) => api.delete(`/svc/${id}`);
+export const createSvcItem = (id, data) => api.post(`/svc/${id}/items`, data);
+export const updateSvcItem = (id, itemId, data) => api.patch(`/svc/${id}/items/${itemId}`, data);
+export const deleteSvcItem = (id, itemId) => api.delete(`/svc/${id}/items/${itemId}`);
+export const uploadSvcFile = (id, formData) => api.post(`/svc/${id}/files`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const deleteSvcFile = (id, fileId) => api.delete(`/svc/${id}/files/${fileId}`);
+export const getSvcFileDownloadUrl = (id, fileId) => `/api/svc/${id}/files/${fileId}/download`;
+export const getSvcLogs = (id) => api.get(`/svc/${id}/logs`);
+export const applySvcMargin = (id, data) => api.patch(`/svc/${id}/margin`, data);
+export const getSvcMetaUsers = () => api.get('/svc/meta/users');
+export const updateUserSvcRole = (id, svcRole) => api.patch(`/users/${id}`, { svc_role: svcRole });
+export const importSvcFromExcel = (formData) => api.post('/svc/import', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' },
+  timeout: 120000,
+});
+export const getSvcCoverUrl = (id) => `/api/svc/${id}/cover`;
+export const getSvcTeklifPdfUrl = (id) => `/api/svc/${id}/teklif-pdf`;
+export const downloadSvcTeklifPdf = (id) => api.get(`/svc/${id}/teklif-pdf`, { responseType: 'blob' });
+export const uploadSvcCover = (id, formData) => api.post(`/svc/${id}/cover`, formData, {
+  headers: { 'Content-Type': 'multipart/form-data' },
+});
+
+// Döviz kurları
+export const getRates = () => api.get('/rates');
+
+// Kritik Stok - Manuel İşaretleme
+export const getKritikStokIsaretliler = () => api.get('/kritik-stok');
+export const isaretle = (stok_kodu) => api.post('/kritik-stok/isaretle', { stok_kodu });
+export const topluIsaretle = (stok_kodlari) => api.post('/kritik-stok/toplu-isaretle', { stok_kodlari });
+export const topluIsaretiKaldir = (stok_kodlari) => api.post('/kritik-stok/toplu-kaldir', { stok_kodlari });
+export const isaretiKaldir = (stok_kodu) => api.delete(`/kritik-stok/${encodeURIComponent(stok_kodu)}`);
+export const kritikStokAyarlarGuncelle = (stok_kodu, data) => api.put(`/kritik-stok/${encodeURIComponent(stok_kodu)}/ayarlar`, data);
+
+// Operasyon
+export const getOperasyonMeta = () => api.get('/operasyon/meta');
+export const getOperasyonlar = (params) => api.get('/operasyon', { params });
+export const createOperasyon = (data) => api.post('/operasyon', data);
+export const updateOperasyon = (id, data) => api.put(`/operasyon/${id}`, data);
+export const deleteOperasyon = (id) => api.delete(`/operasyon/${id}`);
+export const syncOperasyonExcel = () => api.post('/operasyon/sync-excel');
 
 // Ciro Raporu
 export const getCiroRaporu = () => api.get('/ciro/raporu');
 export const getCiroRaporuForce = () => api.get('/ciro/raporu', { params: { force: 'true' } });
+export const getCiroDashboard = (force = false) => api.get('/ciro/dashboard', { params: force ? { force: 'true' } : {} });
 
 // Settings (Admin)
 export const getDbConnection = () => api.get('/settings/db-connection');

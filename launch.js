@@ -17,10 +17,12 @@ function run(label, cmd, args, cwd) {
   return proc;
 }
 
+function killPort(port, cb) {
+  exec(`for /f "tokens=5" %a in ('netstat -ano ^| findstr :${port}') do taskkill /PID %a /F`, () => {
+    setTimeout(cb, 800);
+  });
+}
 
-const server = run('SERVER', 'node', ['index.js'], path.join(root, 'server'));
-
-// Server hazır olduktan sonra Client'ı başlat — böylece proxy başlar başlamaz çalışır
 function startClientWhenReady(maxWaitMs = 30000) {
   const start = Date.now();
   const check = () => {
@@ -41,7 +43,11 @@ function startClientWhenReady(maxWaitMs = 30000) {
   setTimeout(check, 2000);
 }
 
-startClientWhenReady();
+console.log(`[LAUNCHER] Port ${SERVER_PORT} temizleniyor...`);
+killPort(SERVER_PORT, () => {
+  run('SERVER', 'node', ['index.js'], path.join(root, 'server'));
+  startClientWhenReady();
+});
 
 process.on('SIGINT', () => { process.exit(); });
 process.on('SIGTERM', () => { process.exit(); });

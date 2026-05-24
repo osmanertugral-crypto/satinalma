@@ -28,8 +28,10 @@ server/satinalma.db-shm
 *.zip
 server/satinalma_backup*.db
 
-# Uploads klasörü (büyük dosyalar)
-uploads/
+# Uploads — SVC proje dosyaları dahil edilir
+server/uploads/**
+!server/uploads/svc/
+!server/uploads/svc/**
 
 # OS dosyaları
 .DS_Store

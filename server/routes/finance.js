@@ -266,11 +266,17 @@ router.get('/cariler', (req, res) => {
     if (count === 0) return res.json([]);
 
     const today = new Date().toISOString().split('T')[0];
+    // Şirket başına TEK satır — tüm para birimlerindeki TL bakiye toplanır.
+    // Bu sayede liste bakiyesi ile detay kalanBorç değeri eşleşir.
     let rows = db.prepare(`
       SELECT
         code AS cariKodu,
         MAX(definition_) AS cariAdi,
-        COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz,
+        CASE
+          WHEN COUNT(DISTINCT COALESCE(NULLIF(islem_dovizi,''), 'TL')) = 1
+          THEN MAX(COALESCE(NULLIF(islem_dovizi,''), 'TL'))
+          ELSE 'TL'
+        END AS doviz,
         MAX(cari_tur) AS cariKontrol,
         SUM(CASE WHEN borc > 0 THEN borc ELSE 0 END)
           - SUM(CASE WHEN alacak < 0 THEN ABS(alacak) ELSE 0 END) AS bakiye,
@@ -283,34 +289,31 @@ router.get('/cariler', (req, res) => {
         COUNT(CASE WHEN borc > 0 THEN 1 END) AS odemeSayisi,
         substr(MAX(CASE WHEN alacak < 0 THEN indate END), 1, 7) AS sonFaturaDonem
       FROM finance_ekstre_cache
-      GROUP BY code, COALESCE(NULLIF(islem_dovizi,''), 'TL')
+      GROUP BY code
     `).all(today, today, today);
 
-    // Son ödeme tutarı
+    // Son ödeme tutarı — şirket bazında (doviz ayrımı yok)
     const sonOdemeRaw = db.prepare(`
-      SELECT code, COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz, indate, borc
+      SELECT code, indate, borc
       FROM finance_ekstre_cache WHERE borc > 0
       ORDER BY indate DESC
     `).all();
     const sonOdemeMap = new Map();
     for (const r of sonOdemeRaw) {
-      const key = r.code + '||' + r.doviz;
-      if (!sonOdemeMap.has(key)) sonOdemeMap.set(key, { sonOdemeTutar: r.borc, sonOdemeTarih: r.indate });
+      if (!sonOdemeMap.has(r.code)) sonOdemeMap.set(r.code, { sonOdemeTutar: r.borc, sonOdemeTarih: r.indate });
     }
 
-    // FIFO: en eski fatura önce ödenir; kalan en eski faturanın vade tarihinden gün hesabı
+    // FIFO: şirket bazında (tüm dovizler birlikte) — detay ile tutarlı
     const allExtre = db.prepare(`
-      SELECT code, COALESCE(NULLIF(islem_dovizi,''), 'TL') AS doviz,
-             indate, duedate, borc, alacak, islem_doviz_tutari
+      SELECT code, indate, duedate, borc, alacak, islem_doviz_tutari
       FROM finance_ekstre_cache
-      ORDER BY code, islem_dovizi, indate ASC
+      ORDER BY code, indate ASC
     `).all();
 
     const fifoGrouped = new Map();
     for (const r of allExtre) {
-      const key = r.code + '||' + r.doviz;
-      if (!fifoGrouped.has(key)) fifoGrouped.set(key, { faturalar: [], toplamOdeme: 0 });
-      const g = fifoGrouped.get(key);
+      if (!fifoGrouped.has(r.code)) fifoGrouped.set(r.code, { faturalar: [], toplamOdeme: 0 });
+      const g = fifoGrouped.get(r.code);
       if (r.alacak < 0) g.faturalar.push(r);
       if (r.borc > 0) g.toplamOdeme += r.borc;
     }
@@ -318,10 +321,10 @@ router.get('/cariler', (req, res) => {
     const todayDate = new Date();
     const todayDateStr = todayDate.toISOString().split('T')[0];
     const fifoResult = new Map();
-    for (const [key, g] of fifoGrouped) {
+    for (const [code, g] of fifoGrouped) {
       let odemePotu = g.toplamOdeme;
       let enEski = null;
-      let vadesiGelenFifo = 0;   // sadece vadesi geçmiş + kalan borçlu kısım
+      let vadesiGelenFifo = 0;
       let vadesiGelenFifoDoviz = 0;
 
       for (const f of g.faturalar) {
@@ -338,8 +341,6 @@ router.get('/cariler', (req, res) => {
           kalanF = tutar;
           if (!enEski) enEski = f;
         }
-        // Vadesi geçmiş VE hâlâ borçlu olan kısım
-        // null duedate = vade girilmemiş = anında vadeli sayılır
         if (kalanF > 0 && (!f.duedate || f.duedate <= todayDateStr)) {
           vadesiGelenFifo += kalanF;
           vadesiGelenFifoDoviz += Math.abs(f.islem_doviz_tutari || 0) > 0
@@ -353,7 +354,7 @@ router.get('/cariler', (req, res) => {
         const days = refDate
           ? Math.max(0, Math.floor((todayDate - new Date(refDate)) / 86400_000))
           : 0;
-        fifoResult.set(key, {
+        fifoResult.set(code, {
           enUzakGun: days,
           enUzakFaturaTutar: enEski ? Math.abs(enEski.alacak) : 0,
           vadesiGelen: vadesiGelenFifo,
@@ -362,10 +363,11 @@ router.get('/cariler', (req, res) => {
       }
     }
 
-    rows = rows.map(r => {
-      const key = r.cariKodu + '||' + r.doviz;
-      return { ...r, ...(sonOdemeMap.get(key) || {}), ...(fifoResult.get(key) || {}) };
-    });
+    rows = rows.map(r => ({
+      ...r,
+      ...(sonOdemeMap.get(r.cariKodu) || {}),
+      ...(fifoResult.get(r.cariKodu) || {}),
+    }));
 
     if (cariKontrol && cariKontrol !== 'TÜMÜ')
       rows = rows.filter(r => (r.cariKontrol || '') === cariKontrol);

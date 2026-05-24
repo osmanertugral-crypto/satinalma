@@ -502,7 +502,7 @@ router.get('/kart-tipleri', (req, res) => {
   res.json(types.map(t => t.kart_tipi));
 });
 
-// GET /api/warehouse/detail/:stok_kodu — Ürün detay (resim + aciklama2 + hareketler)
+// GET /api/warehouse/detail/:stok_kodu — Ürün detay: resim + alımlar + çıkışlar + transferler
 router.get('/detail/:stok_kodu', async (req, res) => {
   const { stok_kodu } = req.params;
   if (!stok_kodu) return res.status(400).json({ error: 'stok_kodu gerekli' });
@@ -513,10 +513,12 @@ router.get('/detail/:stok_kodu', async (req, res) => {
   let aciklama2 = local?.aciklama2 || null;
   let resimBase64 = null;
   let resimMime = 'image/jpeg';
-  let hareketler = [];
+  let alimlar = [];
+  let cikislar = [];
+  let transferler = [];
   const errors = [];
 
-  // STOK_ADI2 (Açıklama 2) + MARKA — STOK_KODU ile sorgula
+  // STOK_ADI2 + MARKA (EVIRA)
   try {
     const acRows = await evira.query(
       `SELECT TOP 1 SK.STOK_ADI2, ISNULL(M.MARKA_ADI, '') AS MARKA_ADI
@@ -532,10 +534,9 @@ router.get('/detail/:stok_kodu', async (req, res) => {
     }
   } catch (e) {
     errors.push('aciklama2: ' + e.message);
-    console.warn('Depo detail: STOK_ADI2 sorgusu başarısız:', e.message);
   }
 
-  // RESIM — Tiger3 LG_123_FIRMDOC tablosundan çek (INFOTYP=20 → ürün resimleri)
+  // RESIM (Tiger3)
   try {
     const resimRows = await tiger3.query(
       `SELECT TOP 1 FD.LDATA
@@ -559,36 +560,90 @@ router.get('/detail/:stok_kodu', async (req, res) => {
     }
   } catch (e) {
     errors.push('resim: ' + e.message);
-    console.warn('Depo detail: LG_123_FIRMDOC sorgusu başarısız:', e.message);
   }
 
-  // HAREKETLERİ — STOK_KODU ile filtrele
+  // ALIMLAR: Tiger3 satın alma siparişleri (döviz bilgisiyle)
   try {
-    hareketler = await evira.query(
+    alimlar = await tiger3.query(
+      `SELECT TOP 60
+        CONVERT(VARCHAR(10), F.DATE_, 120)                                        AS TARIH,
+        F.FICHENO                                                                  AS FISNO,
+        ISNULL(C.DEFINITION_, '')                                                  AS CARI_UNVANI,
+        ISNULL(L.PRICE, 0)                                                         AS FIYAT,
+        ISNULL(L.AMOUNT, 0)                                                        AS MIKTAR,
+        ISNULL(L.SHIPPEDAMOUNT, 0)                                                 AS TALINAN,
+        ISNULL(L.TOTAL, 0)                                                         AS TUTAR,
+        CASE ISNULL(F.TRCURR, 0) WHEN 1 THEN 'USD' WHEN 2 THEN 'EUR' ELSE 'TRY' END AS DOVIZ,
+        ISNULL(F.TRRATE, 1)                                                        AS KUR
+      FROM LG_123_01_ORFICHE F
+      JOIN LG_123_CLCARD     C ON C.LOGICALREF    = F.CLIENTREF
+      JOIN LG_123_01_ORFLINE L ON L.ORDFICHEREF   = F.LOGICALREF
+      JOIN LG_123_ITEMS      S ON S.LOGICALREF    = L.STOCKREF
+      WHERE F.TRCODE = 2
+        AND L.LINETYPE = 0
+        AND S.CODE = @kod
+        AND F.CANCELLED = 0
+      ORDER BY F.DATE_ DESC, F.FICHENO DESC`,
+      { kod: { type: tiger3.sql.VarChar(50), value: stok_kodu } }
+    );
+  } catch (e) {
+    errors.push('alimlar: ' + e.message);
+  }
+
+  // CIKISLAR: SQLite ciro_cache — Tiger3 satışları
+  try {
+    cikislar = db.prepare(`
+      SELECT tarih, fatura_no, cari_adi, miktar, fiyat, tutar, islem_dovizi, is_emri_no
+      FROM ciro_cache
+      WHERE stok_kodu = ?
+      ORDER BY tarih DESC
+      LIMIT 100
+    `).all(stok_kodu);
+  } catch (e) {
+    errors.push('cikislar: ' + e.message);
+  }
+
+  // TRANSFERLER: EVIRA — sadece transfer hareketleri (FIS_GCD=2)
+  try {
+    transferler = await evira.query(
       `SELECT TOP 100
-        CONVERT(VARCHAR(10), SF.TARIH, 120) AS TARIH,
+        CONVERT(VARCHAR(10), SF.TARIH, 120)                                                              AS TARIH,
         SF.FIS_NO,
-        ISNULL((SELECT A.AMBAR_KODU+' '+A.AMBAR_ADI FROM AMBAR A WHERE A.AMBAR_KODU=SH.AMBAR_KODU), SH.AMBAR_KODU) AS AMBAR,
-        ISNULL((SELECT A.AMBAR_KODU+' '+A.AMBAR_ADI FROM AMBAR A WHERE A.AMBAR_KODU=SH.HEDEF_AMBAR), SH.HEDEF_AMBAR) AS HEDEF_AMBAR,
-        ISNULL((SELECT FT.FIS_ADI FROM FISTURLERI FT WHERE FT.FIS_TURU=SF.FIS_TURU), SF.FIS_TURU) AS FIS_TURU,
-        CASE SF.FIS_GCD WHEN '0' THEN 'GİRİŞ' WHEN '1' THEN 'ÇIKIŞ' WHEN '2' THEN 'TRANSFER' ELSE '?' END AS ISLEM,
-        SUM(SH.MIKTAR) AS MIKTAR,
-        ISNULL((SELECT SB.BIRIM FROM STOKBIRIM SB WHERE SB.BIRIM_REF=SH.ANABIRIM_REF), '') AS BIRIM
+        ISNULL((SELECT P.PROJE_KODU FROM PROJE P WHERE P.PROJE_REF=SF.PROJE_REF), '')                   AS PROJE_KODU,
+        ISNULL((SELECT A.AMBAR_ADI FROM AMBAR A WHERE A.AMBAR_KODU=SH.AMBAR_KODU), SH.AMBAR_KODU)       AS AMBAR,
+        ISNULL((SELECT A.AMBAR_ADI FROM AMBAR A WHERE A.AMBAR_KODU=SH.HEDEF_AMBAR), SH.HEDEF_AMBAR)     AS HEDEF_AMBAR,
+        SUM(SH.MIKTAR)                                                                                    AS MIKTAR,
+        ISNULL((SELECT SB.BIRIM FROM STOKBIRIM SB WHERE SB.BIRIM_REF=SH.ANABIRIM_REF), '')               AS BIRIM
       FROM STOKKARTI SK
       JOIN STOKHAREKETLERI SH ON SH.STOK_REF = SK.STOK_REF
-      JOIN STOKFISLERI SF ON SF.FB_REF = SH.FB_REF
+      JOIN STOKFISLERI     SF ON SF.FB_REF    = SH.FB_REF
       WHERE SK.STOK_KODU = @kod
-      GROUP BY SF.TARIH, SF.FIS_NO, SH.AMBAR_KODU, SH.HEDEF_AMBAR, SF.FIS_TURU, SF.FIS_GCD,
-               SH.ANABIRIM_REF, SF.KULLANICI_REF, SH.TAKIP_NO, SH.STOK_REF, SF.SAAT, SF.SB_REF, SH.SB_REF, SF.BELGE_NO
-      ORDER BY SF.TARIH DESC, SF.FIS_NO DESC`,
+        AND SF.FIS_GCD = '2'
+      GROUP BY SF.TARIH, SF.FIS_NO, SH.AMBAR_KODU, SH.HEDEF_AMBAR,
+               SH.ANABIRIM_REF, SH.TAKIP_NO, SH.STOK_REF, SF.SAAT, SF.SB_REF, SH.SB_REF, SF.BELGE_NO, SF.PROJE_REF
+      ORDER BY SF.TARIH DESC`,
       { kod: { type: evira.sql.NVarChar(50), value: stok_kodu } }
     );
   } catch (e) {
-    errors.push('hareketler: ' + e.message);
-    console.warn('Depo detail: hareketler sorgusu başarısız:', e.message);
+    errors.push('transferler: ' + e.message);
   }
 
-  res.json({ aciklama2, resimBase64, resimMime, hareketler, errors });
+  // ÖZET: alım istatistikleri
+  const oneYearAgoStr = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const sonYilAlimlar = alimlar.filter(a => (a.TARIH || '') >= oneYearAgoStr);
+  const tlFiyatlar = alimlar
+    .filter(a => (a.FIYAT || 0) > 0)
+    .map(a => a.DOVIZ === 'TRY' ? a.FIYAT : a.FIYAT * (a.KUR || 1));
+  const ozet = {
+    son_yil_siparis: sonYilAlimlar.length,
+    son_yil_miktar:  Math.round(sonYilAlimlar.reduce((s, a) => s + (a.MIKTAR || 0), 0) * 100) / 100,
+    toplam_siparis:  alimlar.length,
+    ort_fiyat_tl:    tlFiyatlar.length > 0
+      ? Math.round(tlFiyatlar.reduce((s, f) => s + f, 0) / tlFiyatlar.length * 100) / 100
+      : 0,
+  };
+
+  res.json({ aciklama2, resimBase64, resimMime, alimlar, cikislar, transferler, ozet, errors });
 });
 
 module.exports = router;

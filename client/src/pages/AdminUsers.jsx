@@ -2,23 +2,33 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getUsers, createUser, updateUser, resetUserPassword, deleteUser } from '../api';
 import { PageHeader, Card, Button, Badge, Modal, Input, Select, Table, Spinner } from '../components/UI';
-import { Plus, Pencil, Trash2, Key, Shield, CheckSquare, Square } from 'lucide-react';
+import { Plus, Pencil, Trash2, Key, Shield, CheckSquare, Square, Star } from 'lucide-react';
 
 const ALL_PAGES = [
   { key: 'dashboard', label: 'Dashboard' },
-  { key: 'finance', label: 'Finans' },
-  { key: 'suppliers', label: 'Tedarikçiler' },
-  { key: 'products', label: 'Ürünler ve Fiyat Analizi' },
-  { key: 'po', label: 'Siparişler (PO)' },
-  { key: 'inventory', label: 'Envanter' },
-  { key: 'depo', label: 'Depo Stok' },
   { key: 'malzeme-ihtiyac', label: 'Malzeme İhtiyaç' },
-  { key: 'projects', label: 'Projeler' },
+  { key: 'suppliers', label: 'Siparişler ve Tedarikçiler' },
+  { key: 'depo', label: 'Depo Stok' },
+  { key: 'hareketler', label: 'Depo Hareketleri' },
+  { key: 'finance', label: 'Cariler' },
+  { key: 'ciro-raporu', label: 'Ciro Raporu' },
+  { key: 'products', label: 'Ürünler ve Fiyat Analizi' },
+  { key: 'svc-takip', label: 'SVC Takip' },
+  { key: 'department-requests', label: 'Departman Talepleri' },
   { key: 'damage-reports', label: 'Hasar Tutanakları' },
-  { key: 'outlook-tasks', label: 'Outlook Yapılacaklar' },
 ];
 
-const EMPTY = { name: '', email: '', password: '', role: 'user', allowed_pages: null };
+const SPECIAL_PERMISSIONS = [
+  { key: 'kritik_stok_duzenle', label: 'Kritik Stok Düzenleme', desc: 'Kritik stok listesini işaretleyip ayarları düzenleyebilir' },
+];
+
+const SVC_ROLES = [
+  { value: 'none',       label: 'Yok — SVC erişimi kapalı' },
+  { value: 'management', label: 'Düzenleme — Ekleme, silme, değiştirme yapabilir' },
+  { value: 'readonly',   label: 'Sadece Takip — Görüntüler, değişiklik yapamaz' },
+];
+
+const EMPTY = { name: '', email: '', password: '', role: 'user', svc_role: 'none', allowed_pages: null, extra_permissions: null };
 
 export default function AdminUsersPage() {
   const qc = useQueryClient();
@@ -50,8 +60,10 @@ export default function AdminUsersPage() {
       email: u.email,
       password: '',
       role: u.role,
+      svc_role: u.svc_role || 'none',
       active: u.active,
       allowed_pages: u.allowed_pages || null,
+      extra_permissions: u.extra_permissions || null,
     });
     setModal({ id: u.id });
   }
@@ -62,6 +74,14 @@ export default function AdminUsersPage() {
       const current = f.allowed_pages || [];
       const next = current.includes(key) ? current.filter(k => k !== key) : [...current, key];
       return { ...f, allowed_pages: next.length === 0 ? null : next };
+    });
+  }
+
+  function togglePermission(key) {
+    setForm(f => {
+      const current = f.extra_permissions || [];
+      const next = current.includes(key) ? current.filter(k => k !== key) : [...current, key];
+      return { ...f, extra_permissions: next.length === 0 ? null : next };
     });
   }
 
@@ -135,6 +155,9 @@ export default function AdminUsersPage() {
           <option value="user">Kullanıcı</option>
           <option value="viewer">İzleyici</option>
         </Select>
+        <Select label="SVC Takip Yetkisi" name="svc_role" value={form.svc_role || 'none'} onChange={handleChange} className="mt-3">
+          {SVC_ROLES.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+        </Select>
         {modal?.id && (
           <label className="flex items-center gap-2 mt-3 text-sm text-gray-600 cursor-pointer">
             <input type="checkbox" checked={form.active} onChange={e => setForm(f => ({ ...f, active: e.target.checked }))} />
@@ -201,6 +224,35 @@ export default function AdminUsersPage() {
                 Kullanıcı tüm menüleri görebilir. Kısıtlamak için "Kısıtlanmış mod" seçeneğini açın.
               </p>
             )}
+          </div>
+        )}
+
+        {/* Özel Yetki Ayarları – Admin ise gösterme */}
+        {form.role !== 'admin' && (
+          <div className="mt-4 border border-gray-200 rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-3">
+              <Star size={15} className="text-blue-500" />
+              <span className="text-sm font-semibold text-gray-700">Özel Yetkiler</span>
+            </div>
+            <div className="space-y-2">
+              {SPECIAL_PERMISSIONS.map(p => {
+                const checked = form.extra_permissions?.includes(p.key) || false;
+                return (
+                  <label key={p.key} className="flex items-start gap-2 cursor-pointer rounded px-2 py-1.5 hover:bg-gray-50 border border-transparent hover:border-gray-200">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => togglePermission(p.key)}
+                      className="mt-0.5 rounded border-gray-300 text-blue-600"
+                    />
+                    <div>
+                      <span className={`text-sm ${checked ? 'text-gray-800 font-medium' : 'text-gray-600'}`}>{p.label}</span>
+                      {p.desc && <p className="text-xs text-gray-400">{p.desc}</p>}
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
           </div>
         )}
 

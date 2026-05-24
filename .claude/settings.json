@@ -4,7 +4,31 @@
       "Bash(git fetch *)",
       "Bash(netstat -ano)",
       "Bash(taskkill /PID 47320 /F)",
-      "PowerShell(Stop-Process -Id 47320 -Force)"
+      "PowerShell(Stop-Process -Id 47320 -Force)",
+      "PowerShell(Get-ChildItem \"c:\\\\Vs Code Proje\\\\Satınalma\\\\uploads\" -Recurse | Measure-Object -Property Length -Sum | Select-Object @{N='TotalMB';E={[math]::Round\\($_.Sum/1MB,2\\)}}, Count)",
+      "PowerShell($files = Get-ChildItem \"c:\\\\Vs Code Proje\\\\Satınalma\\\\uploads\" -Recurse -File -ErrorAction SilentlyContinue; if \\($files\\) { $total = \\($files | Measure-Object -Property Length -Sum\\).Sum; \"Dosya sayısı: $\\($files.Count\\), Toplam: $\\([math]::Round\\($total/1MB,2\\)\\) MB\" } else { \"Klasör boş veya yok\" })",
+      "PowerShell(git -C \"c:\\\\Vs Code Proje\\\\Sat�nalma\" add server/satinalma.db \".claude/settings.local.json\" \"Tabloalar�m/SATINALMA RAPORU - P�VOT - 15.04.2025.xlsx\")",
+      "Bash(node -e \"require\\('node-fetch'\\); console.log\\('node-fetch OK'\\)\")",
+      "Bash(node -e \"require\\('axios'\\); console.log\\('axios OK'\\)\")",
+      "Bash(node -e \"const { getRates } = require\\('./utils/tcmb'\\); getRates\\(\\).then\\(r => console.log\\(r\\)\\).catch\\(e => console.error\\(e.message\\)\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(dir \"C:\\\\Vs Code Proje\\\\Logolar\")",
+      "Bash(cp \"C:\\\\Vs Code Proje\\\\Logolar\\\\DMO Logo.png\" \"C:\\\\Vs Code Proje\\\\Satınalma\\\\client\\\\public\\\\logo-dmo.png\")",
+      "Bash(cp \"C:\\\\Vs Code Proje\\\\Logolar\\\\Emniyet Logo.png\" \"C:\\\\Vs Code Proje\\\\Satınalma\\\\client\\\\public\\\\logo-emniyet.png\")",
+      "Bash(cp \"C:\\\\Vs Code Proje\\\\Logolar\\\\Jandarma.png\" \"C:\\\\Vs Code Proje\\\\Satınalma\\\\client\\\\public\\\\logo-jandarma.png\")",
+      "Bash(cp \"C:\\\\Vs Code Proje\\\\Logolar\\\\Karayolları Logo.png\" \"C:\\\\Vs Code Proje\\\\Satınalma\\\\client\\\\public\\\\logo-karayollari.png\")",
+      "Bash(node -e \"const db = require\\('better-sqlite3'\\)\\('C:/Vs Code Proje/Satınalma/server/satinalma.db'\\); const info = db.prepare\\('PRAGMA table_info\\(svc_projects\\)'\\).all\\(\\); console.log\\(info.map\\(c=>c.name\\).join\\(', '\\)\\);\")",
+      "Bash(node -e \"const db = require\\('better-sqlite3'\\)\\('./satinalma.db'\\); const info = db.prepare\\('PRAGMA table_info\\(svc_projects\\)'\\).all\\(\\); console.log\\(info.map\\(c=>c.name\\).join\\(', '\\)\\);\")",
+      "Bash(cp \"C:\\\\Vs Code Proje\\\\Logolar\\\\MSB Logo.png\" \"C:\\\\Vs Code Proje\\\\Satınalma\\\\client\\\\public\\\\logo-msb.png\" && echo \"Kopyalandı\")",
+      "PowerShell(Get-ChildItem \"C:\\\\Vs Code Proje\\\\Satınalma\\\\Tabloalarım\" -Force | ForEach-Object { $_.Name + \" | \" + $_.Extension + \" | \" + $_.Length })",
+      "Bash(node -e \"require\\('./server/routes/svc.js'\\); console.log\\('svc.js OK'\\)\")",
+      "Bash(node parse_report.js)",
+      "Bash(node import_svc.js)"
+    ],
+    "additionalDirectories": [
+      "C:\\Vs Code Proje\\Logolar",
+      "C:\\Vs Code Proje\\Sat�nalma\\Tabloalar�m",
+      "C:\\Vs Code Proje\\Sat�nalma\\client\\public"
     ]
   }
 }

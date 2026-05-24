@@ -24,12 +24,15 @@ import OutlookTasksPage from './pages/OutlookTasks';
 import MalzemeIhtiyacPage from './pages/MalzemeIhtiyac';
 import FinancePage from './pages/Finance';
 import DamageReportsPage from './pages/DamageReports';
-import ProjectsPage from './pages/Projects';
-import ProjectDetailPage from './pages/ProjectDetail';
+import SvcTakipPage from './pages/SvcTakip';
+import SvcDetailPage from './pages/SvcDetail';
 import CiroRaporuPage from './pages/CiroRaporu';
 import DepartmentRequestsPage from './pages/DepartmentRequests';
 import SettingsPage from './pages/Settings';
 import HareketlerPage from './pages/Hareketler';
+import KritikStokPage from './pages/KritikStok';
+import DenemePage from './pages/Deneme';
+import OperasyonPage from './pages/Operasyon';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30000 } }
@@ -74,11 +77,14 @@ function App() {
               <Route path="outlook-tasks" element={<OutlookTasksPage />} />
               <Route path="price-analysis" element={<Navigate to="/products" replace />} />
               <Route path="hasar-tutanaklari" element={<DamageReportsPage />} />
-              <Route path="projeler" element={<ProjectsPage />} />
-              <Route path="projeler/:id" element={<ProjectDetailPage />} />
+              <Route path="svc-takip" element={<SvcTakipPage />} />
+              <Route path="svc-takip/:id" element={<SvcDetailPage />} />
               <Route path="ciro-raporu" element={<CiroRaporuPage />} />
               <Route path="department-requests" element={<DepartmentRequestsPage />} />
               <Route path="hareketler" element={<HareketlerPage />} />
+              <Route path="kritik-stok" element={<KritikStokPage />} />
+              <Route path="deneme" element={<DenemePage />} />
+              <Route path="operasyon" element={<OperasyonPage />} />
               <Route path="reports" element={<ReportsPage />} />
               <Route path="admin/users" element={<AdminRoute><AdminUsersPage /></AdminRoute>} />
               <Route path="admin/settings" element={<AdminRoute><SettingsPage /></AdminRoute>} />

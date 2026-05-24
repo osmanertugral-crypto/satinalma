@@ -11,19 +11,56 @@ const tiger3 = require('../utils/tiger3');
 const router = express.Router();
 router.use(authenticate);
 
-// ── Kategori normalizasyonu (üst seviye gruplama) ────────────────────────────
-const RAW_MATERIAL_GROUPS_SET = new Set([
-  'HAMMADDE', 'HIRDAVAT', 'KARAVAN EKIPMAN', 'MEKANIK', '3D-BASKI', 'BEDELSIZ',
-  'CADIR', 'DOSEME', 'DÖŞEME', 'ELEKTRIK', 'KARAVAN', 'KIMYASAL',
-  'MOBILYA', 'YEDEK PARCA',
-]);
-
+// ── Türkçe karakter normalizasyonu ───────────────────────────────────────────
 function normalizeText(v) {
   return String(v || '').trim().toUpperCase()
     .replace(/İ/g, 'I').replace(/ı/g, 'I').replace(/Ş/g, 'S').replace(/ş/g, 'S')
     .replace(/Ğ/g, 'G').replace(/ğ/g, 'G').replace(/Ü/g, 'U').replace(/ü/g, 'U')
     .replace(/Ö/g, 'O').replace(/ö/g, 'O').replace(/Ç/g, 'C').replace(/ç/g, 'C');
 }
+
+// Stok grup kanonik adları — Türkçe karakter farkından kaynaklanan tekrarları birleştirir
+const GRUP_DISPLAY = {
+  'ELEKTRIK':       'Elektrik',
+  'HIRDAVAT':       'Hırdavat',
+  'TESISAT':        'Tesisat',
+  'KIMYASAL':       'Kimyasal',
+  'MEKANIK':        'Mekanik',
+  'MOBILYA':        'Mobilya',
+  'DOSEME':         'Döşeme',
+  'CADIR':          'Çadır',
+  'HAMMADDE':       'Hammadde',
+  'KARAVAN':        'Karavan',
+  'KARAVAN EKIPMAN':'Karavan Ekipman',
+  'YEDEK PARCA':    'Yedek Parça',
+  'ETICARET':       'E-Ticaret',
+  'E-TICARET':      'E-Ticaret',
+  'ARGE':           'Ar-Ge',
+  'AR-GE':          'Ar-Ge',
+  'NUMUNE':         'Numune',
+  'MARKETING':      'Marketing',
+  'PAZARLAMA':      'Pazarlama',
+  'KABIN':          'Kabin',
+  '3D-BASKI':       '3D Baskı',
+  'BEDELSIZ':       'Bedelsiz',
+  'UYKU KAPSULU':   'Uyku Kapsülü',
+  'GENEL':          'Genel',
+  'DIGER':          'Diğer',
+};
+
+// Herhangi bir stok grup değerini kanonik görüntü adına çevirir
+function canonicalGrup(v) {
+  if (!v || !String(v).trim()) return '';
+  const key = normalizeText(v.trim());
+  return GRUP_DISPLAY[key] || key; // Bilinmeyenlerde ASCII normalize edilmiş hali göster
+}
+
+// ── Kategori normalizasyonu (üst seviye gruplama) ────────────────────────────
+// Normalize ASCII anahtarlar kullan — artık 'DÖŞEME'/'DOSEME' gibi çiftler yok
+const RAW_MATERIAL_GROUPS_SET = new Set([
+  'HAMMADDE', 'HIRDAVAT', 'KARAVAN EKIPMAN', 'MEKANIK', '3D-BASKI', 'BEDELSIZ',
+  'CADIR', 'DOSEME', 'ELEKTRIK', 'KARAVAN', 'KIMYASAL', 'MOBILYA', 'YEDEK PARCA',
+]);
 
 function mapCategory(groupName) {
   const g = normalizeText(groupName);
@@ -171,7 +208,10 @@ async function syncPriceAnalysis() {
   `);
 
   db.prepare('DELETE FROM tiger_price_analysis').run();
-  const upsertMany = db.transaction(rs => { for (const r of rs) upsert.run(r); });
+  // stok_grup kanonik forma çevirerek kaydet — Türkçe karakter tekrarını önler
+  const upsertMany = db.transaction(rs => {
+    for (const r of rs) upsert.run({ ...r, stok_grup: canonicalGrup(r.stok_grup) });
+  });
   upsertMany(rows);
 
   db.prepare(`
@@ -236,7 +276,7 @@ function getProductAnalysisRows() {
         product_id: item.malzeme_kodu,
         code:       item.malzeme_kodu,
         name:       item.malzeme_adi || '',
-        category:   item.stok_grup   || 'Genel',
+        category:   canonicalGrup(item.stok_grup) || 'Genel',
         anaGrup:    mapCategory(item.stok_grup),
         firstDate:  firstDate ? firstDate.toISOString().slice(0, 10) : null,
         firstPrice,
@@ -1467,6 +1507,183 @@ router.post('/sync/price-analysis', async (req, res) => {
   }
 });
 
+// GET /api/reports/abc-analysis
+// 2025-2026 alımlarından ABC sınıflandırması (harcama değerine göre Pareto)
+router.get('/abc-analysis', (req, res) => {
+  const db = getDb();
+
+  const rows = db.prepare(`
+    SELECT
+      ph.malzeme_kodu,
+      MAX(ph.malzeme_adi)                                                   AS malzeme_adi,
+      COUNT(*)                                                              AS alim_sayisi,
+      SUM(ph.miktar)                                                        AS toplam_miktar,
+      SUM(COALESCE(NULLIF(ph.net_tutar, 0), ph.miktar * ph.birim_fiyat, 0)) AS toplam_tutar,
+      MAX(ph.tarih)                                                         AS son_alim,
+      COALESCE(NULLIF(MAX(tpa.stok_grup), ''), MAX(ws.kart_tipi), '')       AS stok_grup
+    FROM tiger_purchase_history ph
+    LEFT JOIN warehouse_stock      ws  ON ws.stok_kodu    = ph.malzeme_kodu
+    LEFT JOIN tiger_price_analysis tpa ON tpa.malzeme_kodu = ph.malzeme_kodu
+    WHERE ph.tarih >= '2025-01-01' AND ph.iade = 0 AND ph.miktar > 0
+    GROUP BY ph.malzeme_kodu
+    HAVING SUM(COALESCE(NULLIF(ph.net_tutar, 0), ph.miktar * ph.birim_fiyat, 0)) > 0
+    ORDER BY toplam_tutar DESC
+  `).all();
+
+  const toplamHarcama = rows.reduce((s, r) => s + r.toplam_tutar, 0);
+
+  let kumulatif = 0;
+  const products = rows.map((r, i) => {
+    const pay = toplamHarcama > 0 ? (r.toplam_tutar / toplamHarcama) * 100 : 0;
+    kumulatif += pay;
+    const abc = kumulatif <= 70 ? 'A' : kumulatif <= 90 ? 'B' : 'C';
+    return {
+      sira: i + 1,
+      kod: r.malzeme_kodu,
+      adi: r.malzeme_adi || '',
+      stok_grup: canonicalGrup(r.stok_grup),
+      alim_sayisi: r.alim_sayisi,
+      toplam_miktar: Math.round(r.toplam_miktar * 100) / 100,
+      toplam_tutar: Math.round(r.toplam_tutar),
+      son_alim: r.son_alim,
+      harcama_pay: Math.round(pay * 100) / 100,
+      kumulatif_pay: Math.round(kumulatif * 100) / 100,
+      abc,
+    };
+  });
+
+  const sinifOzet = (s) => ({
+    sayi: products.filter(p => p.abc === s).length,
+    tutar: Math.round(products.filter(p => p.abc === s).reduce((sum, p) => sum + p.toplam_tutar, 0)),
+  });
+
+  res.json({
+    products,
+    ozet: {
+      toplam_urun: products.length,
+      toplam_harcama: Math.round(toplamHarcama),
+      a: sinifOzet('A'),
+      b: sinifOzet('B'),
+      c: sinifOzet('C'),
+    },
+  });
+});
+
+// GET /api/reports/critical-stock
+// 2025-2026 alımlarından devir hızı + kritik stok eşiği hesabı
+router.get('/critical-stock', (req, res) => {
+  const db = getDb();
+  const { search, status } = req.query;
+
+  // 2025+ alımlardan ürün bazlı istatistik — en az 2 alım ve pozitif dönem şartı
+  const rows = db.prepare(`
+    SELECT
+      ph.malzeme_kodu,
+      MAX(ph.malzeme_adi) AS malzeme_adi,
+      COUNT(*) AS alim_sayisi,
+      SUM(ph.miktar) AS toplam_miktar,
+      MIN(ph.tarih) AS ilk_alim,
+      MAX(ph.tarih) AS son_alim,
+      ROUND(julianday(MAX(ph.tarih)) - julianday(MIN(ph.tarih))) AS donem_gun,
+      COALESCE(MAX(ws.gebze_stok), 0) + COALESCE(MAX(ws.eticaret_stok), 0) + COALESCE(MAX(ws.showroom_stok), 0) AS mevcut_stok,
+      COALESCE(MAX(ws.gebze_stok), 0) AS gebze_stok,
+      COALESCE(MAX(ws.eticaret_stok), 0) AS eticaret_stok,
+      COALESCE(MAX(ws.showroom_stok), 0) AS showroom_stok,
+      MAX(ws.birim_fiyat) AS birim_fiyat,
+      MAX(ws.kart_tipi) AS kart_tipi,
+      MAX(ws.son_hareket) AS son_hareket,
+      COALESCE(NULLIF(MAX(tpa.stok_grup), ''), MAX(ws.kart_tipi), '') AS stok_grup
+    FROM tiger_purchase_history ph
+    LEFT JOIN warehouse_stock ws ON ws.stok_kodu = ph.malzeme_kodu
+    LEFT JOIN tiger_price_analysis tpa ON tpa.malzeme_kodu = ph.malzeme_kodu
+    WHERE ph.tarih >= '2025-01-01' AND ph.iade = 0 AND ph.miktar > 0
+    GROUP BY ph.malzeme_kodu
+    HAVING COUNT(*) >= 2
+      AND ROUND(julianday(MAX(ph.tarih)) - julianday(MIN(ph.tarih))) > 0
+    ORDER BY ph.malzeme_kodu
+  `).all();
+
+  const today = new Date();
+
+  const products = rows
+    .map(r => {
+      const ortAlimArasi = Math.round(r.donem_gun / (r.alim_sayisi - 1));
+      const gunlukTuketim = r.toplam_miktar / r.donem_gun;
+      const kritikEsik = Math.ceil(gunlukTuketim * ortAlimArasi);
+      const mevcut = r.mevcut_stok || 0;
+      const tahminiTukenme = gunlukTuketim > 0 ? Math.round(mevcut / gunlukTuketim) : null;
+      const oran = kritikEsik > 0 ? mevcut / kritikEsik : null;
+      // Yıllık devir hızı: kaç alım periyodu geçti
+      const devirHizi = r.donem_gun > 0 ? Math.round((r.alim_sayisi / r.donem_gun) * 365 * 10) / 10 : null;
+      // Sipariş önerisi: kritik eşiğin 2.5 katına ulaşmak için gereken miktar
+      const siparisOneri = Math.max(0, Math.ceil(kritikEsik * 2.5 - mevcut));
+      // Son alımdan bu yana geçen gün
+      const sonAlimGun = r.son_alim
+        ? Math.round((today - new Date(r.son_alim)) / (1000 * 60 * 60 * 24))
+        : null;
+
+      // Renk/durum — oran + tahmini tükenme birlikte değerlendirilir
+      let durum;
+      if (oran === null) {
+        durum = 'belirsiz';
+      } else if (oran <= 1.0 || (tahminiTukenme !== null && tahminiTukenme <= ortAlimArasi)) {
+        durum = 'kritik';     // 🔴
+      } else if (oran <= 1.5 || (tahminiTukenme !== null && tahminiTukenme <= ortAlimArasi * 1.5)) {
+        durum = 'uyari';      // 🟠
+      } else if (oran <= 2.5) {
+        durum = 'dikkat';     // 🟡
+      } else {
+        durum = 'normal';     // 🟢
+      }
+
+      return {
+        kod: r.malzeme_kodu,
+        adi: r.malzeme_adi,
+        kart_tipi: r.kart_tipi || '',
+        stok_grup: canonicalGrup(r.stok_grup),
+        alim_sayisi: r.alim_sayisi,
+        toplam_miktar: Math.round(r.toplam_miktar * 100) / 100,
+        ilk_alim: r.ilk_alim,
+        son_alim: r.son_alim,
+        son_alim_gun: sonAlimGun,
+        donem_gun: r.donem_gun,
+        ort_alim_arasi: ortAlimArasi,
+        gunluk_tuketim: Math.round(gunlukTuketim * 1000) / 1000,
+        devir_hizi: devirHizi,
+        kritik_esik: kritikEsik,
+        mevcut_stok: mevcut,
+        gebze_stok: r.gebze_stok,
+        eticaret_stok: r.eticaret_stok,
+        showroom_stok: r.showroom_stok,
+        tahmini_tukenme: tahminiTukenme,
+        siparis_oneri: siparisOneri,
+        birim_fiyat: r.birim_fiyat,
+        son_hareket: r.son_hareket,
+        durum,
+        oran: oran !== null ? Math.round(oran * 100) / 100 : null,
+      };
+    })
+    .filter(r => {
+      if (status && status !== 'all' && r.durum !== status) return false;
+      if (search) {
+        const q = search.toLowerCase();
+        return r.kod.toLowerCase().includes(q) || r.adi.toLowerCase().includes(q);
+      }
+      return true;
+    });
+
+  const ozet = {
+    toplam: products.length,
+    kritik: products.filter(p => p.durum === 'kritik').length,
+    uyari: products.filter(p => p.durum === 'uyari').length,
+    dikkat: products.filter(p => p.durum === 'dikkat').length,
+    normal: products.filter(p => p.durum === 'normal').length,
+    belirsiz: products.filter(p => p.durum === 'belirsiz').length,
+  };
+
+  res.json({ products, ozet });
+});
+
 // GET /api/reports/sync/status
 router.get('/sync/status', (req, res) => {
   const db = getDb();
@@ -1480,4 +1697,17 @@ router.get('/sync/status', (req, res) => {
   });
 });
 
-module.exports = Object.assign(router, { syncPurchaseHistory, syncPriceAnalysis });
+// Mevcut DB'deki stok_grup değerlerini kanonik forma güncelle (tek seferlik)
+function normalizeTigerGruplar(db) {
+  const rows = db.prepare('SELECT DISTINCT stok_grup FROM tiger_price_analysis WHERE stok_grup IS NOT NULL').all();
+  const update = db.prepare('UPDATE tiger_price_analysis SET stok_grup = ? WHERE stok_grup = ?');
+  const run = db.transaction(() => {
+    for (const { stok_grup } of rows) {
+      const canonical = canonicalGrup(stok_grup);
+      if (canonical !== stok_grup) update.run(canonical, stok_grup);
+    }
+  });
+  run();
+}
+
+module.exports = Object.assign(router, { syncPurchaseHistory, syncPriceAnalysis, normalizeTigerGruplar });

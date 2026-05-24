@@ -33,7 +33,9 @@ async function syncPurchaseOrdersFromTIGER3() {
       F.CANCELLED                                      AS SIPARIS_IPTAL,
       CASE ISNULL(F.TRCURR, 0)
         WHEN 1 THEN 'USD' WHEN 2 THEN 'EUR' ELSE 'TRY'
-      END                                              AS DOVIZ
+      END                                              AS DOVIZ,
+      ISNULL(F.TRRATE, 1)                              AS KURU,
+      ''                                               AS RAPOR_DOVIZI
     FROM LG_123_01_ORFICHE F
     JOIN LG_123_CLCARD      C ON C.LOGICALREF = F.CLIENTREF
     JOIN LG_123_01_ORFLINE  L ON L.ORDFICHEREF = F.LOGICALREF
@@ -54,6 +56,8 @@ async function syncPurchaseOrdersFromTIGER3() {
         cari_kodu: r.CARI_KODU,
         cari_unvani: r.CARI_UNVANI,
         doviz: r.DOVIZ,
+        kur: r.KURU || 1,
+        rapor_doviz: r.RAPOR_DOVIZI || '',
         iptal: r.SIPARIS_IPTAL,
         lines: [],
         totalTutar: 0,
@@ -139,8 +143,8 @@ async function syncPurchaseOrdersFromTIGER3() {
 
   // ── Sipariş ve kalemleri kaydet ─────────────────────────────────────────────
   const insertPo = db.prepare(`
-    INSERT INTO purchase_orders (id, po_number, supplier_id, order_date, currency, total_amount, status)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO purchase_orders (id, po_number, supplier_id, order_date, currency, total_amount, status, exchange_rate, reference_currency)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
   const insertItem = db.prepare(`
     INSERT INTO po_items (id, po_id, product_id, quantity, unit_price, received_quantity)
@@ -155,7 +159,7 @@ async function syncPurchaseOrdersFromTIGER3() {
       const supplierId = supplierMap.get(ord.cari_kodu);
       if (!supplierId) { poSkipped++; continue; }
       const poId = uuidv4();
-      insertPo.run(poId, fisno, supplierId, ord.tarih, ord.doviz, ord.totalTutar, calcStatus(ord));
+      insertPo.run(poId, fisno, supplierId, ord.tarih, ord.doviz, ord.totalTutar, calcStatus(ord), ord.kur || 1, ord.rapor_doviz || null);
       poIdMap.set(fisno, poId);
       poInserted++;
     }
@@ -216,7 +220,7 @@ router.get('/:id', (req, res) => {
 
 // POST /api/po
 router.post('/', authorize('admin', 'user'), (req, res) => {
-  const { supplier_id, order_date, expected_date, currency, notes, items } = req.body;
+  const { supplier_id, order_date, expected_date, currency, notes, items, exchange_rate } = req.body;
   if (!supplier_id || !order_date || !items || items.length === 0) {
     return res.status(400).json({ error: 'Tedarikçi, tarih ve en az bir kalem gerekli' });
   }
@@ -225,12 +229,12 @@ router.post('/', authorize('admin', 'user'), (req, res) => {
   const po_number = getNextPoNumber(db);
   const total = items.reduce((s, i) => s + (parseFloat(i.quantity) * parseFloat(i.unit_price)), 0);
 
-  const insertPo = db.prepare(`INSERT INTO purchase_orders (id, po_number, supplier_id, order_date, expected_date, currency, total_amount, notes, status, created_by)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+  const insertPo = db.prepare(`INSERT INTO purchase_orders (id, po_number, supplier_id, order_date, expected_date, currency, total_amount, notes, status, created_by, exchange_rate)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
   const insertItem = db.prepare(`INSERT INTO po_items (id, po_id, product_id, quantity, unit_price, notes) VALUES (?, ?, ?, ?, ?, ?)`);
 
   db.transaction(() => {
-    insertPo.run(id, po_number, supplier_id, order_date, expected_date || null, currency || 'TRY', total, notes || null, 'açık', req.user.id);
+    insertPo.run(id, po_number, supplier_id, order_date, expected_date || null, currency || 'TRY', total, notes || null, 'açık', req.user.id, parseFloat(exchange_rate) || 1);
     for (const item of items) {
       insertItem.run(uuidv4(), id, item.product_id, parseFloat(item.quantity), parseFloat(item.unit_price), item.notes || null);
     }

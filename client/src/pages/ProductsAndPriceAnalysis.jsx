@@ -107,36 +107,14 @@ function changeBadge(pct) {
 
 // ── Ana sayfa bileşeni ────────────────────────────────────────────────────────
 export default function ProductsAndPriceAnalysisPage() {
-  const [activeTab, setActiveTab] = useState('products');
-
+  const [selectedPriceProduct, setSelectedPriceProduct] = useState(null);
   return (
     <div className="p-6">
-      <PageHeader
-        title="Ürünler ve Fiyat Analizi"
-        subtitle="Ürün yönetimi, satınalma analizi ve Hotomobil model kataloğu"
-      />
-
-      {/* Ana Sekme Çubuğu */}
-      <div className="flex gap-1 mb-6 bg-gray-100 rounded-xl p-1 w-fit">
-        {MAIN_TABS.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              activeTab === tab.id
-                ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            <tab.icon size={16} />
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {activeTab === 'products' && <ProductsTab />}
-      {activeTab === 'analysis' && <PriceAnalysisTab />}
-      {activeTab === 'models' && <ModelsTab />}
+      <PageHeader title="Fiyat Analizi" subtitle="Alım ve fiyat değişim analizi" />
+      <PriceAnalysisTab onSelect={setSelectedPriceProduct} />
+      {selectedPriceProduct && (
+        <ProductDetailModal product={selectedPriceProduct} onClose={() => setSelectedPriceProduct(null)} />
+      )}
     </div>
   );
 }
@@ -492,15 +470,18 @@ function ProductsTab() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// SEKMESİ 2: FİYAT ANALİZİ
+// FİYAT ANALİZİ (grafikler + kritik uyarı + en fazla artış/alım + tam liste)
 // ══════════════════════════════════════════════════════════════════════════════
-function PriceAnalysisTab() {
+function PriceAnalysisTab({ onSelect }) {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState('name');
-  const [sortDir, setSortDir] = useState('asc');
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [sortBy, setSortBy] = useState('overallChange');
+  const [sortDir, setSortDir] = useState('desc');
+  const [chartYear, setChartYear] = useState(String(new Date().getFullYear()));
+
+  const CHART_YEARS = Array.from({ length: 8 }, (_, i) => String(new Date().getFullYear() - i));
+  const MONTH_LABELS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 
   const { data: summaryData, isLoading } = useQuery({
     queryKey: ['product-purchase-summary', selectedYear, selectedMonth, search],
@@ -509,25 +490,52 @@ function PriceAnalysisTab() {
       month: selectedMonth || undefined,
       search: search || undefined,
     }).then(r => r.data),
-    keepPreviousData: true,
   });
 
-  const { data: detailData, isLoading: detailLoading } = useQuery({
-    queryKey: ['product-purchase-detail', selectedProduct?.code],
-    queryFn: () => getProductPurchaseDetail(selectedProduct.code).then(r => r.data),
-    enabled: !!selectedProduct,
+  const { data: statsData } = useQuery({
+    queryKey: ['product-stats', chartYear],
+    queryFn: () => getProductStats({ year: chartYear }).then(r => r.data),
   });
 
   const products = summaryData?.products || [];
+
+  const chartMonthly = useMemo(() => Array.from({ length: 12 }, (_, i) => {
+    const m = i + 1;
+    const found = statsData?.monthly?.find(r => r.month === m);
+    return { ay: MONTH_LABELS[m].slice(0, 3), ayFull: MONTH_LABELS[m], toplam_tutar: found?.toplam_tutar || 0, urun_cesidi: found?.urun_cesidi || 0 };
+  }), [statsData]);
+
+  const stockSummary = statsData?.stockSummary || { toplam_urun: 0, kritik_stok: 0, stoksuz: 0, yeterli_stok: 0 };
+  const stockPieData = useMemo(() => [
+    { name: 'Yeterli', value: stockSummary.yeterli_stok || 0, color: '#10b981' },
+    { name: 'Kritik', value: stockSummary.kritik_stok || 0, color: '#f59e0b' },
+    { name: 'Stoksuz', value: stockSummary.stoksuz || 0, color: '#ef4444' },
+  ].filter(s => s.value > 0), [stockSummary]);
 
   const kpi = useMemo(() => {
     const totalPurchases = products.reduce((s, p) => s + p.purchaseCount, 0);
     const totalQty = products.reduce((s, p) => s + p.totalQty, 0);
     const changes = products.filter(p => p.overallChange != null).map(p => p.overallChange);
     const avgChange = changes.length > 0 ? changes.reduce((a, b) => a + b, 0) / changes.length : null;
-    const totalSuppliers = Math.max(...products.map(p => p.supplierCount), 0);
     return { totalProducts: products.length, totalPurchases, totalQty, avgChange };
   }, [products]);
+
+  // >20% artışlar
+  const kritikArtislar = useMemo(() =>
+    [...products].filter(p => (p.overallChange || 0) > 20)
+      .sort((a, b) => (b.overallChange || 0) - (a.overallChange || 0))
+      .slice(0, 14)
+  , [products]);
+
+  const enFazlaArtis = useMemo(() =>
+    [...products].filter(p => p.overallChange != null)
+      .sort((a, b) => (b.overallChange || 0) - (a.overallChange || 0))
+      .slice(0, 10)
+  , [products]);
+
+  const enFazlaAlinan = useMemo(() =>
+    [...products].sort((a, b) => b.purchaseCount - a.purchaseCount).slice(0, 10)
+  , [products]);
 
   const sorted = useMemo(() => {
     const list = [...products];
@@ -571,63 +579,59 @@ function PriceAnalysisTab() {
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'AlımAnalizi');
-    XLSX.writeFile(wb, `alim-analizi-${selectedYear || 'tumzaman'}-${new Date().toISOString().slice(0,10)}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'FiyatAnalizi');
+    XLSX.writeFile(wb, `fiyat-analizi-${selectedYear || 'tumzaman'}-${new Date().toISOString().slice(0,10)}.xlsx`);
   }
 
   return (
     <div className="space-y-4">
-      {/* Filtreler */}
+      {/* ── Filtreler ── */}
       <Card className="p-4">
         <div className="flex flex-wrap gap-3 items-end">
-          {/* Yıl Toggle */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">Yıl</label>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Analiz Yılı</label>
             <div className="inline-flex rounded-lg border border-gray-300 overflow-hidden bg-white">
-              <button
-                onClick={() => { setSelectedYear(''); setSelectedMonth(''); }}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${!selectedYear ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
-              >Tümü</button>
+              <button onClick={() => { setSelectedYear(''); setSelectedMonth(''); }}
+                className={`px-3 py-2 text-sm font-medium transition-colors ${!selectedYear ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'}`}>
+                Tümü
+              </button>
               {YEARS.map(y => (
                 <button key={y} onClick={() => setSelectedYear(y)}
-                  className={`px-3 py-2 text-sm font-medium transition-colors ${selectedYear === y ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
-                >{y}</button>
+                  className={`px-3 py-2 text-sm font-medium transition-colors ${selectedYear === y ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'}`}>
+                  {y}
+                </button>
               ))}
             </div>
           </div>
-
-          {/* Ay Seçimi */}
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Ay</label>
-            <select
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
-              value={selectedMonth}
-              onChange={e => setSelectedMonth(e.target.value)}
-              disabled={!selectedYear}
-            >
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+              value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)} disabled={!selectedYear}>
               {MONTHS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
             </select>
           </div>
-
-          {/* Arama */}
-          <div className="flex-1 min-w-[220px]">
+          <div className="flex-1 min-w-[200px]">
             <label className="block text-xs font-medium text-gray-500 mb-1">Ürün Ara</label>
             <div className="relative">
               <Search size={15} className="absolute left-3 top-2.5 text-gray-400" />
-              <input
-                type="text" placeholder="Stok kodu veya ürün adı..."
+              <input type="text" placeholder="Stok kodu veya ürün adı..."
                 className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={search} onChange={e => setSearch(e.target.value)}
-              />
+                value={search} onChange={e => setSearch(e.target.value)} />
             </div>
           </div>
-
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Grafik Yılı</label>
+            <div className="flex items-center gap-1.5 border border-gray-300 rounded-lg px-3 py-2 bg-white">
+              <Calendar size={13} className="text-gray-400" />
+              <select className="text-sm bg-transparent outline-none" value={chartYear} onChange={e => setChartYear(e.target.value)}>
+                {CHART_YEARS.map(y => <option key={y}>{y}</option>)}
+              </select>
+            </div>
+          </div>
           <button onClick={exportExcel} className="inline-flex items-center gap-1.5 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
             <Download size={14} /> Excel
           </button>
         </div>
-
-        {/* Dönem etiketi */}
         {selectedYear && (
           <div className="mt-2 flex items-center gap-2">
             <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
@@ -638,115 +642,267 @@ function PriceAnalysisTab() {
         )}
       </Card>
 
-      {/* KPI Kartları */}
+      {/* ── KPI Kartları ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">Ürün Sayısı</p>
-          <p className="text-2xl font-bold text-gray-800">{fmtNum(kpi.totalProducts)}</p>
+        <Card className="p-4 text-center"><p className="text-xs text-gray-500 mb-1">Ürün Sayısı</p><p className="text-2xl font-bold text-gray-800">{fmtNum(kpi.totalProducts)}</p></Card>
+        <Card className="p-4 text-center"><p className="text-xs text-gray-500 mb-1">Toplam Alım</p><p className="text-2xl font-bold text-gray-800">{fmtNum(kpi.totalPurchases)}</p></Card>
+        <Card className="p-4 text-center"><p className="text-xs text-gray-500 mb-1">Toplam Adet</p><p className="text-2xl font-bold text-gray-800">{fmtNum(kpi.totalQty)}</p></Card>
+        <Card className="p-4 text-center"><p className="text-xs text-gray-500 mb-1">Ort. Fiyat Değişimi</p><p className="text-2xl font-bold">{kpi.avgChange == null ? '-' : changeBadge(Math.round(kpi.avgChange * 100) / 100)}</p></Card>
+      </div>
+
+      {/* ── Kritik Artış Uyarısı ── */}
+      {kritikArtislar.length > 0 && (
+        <div className="rounded-xl border-2 border-red-300 bg-gradient-to-r from-red-50 to-orange-50 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="p-1.5 rounded-lg bg-red-100"><AlertTriangle size={18} className="text-red-600" /></div>
+            <h3 className="font-bold text-red-800 text-sm">Kritik Fiyat Artışları</h3>
+            <span className="text-xs bg-red-600 text-white px-2 py-0.5 rounded-full font-bold">{kritikArtislar.length} ürün</span>
+            <span className="text-xs text-red-500 ml-1">%20 üzeri artış</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {kritikArtislar.map(p => (
+              <button key={p.code} onClick={() => onSelect(p)}
+                className="flex items-center gap-1.5 bg-white border border-red-200 rounded-lg px-2.5 py-1.5 text-xs hover:bg-red-50 hover:border-red-300 transition-colors shadow-sm">
+                <TrendingUp size={11} className="text-red-500 shrink-0" />
+                <span className="font-medium text-gray-700 max-w-[110px] truncate" title={p.name}>{p.name || p.code}</span>
+                <span className="text-red-600 font-bold shrink-0">+{fmtNum(p.overallChange)}%</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Grafikler ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card>
+          <div className="p-3 border-b border-gray-100">
+            <p className="text-sm font-semibold text-gray-700 flex items-center gap-2"><BarChart3 size={15} className="text-purple-500" /> Aylık Alım Trendi ({chartYear})</p>
+          </div>
+          <div className="p-3" style={{ height: 240 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={chartMonthly}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="ay" tick={{ fontSize: 11 }} />
+                <YAxis yAxisId="left" tick={{ fontSize: 10 }} tickFormatter={v => v >= 1e6 ? `${(v/1e6).toFixed(1)}M` : `${(v/1e3).toFixed(0)}K`} />
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
+                <Tooltip formatter={(v, name) => name === 'Tutar' ? [`₺${fmtNum(v)}`, name] : [v, name]} labelFormatter={(_l, p) => p?.[0]?.payload?.ayFull || _l} />
+                <Legend />
+                <Bar yAxisId="left" dataKey="toplam_tutar" name="Tutar" fill="#8b5cf6" radius={[4,4,0,0]} />
+                <Line yAxisId="right" type="monotone" dataKey="urun_cesidi" name="Ürün Çeşidi" stroke="#ef4444" strokeWidth={2} dot={{ r: 3 }} />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
         </Card>
-        <Card className="p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">Toplam Alım</p>
-          <p className="text-2xl font-bold text-gray-800">{fmtNum(kpi.totalPurchases)}</p>
+        <Card>
+          <div className="p-3 border-b border-gray-100">
+            <p className="text-sm font-semibold text-gray-700 flex items-center gap-2"><DollarSign size={15} className="text-green-500" /> En Yüksek Tutarlı ({chartYear})</p>
+          </div>
+          <div className="p-3" style={{ height: 240 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={statsData?.topByAmount || []} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis type="number" tick={{ fontSize: 10 }} tickFormatter={v => v >= 1e6 ? `${(v/1e6).toFixed(1)}M` : `${(v/1e3).toFixed(0)}K`} />
+                <YAxis type="category" dataKey="code" tick={{ fontSize: 9 }} width={80} />
+                <Tooltip formatter={v => [`₺${fmtNum(v)}`, 'Tutar']} labelFormatter={(_l, p) => p?.[0]?.payload?.name || _l} contentStyle={{ fontSize: 11 }} />
+                <Bar dataKey="toplam_tutar" name="Tutar" fill="#10b981" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </Card>
-        <Card className="p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">Toplam Adet</p>
-          <p className="text-2xl font-bold text-gray-800">{fmtNum(kpi.totalQty)}</p>
+        <Card>
+          <div className="p-3 border-b border-gray-100">
+            <p className="text-sm font-semibold text-gray-700 flex items-center gap-2"><TrendingUp size={15} className="text-blue-500" /> Devir Hızı En Yüksek ({chartYear})</p>
+          </div>
+          <div className="p-3" style={{ height: 240 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={statsData?.turnover || []} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis type="number" tick={{ fontSize: 10 }} />
+                <YAxis type="category" dataKey="code" tick={{ fontSize: 9 }} width={80} />
+                <Tooltip formatter={v => [fmtNum(v), 'Devir Hızı']} labelFormatter={(_l, p) => p?.[0]?.payload?.name || _l} contentStyle={{ fontSize: 11 }} />
+                <Bar dataKey="devir_hizi" name="Devir Hızı" radius={[0, 4, 4, 0]}>
+                  {(statsData?.turnover || []).map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </Card>
-        <Card className="p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">Ort. Fiyat Değişimi</p>
-          <p className="text-2xl font-bold">{kpi.avgChange == null ? '-' : changeBadge(Math.round(kpi.avgChange * 100) / 100)}</p>
+        <Card>
+          <div className="p-3 border-b border-gray-100">
+            <p className="text-sm font-semibold text-gray-700 flex items-center gap-2"><PieChartIcon size={15} className="text-amber-500" /> Stok Durumu</p>
+          </div>
+          <div className="p-3" style={{ height: 240 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={stockPieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={85}
+                  label={({ name, percent }) => `${name} %${(percent*100).toFixed(0)}`}>
+                  {stockPieData.map((s, i) => <Cell key={i} fill={s.color} />)}
+                </Pie>
+                <Tooltip formatter={v => [`${v} ürün`, '']} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </Card>
       </div>
 
-      {/* Ürün Listesi + Detay Panel yan yana */}
-      <div className={`flex gap-4 ${selectedProduct ? '' : ''}`}>
-        {/* Tablo */}
-        <Card className={`overflow-auto ${selectedProduct ? 'flex-1 min-w-0' : 'w-full'}`}>
-          {isLoading ? <div className="p-8"><Spinner /></div> : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-600">
-                  <th className="px-3 py-3 text-left font-medium"><SortBtn col="name" label="Ürün" /></th>
-                  <th className="px-3 py-3 text-center font-medium"><SortBtn col="purchaseCount" label="Alım #" /></th>
-                  <th className="px-3 py-3 text-right font-medium"><SortBtn col="totalQty" label="Top. Adet" /></th>
-                  <th className="px-3 py-3 text-right font-medium"><SortBtn col="firstPrice" label="İlk Fiyat" /></th>
-                  <th className="px-3 py-3 text-right font-medium"><SortBtn col="lastPrice" label="Son Fiyat" /></th>
-                  <th className="px-3 py-3 text-right font-medium"><SortBtn col="avgPrice" label="Ort. Fiyat" /></th>
-                  <th className="px-3 py-3 text-right font-medium"><SortBtn col="overallChange" label="Değişim" /></th>
-                  <th className="px-3 py-3 text-center font-medium">Ted.</th>
-                </tr>
-              </thead>
+      {/* ── İki mini tablo ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card>
+          <div className="p-3 border-b border-gray-100 flex items-center gap-2">
+            <TrendingUp size={15} className="text-red-500" />
+            <span className="text-sm font-semibold text-gray-700">En Fazla Fiyat Artışı</span>
+            <span className="ml-auto text-xs text-gray-400">İlk → Son fiyat</span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead><tr className="bg-gray-50 border-b border-gray-200 text-gray-500">
+                <th className="text-left px-3 py-2 font-medium">Ürün</th>
+                <th className="text-right px-3 py-2 font-medium">İlk</th>
+                <th className="text-right px-3 py-2 font-medium">Son</th>
+                <th className="text-right px-3 py-2 font-medium">Artış</th>
+              </tr></thead>
               <tbody>
-                {sorted.map((p, i) => (
-                  <tr
-                    key={p.code}
-                    className={`border-b border-gray-100 cursor-pointer transition-colors ${
-                      selectedProduct?.code === p.code ? 'bg-blue-50 border-l-2 border-l-blue-500' : i % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50/50 hover:bg-gray-100'
-                    }`}
-                    onClick={() => setSelectedProduct(selectedProduct?.code === p.code ? null : p)}
-                  >
-                    <td className="px-3 py-2.5">
-                      <div className="font-medium text-gray-800 text-xs leading-tight">{p.name}</div>
-                      <div className="text-gray-400 text-xs font-mono">{p.code}</div>
+                {enFazlaArtis.map((p, i) => (
+                  <tr key={p.code} onClick={() => onSelect(p)}
+                    className={`border-b border-gray-50 cursor-pointer hover:bg-red-50 ${i % 2 === 0 ? '' : 'bg-gray-50/50'}`}>
+                    <td className="px-3 py-2">
+                      <div className="font-medium text-gray-800 truncate max-w-[150px]" title={p.name}>{p.name || p.code}</div>
+                      <div className="text-gray-400 font-mono text-[10px]">{p.code}</div>
                     </td>
-                    <td className="px-3 py-2.5 text-center">
-                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">{p.purchaseCount}</span>
-                    </td>
-                    <td className="px-3 py-2.5 text-right text-gray-600">{fmtNum(p.totalQty)}</td>
-                    <td className="px-3 py-2.5 text-right text-gray-500 text-xs">
-                      <div>{fmtPrice(p.firstPrice)}</div>
-                      <div className="text-gray-400">{fmtDate(p.firstDate)}</div>
-                    </td>
-                    <td className="px-3 py-2.5 text-right font-semibold text-gray-800 text-xs">
-                      <div>{fmtPrice(p.lastPrice)}</div>
-                      <div className="text-gray-400 font-normal">{fmtDate(p.lastDate)}</div>
-                    </td>
-                    <td className="px-3 py-2.5 text-right text-gray-600">{fmtPrice(p.avgPrice)}</td>
-                    <td className="px-3 py-2.5 text-right">{changeBadge(p.overallChange)}</td>
-                    <td className="px-3 py-2.5 text-center text-gray-500">{p.supplierCount}</td>
+                    <td className="px-3 py-2 text-right text-emerald-600">{fmtPrice(p.firstPrice)}</td>
+                    <td className="px-3 py-2 text-right font-semibold text-gray-800">{fmtPrice(p.lastPrice)}</td>
+                    <td className="px-3 py-2 text-right">{changeBadge(p.overallChange)}</td>
                   </tr>
                 ))}
-                {sorted.length === 0 && (
-                  <tr><td colSpan={8} className="py-12 text-center text-gray-400">
-                    {isLoading ? '' : selectedYear ? `${selectedYear} yılında alım kaydı bulunamadı` : 'Alım verisi bulunamadı'}
-                  </td></tr>
-                )}
+                {enFazlaArtis.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400 text-xs">Veri yok</td></tr>}
               </tbody>
             </table>
-          )}
+          </div>
         </Card>
-
-        {/* Ürün Detay Paneli */}
-        {selectedProduct && (
-          <ProductDetailPanel
-            product={selectedProduct}
-            detailData={detailData}
-            isLoading={detailLoading}
-            onClose={() => setSelectedProduct(null)}
-          />
-        )}
+        <Card>
+          <div className="p-3 border-b border-gray-100 flex items-center gap-2">
+            <Package size={15} className="text-blue-500" />
+            <span className="text-sm font-semibold text-gray-700">En Fazla Alınan Ürünler</span>
+            <span className="ml-auto text-xs text-gray-400">Sipariş # · Adet · Artış</span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead><tr className="bg-gray-50 border-b border-gray-200 text-gray-500">
+                <th className="text-left px-3 py-2 font-medium">Ürün</th>
+                <th className="text-right px-3 py-2 font-medium">Sipariş #</th>
+                <th className="text-right px-3 py-2 font-medium">Top. Adet</th>
+                <th className="text-right px-3 py-2 font-medium">Artış</th>
+              </tr></thead>
+              <tbody>
+                {enFazlaAlinan.map((p, i) => (
+                  <tr key={p.code} onClick={() => onSelect(p)}
+                    className={`border-b border-gray-50 cursor-pointer hover:bg-blue-50 ${i % 2 === 0 ? '' : 'bg-gray-50/50'}`}>
+                    <td className="px-3 py-2">
+                      <div className="font-medium text-gray-800 truncate max-w-[150px]" title={p.name}>{p.name || p.code}</div>
+                      <div className="text-gray-400 font-mono text-[10px]">{p.code}</div>
+                    </td>
+                    <td className="px-3 py-2 text-right">
+                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-100 text-blue-700 font-bold">{p.purchaseCount}</span>
+                    </td>
+                    <td className="px-3 py-2 text-right text-gray-700 font-medium">{fmtNum(p.totalQty)}</td>
+                    <td className="px-3 py-2 text-right">{changeBadge(p.overallChange)}</td>
+                  </tr>
+                ))}
+                {enFazlaAlinan.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400 text-xs">Veri yok</td></tr>}
+              </tbody>
+            </table>
+          </div>
+        </Card>
       </div>
+
+      {/* ── Tam Liste (overallChange desc varsayılan) ── */}
+      <Card className="overflow-auto">
+        {isLoading ? <div className="p-8"><Spinner /></div> : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-600">
+                <th className="px-3 py-3 text-left font-medium"><SortBtn col="name" label="Ürün" /></th>
+                <th className="px-3 py-3 text-center font-medium"><SortBtn col="purchaseCount" label="Alım #" /></th>
+                <th className="px-3 py-3 text-right font-medium"><SortBtn col="totalQty" label="Top. Adet" /></th>
+                <th className="px-3 py-3 text-right font-medium"><SortBtn col="firstPrice" label="İlk Fiyat" /></th>
+                <th className="px-3 py-3 text-right font-medium"><SortBtn col="lastPrice" label="Son Fiyat" /></th>
+                <th className="px-3 py-3 text-right font-medium"><SortBtn col="avgPrice" label="Ort. Fiyat" /></th>
+                <th className="px-3 py-3 text-right font-medium"><SortBtn col="overallChange" label="Değişim ▾" /></th>
+                <th className="px-3 py-3 text-center font-medium">Ted.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sorted.map((p, i) => (
+                <tr key={p.code}
+                  className={`border-b border-gray-100 cursor-pointer transition-colors ${
+                    (p.overallChange || 0) > 20
+                      ? 'bg-red-50/50 hover:bg-red-100/60'
+                      : i % 2 === 0 ? 'hover:bg-blue-50' : 'bg-gray-50/50 hover:bg-blue-50'
+                  }`}
+                  onClick={() => onSelect(p)}
+                >
+                  <td className="px-3 py-2.5">
+                    <div className="font-medium text-gray-800 text-xs leading-tight">{p.name}</div>
+                    <div className="text-gray-400 text-xs font-mono">{p.code}</div>
+                  </td>
+                  <td className="px-3 py-2.5 text-center">
+                    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">{p.purchaseCount}</span>
+                  </td>
+                  <td className="px-3 py-2.5 text-right text-gray-600">{fmtNum(p.totalQty)}</td>
+                  <td className="px-3 py-2.5 text-right text-gray-500 text-xs">
+                    <div>{fmtPrice(p.firstPrice)}</div>
+                    <div className="text-gray-400">{fmtDate(p.firstDate)}</div>
+                  </td>
+                  <td className="px-3 py-2.5 text-right font-semibold text-gray-800 text-xs">
+                    <div>{fmtPrice(p.lastPrice)}</div>
+                    <div className="text-gray-400 font-normal">{fmtDate(p.lastDate)}</div>
+                  </td>
+                  <td className="px-3 py-2.5 text-right text-gray-600">{fmtPrice(p.avgPrice)}</td>
+                  <td className="px-3 py-2.5 text-right">{changeBadge(p.overallChange)}</td>
+                  <td className="px-3 py-2.5 text-center text-gray-500">{p.supplierCount}</td>
+                </tr>
+              ))}
+              {sorted.length === 0 && (
+                <tr><td colSpan={8} className="py-12 text-center text-gray-400">
+                  {isLoading ? '' : selectedYear ? `${selectedYear} yılında alım kaydı bulunamadı` : 'Alım verisi bulunamadı'}
+                </td></tr>
+              )}
+            </tbody>
+          </table>
+        )}
+      </Card>
     </div>
   );
 }
 
-// ── Ürün Detay Paneli ─────────────────────────────────────────────────────────
-function ProductDetailPanel({ product, detailData, isLoading, onClose }) {
-  const purchases = detailData?.purchases || [];
-  const returns = detailData?.returns || [];
+// ── Ürün Detay Modal (Depo.jsx mimarisi) ─────────────────────────────────────
+function ProductDetailModal({ product, onClose }) {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['product-purchase-detail', product.code],
+    queryFn: () => getProductPurchaseDetail(product.code).then(r => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const purchases = data?.purchases || [];
+  const iadeler = data?.returns || [];
 
   const chartData = useMemo(() => {
     return purchases
-      .filter(p => p.price != null)
-      .map(p => ({ date: p.date?.slice(0, 7) || p.date, price: p.price, qty: p.qty }));
+      .filter(r => r.price != null)
+      .map(r => ({ date: r.date?.slice(0, 7) || r.date, price: r.price }));
   }, [purchases]);
 
+  const prices = purchases.filter(r => r.price != null && r.price > 0).map(r => r.price);
+  const firstP = purchases[0];
+  const lastP = purchases[purchases.length - 1];
+
   function exportDetail() {
-    if (!detailData) return;
-    const rows = purchases.map(p => ({
-      Tarih: p.date, Tedarikçi: p.supplier, Miktar: p.qty,
-      BirimFiyat: p.price, Tutar: p.amount, ParaBirimi: p.currency || 'TRY',
-      DeğişimYüzde: p.changePct,
+    if (!data) return;
+    const rows = purchases.map(r => ({
+      Tarih: r.date, Tedarikçi: r.supplier, Miktar: r.qty,
+      BirimFiyat: r.price, Tutar: r.amount, ParaBirimi: r.currency || 'TRY',
+      DeğişimYüzde: r.changePct,
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
@@ -755,176 +911,175 @@ function ProductDetailPanel({ product, detailData, isLoading, onClose }) {
   }
 
   return (
-    <div className="w-[480px] shrink-0">
-      <Card className="h-full overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
         {/* Başlık */}
-        <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 sticky top-0 z-10">
-          <div className="flex items-start justify-between">
-            <div className="flex-1 min-w-0 pr-2">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="font-mono text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded">{product.code}</span>
-              </div>
-              <h3 className="font-bold text-gray-900 text-sm leading-snug">{product.name}</h3>
-            </div>
-            <div className="flex gap-1">
-              <button onClick={exportDetail} title="Excel indir" className="p-1.5 rounded text-gray-500 hover:text-blue-600 hover:bg-blue-100">
-                <Download size={15} />
-              </button>
-              <button onClick={onClose} className="p-1.5 rounded text-gray-500 hover:text-gray-700 hover:bg-gray-100">
-                <X size={16} />
-              </button>
-            </div>
+        <div className="flex items-start justify-between p-5 border-b border-gray-100">
+          <div className="flex-1 min-w-0 pr-4">
+            <p className="font-mono text-xs text-gray-400 mb-0.5">{product.code}</p>
+            <h2 className="font-bold text-gray-800 text-base leading-snug">{product.name}</h2>
           </div>
-
-          {/* KPI satırı */}
-          {isLoading ? <div className="mt-2 text-xs text-gray-400">Yükleniyor...</div> : (
-            <div className="mt-3 grid grid-cols-4 gap-2 text-center">
-              {[
-                { label: 'Alım', value: detailData?.totalPurchaseCount ?? '—' },
-                { label: 'Top. Adet', value: fmtNum(detailData?.totalQty) },
-                { label: 'Tedarikçi', value: detailData?.supplierCount ?? '—' },
-                { label: 'İade', value: detailData?.returnCount || 0 },
-              ].map(k => (
-                <div key={k.label} className="bg-white rounded-lg p-2 shadow-sm">
-                  <div className="text-lg font-bold text-gray-800">{k.value}</div>
-                  <div className="text-xs text-gray-500">{k.label}</div>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {data && (
+              <button onClick={exportDetail} title="Excel indir" className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600">
+                <Download size={16} />
+              </button>
+            )}
+            <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700">
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
-        {isLoading ? (
-          <div className="p-8 flex justify-center"><Spinner /></div>
-        ) : (
-          <div className="p-4 space-y-4">
-            {/* Fiyat Grafiği */}
-            {chartData.length > 1 && (
-              <div>
-                <h4 className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1"><LineChartIcon size={13} /> Fiyat Trendi (tüm zamanlar)</h4>
-                <div style={{ height: 160 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="date" tick={{ fontSize: 9 }} />
-                      <YAxis tick={{ fontSize: 9 }} tickFormatter={v => fmtNum(v)} width={55} />
-                      <Tooltip formatter={v => [fmtPrice(v), 'Fiyat']} contentStyle={{ fontSize: 11 }} />
-                      <Line type="monotone" dataKey="price" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            )}
+        {/* İçerik */}
+        <div className="flex-1 overflow-y-auto p-5 space-y-5">
+          {isLoading && <div className="flex justify-center py-8"><Spinner /></div>}
+          {isError && <p className="text-center text-red-500 text-sm py-4">Veriler yüklenemedi.</p>}
 
-            {/* Tedarikçiler */}
-            {detailData?.suppliers?.length > 0 && (
-              <div>
-                <h4 className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1"><Truck size={13} /> Tedarikçiler</h4>
-                <div className="flex flex-wrap gap-1">
-                  {detailData.suppliers.map(s => (
-                    <span key={s} className="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full">{s}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Alım Geçmişi */}
-            <div>
-              <h4 className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1">
-                <Hash size={13} /> Tüm Alımlar ({purchases.length})
-              </h4>
-              <div className="overflow-x-auto border border-gray-200 rounded-lg">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr className="bg-gray-50 border-b border-gray-200">
-                      <th className="px-2 py-2 text-left text-gray-500">Tarih</th>
-                      <th className="px-2 py-2 text-right text-gray-500">Adet</th>
-                      <th className="px-2 py-2 text-right text-gray-500">Birim Fiyat</th>
-                      <th className="px-2 py-2 text-right text-gray-500">Değişim</th>
-                      <th className="px-2 py-2 text-left text-gray-500">Tedarikçi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[...purchases].reverse().map((p, i) => (
-                      <tr key={i} className={`border-b border-gray-100 ${i === 0 ? 'bg-blue-50 font-medium' : ''}`}>
-                        <td className="px-2 py-2 text-gray-600">{fmtDate(p.date)}</td>
-                        <td className="px-2 py-2 text-right text-gray-700">{fmtNum(p.qty)}</td>
-                        <td className="px-2 py-2 text-right font-semibold text-gray-800">{fmtPrice(p.price, p.currency)}</td>
-                        <td className="px-2 py-2 text-right">{p.changePct != null ? changeBadge(p.changePct) : <span className="text-gray-300 text-xs">—</span>}</td>
-                        <td className="px-2 py-2 text-gray-500 truncate max-w-[110px]" title={p.supplier}>{p.supplier || '-'}</td>
-                      </tr>
-                    ))}
-                    {purchases.length === 0 && (
-                      <tr><td colSpan={5} className="py-4 text-center text-gray-400">Alım kaydı yok</td></tr>
-                    )}
-                  </tbody>
-                </table>
+          {data && (
+            <>
+              {/* KPI Kartları */}
+              <div className="grid grid-cols-4 gap-3">
+                {[
+                  { label: 'Toplam Alım', value: data.totalPurchaseCount ?? '—' },
+                  { label: 'Toplam Adet', value: fmtNum(data.totalQty) },
+                  { label: 'Tedarikçi Sayısı', value: data.supplierCount ?? '—' },
+                  { label: 'İade', value: data.returnCount || 0 },
+                ].map(k => (
+                  <div key={k.label} className="rounded-xl border border-gray-100 bg-gray-50 p-3 text-center">
+                    <p className="text-[11px] text-gray-400 mb-0.5">{k.label}</p>
+                    <p className="text-xl font-bold text-gray-800">{k.value}</p>
+                  </div>
+                ))}
               </div>
 
-              {/* Özet satır */}
+              {/* Fiyat Özeti */}
               {purchases.length > 0 && (
-                <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
-                  {(() => {
-                    const prices = purchases.filter(p => p.price != null && p.price > 0).map(p => p.price);
-                    const first = purchases[0];
-                    const last = purchases[purchases.length - 1];
-                    return (
-                      <>
-                        <div className="bg-emerald-50 rounded p-2 text-center">
-                          <div className="font-bold text-emerald-700">{fmtPrice(first?.price, first?.currency)}</div>
-                          <div className="text-emerald-600">İlk Alış</div>
-                          <div className="text-gray-400">{fmtDate(first?.date)}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded p-2 text-center">
-                          <div className="font-bold text-gray-700">{fmtPrice(prices.length ? prices.reduce((a,b) => a+b, 0) / prices.length : null)}</div>
-                          <div className="text-gray-500">Ortalama</div>
-                        </div>
-                        <div className="bg-blue-50 rounded p-2 text-center">
-                          <div className="font-bold text-blue-700">{fmtPrice(last?.price, last?.currency)}</div>
-                          <div className="text-blue-600">Son Alış</div>
-                          <div className="text-gray-400">{fmtDate(last?.date)}</div>
-                        </div>
-                      </>
-                    );
-                  })()}
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-center">
+                    <p className="text-[11px] text-emerald-600 mb-0.5">İlk Alış</p>
+                    <p className="font-bold text-emerald-700">{fmtPrice(firstP?.price, firstP?.currency)}</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{fmtDate(firstP?.date)}</p>
+                  </div>
+                  <div className="rounded-xl border border-gray-200 bg-gray-50 p-3 text-center">
+                    <p className="text-[11px] text-gray-500 mb-0.5">Ortalama</p>
+                    <p className="font-bold text-gray-700">{fmtPrice(prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : null)}</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{purchases.length} kayıt</p>
+                  </div>
+                  <div className="rounded-xl border border-blue-200 bg-blue-50 p-3 text-center">
+                    <p className="text-[11px] text-blue-600 mb-0.5">Son Alış</p>
+                    <p className="font-bold text-blue-700">{fmtPrice(lastP?.price, lastP?.currency)}</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{fmtDate(lastP?.date)}</p>
+                  </div>
                 </div>
               )}
-            </div>
 
-            {/* İadeler */}
-            {returns.length > 0 && (
-              <div>
-                <h4 className="text-xs font-semibold text-red-600 mb-2 flex items-center gap-1">
-                  <AlertTriangle size={13} /> İadeler ({returns.length})
-                </h4>
-                <div className="overflow-x-auto border border-red-200 rounded-lg">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="bg-red-50 border-b border-red-200">
-                        <th className="px-2 py-2 text-left text-red-600">Tarih</th>
-                        <th className="px-2 py-2 text-right text-red-600">Adet</th>
-                        <th className="px-2 py-2 text-right text-red-600">Birim Fiyat</th>
-                        <th className="px-2 py-2 text-left text-red-600">Tedarikçi</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {returns.map((r, i) => (
-                        <tr key={i} className="border-b border-red-100">
-                          <td className="px-2 py-2 text-gray-600">{fmtDate(r.date)}</td>
-                          <td className="px-2 py-2 text-right text-red-700 font-medium">{fmtNum(r.qty)}</td>
-                          <td className="px-2 py-2 text-right">{fmtPrice(r.price, r.currency)}</td>
-                          <td className="px-2 py-2 text-gray-500 truncate max-w-[110px]">{r.supplier || '-'}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              {/* Fiyat Trendi */}
+              {chartData.length > 1 && (
+                <div>
+                  <h3 className="font-semibold text-gray-700 text-sm mb-2 flex items-center gap-1.5">
+                    <LineChartIcon size={14} className="text-blue-500" /> Fiyat Trendi
+                  </h3>
+                  <div className="border border-gray-200 rounded-xl p-3 bg-gray-50" style={{ height: 180 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                        <XAxis dataKey="date" tick={{ fontSize: 9 }} />
+                        <YAxis tick={{ fontSize: 9 }} tickFormatter={v => fmtNum(v)} width={60} />
+                        <Tooltip formatter={v => [fmtPrice(v), 'Fiyat']} contentStyle={{ fontSize: 11 }} />
+                        <Line type="monotone" dataKey="price" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
-                <div className="mt-1 text-xs text-red-600 text-right">Toplam iade: {fmtNum(detailData?.returnQty)} adet</div>
+              )}
+
+              {/* Tedarikçiler */}
+              {data.suppliers?.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-700 text-sm mb-2 flex items-center gap-1.5">
+                    <Truck size={14} className="text-indigo-500" /> Tedarikçiler
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {data.suppliers.map(s => (
+                      <span key={s} className="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full">{s}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Alım Geçmişi */}
+              <div>
+                <h3 className="font-semibold text-gray-700 text-sm mb-2 flex items-center gap-1.5">
+                  <Hash size={14} className="text-gray-500" /> Alım Geçmişi ({purchases.length})
+                </h3>
+                {purchases.length === 0 ? (
+                  <p className="text-sm text-gray-400 italic text-center py-4">Alım kaydı bulunamadı.</p>
+                ) : (
+                  <div className="overflow-auto rounded-xl border border-gray-100">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="bg-gray-50 border-b border-gray-200 text-gray-500">
+                          <th className="text-left py-2 px-3">Tarih</th>
+                          <th className="text-right py-2 px-3">Adet</th>
+                          <th className="text-right py-2 px-3">Birim Fiyat</th>
+                          <th className="text-right py-2 px-3">Tutar</th>
+                          <th className="text-right py-2 px-3">Değişim</th>
+                          <th className="text-left py-2 px-3">Tedarikçi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[...purchases].reverse().map((r, i) => (
+                          <tr key={i} className={`border-b border-gray-50 ${i === 0 ? 'bg-blue-50/60' : i % 2 === 0 ? '' : 'bg-gray-50/40'}`}>
+                            <td className="py-1.5 px-3 whitespace-nowrap text-gray-600">{fmtDate(r.date)}</td>
+                            <td className="py-1.5 px-3 text-right text-gray-700">{fmtNum(r.qty)}</td>
+                            <td className="py-1.5 px-3 text-right font-semibold text-gray-800">{fmtPrice(r.price, r.currency)}</td>
+                            <td className="py-1.5 px-3 text-right text-gray-600">{fmtPrice(r.amount, r.currency)}</td>
+                            <td className="py-1.5 px-3 text-right">{r.changePct != null ? changeBadge(r.changePct) : <span className="text-gray-300">—</span>}</td>
+                            <td className="py-1.5 px-3 text-gray-500 max-w-[140px] truncate" title={r.supplier}>{r.supplier || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        )}
-      </Card>
+
+              {/* İadeler */}
+              {iadeler.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-red-600 text-sm mb-2 flex items-center gap-1.5">
+                    <AlertTriangle size={14} /> İadeler ({iadeler.length})
+                  </h3>
+                  <div className="overflow-auto rounded-xl border border-red-100">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="bg-red-50 border-b border-red-200 text-red-600">
+                          <th className="text-left py-2 px-3">Tarih</th>
+                          <th className="text-right py-2 px-3">Adet</th>
+                          <th className="text-right py-2 px-3">Birim Fiyat</th>
+                          <th className="text-left py-2 px-3">Tedarikçi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {iadeler.map((r, i) => (
+                          <tr key={i} className="border-b border-red-50 hover:bg-red-50">
+                            <td className="py-1.5 px-3 text-gray-600">{fmtDate(r.date)}</td>
+                            <td className="py-1.5 px-3 text-right text-red-700 font-medium">{fmtNum(r.qty)}</td>
+                            <td className="py-1.5 px-3 text-right">{fmtPrice(r.price, r.currency)}</td>
+                            <td className="py-1.5 px-3 text-gray-500">{r.supplier || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="mt-1.5 text-xs text-red-600 text-right">Toplam iade: {fmtNum(data.returnQty)} adet</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

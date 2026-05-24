@@ -40,11 +40,26 @@ app.use('/api/malzeme-ihtiyac', require('./routes/malzeme-ihtiyac'));
 app.use('/api/department-requests', require('./routes/department-requests'));
 app.use('/api/finance', require('./routes/finance'));
 app.use('/api/damage-reports', require('./routes/damage-reports'));
-app.use('/api/projects', require('./routes/projects'));
+app.use('/api/svc', require('./routes/svc'));
 app.use('/api/ciro', require('./routes/ciro'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/evira', require('./routes/evira'));
 app.use('/api/hareketler', require('./routes/hareketler'));
+app.use('/api/kritik-stok', require('./routes/kritik-stok'));
+app.use('/api/deneme', require('./routes/deneme'));
+app.use('/api/operasyon', require('./routes/operasyon'));
+
+// Döviz kurları (TCMB Efektif Satış)
+const { getRates } = require('./utils/tcmb');
+const { authenticate } = require('./middleware/auth');
+app.get('/api/rates', authenticate, async (req, res) => {
+  try {
+    const rates = await getRates();
+    res.json(rates);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 // Üretim modunda React build'ini sun
 if (process.env.NODE_ENV === 'production') {

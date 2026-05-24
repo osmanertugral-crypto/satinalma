@@ -10,6 +10,43 @@ const MONTHS = ['', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Tem
 const YEARS = Array.from({ length: 10 }, (_, i) => String(new Date().getFullYear() - i));
 const COLORS = ['#3b82f6', '#ef4444', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', '#84cc16', '#14b8a6'];
 
+function currencySymbol(c) {
+  if (c === 'USD') return '$';
+  if (c === 'EUR') return '€';
+  return '₺';
+}
+
+// Döviz tutarı ve TL karşılığını hesaplar.
+// İki senaryo:
+//   A) currency=USD/EUR : tutar dövizde → TL = tutar × kur
+//   B) currency=TRY, referenceCurrency=EUR/USD : tutar TL'de → döviz = TL ÷ kur
+function formatAmount(amount, currency, exchangeRate, referenceCurrency) {
+  const num = Number(amount || 0);
+  const rate = Number(exchangeRate || 0);
+
+  // Senaryo A: USD veya EUR olarak kaydedilmiş sipariş
+  if (currency === 'USD' || currency === 'EUR') {
+    const sym = currencySymbol(currency);
+    const original = sym + num.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+    const tl = rate > 0 ? '₺' + (num * rate).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : null;
+    return { original, tl, mode: 'foreign' };
+  }
+
+  // Senaryo B: TRY'de kayıtlı ama EUR/USD referanslı (LOGO'nun TRCURR=0 durumu)
+  const ref = referenceCurrency;
+  if ((ref === 'EUR' || ref === 'USD') && rate > 1) {
+    const sym = currencySymbol(ref);
+    const foreignAmt = num / rate;
+    const original = sym + foreignAmt.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+    const tl = '₺' + num.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    return { original, tl, mode: 'try-with-ref' };
+  }
+
+  // Senaryo C: Saf TRY sipariş
+  const original = '₺' + num.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+  return { original, tl: null, mode: 'try' };
+}
+
 const STATUS_LABELS = {
   draft: 'Taslak',
   sent: 'Gönderildi',
@@ -499,14 +536,17 @@ export default function SuppliersOrdersPage() {
                   </th>
                   <th className={thPlain}>Durum</th>
                   <th className={thSortable} onClick={() => handleOrderSort('amount')}>
-                    Toplam <SortIcon col="amount" sortKey={orderSortKey} sortDir={orderSortDir} />
+                    Tutar (Orijinal) <SortIcon col="amount" sortKey={orderSortKey} sortDir={orderSortDir} />
                   </th>
+                  <th className={thPlain}>Tutar (TL)</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredOrders.length === 0 ? (
-                  <tr><td colSpan={5} className="text-center text-gray-400 py-12">Sipariş bulunamadı</td></tr>
-                ) : filteredOrders.map(po => (
+                  <tr><td colSpan={6} className="text-center text-gray-400 py-12">Sipariş bulunamadı</td></tr>
+                ) : filteredOrders.map(po => {
+                  const { original, tl } = formatAmount(po.total_amount, po.currency, po.exchange_rate, po.reference_currency);
+                  return (
                   <tr key={po.id} className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onClick={() => setPoModalId(po.id)}>
                     <td className="px-4 py-3 text-blue-600 font-medium">{po.po_number}</td>
                     <td className="px-4 py-3 text-gray-700">{po.supplier_name}</td>
@@ -516,9 +556,14 @@ export default function SuppliersOrdersPage() {
                         {STATUS_LABELS[po.status] || po.status}
                       </Badge>
                     </td>
-                    <td className="px-4 py-3 font-semibold text-gray-800">{Number(po.total_amount || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {po.currency || 'TRY'}</td>
+                    <td className="px-4 py-3 font-semibold text-gray-800">
+                      {original}
+                      {po.currency && po.currency !== 'TRY' && <span className="ml-1 text-xs text-gray-400">{po.currency}</span>}
+                    </td>
+                    <td className="px-4 py-3 text-gray-700">{tl || <span className="text-gray-400">—</span>}</td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -531,8 +576,10 @@ export default function SuppliersOrdersPage() {
           kpiModal.orders.length === 0 ? (
             <p className="text-gray-500 text-sm py-8 text-center">Bu dönemde sipariş bulunamadı.</p>
           ) : (
-            <Table headers={['PO No', 'Tedarikçi', 'Tarih', 'Durum', 'Toplam']}>
-              {kpiModal.orders.map(po => (
+            <Table headers={['PO No', 'Tedarikçi', 'Tarih', 'Durum', 'Tutar (Orijinal)', 'Tutar (TL)']}>
+              {kpiModal.orders.map(po => {
+                const { original, tl } = formatAmount(po.total_amount, po.currency, po.exchange_rate, po.reference_currency);
+                return (
                 <tr key={po.id} className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onClick={() => { setKpiModal(null); setPoModalId(po.id); }}>
                   <td className="px-3 py-2 text-sm text-blue-600 font-medium">{po.po_number}</td>
                   <td className="px-3 py-2 text-sm text-gray-700">{po.supplier_name}</td>
@@ -542,9 +589,14 @@ export default function SuppliersOrdersPage() {
                       {STATUS_LABELS[po.status] || po.status}
                     </Badge>
                   </td>
-                  <td className="px-3 py-2 text-sm font-semibold text-gray-800">{Number(po.total_amount || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {po.currency || 'TRY'}</td>
+                  <td className="px-3 py-2 text-sm font-semibold text-gray-800">
+                    {original}
+                    {po.currency && po.currency !== 'TRY' && <span className="ml-1 text-xs text-gray-400">{po.currency}</span>}
+                  </td>
+                  <td className="px-3 py-2 text-sm text-gray-700">{tl || '—'}</td>
                 </tr>
-              ))}
+                );
+              })}
             </Table>
           )
         )}
@@ -569,7 +621,9 @@ export default function SuppliersOrdersPage() {
             <Card className="p-4">
               <h3 className="font-semibold text-gray-700 mb-3">Siparişler</h3>
               <Table headers={['PO', 'Tarih', 'Durum', 'Tutar']} empty={supplierOrders.length === 0 && 'Sipariş yok'}>
-                {supplierOrders.map(po => (
+                {supplierOrders.map(po => {
+                  const { original, tl } = formatAmount(po.total_amount, po.currency, po.exchange_rate, po.reference_currency);
+                  return (
                   <tr key={po.id} className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onClick={() => { setSupplierModalId(null); setPoModalId(po.id); }}>
                     <td className="px-3 py-2 text-sm text-blue-600">{po.po_number}</td>
                     <td className="px-3 py-2 text-xs text-gray-500">{po.order_date}</td>
@@ -578,9 +632,13 @@ export default function SuppliersOrdersPage() {
                         {STATUS_LABELS[po.status] || po.status}
                       </Badge>
                     </td>
-                    <td className="px-3 py-2 text-sm text-gray-700">{Number(po.total_amount || 0).toLocaleString('tr-TR')} {po.currency || 'TRY'}</td>
+                    <td className="px-3 py-2 text-sm text-gray-700">
+                      <div className="font-medium">{original}{po.currency && po.currency !== 'TRY' && <span className="ml-1 text-xs text-gray-400">{po.currency}</span>}</div>
+                      {tl && <div className="text-xs text-gray-500">{tl} TL</div>}
+                    </td>
                   </tr>
-                ))}
+                  );
+                })}
               </Table>
             </Card>
           </div>
@@ -602,25 +660,117 @@ export default function SuppliersOrdersPage() {
                     {STATUS_LABELS[poDetail.status] || poDetail.status}
                   </Badge>
                 </div>
-                <div><span className="text-gray-500">Para Birimi:</span> <span className="font-medium text-gray-800">{poDetail.currency || 'TRY'}</span></div>
-                <div><span className="text-gray-500">Toplam:</span> <span className="font-semibold text-gray-900">{Number(poDetail.total_amount || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {poDetail.currency || 'TRY'}</span></div>
+                {(() => {
+                  const { original, tl, mode } = formatAmount(poDetail.total_amount, poDetail.currency, poDetail.exchange_rate, poDetail.reference_currency);
+                  const refCur = poDetail.reference_currency || poDetail.currency || 'TRY';
+                  const displayCur = mode === 'try-with-ref' ? refCur : (poDetail.currency || 'TRY');
+                  return (
+                    <>
+                      <div>
+                        <span className="text-gray-500">Para Birimi:</span>{' '}
+                        <span className="font-medium text-gray-800">{displayCur}</span>
+                        {poDetail.exchange_rate > 1 && (
+                          <span className="ml-2 text-xs text-gray-400">Kur: {Number(poDetail.exchange_rate).toLocaleString('tr-TR', { minimumFractionDigits: 4 })}</span>
+                        )}
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Toplam:</span>{' '}
+                        <span className="font-semibold text-gray-900">{original}</span>
+                        {tl && <span className="ml-2 text-sm text-gray-600">= {tl} TL</span>}
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
               {poDetail.notes && <p className="mt-3 text-sm text-gray-600 border-t pt-3">{poDetail.notes}</p>}
             </Card>
 
             <Card className="p-4">
-              <h3 className="font-semibold text-gray-700 mb-3">Kalemler</h3>
-              <Table headers={['Ürün Kodu', 'Ürün Adı', 'Miktar', 'Birim', 'Birim Fiyat', 'Toplam']} empty={!poDetail.items?.length && 'Kalem yok'}>
-                {poDetail.items?.map(item => (
-                  <tr key={item.id} className="border-b border-gray-100">
-                    <td className="px-3 py-2 text-xs text-gray-600">{item.product_code}</td>
-                    <td className="px-3 py-2 text-sm text-gray-800">{item.product_name}</td>
-                    <td className="px-3 py-2 text-sm text-gray-600">{item.quantity}</td>
-                    <td className="px-3 py-2 text-sm text-gray-500">{item.unit}</td>
-                    <td className="px-3 py-2 text-sm text-gray-600">{Number(item.unit_price || 0).toLocaleString('tr-TR')}</td>
-                    <td className="px-3 py-2 text-sm font-semibold text-gray-800">{Number((item.quantity || 0) * (item.unit_price || 0)).toLocaleString('tr-TR')}</td>
-                  </tr>
-                ))}
+              {(() => {
+                const items = poDetail.items || [];
+                const gelenSayisi = items.filter(i => (i.received_quantity || 0) >= (i.quantity || 0) && (i.quantity || 0) > 0).length;
+                const gelmeyenSayisi = items.filter(i => (i.received_quantity || 0) === 0).length;
+                const kismiSayisi = items.filter(i => (i.received_quantity || 0) > 0 && (i.received_quantity || 0) < (i.quantity || 0)).length;
+                const bekleyenTutarTry = items.reduce((s, i) => {
+                  const bek = Math.max(0, (i.quantity || 0) - (i.received_quantity || 0));
+                  return s + bek * (i.unit_price || 0);
+                }, 0);
+                const { mode: poMode } = formatAmount(poDetail.total_amount, poDetail.currency, poDetail.exchange_rate, poDetail.reference_currency);
+                const poIsTryRef = poMode === 'try-with-ref';
+                const poRate = Number(poDetail.exchange_rate || 1);
+                const poEffCur = poIsTryRef ? poDetail.reference_currency : (poDetail.currency || 'TRY');
+                const poBekSym = currencySymbol(poEffCur);
+                const bekleyenDisplay = poIsTryRef && poRate > 0 ? bekleyenTutarTry / poRate : bekleyenTutarTry;
+                return (
+                  <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100 flex-wrap">
+                    <h3 className="font-semibold text-gray-700">Kalemler</h3>
+                    <div className="flex items-center gap-2 ml-auto flex-wrap">
+                      <span className="flex items-center gap-1.5 bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-semibold border border-green-200">
+                        <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+                        Geldi: {gelenSayisi}
+                      </span>
+                      {kismiSayisi > 0 && (
+                        <span className="flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-semibold border border-amber-200">
+                          <span className="w-2 h-2 rounded-full bg-amber-500 inline-block" />
+                          Kısmi: {kismiSayisi}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1.5 bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-semibold border border-red-200">
+                        <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />
+                        Gelmedi: {gelmeyenSayisi}
+                      </span>
+                      {bekleyenDisplay > 0 && (
+                        <span className="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-semibold border border-red-200">
+                          Bekleyen: {poBekSym}{bekleyenDisplay.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
+              <Table headers={['Ürün Kodu', 'Ürün Adı', 'Sipariş', 'Gelen', 'Bekleyen', 'Birim', 'Birim Fiyat', 'Bekleyen Tutar']} empty={!poDetail.items?.length && 'Kalem yok'}>
+                {poDetail.items?.map(item => {
+                  const gelen = item.received_quantity || 0;
+                  const siparisMiktar = item.quantity || 0;
+                  const bekleyenMiktar = Math.max(0, siparisMiktar - gelen);
+                  const bekleyenTutar = bekleyenMiktar * (item.unit_price || 0);
+                  const tamGeldi = gelen >= siparisMiktar && siparisMiktar > 0;
+                  const hicGelmedi = gelen === 0;
+                  const rowCls = tamGeldi
+                    ? 'bg-green-50 border-b border-green-100'
+                    : hicGelmedi
+                      ? 'bg-red-50 border-b border-red-100'
+                      : 'bg-amber-50 border-b border-amber-100';
+                  const nameCls = tamGeldi ? 'text-green-800' : hicGelmedi ? 'text-red-800' : 'text-amber-800';
+                  const { mode } = formatAmount(poDetail.total_amount, poDetail.currency, poDetail.exchange_rate, poDetail.reference_currency);
+                  const isTryRef = mode === 'try-with-ref';
+                  const effectiveCur = isTryRef ? poDetail.reference_currency : (poDetail.currency || 'TRY');
+                  const sym = currencySymbol(effectiveCur);
+                  const rate = Number(poDetail.exchange_rate || 1);
+                  // TRY referanslı siparişlerde birim fiyatlar TL, dövize çevir
+                  const displayUnitPrice = isTryRef && rate > 0
+                    ? Number(item.unit_price || 0) / rate
+                    : Number(item.unit_price || 0);
+                  const displayBekleyenTutar = isTryRef && rate > 0
+                    ? bekleyenTutar / rate
+                    : bekleyenTutar;
+                  return (
+                    <tr key={item.id} className={rowCls}>
+                      <td className="px-3 py-2 text-xs text-gray-500">{item.product_code}</td>
+                      <td className="px-3 py-2 text-sm font-medium">
+                        <span className={nameCls}>{item.product_name}</span>
+                      </td>
+                      <td className="px-3 py-2 text-sm text-gray-600">{siparisMiktar}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-700">{gelen > 0 ? gelen : '—'}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-red-700">{bekleyenMiktar > 0 ? bekleyenMiktar : '—'}</td>
+                      <td className="px-3 py-2 text-sm text-gray-500">{item.unit}</td>
+                      <td className="px-3 py-2 text-sm text-gray-600">{sym}{displayUnitPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-red-700">
+                        {displayBekleyenTutar > 0 ? `${sym}${displayBekleyenTutar.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}` : '—'}
+                      </td>
+                    </tr>
+                  );
+                })}
               </Table>
             </Card>
           </div>

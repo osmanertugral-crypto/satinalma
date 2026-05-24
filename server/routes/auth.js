@@ -32,21 +32,24 @@ router.post('/login', (req, res) => {
   );
 
   const allowedPages = user.allowed_pages ? JSON.parse(user.allowed_pages) : null;
+  const extraPermissions = user.extra_permissions ? JSON.parse(user.extra_permissions) : null;
 
   return res.json({
     token,
-    user: { id: user.id, name: user.name, email: user.email, role: user.role, allowed_pages: allowedPages }
+    user: { id: user.id, name: user.name, email: user.email, role: user.role, svc_role: user.svc_role || 'none', allowed_pages: allowedPages, extra_permissions: extraPermissions }
   });
 });
 
 // GET /api/auth/me
 router.get('/me', authenticate, (req, res) => {
   const db = getDb();
-  const user = db.prepare('SELECT id, name, email, role, created_at, allowed_pages FROM users WHERE id = ?').get(req.user.id);
+  const user = db.prepare('SELECT id, name, email, role, svc_role, created_at, allowed_pages, extra_permissions FROM users WHERE id = ?').get(req.user.id);
   if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
   res.json({
     ...user,
+    svc_role: user.svc_role || 'none',
     allowed_pages: user.allowed_pages ? JSON.parse(user.allowed_pages) : null,
+    extra_permissions: user.extra_permissions ? JSON.parse(user.extra_permissions) : null,
   });
 });
 

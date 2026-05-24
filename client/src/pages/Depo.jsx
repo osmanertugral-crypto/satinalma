@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getWarehouseSummary, getWarehouseStock, getWarehouseKartTipleri, syncWarehouse, getWarehouseStatus, refreshWarehouseExcelAndSync, getWarehouseDetail, syncWarehouseEvira } from '../api';
 import { PageHeader, Card, Button, Badge, Spinner } from '../components/UI';
@@ -49,6 +49,20 @@ const DEPO_LABELS = {
 
 const TYPE_COLORS = ['#1F4E79', '#059669', '#D97706', '#7C3AED', '#DC2626', '#0891B2'];
 
+function formatCurrency(val, doviz) {
+  if (val == null || val === 0) return '—';
+  const num = Number(val);
+  if (doviz === 'USD') return '$' + new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+  if (doviz === 'EUR') return '€' + new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+  return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 2 }).format(num);
+}
+
+function DovizBadge({ doviz }) {
+  if (!doviz || doviz === 'TRY') return null;
+  const cls = doviz === 'USD' ? 'text-green-600 bg-green-50' : 'text-blue-600 bg-blue-50';
+  return <span className={`ml-1 text-[10px] font-semibold px-1 rounded ${cls}`}>{doviz}</span>;
+}
+
 function StokDetailModal({ row, onClose }) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['warehouse-detail', row.stok_kodu],
@@ -56,121 +70,216 @@ function StokDetailModal({ row, onClose }) {
     staleTime: 5 * 60 * 1000,
   });
 
+  // Çıkışlar (ciro_cache) + Transferler (EVIRA) birleşik liste
+  const hareketRight = useMemo(() => {
+    if (!data) return [];
+    const sales = (data.cikislar || []).map(h => ({
+      _type: 'sale',
+      tarih: h.tarih || '',
+      baslik: h.cari_adi || h.is_emri_no || '—',
+      fatura: h.fatura_no,
+      miktar: h.miktar,
+      birim: null,
+      fiyat: h.fiyat,
+      tutar: h.tutar,
+      doviz: h.islem_dovizi || 'TRY',
+    }));
+    const xfers = (data.transferler || []).map(h => ({
+      _type: 'transfer',
+      tarih: h.TARIH || '',
+      baslik: h.PROJE_KODU || h.HEDEF_AMBAR || '—',
+      fatura: h.FIS_NO,
+      miktar: h.MIKTAR,
+      birim: h.BIRIM,
+      fiyat: null,
+      tutar: null,
+      doviz: null,
+    }));
+    return [...sales, ...xfers].sort((a, b) => (b.tarih || '').localeCompare(a.tarih || ''));
+  }, [data]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-start justify-between p-5 border-b border-gray-100">
-          <div className="flex-1 min-w-0 pr-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[92vh] flex flex-col" onClick={e => e.stopPropagation()}>
+
+        {/* ── HEADER ── */}
+        <div className="flex items-start gap-4 p-4 border-b border-gray-100 flex-shrink-0">
+          <div className="flex-shrink-0 w-20 h-20 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
+            {data?.resimBase64 ? (
+              <img src={`data:${data.resimMime || 'image/jpeg'};base64,${data.resimBase64}`} alt={row.stok_adi} className="object-contain w-full h-full" />
+            ) : (
+              <div className="flex flex-col items-center text-gray-300 gap-1">
+                <ImageOff size={22} />
+                <span className="text-[9px]">Resim yok</span>
+              </div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
             <p className="font-mono text-xs text-gray-400 mb-0.5">{row.stok_kodu}</p>
-            <h2 className="font-bold text-gray-800 text-base leading-snug">{row.stok_adi}</h2>
-            {row.kart_tipi && <Badge color="gray" className="mt-1">{row.kart_tipi}</Badge>}
+            <h2 className="font-bold text-gray-800 text-base leading-tight">{row.stok_adi}</h2>
+            <div className="flex items-center gap-2 mt-1 flex-wrap">
+              {row.kart_tipi && <Badge color="gray">{row.kart_tipi}</Badge>}
+              {data?.aciklama2 && <span className="text-xs text-gray-500">{data.aciklama2}</span>}
+            </div>
+            <div className="flex gap-2 mt-2">
+              {[
+                { label: 'Gebze', val: row.gebze_stok, color: 'text-blue-700', bg: 'bg-blue-50' },
+                { label: 'E-Ticaret', val: row.eticaret_stok, color: 'text-emerald-700', bg: 'bg-emerald-50' },
+                { label: 'Showroom', val: row.showroom_stok, color: 'text-amber-700', bg: 'bg-amber-50' },
+              ].map(d => (
+                <div key={d.label} className={`rounded-lg ${d.bg} px-3 py-1 text-center min-w-[60px]`}>
+                  <p className="text-[10px] text-gray-500">{d.label}</p>
+                  <p className={`text-sm font-bold ${d.color}`}>{formatNum(d.val)}</p>
+                </div>
+              ))}
+            </div>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700 flex-shrink-0">
             <X size={18} />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-5 space-y-5">
-          {isLoading && <div className="flex justify-center py-8"><Spinner /></div>}
-          {isError && <p className="text-center text-red-500 text-sm py-4">Sunucuya bağlanılamadı.</p>}
-          {data?.errors?.length > 0 && (
-            <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs text-amber-700 space-y-1">
-              {data.errors.map((e, i) => <p key={i}>{e}</p>)}
+        {/* ── ÖZET ŞERIT ── */}
+        {data?.ozet && (
+          <div className="flex items-center gap-6 px-5 py-2.5 bg-gray-50 border-b border-gray-100 flex-shrink-0 flex-wrap">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] text-gray-400">Son 1 Yıl Sipariş:</span>
+              <span className="font-bold text-blue-700 text-sm">{data.ozet.son_yil_siparis}</span>
+              {data.ozet.son_yil_miktar > 0 && (
+                <span className="text-gray-400 text-xs">({formatNum(data.ozet.son_yil_miktar)} adet)</span>
+              )}
             </div>
-          )}
+            <div className="w-px h-4 bg-gray-300 hidden sm:block" />
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] text-gray-400">Ortalama Alım Fiyatı:</span>
+              <span className="font-bold text-emerald-700 text-sm">
+                {data.ozet.ort_fiyat_tl > 0 ? `≈${formatTRY(data.ozet.ort_fiyat_tl)}` : '—'}
+              </span>
+            </div>
+            <div className="w-px h-4 bg-gray-300 hidden sm:block" />
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] text-gray-400">Toplam Sipariş:</span>
+              <span className="font-bold text-gray-800 text-sm">{data.ozet.toplam_siparis}</span>
+            </div>
+          </div>
+        )}
 
-          {data && (
-            <>
-              {/* Üst bölüm: resim + bilgi */}
-              <div className="flex gap-5">
-                {/* Resim */}
-                <div className="flex-shrink-0 w-36 h-36 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
-                  {data.resimBase64 ? (
-                    <img
-                      src={`data:${data.resimMime || 'image/jpeg'};base64,${data.resimBase64}`}
-                      alt={row.stok_adi}
-                      className="object-contain w-full h-full"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center text-gray-300 gap-1">
-                      <ImageOff size={28} />
-                      <span className="text-[10px]">Resim yok</span>
-                    </div>
-                  )}
-                </div>
+        {/* ── YÜKLENİYOR / HATA ── */}
+        {isLoading && <div className="flex justify-center py-10 flex-shrink-0"><Spinner /></div>}
+        {isError && <p className="text-center text-red-500 text-sm py-6 flex-shrink-0">Sunucuya bağlanılamadı.</p>}
+        {data?.errors?.filter(e => !e.startsWith('aciklama2') && !e.startsWith('resim')).length > 0 && (
+          <div className="mx-4 mt-2 flex-shrink-0 rounded-lg bg-amber-50 border border-amber-200 p-2 text-xs text-amber-700">
+            {data.errors.filter(e => !e.startsWith('aciklama2') && !e.startsWith('resim')).map((e, i) => <p key={i}>{e}</p>)}
+          </div>
+        )}
 
-                {/* Açıklama 2 + stok özeti */}
-                <div className="flex-1 space-y-3">
-                  {data.aciklama2 && (
-                    <div>
-                      <p className="text-xs font-medium text-gray-400 mb-1">Açıklama 2 (Marka / Model)</p>
-                      <p className="text-sm text-gray-700 whitespace-pre-line">{data.aciklama2}</p>
-                    </div>
-                  )}
-                  {!data.aciklama2 && <p className="text-sm text-gray-400 italic">Açıklama 2 bilgisi yok.</p>}
+        {/* ── İKİ KOLON ── */}
+        {data && (
+          <div className="flex flex-1 min-h-0 overflow-hidden">
 
-                  <div className="grid grid-cols-3 gap-2 pt-1">
-                    {[
-                      { label: 'Gebze', val: row.gebze_stok, color: 'text-blue-700' },
-                      { label: 'E-Ticaret', val: row.eticaret_stok, color: 'text-emerald-700' },
-                      { label: 'Showroom', val: row.showroom_stok, color: 'text-amber-700' },
-                    ].map(d => (
-                      <div key={d.label} className="rounded-lg border border-gray-100 bg-gray-50 p-2 text-center">
-                        <p className="text-[10px] text-gray-400">{d.label}</p>
-                        <p className={`text-sm font-bold ${d.color}`}>{formatNum(d.val)}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            {/* SOL: Alım Siparişleri */}
+            <div className="flex-1 flex flex-col min-h-0 border-r border-gray-100">
+              <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 border-b border-emerald-100 flex-shrink-0">
+                <ArrowDownCircle size={14} className="text-emerald-600" />
+                <span className="font-semibold text-emerald-800 text-xs">ALİM SİPARİŞLERİ</span>
+                <span className="ml-auto text-[11px] text-emerald-600">{data.alimlar?.length || 0} kayıt</span>
               </div>
-
-              {/* Hareketler */}
-              <div>
-                <h3 className="font-semibold text-gray-700 text-sm mb-2">Son Hareketler</h3>
-                {data.hareketler.length === 0 ? (
-                  <p className="text-sm text-gray-400 italic text-center py-4">Hareket kaydı bulunamadı.</p>
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                {!data.alimlar?.length ? (
+                  <p className="text-center text-gray-400 text-xs py-8 italic">Sipariş kaydı bulunamadı.</p>
                 ) : (
-                  <div className="overflow-auto rounded-xl border border-gray-100">
-                    <table className="w-full text-xs">
-                      <thead>
-                        <tr className="bg-gray-50 border-b border-gray-200 text-gray-500">
-                          <th className="text-left py-2 px-3">Tarih</th>
-                          <th className="text-left py-2 px-3">İşlem</th>
-                          <th className="text-left py-2 px-3">Fiş No</th>
-                          <th className="text-left py-2 px-3">Ambar</th>
-                          <th className="text-right py-2 px-3">Miktar</th>
-                          <th className="text-left py-2 px-3">Birim</th>
+                  <table className="w-full text-xs">
+                    <thead className="sticky top-0 bg-white z-10 shadow-sm">
+                      <tr className="border-b border-gray-200 text-gray-400">
+                        <th className="text-left py-2 px-3 font-medium">Tarih</th>
+                        <th className="text-left py-2 px-3 font-medium">Tedarikçi</th>
+                        <th className="text-right py-2 px-3 font-medium">Mik / Teslim</th>
+                        <th className="text-right py-2 px-3 font-medium">Birim Fiyat</th>
+                        <th className="text-right py-2 px-3 font-medium">Tutar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.alimlar.map((a, i) => (
+                        <tr key={i} className={`border-b border-gray-50 ${i % 2 === 0 ? '' : 'bg-gray-50/50'}`}>
+                          <td className="py-1.5 px-3 text-gray-500 whitespace-nowrap">{a.TARIH}</td>
+                          <td className="py-1.5 px-3 text-gray-700 max-w-[120px] truncate" title={a.CARI_UNVANI}>{a.CARI_UNVANI || '—'}</td>
+                          <td className="py-1.5 px-3 text-right">
+                            <span className="font-medium text-gray-800">{formatNum(a.MIKTAR)}</span>
+                            {a.TALINAN > 0 && <span className="text-gray-400 ml-1 text-[10px]">/{formatNum(a.TALINAN)}</span>}
+                          </td>
+                          <td className="py-1.5 px-3 text-right font-medium text-gray-700 whitespace-nowrap">
+                            {formatCurrency(a.FIYAT, a.DOVIZ)}
+                            <DovizBadge doviz={a.DOVIZ} />
+                          </td>
+                          <td className="py-1.5 px-3 text-right font-semibold text-gray-800 whitespace-nowrap">
+                            {formatCurrency(a.TUTAR, a.DOVIZ)}
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {data.hareketler.map((h, i) => {
-                          const isGiris = h.ISLEM === 'GİRİŞ';
-                          const isCikis = h.ISLEM === 'ÇIKIŞ';
-                          return (
-                            <tr key={i} className={`border-b border-gray-50 ${i % 2 === 0 ? '' : 'bg-gray-50/40'}`}>
-                              <td className="py-1.5 px-3 whitespace-nowrap">{h.TARIH}</td>
-                              <td className="py-1.5 px-3">
-                                <span className={`inline-flex items-center gap-1 font-medium ${isGiris ? 'text-emerald-600' : isCikis ? 'text-red-500' : 'text-blue-500'}`}>
-                                  {isGiris ? <ArrowDownCircle size={11} /> : isCikis ? <ArrowUpCircle size={11} /> : <ArrowLeftRight size={11} />}
-                                  {h.ISLEM}
-                                </span>
-                              </td>
-                              <td className="py-1.5 px-3 font-mono text-gray-500">{h.FIS_NO}</td>
-                              <td className="py-1.5 px-3 text-gray-600 max-w-[130px] truncate" title={h.AMBAR}>{h.AMBAR || h.HEDEF_AMBAR || '—'}</td>
-                              <td className="py-1.5 px-3 text-right font-medium text-gray-700">{formatNum(h.MIKTAR)}</td>
-                              <td className="py-1.5 px-3 text-gray-500">{h.BIRIM}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
                 )}
               </div>
-            </>
-          )}
-        </div>
+            </div>
+
+            {/* SAĞ: Çıkışlar + Transferler */}
+            <div className="flex-1 flex flex-col min-h-0">
+              <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 border-b border-orange-100 flex-shrink-0">
+                <ArrowUpCircle size={14} className="text-orange-600" />
+                <span className="font-semibold text-orange-800 text-xs">ÇIKIŞLAR & TRANSFERLER</span>
+                <span className="ml-auto text-[11px] text-orange-600">{hareketRight.length} kayıt</span>
+              </div>
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                {!hareketRight.length ? (
+                  <p className="text-center text-gray-400 text-xs py-8 italic">Hareket kaydı bulunamadı.</p>
+                ) : (
+                  <table className="w-full text-xs">
+                    <thead className="sticky top-0 bg-white z-10 shadow-sm">
+                      <tr className="border-b border-gray-200 text-gray-400">
+                        <th className="text-left py-2 px-3 font-medium">Tarih</th>
+                        <th className="text-left py-2 px-2 font-medium">Tür</th>
+                        <th className="text-left py-2 px-3 font-medium">Proje / Firma</th>
+                        <th className="text-right py-2 px-3 font-medium">Miktar</th>
+                        <th className="text-right py-2 px-3 font-medium">Tutar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {hareketRight.map((h, i) => (
+                        <tr key={i} className={`border-b border-gray-50 ${i % 2 === 0 ? '' : 'bg-gray-50/50'}`}>
+                          <td className="py-1.5 px-3 text-gray-500 whitespace-nowrap">{h.tarih}</td>
+                          <td className="py-1.5 px-2">
+                            {h._type === 'transfer' ? (
+                              <span className="inline-flex items-center gap-0.5 bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 font-medium" style={{ fontSize: 10 }}>
+                                <ArrowLeftRight size={9} />TRF
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-0.5 bg-orange-100 text-orange-700 rounded px-1.5 py-0.5 font-medium" style={{ fontSize: 10 }}>
+                                <ArrowUpCircle size={9} />ÇKŞ
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-1.5 px-3 text-gray-700 max-w-[130px] truncate" title={h.baslik}>{h.baslik}</td>
+                          <td className="py-1.5 px-3 text-right font-medium text-gray-800 whitespace-nowrap">
+                            {formatNum(h.miktar)}{h.birim ? <span className="text-gray-400 font-normal ml-0.5">{h.birim}</span> : null}
+                          </td>
+                          <td className="py-1.5 px-3 text-right whitespace-nowrap">
+                            {h.tutar ? (
+                              <span className="font-semibold text-gray-700">
+                                {formatCurrency(h.tutar, h.doviz)}
+                                <DovizBadge doviz={h.doviz} />
+                              </span>
+                            ) : <span className="text-gray-300">—</span>}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </div>
+
+          </div>
+        )}
       </div>
     </div>
   );
@@ -179,7 +288,13 @@ function StokDetailModal({ row, onClose }) {
 export default function DepoPage() {
   const qc = useQueryClient();
   const [selectedDepolar, setSelectedDepolar] = useState(['gebze', 'eticaret', 'showroom']);
+  const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const t = setTimeout(() => { setSearch(searchInput); setPage(1); }, 400);
+    return () => clearTimeout(t);
+  }, [searchInput]);
   const [kartTipiFilter, setKartTipiFilter] = useState([]);
   const [depoFilter, setDepoFilter] = useState('');
   const [page, setPage] = useState(1);
@@ -577,8 +692,8 @@ export default function DepoPage() {
                     <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input type="text" placeholder="Stok kodu veya adı ara..."
                       className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      value={search}
-                      onChange={e => { setSearch(e.target.value); setPage(1); }}
+                      value={searchInput}
+                      onChange={e => setSearchInput(e.target.value)}
                     />
                   </div>
                 </div>

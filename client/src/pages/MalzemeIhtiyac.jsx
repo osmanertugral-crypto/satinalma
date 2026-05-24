@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { PageHeader, Card, Button, Spinner, Badge, StatCard, Select, Input, Modal } from '../components/UI';
-import { RefreshCw, Package, ShoppingCart, TrendingUp, Search, Filter, Download, AlertTriangle, CheckCircle, ArrowUpDown, List, Users, ChevronDown, ChevronRight, Mail, FileDown, Plus, Minus, Printer, ExternalLink, CheckSquare, Square, CreditCard, Info, X, Warehouse } from 'lucide-react';
+import { RefreshCw, Package, ShoppingCart, TrendingUp, Search, Filter, Download, AlertTriangle, CheckCircle, ArrowUpDown, List, Users, ChevronDown, ChevronRight, Mail, FileDown, Plus, Minus, Printer, ExternalLink, CheckSquare, Square, CreditCard, Info, X, Warehouse, Car, Layers } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import {
   getMalzemeUretimIhtiyac,
@@ -19,6 +19,43 @@ const TABS = [
   { key: 'uretim', label: 'Üretim İhtiyaç Raporu', icon: Package },
   { key: 'maliyet', label: 'Proje Maliyet', icon: TrendingUp },
   { key: 'satinalma', label: 'Satınalma', icon: ShoppingCart },
+  { key: 'modeller', label: 'Ürün Modelleri', icon: Car },
+];
+
+const HOTOMOBIL_MODELS = [
+  {
+    category: 'ATLAS CAMPER TOPPER',
+    color: '#1E40AF',
+    items: [
+      { name: 'Atlas Camper Topper', abbr: 'ACT', desc: 'Araç üstü yerleşim — şase bağımsız kabin çözümü' },
+    ],
+  },
+  {
+    category: 'EU SIZE PICK-UP CAMPER',
+    color: '#065F46',
+    items: [
+      { name: 'Gladiator S', abbr: 'GS', desc: 'Küçük Avrupa ölçülü pick-up karavan' },
+      { name: 'Gladiator SM', abbr: 'GSM', desc: 'Orta-küçük Avrupa ölçülü pick-up karavan' },
+      { name: 'Gladiator SH', abbr: 'GSH', desc: 'Yüksek profilli Avrupa ölçülü pick-up karavan' },
+      { name: 'Gladiator SE', abbr: 'GSE', desc: 'Genişletilmiş Avrupa ölçülü pick-up karavan' },
+    ],
+  },
+  {
+    category: 'USA SIZE PICK-UP CAMPER',
+    color: '#92400E',
+    items: [
+      { name: 'Gladiator L', abbr: 'GL', desc: 'Büyük ABD ölçülü pick-up karavan' },
+      { name: 'Gladiator XL', abbr: 'GXL', desc: 'Ekstra büyük ABD ölçülü pick-up karavan' },
+      { name: 'Gladiator KLE', abbr: 'GKLE', desc: 'ABD ölçülü lüks donanımlı pick-up karavan' },
+    ],
+  },
+  {
+    category: 'CYBERGLAD PICK-UP CAMPER',
+    color: '#4C1D95',
+    items: [
+      { name: 'Cyberglad', abbr: 'CG', desc: 'Modern tasarımlı elektrikli pick-up karavan' },
+    ],
+  },
 ];
 
 function formatCurrency(val) {
@@ -1398,6 +1435,9 @@ export default function MalzemeIhtiyac() {
         </div>
       )}
       
+      {/* Ürün Modelleri Tab */}
+      {activeTab === 'modeller' && <ModelsTab />}
+
       {/* Stok Ara Modal */}
       {stokAraModal && <StokAraModalView />}
 
@@ -1670,6 +1710,136 @@ export default function MalzemeIhtiyac() {
           );
         })()}
       </Modal>
+    </div>
+  );
+}
+
+function ModelsTab() {
+  const [selectedModel, setSelectedModel] = useState(null);
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="overflow-hidden">
+          <div className="bg-slate-900 p-4">
+            <div className="text-white text-center mb-3">
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <span className="text-2xl font-black tracking-tight"><span className="text-red-500">HOTO</span>MOBİL</span>
+              </div>
+              <p className="text-slate-400 text-xs">Camper Family — İnovatif Mobil Yaşam Çözümleri</p>
+            </div>
+            <img
+              src="/urun-modelleri.png"
+              alt="Hotomobil Camper Family"
+              className="w-full rounded-lg"
+              onError={e => { e.target.style.display = 'none'; }}
+            />
+          </div>
+          <div className="p-3 bg-slate-50 text-xs text-center text-gray-500">
+            Hotomobil Camper Family — Tüm model serileri
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <Layers size={18} className="text-blue-500" />
+            Model Kısaltmaları Referansı
+          </h3>
+          <div className="space-y-4">
+            {HOTOMOBIL_MODELS.map(group => (
+              <div key={group.category}>
+                <div className="text-xs font-semibold uppercase tracking-wider mb-2 px-2 py-1 rounded" style={{ color: group.color, backgroundColor: group.color + '15' }}>
+                  {group.category}
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {group.items.map(m => (
+                    <button
+                      key={m.abbr}
+                      onClick={() => setSelectedModel(selectedModel?.abbr === m.abbr ? null : m)}
+                      className={`flex items-center gap-3 p-2.5 rounded-lg border transition-all text-left ${
+                        selectedModel?.abbr === m.abbr ? 'border-blue-400 bg-blue-50 shadow-sm' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0" style={{ backgroundColor: group.color }}>
+                        {m.abbr}
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-gray-800">{m.name}</div>
+                        <div className="text-xs text-gray-500">{m.abbr}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {selectedModel && (
+        <Card className="p-4 border-2 border-blue-200 bg-blue-50/50">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold" style={{ backgroundColor: HOTOMOBIL_MODELS.find(g => g.items.find(i => i.abbr === selectedModel.abbr))?.color || '#3b82f6' }}>
+                {selectedModel.abbr}
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900">{selectedModel.name}</h3>
+                <p className="text-sm text-gray-500">Kısaltma: <strong>{selectedModel.abbr}</strong></p>
+              </div>
+            </div>
+            <button onClick={() => setSelectedModel(null)} className="text-gray-400 hover:text-gray-600"><X size={18} /></button>
+          </div>
+          <p className="text-sm text-gray-700 bg-white rounded-lg p-3 border border-blue-200">{selectedModel.desc}</p>
+        </Card>
+      )}
+
+      <div>
+        <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><Car size={20} /> Tüm Model Serileri</h3>
+        <div className="space-y-6">
+          {HOTOMOBIL_MODELS.map(group => (
+            <div key={group.category}>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-1 w-8 rounded-full" style={{ backgroundColor: group.color }} />
+                <h4 className="font-bold text-gray-700 text-sm uppercase tracking-wide">{group.category}</h4>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {group.items.map(m => (
+                  <div
+                    key={m.abbr}
+                    className="rounded-xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => setSelectedModel(selectedModel?.abbr === m.abbr ? null : m)}
+                  >
+                    <div className="p-5 flex flex-col items-center" style={{ backgroundColor: group.color }}>
+                      <div className="text-4xl font-black text-white/20 mb-1 select-none">{m.abbr}</div>
+                      <div className="text-white font-bold text-lg">{m.name}</div>
+                    </div>
+                    <div className="p-3 bg-white">
+                      <p className="text-xs text-gray-600 leading-relaxed">{m.desc}</p>
+                      <div className="mt-2 inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: group.color }}>
+                        {m.abbr}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Card className="p-4 bg-slate-50 border-slate-200">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-slate-700 flex items-center justify-center shrink-0">
+            <Download size={18} className="text-white" />
+          </div>
+          <div>
+            <p className="font-medium text-gray-800 text-sm">Hotomobil Camper Family Katalog</p>
+            <p className="text-xs text-gray-500">Tüm model özellikleri ve teknik detaylar için Hotomobil katalog dokümanına bakınız.</p>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }

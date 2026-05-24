@@ -9,17 +9,18 @@ router.use(authenticate);
 // GET /api/users
 router.get('/', authorize('admin'), (req, res) => {
   const db = getDb();
-  const users = db.prepare('SELECT id, name, email, role, active, created_at, allowed_pages FROM users ORDER BY name').all();
+  const users = db.prepare('SELECT id, name, email, role, svc_role, active, created_at, allowed_pages, extra_permissions FROM users ORDER BY name').all();
   res.json(users.map(u => ({
     ...u,
     allowed_pages: u.allowed_pages ? JSON.parse(u.allowed_pages) : null,
+    extra_permissions: u.extra_permissions ? JSON.parse(u.extra_permissions) : null,
   })));
 });
 
 // POST /api/users
 router.post('/', authorize('admin'), (req, res) => {
   const bcrypt = require('bcryptjs');
-  const { name, email, password, role, allowed_pages } = req.body;
+  const { name, email, password, role, allowed_pages, extra_permissions } = req.body;
   if (!name || !email || !password || !role) {
     return res.status(400).json({ error: 'Tüm alanlar gerekli' });
   }
@@ -30,19 +31,21 @@ router.post('/', authorize('admin'), (req, res) => {
   const id = uuidv4();
   const hash = bcrypt.hashSync(password, 10);
   const pagesJson = allowed_pages && allowed_pages.length > 0 ? JSON.stringify(allowed_pages) : null;
-  db.prepare('INSERT INTO users (id, name, email, password, role, allowed_pages) VALUES (?, ?, ?, ?, ?, ?)').run(
-    id, name, email.toLowerCase().trim(), hash, role, pagesJson
+  const permsJson = extra_permissions && extra_permissions.length > 0 ? JSON.stringify(extra_permissions) : null;
+  db.prepare('INSERT INTO users (id, name, email, password, role, allowed_pages, extra_permissions) VALUES (?, ?, ?, ?, ?, ?, ?)').run(
+    id, name, email.toLowerCase().trim(), hash, role, pagesJson, permsJson
   );
-  res.status(201).json({ id, name, email, role, active: 1, allowed_pages: allowed_pages || null });
+  res.status(201).json({ id, name, email, role, active: 1, allowed_pages: allowed_pages || null, extra_permissions: extra_permissions || null });
 });
 
 // PUT /api/users/:id
 router.put('/:id', authorize('admin'), (req, res) => {
-  const { name, role, active, allowed_pages } = req.body;
+  const { name, role, svc_role, active, allowed_pages, extra_permissions } = req.body;
   const db = getDb();
   const pagesJson = allowed_pages && allowed_pages.length > 0 ? JSON.stringify(allowed_pages) : null;
-  db.prepare('UPDATE users SET name = ?, role = ?, active = ?, allowed_pages = ? WHERE id = ?').run(
-    name, role, active ? 1 : 0, pagesJson, req.params.id
+  const permsJson = extra_permissions && extra_permissions.length > 0 ? JSON.stringify(extra_permissions) : null;
+  db.prepare('UPDATE users SET name = ?, role = ?, svc_role = ?, active = ?, allowed_pages = ?, extra_permissions = ? WHERE id = ?').run(
+    name, role, svc_role || 'none', active ? 1 : 0, pagesJson, permsJson, req.params.id
   );
   res.json({ message: 'Kullanıcı güncellendi' });
 });
